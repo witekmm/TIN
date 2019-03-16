@@ -1,5 +1,7 @@
-Czat podzielony na grupy;
+Mamy zrobiæ czat podzielony na grupy(Tablica rozg³oszeniowa)
 Mo¿liwoœæ wys³ania wiadomoœci do ca³ej grupy albo do wszystkich grup
+tak, ¿e nawet jak klient jest offline to zostanie zapisane ¿e przysz³a do
+niego wiadomoœæ.
 
 Serwer:
 - w cpp
