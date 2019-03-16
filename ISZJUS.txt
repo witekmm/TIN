@@ -1,0 +1,18 @@
+Czat podzielony na grupy;
+Mo¿liwoœæ wys³ania wiadomoœci do ca³ej grupy albo do wszystkich grup
+
+Serwer:
+- w cpp
+- wielow¹tkowy
+- mo¿liwoœæ zalogowanie siê do serwera by uzyskaæ dostêp do konsoli zarz¹dzania:
+	jakieœ podstawowe funkcje dla administratora:
+	- tworzenie kont
+	- reset hase³ itd 
+
+
+3 klientów:
+- jeden w cpp
+- jeden w javie na androida
+- jeden w C#(w golangu(co to wgl jest))
+
+
