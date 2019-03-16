@@ -8,6 +8,7 @@ Serwer:
 	jakieœ podstawowe funkcje dla administratora:
 	- tworzenie kont
 	- reset hase³ itd 
+- ma byæ mo¿liwoœæ wy³¹czenie serwera
 
 
 3 klientów:
@@ -15,4 +16,6 @@ Serwer:
 - jeden w javie na androida
 - jeden w C#(w golangu(co to wgl jest))
 
+
+Testy maj¹ istnieæ
 
