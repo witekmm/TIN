@@ -19,11 +19,13 @@ int main()
 
     fd_set master; // główna lista deskryptorów plików
     fd_set exceptionsfds; // pomocnicza lista deskryptorów dla select()
+    fd_set receivefds;
     int fdmax;
     int newfd;
     int addrlen;
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
+    FD_ZERO(& receivefds);
 
     struct sockaddr_in serwer =
     {
@@ -59,19 +61,20 @@ int main()
     while( 1 )
     {
         exceptionsfds = master;
+        receivefds = master;
         struct sockaddr_in client = { };
 
-        if( select( fdmax + 1, NULL, NULL, &exceptionsfds, NULL ) == - 1 ) {
+        if( select( fdmax + 1, &receivefds, NULL, &exceptionsfds, NULL ) == - 1 ) {
             perror( "select" );
             exit( 1 );
         }
 
         for( i = 0; i <= fdmax; i++ ) {
-            if( FD_ISSET( i, & excptionsfds ) ) { // mamy jednego!!
+            if( FD_ISSET( i, & receivefds ) ) { // mamy jednego!!
                 if( i == serverSocket ) {
-                    // obsłuż nowe połączenie
+                    //nowe połączenie
                     addrlen = sizeof( client );
-                    if(( newfd = accept( listener,( struct sockaddr * ) & remoteaddr,
+                    if(( newfd = accept( serverSocket,( struct sockaddr * ) & client,
                     & addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
@@ -80,35 +83,31 @@ int main()
                             fdmax = newfd;
                         }
                         printf( "selectserver: new connection from %s on "
-                        "socket %d\n", inet_ntoa( remoteaddr.sin_addr ), newfd );
+                        "socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
-                } else {
-                    // obsłuż dane od klienta
-                    if(( nbytes = recv( i, buf, sizeof( buf ), 0 ) ) <= 0 ) {
-                        // błąd lub połączenie zostało zerwane
-                        if( nbytes == 0 ) {
-                            // połączenie zerwera
-                            printf( "selectserver: socket %d hung up\n", i );
-                        } else {
-                            perror( "recv" );
+
+
+                }
+                else {
+                    odłącz klienta lub odłącz serwer
+                    addrlen = sizeof( client );
+                    if(( newfd = accept( client,( struct sockaddr * ) & client,
+                    & addrlen ) ) == - 1 ) {
+                        perror( "accept" );
+                    }
+                    else {
+                        FD_SET( newfd, & master ); // dodaj do głównego zestawu
+                        if( newfd > fdmax ) { // śledź maksymalny
+                            fdmax = newfd;
                         }
-                        close( i ); // papa!
-                        FD_CLR( i, & master ); // usuń z głównego zestawu
-                    } else {
-                        // mamy trochę danych od klienta
-                        for( j = 0; j <= fdmax; j++ ) {
-                            // wyślij do wszystkich!
-                            if( FD_ISSET( j, & master ) ) {
-                                // oprócz nas i gniazda nasłuchującego
-                                if( j != listener && j != i ) {
-                                    if( send( j, buf, nbytes, 0 ) == - 1 ) {
-                                        perror( "send" );
-                                    }
-                                }
-                            }
-                        }
+                        printf( "selectserver: new connection from %s on "
+                        "socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
                 }
+            }
+            if( FD_ISSET( i, & exceptionsfds ) ){
+            // tutaj klient wysłał dane OOB
+
             }
         }
     }
