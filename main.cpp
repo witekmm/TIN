@@ -13,6 +13,8 @@
 #include <sys/select.h>
 #include <unistd.h>
 
+#include <pthread.h>
+
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
@@ -36,7 +38,16 @@ int main()
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
 
-    //pthread_t clientThreads[MAX_CONNECTION];
+    pthread_t clientThreads[MAX_CONNECTION];
+    int rc;
+    for(int i = 0; i < MAX_CONNECTION; i++ ) {
+      rc = pthread_create(&clientThreads[i], NULL, NULL, (void *)i);
+
+      if (rc) {
+         cout << "Error:unable to create thread," << rc << endl;
+         exit(-1);
+      }
+   }
 
     struct sockaddr_in serwer =
     {
@@ -103,7 +114,7 @@ int main()
                     }
                 }
                 else{
-                    recv(i , buf , sizeof(buf) , NULL);
+                    recv(i , buf , sizeof(buf) , 0);
                     cout<<buf;
                 }
             }
