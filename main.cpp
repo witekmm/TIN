@@ -28,9 +28,13 @@ int main()
     int fdmax;
     int newfd;
     int addrlen;
+    int yes = 1;
+    int no = 0;
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
+
+    //pthread_t clientThreads[MAX_CONNECTION];
 
     struct sockaddr_in serwer =
     {
@@ -39,6 +43,11 @@ int main()
     };
     if( inet_pton( AF_INET, SERWER_IP, & serwer.sin_addr ) <= 0 ){
         perror( "inet_pton() ERROR" );
+        exit( 1 );
+    }
+
+    if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
+        perror( "setsockopt" );
         exit( 1 );
     }
 
@@ -79,7 +88,7 @@ int main()
             if( FD_ISSET( i, & receivefds ) ) {
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
-                    if(( newfd = accept( serverSocket,( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
+                    if(( newfd = accept( serverSocket , ( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
