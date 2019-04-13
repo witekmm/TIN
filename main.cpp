@@ -113,16 +113,17 @@ int main()
                     close(i);
                     FD_CLR(i,master);
                     if(i==fdmax){
-                        int x = &master;
+                        int x = master;
                         int best = &master;
                         while(x != NULL){
-                            if(x==fdmax) continue;
-                            if(x>best) best=x;
+                            if(&x == fdmax) continue;
+                            if(&x > best) best = &x;
                             x++;
                         }
-                        fdmax = x;
+                        fdmax = best;
                     }
                 }
+                if(strcmp())
             }
         }
     }
