@@ -16,6 +16,8 @@
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
 
+using namespace std;
+
 int main()
 {
     struct sockaddr_in serwer =
@@ -37,26 +39,31 @@ int main()
     }
 
     socklen_t len = sizeof( serwer );
-    if( bind( socket_,( struct sockaddr * ) & serwer, len ) < 0 )
+    if( bind( socketServer,( struct sockaddr * ) & serwer, len ) < 0 )
     {
         perror( "bind() ERROR" );
         exit( 3 );
     }
 
-    if( listen( socket_, MAX_CONNECTION ) < 0 )
-    {
-        perror( "listen() ERROR" );
+    printf( "Waiting for connection...\n" );
+
+    //struct sockaddr_in client = { };
+
+    if(connect(socketServer,( struct sockaddr * ) & serwer,len) == -1){
+        perror("Cannon connect");
         exit( 4 );
     }
 
+    printf("Connected.\n" );
 
-    for( int i = 0; i < 3; ++i )
-    {
-        printf( "Waiting for connection...\n" );
+    string buffer = "1";
 
-        struct sockaddr_in client = { };
+    send(serverSocket, &buffer , 1 , MSG_OOB);
 
-        const int clientSocket = accept( socket_,( struct sockaddr * ) & client, & len );
+
+
+    /*
+    const int clientSocket = accept( socket_,( struct sockaddr * ) & client, & len );
         if( clientSocket < 0 )
         {
             perror( "accept() ERROR" );
@@ -80,8 +87,8 @@ int main()
         }
 
         shutdown( clientSocket, SHUT_RDWR );
-    }
+    */
 
-    shutdown( socket_, SHUT_RDWR );
+    //shutdown( socket_, SHUT_RDWR );
 }
 
