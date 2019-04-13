@@ -19,7 +19,7 @@ int main()
 
     fd_set master; // główna lista deskryptorów plików
     fd_set exceptionsfds; // pomocnicza lista deskryptorów dla select()
-    fd_set receivefds;
+    fd_set receivefds; //pomocnicza lista deskryptorów dla select()
     int fdmax;
     int newfd;
     int addrlen;
@@ -107,10 +107,26 @@ int main()
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
             // tutaj klient wysłał dane OOB
-
+                char msg;
+                recv(i,msg,1,MSG_OOB);
+                if(strcmp(msg,"0")){
+                    close(i);
+                    FD_CLR(i,master);
+                    if(i==fdmax){
+                        int x = &master;
+                        int best = &master;
+                        while(x != NULL){
+                            if(x==fdmax) continue;
+                            if(x>best) best=x;
+                            x++;
+                        }
+                        fdmax = x;
+                    }
+                }
             }
         }
     }
+
 
 
 
