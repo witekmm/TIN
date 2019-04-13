@@ -16,6 +16,7 @@
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
+#define MAX_MSG_SIZE
 
 using namespace std;
 
@@ -30,6 +31,7 @@ int main()
     int addrlen;
     int yes = 1;
     int no = 0;
+    char buf[MAX_MSG_SIZE];
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
@@ -97,6 +99,10 @@ int main()
                         }
                         printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
+                }
+                else{
+                    recv(i , buf , sizeof(buf) , NULL);
+                    cout<<buf;
                 }
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
