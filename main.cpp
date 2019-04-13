@@ -16,7 +16,7 @@
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
-#define MAX_MSG_SIZE
+#define MAX_MSG_SIZE 256
 
 using namespace std;
 
@@ -48,15 +48,17 @@ int main()
         exit( 1 );
     }
 
-    if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
-        perror( "setsockopt" );
-        exit( 1 );
-    }
+
 
     const int serverSocket = socket( AF_INET, SOCK_STREAM, 0 );
     if( serverSocket < 0 ){
         perror( "socket() ERROR" );
         exit( 2 );
+    }
+
+    if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
+        perror( "setsockopt" );
+        exit( 1 );
     }
 
     socklen_t len = sizeof( serwer );
