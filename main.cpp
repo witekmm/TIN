@@ -65,7 +65,8 @@ int main()
 
     while( 1 )
     {
-        exceptionsfds = master;
+
+exceptionsfds = master;
         receivefds = master;
         struct sockaddr_in client = { };
 
@@ -87,9 +88,6 @@ int main()
                         }
                         printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
-                }
-                else { //WIADOMOSC OD KOGOS A W TEJ WIADOMOSCI
-
                 }
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
