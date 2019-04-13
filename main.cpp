@@ -72,9 +72,8 @@ int main()
         }
 
         for(int i = 0; i <= fdmax; i++ ) {
-            if( FD_ISSET( i, & receivefds ) ) { // mamy jednego!!
-                if( i == serverSocket ) {
-                    //nowe połączenie
+            if( FD_ISSET( i, & receivefds ) ) {
+                if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
                     if(( newfd = accept( serverSocket,( struct sockaddr * ) & client, & addrlen ) ) == - 1 ) {
                         perror( "accept" );
@@ -83,34 +82,18 @@ int main()
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
-                        printf( "selectserver: new connection from %s on "
-                        "socket %d\n", inet_ntoa( client.sin_addr ), newfd );
+                        printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
-
-
                 }
-                else {
-                    //odłącz klienta lub odłącz serwer
-                    addrlen = sizeof( client );
-                    if(( newfd = accept( client,( struct sockaddr * ) & client,
-                    & addrlen ) ) == - 1 ) {
-                        perror( "accept" );
-                    }
-                    else {
-                        FD_SET( newfd, & master ); // dodaj do głównego zestawu
-                        if( newfd > fdmax ) { // śledź maksymalny
-                            fdmax = newfd;
-                        }
-                        printf( "selectserver: new connection from %s on "
-                        "socket %d\n", inet_ntoa( client.sin_addr ), newfd );
-                    }
+                else { //WIADOMOSC OD KOGOS A W TEJ WIADOMOSCI
+
                 }
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
             // tutaj klient wysłał dane OOB
-                char msg;
+                string msg;
                 recv(i,msg,1,MSG_OOB);
-                if(strcmp(msg,"1")){
+                if(strcmp(msg , "1")){
                     close(i);
                     FD_CLR(i,master);
                     if(i==fdmax){
@@ -137,9 +120,6 @@ int main()
             }
         }
     }
-
-
-
 
 
 
