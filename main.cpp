@@ -109,21 +109,29 @@ int main()
             // tutaj klient wysłał dane OOB
                 char msg;
                 recv(i,msg,1,MSG_OOB);
-                if(strcmp(msg,"0")){
+                if(strcmp(msg,"1")){
                     close(i);
                     FD_CLR(i,master);
                     if(i==fdmax){
-                        int x = master;
+                        int * x = master;
                         int best = &master;
                         while(x != NULL){
-                            if(&x == fdmax) continue;
-                            if(&x > best) best = &x;
+                            if(*x == fdmax) continue;
+                            if(*x > best) best = *x;
                             x++;
                         }
                         fdmax = best;
                     }
                 }
-                if(strcmp())
+                if(strcmp(msg,"0")){
+                    for(int * x = master; x!= NULL; x++){
+                        if(*x == serverSocket) continue;
+                        close(i);
+                    }
+                    FD_ZERO(master);
+                    shutdown( serverSocket, SHUT_RDWR );
+                    return 0;
+                }
             }
         }
     }
@@ -133,7 +141,7 @@ int main()
 
 
 
-    shutdown( serverSocket_, SHUT_RDWR );
+    shutdown( serverSocket, SHUT_RDWR );
 
 
     return 0;
