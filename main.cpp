@@ -105,10 +105,12 @@ exceptionsfds = master;
                             if(*x > best) best = *x;
                             x++;
                         }
-                        fdmax = best;
+                        fdmax = best+1;
                     }
+                    printf("Connection abandonedened by %d", i);
                 }
                 if(strcmp((char *) &msg,"0")){
+                    printf("Server will be closed");
                     for(int * x = (int*)&master; x!= NULL; x++){
                         if(*x == serverSocket) continue;
                         close(i);
