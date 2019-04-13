@@ -13,6 +13,7 @@
 
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
+#define SERWER_IP "127.0.0.1"
 
 int main()
 {
@@ -89,7 +90,7 @@ int main()
 
                 }
                 else {
-                    odłącz klienta lub odłącz serwer
+                    //odłącz klienta lub odłącz serwer
                     addrlen = sizeof( client );
                     if(( newfd = accept( client,( struct sockaddr * ) & client,
                     & addrlen ) ) == - 1 ) {
@@ -130,6 +131,7 @@ int main()
                     }
                     FD_ZERO(master);
                     shutdown( serverSocket, SHUT_RDWR );
+                    close(serverSocket);
                     return 0;
                 }
             }
@@ -142,7 +144,7 @@ int main()
 
 
     shutdown( serverSocket, SHUT_RDWR );
-
+    close(serverSocket);
 
     return 0;
 }
