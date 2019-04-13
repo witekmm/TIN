@@ -3,7 +3,7 @@
 #include <stdlib.h> // exit()
 #include <cstring> // strlen()
 #include <stdbool.h>
-#include <string>
+#include <string> // string
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -16,6 +16,8 @@
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
+
+using namespace std;
 
 int main()
 {
@@ -76,7 +78,7 @@ int main()
             if( FD_ISSET( i, & receivefds ) ) {
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
-                    if(( newfd = accept( serverSocket,( struct sockaddr * ) & client, & addrlen ) ) == - 1 ) {
+                    if(( newfd = accept( serverSocket,( struct sockaddr * ) client, (socklen_t *) &addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
@@ -93,10 +95,10 @@ int main()
             if( FD_ISSET( i, & exceptionsfds ) ){
             // tutaj klient wysłał dane OOB
                 string msg;
-                recv(i,msg,1,MSG_OOB);
-                if(strcmp(msg , "1")){
+                recv(i , &msg , 1 , MSG_OOB);
+                if(strcmp((char *) &msg , "1")){
                     close(i);
-                    FD_CLR(i,master);
+                    FD_CLR(i , &master);
                     if(i==fdmax){
                         int * x = master;
                         int best = &master;
@@ -108,7 +110,7 @@ int main()
                         fdmax = best;
                     }
                 }
-                if(strcmp(msg,"0")){
+                if(strcmp((char *) &msg,"0")){
                     for(int * x = master; x!= NULL; x++){
                         if(*x == serverSocket) continue;
                         close(i);
