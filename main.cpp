@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <sys/select.h>
+#include <unistd.h>
 
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
@@ -70,13 +71,12 @@ int main()
             exit( 1 );
         }
 
-        for( i = 0; i <= fdmax; i++ ) {
+        for(int i = 0; i <= fdmax; i++ ) {
             if( FD_ISSET( i, & receivefds ) ) { // mamy jednego!!
                 if( i == serverSocket ) {
                     //nowe połączenie
                     addrlen = sizeof( client );
-                    if(( newfd = accept( serverSocket,( struct sockaddr * ) & client,
-                    & addrlen ) ) == - 1 ) {
+                    if(( newfd = accept( serverSocket,( struct sockaddr * ) & client, & addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
