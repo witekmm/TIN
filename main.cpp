@@ -1,8 +1,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h> // exit()
-#include <string.h> // strlen()
+#include <cstring> // strlen()
 #include <stdbool.h>
+#include <string>
 
 #include <sys/types.h>
 #include <sys/socket.h>
