@@ -66,7 +66,7 @@ int main()
     while( 1 )
     {
 
-exceptionsfds = master;
+      exceptionsfds = master;
         receivefds = master;
         struct sockaddr_in client = { };
 
@@ -91,6 +91,8 @@ exceptionsfds = master;
                 }
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
+              printf("Dupa");
+
             // tutaj klient wysłał dane OOB
                 string msg;
                 recv(i , &msg , 1 , MSG_OOB);

@@ -31,25 +31,25 @@ int main()
         exit( 1 );
     }
 
-    const int socketServer = socket( AF_INET, SOCK_STREAM, 0 );
-    if( socket_ < 0 )
+    const int clientSocket = socket( AF_INET, SOCK_STREAM, 0 );
+    if( clientSocket < 0 )
     {
         perror( "socket() ERROR" );
         exit( 2 );
     }
 
     socklen_t len = sizeof( serwer );
-    if( bind( socketServer,( struct sockaddr * ) & serwer, len ) < 0 )
-    {
-        perror( "bind() ERROR" );
-        exit( 3 );
-    }
+    // if( bind( clientSocket,( struct sockaddr * ) & serwer, len ) < 0 )
+    // {
+    //     perror( "bind() ERROR" );
+    //     exit( 3 );
+    // }
 
     printf( "Waiting for connection...\n" );
 
     //struct sockaddr_in client = { };
 
-    if(connect(socketServer,( struct sockaddr * ) & serwer,len) == -1){
+    if(connect(clientSocket,( struct sockaddr * ) & serwer,len) == -1){
         perror("Cannon connect");
         exit( 4 );
     }
@@ -58,7 +58,8 @@ int main()
 
     string buffer = "1";
 
-    send(serverSocket, &buffer , 1 , MSG_OOB);
+    sleep(2);
+    send(clientSocket, &buffer , 1 , MSG_OOB);
 
 
 
@@ -91,4 +92,3 @@ int main()
 
     //shutdown( socket_, SHUT_RDWR );
 }
-
