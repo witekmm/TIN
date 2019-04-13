@@ -78,7 +78,7 @@ int main()
             if( FD_ISSET( i, & receivefds ) ) {
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
-                    if(( newfd = accept( serverSocket,( struct sockaddr * ) client, (socklen_t *) &addrlen ) ) == - 1 ) {
+                    if(( newfd = accept( serverSocket,( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
@@ -100,8 +100,8 @@ int main()
                     close(i);
                     FD_CLR(i , &master);
                     if(i==fdmax){
-                        int * x = master;
-                        int best = &master;
+                        int * x = (int*)&master;
+                        int best = *x;
                         while(x != NULL){
                             if(*x == fdmax) continue;
                             if(*x > best) best = *x;
@@ -111,11 +111,11 @@ int main()
                     }
                 }
                 if(strcmp((char *) &msg,"0")){
-                    for(int * x = master; x!= NULL; x++){
+                    for(int * x = (int*)&master; x!= NULL; x++){
                         if(*x == serverSocket) continue;
                         close(i);
                     }
-                    FD_ZERO(master);
+                    FD_ZERO(&master);
                     shutdown( serverSocket, SHUT_RDWR );
                     close(serverSocket);
                     return 0;
@@ -123,8 +123,6 @@ int main()
             }
         }
     }
-
-
 
     shutdown( serverSocket, SHUT_RDWR );
     close(serverSocket);
