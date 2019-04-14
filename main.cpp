@@ -97,6 +97,7 @@ int main()
 
     while( 1 )
     {
+        cout<<"100"<<endl;
         FD_ZERO(& exceptionsfds);
         FD_ZERO(& receivefds);
         exceptionsfds = master;
@@ -107,11 +108,11 @@ int main()
             perror( "select" );
             exit( 1 );
         }
-
+        cout<<"111"<<endl;
         for(int i = 0; i <= fdmax; i++ ) {
-            printf("%d", i);
+
+          cout<<"113"<<endl;
             if( FD_ISSET( i, & receivefds ) ) {
-              cout<<"receive"<<endl;
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
                     if(( newfd = accept( serverSocket , ( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
@@ -130,26 +131,35 @@ int main()
                     }
                 }
                 else{
-                    if(recv(i , buf , sizeof(buf) , 0) < 0){
+                  cout<<"133"<<endl;
+                    if(recv(i , &buf , sizeof(buf) , 0) < 0){
                         perror("Cannot receive message");
                         exit(-2);
                     }
                     else{
+                      cout<<"138"<<endl;
                         for(int s = 0; s<256;s++){
+                          cout<<"140"<<endl;
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
+                        cout<<"144"<<endl;
                     }
                 }
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
 
+              cout<<"149"<<endl;
             // tutaj klient wysłał dane OOB
                 string msg;
                 recv(i , &msg , 1 , MSG_OOB);
+                cout<<"154"<<endl;
+                cout<<"msg: "<<msg<<endl;
                 if(msg == "1"){
+                  cout<<"155"<<endl;
                     close(i);
                     FD_CLR(i , &master);
+                    cout<<"157"<<endl;
                     if(i==fdmax){
                         int * x = (int*)&master;
                         int best = *x;
@@ -162,6 +172,7 @@ int main()
                     }
                     printf("Connection abandonedened by %d", i);
                 }
+                cout<<"169"<<endl;
                 if(msg == "0"){
                     printf("Server will be closed");
                     for(int * x = (int*)&master; x!= NULL; x++){
@@ -173,6 +184,7 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
+                cout<<"183"<<endl;
             }
         }
     }
