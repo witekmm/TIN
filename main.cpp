@@ -45,18 +45,18 @@ int main()
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
-/*
+
     pthread_t clientThreads[MAX_CONNECTION];
     int rc;
     for(int i = 0; i < MAX_CONNECTION; i++ ) {
-      rc = pthread_create(&clientThreads[i], NULL, NULL, (void *)i);
+      rc = pthread_create(&clientThreads[i], NULL, , (void *) i);
 
       if (rc) {
          cout << "Error:unable to create thread," << rc << endl;
          exit(-1);
       }
    }
-*/
+
     struct sockaddr_in serwer =
     {
         .sin_family = AF_INET,
@@ -79,16 +79,25 @@ int main()
         perror( "setsockopt" );
         exit( 1 );
     }
-
+    // Funkcja która sprawi że będziemy mogli ominąć TIME_WAIT i bez przeszkód bo nieoczekiwanym
+    // końcu serwera znów zbindować socket
+    /*
+    if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
+        perror( "setsockopt" );
+        exit( 1 );
+    }
+    */
     socklen_t len = sizeof( serwer );
 
     if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
         perror( "bind() ERROR" );
+        close(serverSocket);
         exit( 3 );
     }
 
     if( listen( serverSocket, MAX_CONNECTION ) < 0 ){
         perror( "listen() ERROR" );
+        close(serverSocket);
         exit( 4 );
     }
 
@@ -97,19 +106,15 @@ int main()
 
     while( 1 )
     {
-        cout<<"100"<<endl;
         FD_ZERO(& exceptionsfds);
-        cout<<"a"<<endl;
         FD_ZERO(& receivefds);
         exceptionsfds = master;
-        cout<<"b"<<endl;
         receivefds = master;
-        cout<<"c"<<endl;
         struct sockaddr_in client = { };
 
         if( select( fdmax + 1, &receivefds, NULL, &exceptionsfds, NULL ) == - 1 ) {
             perror( "select" );
-            exit( 1 );
+            continue;
         }
         for(int i = 0; i <= fdmax; i++ ) {
 
@@ -129,7 +134,7 @@ int main()
                 else{
                     if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
-                        exit(-2);
+                        break;
                     }
                     string mess(buf);
                     cout<<"buf "<<mess<<endl;
