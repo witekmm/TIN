@@ -121,10 +121,6 @@ int main()
                     if(( newfd = accept( serverSocket , ( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
-<<<<<<< HEAD
-
-=======
->>>>>>> 0f8b3fe4586b3ecfd8165a2b9195af6933ddb6c8
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
@@ -140,7 +136,7 @@ int main()
                     }
                     else{
                       cout<<"138"<<endl;
-                        for(int s = 0; s<256;s++){
+                        for(int s = 0; s<4;s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
