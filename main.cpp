@@ -7,6 +7,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -38,8 +39,14 @@ int main()
     };
 
     socklen_t len = sizeof( serwer );
-
+    //zmienne współdzielone
     int flag = 1;
+    // 1 - serwer słucha
+    // 2 - CLI wysłał rozkaz odłączenia gniazda
+    // 3 - CLI wysłał prośbę o listę gniazd
+    // 4 - CLI wysłał prośbę o numer gniazda serwera
+    int flag_error = 0;
+    int fd_val = 0;
 
     int serverSocket = createSocket(SERWER_IP,serwer);
     doBind(serverSocket , serwer);
@@ -61,7 +68,7 @@ int main()
     return 0;
 }
 
-void commandLine(){
+void commandLine(int &flag, int &fd_val, int& flag_error){
      string cmd;
      int exit_flag = 1;
      while(exit_flag){
@@ -71,22 +78,42 @@ void commandLine(){
             exit_flag = 0;
         }
         else if(cmd == "help"){
-            printf("crtsock - creating socket\n");
-            printf("bindsock - binding socket\n");
-            printf("lissock - turn socket into passive mode\n");
-            printf("selsock - socket is listening\n");
-            printf("exit - close server and cmd\n");
+            printf("exit - close server and cmd.\n");
+            printf("list - show active sockets.\n");
+            printf("server - show server socket number.\n");
+            printf("close - disconnect socket.\n");
         }
-        else if(cmd == "crtsock"){
-
+        else if(cmd == "close"){
+            int fdval = 0;
+            printf("Which socket:");
+            scanf("%d", fdval);
+            while ((getchar()) != '\n');
+            *fd_val = fdval;
+            *flag = 2;
+            while(*flag == 2); //czekamy az drugi wątek zamknie
+            //Taki socket nie istnieje
+            if(*flag_error == 1) printf("Cant find this socket!\n");
+            //Probujemy zamknac np. serwer
+            else if(*flag_error == 2) printf("You can't close this socket!\n");
+            else printf("Socket closed :)\n");
         }
-        else if(cmd == "bindsock"){
-
+        else if(cmd == "list"){
+            *flag = 3;
+            int lastfd = 0;
+            while(*flag == 3){
+                if((*fd_val != 0) && (*fd_val != lastfd)){ //sprawdz czy juz zapisal i czy my go zapisalismy
+                    printf("%d\t", *fd_val); //wypisz fd
+                    lastfd = *fd_val; // zapisz ostatni fd
+                    *fd_val=0; //wyczyszczenie fd_val dla kolejnego numeru fd
+                }
+            }
         }
-        else if(cmd == "lissock"){
-
+        else if(cmd == "server"){
+            *flag = 4;
+            while(*flag == 4);
+            printf("Server socket number is %d", *fd_val);
+            *fd_val = 0;
         }
-        else if(cmd == "exit")
         else{
             printf("Cannot recognize this command!\n");
         }
@@ -144,8 +171,29 @@ int doListen(int serverSocket){
     return 0;
 }
 
-void doSelect(int serverSocket, int& flag){
+int closeClientSocket(fd_set &master,int socketNumber, int fdmax){
+    close(socketNumber);
+    FD_CLR(socketNumber , &master);
+    int max = 0;
+    if(socketNumber == fdmax){
+        for(int x = fdmax-1; x>0 ;x--)
+        {
+          if(FD_ISSET(x, &master) == 1)
+          {
+            max=x;
+            break;
+          }
+        }
+    }
+    printf("Connection with %d has ended.\n", socketNumber);
+    return max;
+}
 
+void doSelect(int serverSocket, int& flag, int& fd_val, int& flag_error){
+
+    struct timeval tv;
+    tv.tv_sec=1;
+    tv.tv_usec=0;
     fd_set master; // główna lista deskryptorów plików
     FD_ZERO(& master);
     FD_SET( serverSocket, & master );
@@ -155,18 +203,34 @@ void doSelect(int serverSocket, int& flag){
     int newfd;
     int addrlen;
 
+    int select_value = 0;
+
     char buf[MAX_MSG_SIZE];
 
     fdmax = serverSocket;
 
-    while(* flag)
+    while( *flag )
     {
         FD_ZERO(& receivefds);
         receivefds = master;
         struct sockaddr_in client = { };
 
-        if( select( fdmax + 1, &receivefds, NULL, NULL, NULL ) == - 1 ) {
-            perror( "select" );
+        if(*flag != 1){
+            if(*flag == 2){
+                while(*fd_val==0);
+                if(FD_ISSET(*fd_val, &master)){
+                    fdmax = closeClientSocket(&master,*fd_val,fdmax);
+                }
+            }
+        }
+
+        select_value = select( fdmax + 1, &receivefds, NULL, NULL,  &tv)
+        if(select_value == - 1 ) {
+            perror( "Select error" );
+            continue;
+        }
+        //jeśli coś się stało podczas selecta to sprawdzamy co jeśli nie to continue
+        if(!select_value) {
             continue;
         }
         for(int i = 0; i <= fdmax; i++ ) {
@@ -188,22 +252,9 @@ void doSelect(int serverSocket, int& flag){
                         perror("Cannot receive message");
                         break;
                     }
+                    string mess(buf);
                     if(mess == "exit"){
-                        close(i);
-                        FD_CLR(i, &master);
-                        int max = 0;
-                        if(i == fdmax){
-                            for(int x = fdmax-1; x>0 ;x--)
-                            {
-                              if(FD_ISSET(x, &master) == 1)
-                              {
-                                max=x;
-                                break;
-                              }
-                            }
-                            fdmax = max;
-                        }
-                        printf("Connection with %d has ended.\n", i);
+                        closeClientSocket(&master,i,fdmax);
                     }
                     else if(mess == "close"){
                         printf("Server will be closed.\n");
