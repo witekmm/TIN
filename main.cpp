@@ -130,7 +130,7 @@ int main()
                 }
                 else{
                   cout<<"133"<<endl;
-                    if(recv(i , &buf , strlen(buf)+1 , 0) < 0){
+                    if(recv(i , &buf , sizeof(buf) , 0) < 0){
                         perror("Cannot receive message");
                         exit(-2);
                     }
@@ -143,6 +143,7 @@ int main()
                         cout<<"144"<<endl;
                     }
                 }
+                break;
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
 
