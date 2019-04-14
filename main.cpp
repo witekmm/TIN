@@ -139,17 +139,19 @@ int main()
                     if(mess == "exit")
                     {
                       close(i);
-                      FD_CLR(i , &master);
-                      // if(i==fdmax){
-                      //     int * x = (int*)&master;
-                      //     int best = *x;
-                      //     while(x != NULL){
-                      //         if(*x == fdmax) continue;
-                      //         if(*x > best) best = *x;
-                      //         x++;
-                      //     }
-                      //     fdmax = best+1;
-                      // }
+                      FD_CLR(i, &master);
+                      int max = fdmax;
+                      if(i==fdmax){
+                          for(int x = fdmax; x>0 ;x--)
+                          {
+                            if(FD_ISSET(x, &master) == 1)
+                            {
+                              if(x>max)
+                                max = x;
+                            }
+                          }
+                          fdmax = max;
+                      }
                       printf("Connection abandonedened by %d", i);
 
 
