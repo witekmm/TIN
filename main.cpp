@@ -136,25 +136,36 @@ int main()
                     }
                     string mess(buf);
                     cout<<"buf "<<mess<<endl;
-                    if(mess == "exit")
-                    {
-                      close(i);
-                      FD_CLR(i, &master);
-                      int max = 0;
-                      if(i == fdmax){
-                          for(int x = fdmax-1; x>0 ;x--)
-                          {
-                            if(FD_ISSET(x, &master) == 1)
+                    if(mess == "exit"){
+                        close(i);
+                        FD_CLR(i, &master);
+                        int max = 0;
+                        if(i == fdmax){
+                            for(int x = fdmax-1; x>0 ;x--)
                             {
-                              max=x;
-                              break;
+                              if(FD_ISSET(x, &master) == 1)
+                              {
+                                max=x;
+                                break;
+                              }
                             }
-                          }
-                          fdmax = max;
-                      }
-                      printf("Connection abandonedened by %d", i);
-
-
+                            fdmax = max;
+                        }
+                        printf("Connection with %d has ended.\n", i);
+                    }
+                    else if(mess == "close"){
+                        printf("Server will be closed.\n");
+                        for(int x = 0 ; x<=fdmax ; x++){
+                            if(FD_ISSET(x , &master) && x!=serverSocket){
+                                printf("Connection with %d has ended.\n", x);
+                                close(x);
+                             }
+                        }
+                        FD_ZERO(&master);
+                        shutdown( serverSocket, SHUT_RDWR );
+                        close(serverSocket);
+                        printf("Server is sleeping.\n");
+                        return 0;
                     }
                     else{
                         for(int s = 0; s<256;s++){
@@ -165,7 +176,7 @@ int main()
                     }
                 }
                 break;
-            }
+            }/*
             if( FD_ISSET( i, & exceptionsfds ) ){
 
               cout<<"149"<<endl;
@@ -201,7 +212,7 @@ int main()
                     return 0;
                 }
                 cout<<"183"<<endl;
-            }
+            }*/
         }
     }
 
