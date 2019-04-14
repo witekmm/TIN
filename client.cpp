@@ -56,19 +56,21 @@ int main()
 
     printf("Connected.\n" );
 
-    char buffer[50] = "SIEMKAZTEJSTRONYMICHAŁ123123";
-    std::string command;
     while(1){
+        std::string command;
         sleep(1);
         printf("Input command:");
         cin>>command;
-        if(strcmp((char *) &command , "send")){
+        if(command == "send"){
+            char buffer[256];
+            cout<<"Input message text:";
+            scanf("%s", buffer);
             if(send(clientSocket, &buffer , sizeof(buffer) , 0) == -1){
                 perror("Cannot send");
                 exit( 5 );
             }
         }
-        if(strcmp((char *) &command , "exit")){
+        if(command == "exit"){
             char stop[] = "1";
             if(send(clientSocket, &stop , sizeof(stop) , MSG_OOB) == -1){
                 perror("Cannot send");
