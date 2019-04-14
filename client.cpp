@@ -77,7 +77,7 @@ int main()
                 exit( 5 );
             }
             sleep(1);
-            break;
+            //break;
 
         }
 
