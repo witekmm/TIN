@@ -136,7 +136,7 @@ int main()
                     }
                     else{
                         for(int s = 0; s<256;s++){
-                            if(buf[s] == '\0') break;
+                            if(buf[s] == '\n') break;
                             printf("%c", buf[s]);
                         }
                         cout<<"144"<<endl;

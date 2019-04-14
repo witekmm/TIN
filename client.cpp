@@ -59,13 +59,15 @@ int main()
     while(1){
         std::string command;
         sleep(1);
+        char z;
         printf("Input command:");
         cin>>command;
+        cin >> noskipws >> z;
         if(command == "send"){
             std::string buffer;
             cout<<"Input message text:";
             getline(cin, buffer);
-            if(send(clientSocket, &buffer , strlen(buffer)+1 , 0) == -1){
+            if(send(clientSocket, &buffer , buffer.length() , 0) == -1){
                 perror("Cannot send");
                 exit( 5 );
             }
