@@ -70,12 +70,10 @@ int main()
 
 void commandLine(int &flag, int &fd_val, int& flag_error){
      string cmd;
-     int exit_flag = 1;
-     while(exit_flag){
+     while(flag){
         getline(cin, cmd);
         if(cmd == "exit"){
-            flag = 0;
-            exit_flag = 0;
+            *flag = 0;
         }
         else if(cmd == "help"){
             printf("exit - close server and cmd.\n");
@@ -283,18 +281,7 @@ void doSelect(int serverSocket, int& flag, int& fd_val, int& flag_error){
                         closeClientSocket(&master,i,fdmax);
                     }
                     else if(mess == "close"){
-                        printf("Server will be closed.\n");
-                        for(int x = 0 ; x<=fdmax ; x++){
-                            if(FD_ISSET(x , &master) && x!=serverSocket){
-                                printf("Connection with %d has ended.\n", x);
-                                close(x);
-                             }
-                        }
-                        FD_ZERO(&master);
-                        shutdown( serverSocket, SHUT_RDWR );
-                        close(serverSocket);
-                        printf("Server is sleeping.\n");
-                        return 0;
+                        *flag = 0;
 
                     }
                     else{
@@ -344,6 +331,16 @@ void doSelect(int serverSocket, int& flag, int& fd_val, int& flag_error){
 
         }
     }
+      printf("Server will be closed.\n");
+      for(int x = 0 ; x<=fdmax ; x++){
+          if(FD_ISSET(x , &master) && x!=serverSocket){
+              printf("Connection with %d has ended.\n", x);
+              close(x);
+           }
+      }
+      FD_ZERO(&master);
       shutdown( serverSocket, SHUT_RDWR );
       close(serverSocket);
+      printf("Server is sleeping.\n");
+      return 0;
 }
