@@ -17,7 +17,7 @@ Uruchomienie clienta
 ```
 Komendy klienta:
 
-send - wysłanie wiadomości
+send - wysłanie wiadomości(serwer póki co obsługuje tylko wiadomości z jednym słowem)
 
 exit - zakończenie działania aktualnego klienta
 
