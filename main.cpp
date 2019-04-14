@@ -77,9 +77,15 @@ void commandLine(){
             printf("selsock - socket is listening\n");
             printf("exit - close server and cmd\n");
         }
-        else if(cmd == "crtsock")
-        else if(cmd == "bindsock")
-        else if(cmd == "lissock")
+        else if(cmd == "crtsock"){
+
+        }
+        else if(cmd == "bindsock"){
+
+        }
+        else if(cmd == "lissock"){
+
+        }
         else if(cmd == "exit")
         else{
             printf("Cannot recognize this command!\n");
