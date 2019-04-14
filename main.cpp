@@ -128,6 +128,9 @@ int main()
                         printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
                 }
+
+
+                
                 else{
                   cout<<"133"<<endl;
                     if(recv(i , &buf , 256 , 0) < 0){
@@ -153,7 +156,6 @@ int main()
                           fdmax = max+1;
                       }
                       printf("Connection abandonedened by %d", i);
-
 
                     }
                     else{
