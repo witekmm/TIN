@@ -72,13 +72,14 @@ int main()
             }
         }
         if(command == "exit"){
-            char stop[] = "1";
-            if(send(clientSocket, &stop , sizeof(stop) , MSG_OOB) == -1){
+            char buffer[5] = "exit";
+            if(send(clientSocket, &buffer , 5, 0) == -1){
                 perror("Cannot send");
                 exit( 5 );
             }
+
             sleep(1);
-            //break;
+            break;
 
         }
 

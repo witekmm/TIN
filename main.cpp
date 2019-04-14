@@ -144,8 +144,8 @@ int main()
                       close(i);
                       FD_CLR(i, &master);
                       int max = 0;
-                      if(i == fdmax-1){
-                          for(int x = fdmax-2; x>0 ;x--)
+                      if(i == fdmax){
+                          for(int x = fdmax-1; x>0 ;x--)
                           {
                             if(FD_ISSET(x, &master) == 1)
                             {
@@ -153,7 +153,7 @@ int main()
                               break;
                             }
                           }
-                          fdmax = max+1;
+                          fdmax = max;
                       }
                       printf("Connection abandonedened by %d", i);
 
