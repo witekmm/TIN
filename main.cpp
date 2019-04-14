@@ -119,10 +119,6 @@ int main()
                         perror( "accept" );
                     } else {
 
-                        recv(i , &buf , sizeof(buf) , MSG_OOB);
-                        cout<<buf[0]<<endl;
-
-
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
