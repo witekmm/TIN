@@ -12,7 +12,7 @@
 #include <netdb.h>
 #include <sys/select.h>
 #include <unistd.h>
- #include <signal.h>
+#include <signal.h>
 #include <pthread.h>
 
 //#include <pthread.h>
@@ -134,9 +134,29 @@ int main()
                         perror("Cannot receive message");
                         exit(-2);
                     }
+                    string mess(buf);
+                    cout<<"buf "<<mess<<endl;
+                    if(mess == "exit")
+                    {
+                      close(i);
+                      FD_CLR(i , &master);
+                      // if(i==fdmax){
+                      //     int * x = (int*)&master;
+                      //     int best = *x;
+                      //     while(x != NULL){
+                      //         if(*x == fdmax) continue;
+                      //         if(*x > best) best = *x;
+                      //         x++;
+                      //     }
+                      //     fdmax = best+1;
+                      // }
+                      printf("Connection abandonedened by %d", i);
+
+
+                    }
                     else{
                         for(int s = 0; s<256;s++){
-                            if(buf[s] == '\n') break;
+                            if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
                         cout<<"144"<<endl;
@@ -150,13 +170,9 @@ int main()
             // tutaj klient wysłał dane OOB
                 string msg;
                 recv(i , &msg , 1 , MSG_OOB);
-                cout<<"154"<<endl;
-                cout<<"msg: "<<msg<<endl;
                 if(msg == "1"){
-                  cout<<"155"<<endl;
                     close(i);
                     FD_CLR(i , &master);
-                    cout<<"157"<<endl;
                     if(i==fdmax){
                         int * x = (int*)&master;
                         int best = *x;

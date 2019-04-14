@@ -62,7 +62,6 @@ int main()
         char z;
         printf("Input command:");
         cin>>command;
-        cin >> noskipws >> z;
         if(command == "send"){
             char buffer[256];
             cout<<"Input message text:";
