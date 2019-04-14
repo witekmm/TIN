@@ -45,10 +45,6 @@ int main()
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
-<<<<<<< HEAD
-
-
-=======
 /*
     pthread_t clientThreads[MAX_CONNECTION];
     int rc;
@@ -61,7 +57,6 @@ int main()
       }
    }
 */
->>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
     struct sockaddr_in serwer =
     {
         .sin_family = AF_INET,
@@ -114,11 +109,7 @@ int main()
         }
 
         for(int i = 0; i <= fdmax; i++ ) {
-<<<<<<< HEAD
-            cout<<"i: "<<i<<endl;
-=======
             printf("%d", i);
->>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
             if( FD_ISSET( i, & receivefds ) ) {
               cout<<"receive"<<endl;
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
@@ -139,19 +130,6 @@ int main()
                     }
                 }
                 else{
-<<<<<<< HEAD
-                    recv(i , &buf , sizeof(buf) , 0);
-                    cout<<"norm: "<<buf[0]<<endl;
-
-                    recv(i , &buf , sizeof(buf) , MSG_OOB);
-                    cout<<"OOB: "<<buf[0]<<endl;
-                }
-            }
-
-
-            signal(SIGURG, handle_sigint);
-
-=======
                     if(recv(i , buf , sizeof(buf) , 0) < 0){
                         perror("Cannot receive message");
                         exit(-2);
@@ -164,7 +142,6 @@ int main()
                     }
                 }
             }/*
->>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
             if( FD_ISSET( i, & exceptionsfds ) ){
 
             // tutaj klient wysłał dane OOB

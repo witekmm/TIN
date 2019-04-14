@@ -56,21 +56,6 @@ int main()
     cout<<"socket: "<<clientSocket<<endl;
     printf("Connected.\n" );
 
-<<<<<<< HEAD
-    char buffer = '1';
-
-    sleep(4);
-    send(clientSocket, &buffer , 1 , MSG_OOB);
-
-
-
-    /*
-    const int clientSocket = accept( socket_,( struct sockaddr * ) & client, & len );
-        if( clientSocket < 0 )
-        {
-            perror( "accept() ERROR" );
-            continue;
-=======
     char buffer[50] = "SIEMKAZTEJSTRONYMICHAŁ123123";
     std::string command;
     while(1){
@@ -82,7 +67,6 @@ int main()
                 perror("Cannot send");
                 exit( 5 );
             }
->>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
         }
         if(strcmp((char *) &command , "exit")){
             char stop[] = "1";
