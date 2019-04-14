@@ -132,6 +132,7 @@ int main()
                         exit(-2);
                     }
                     string mess(buf);
+<<<<<<< HEAD
                     if(mess == "exit")
                     {
                       close(i);
@@ -141,15 +142,47 @@ int main()
                           for(int x = fdmax-1; x>0 ;x--)
                           {
                             if(FD_ISSET(x, &master) == 1)
+=======
+                    cout<<"buf "<<mess<<endl;
+                    if(mess == "exit"){
+                        close(i);
+                        FD_CLR(i, &master);
+                        int max = 0;
+                        if(i == fdmax){
+                            for(int x = fdmax-1; x>0 ;x--)
+>>>>>>> 927a965cdffb0b4fecfe0125820fa25dbca8d32e
                             {
-                              max=x;
-                              break;
+                              if(FD_ISSET(x, &master) == 1)
+                              {
+                                max=x;
+                                break;
+                              }
                             }
+<<<<<<< HEAD
                           }
                           fdmax = max;
                       }
                       printf("Connection abandonedened by %d", i);
 
+=======
+                            fdmax = max;
+                        }
+                        printf("Connection with %d has ended.\n", i);
+                    }
+                    else if(mess == "close"){
+                        printf("Server will be closed.\n");
+                        for(int x = 0 ; x<=fdmax ; x++){
+                            if(FD_ISSET(x , &master) && x!=serverSocket){
+                                printf("Connection with %d has ended.\n", x);
+                                close(x);
+                             }
+                        }
+                        FD_ZERO(&master);
+                        shutdown( serverSocket, SHUT_RDWR );
+                        close(serverSocket);
+                        printf("Server is sleeping.\n");
+                        return 0;
+>>>>>>> 927a965cdffb0b4fecfe0125820fa25dbca8d32e
                     }
                     else{
                         for(int s = 0; s<256;s++){
@@ -159,7 +192,7 @@ int main()
                     }
                 }
                 break;
-            }
+            }/*
             if( FD_ISSET( i, & exceptionsfds ) ){
 
             // tutaj klient wysłał dane OOB
@@ -192,7 +225,12 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
+<<<<<<< HEAD
             }
+=======
+                cout<<"183"<<endl;
+            }*/
+>>>>>>> 927a965cdffb0b4fecfe0125820fa25dbca8d32e
         }
     }
 

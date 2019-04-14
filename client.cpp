@@ -82,6 +82,17 @@ int main()
             break;
 
         }
+        if(command == "close"){
+            char buffer[6] = "close";
+            if(send(clientSocket, &buffer , 6, 0) == -1){
+                perror("Cannot send");
+                exit( 5 );
+            }
+
+            sleep(1);
+            break;
+
+        }
 
     }
 
