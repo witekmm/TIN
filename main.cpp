@@ -111,10 +111,8 @@ int main()
             perror( "select" );
             exit( 1 );
         }
-        cout<<"111"<<endl;
         for(int i = 0; i <= fdmax; i++ ) {
 
-          cout<<"113"<<endl;
             if( FD_ISSET( i, & receivefds ) ) {
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
@@ -128,17 +126,12 @@ int main()
                         printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
                 }
-
-
-                
                 else{
-                  cout<<"133"<<endl;
                     if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
                         exit(-2);
                     }
                     string mess(buf);
-                    cout<<"buf "<<mess<<endl;
                     if(mess == "exit")
                     {
                       close(i);
@@ -163,14 +156,12 @@ int main()
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
-                        cout<<"144"<<endl;
                     }
                 }
                 break;
             }
             if( FD_ISSET( i, & exceptionsfds ) ){
 
-              cout<<"149"<<endl;
             // tutaj klient wysłał dane OOB
                 string msg;
                 recv(i , &msg , 1 , MSG_OOB);
@@ -190,7 +181,6 @@ int main()
                     printf("Connection abandonedened by %d", i);
                     break;
                 }
-                cout<<"169"<<endl;
                 if(msg == "0"){
                     printf("Server will be closed");
                     for(int * x = (int*)&master; x!= NULL; x++){
@@ -202,7 +192,6 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
-                cout<<"183"<<endl;
             }
         }
     }
