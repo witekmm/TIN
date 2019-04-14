@@ -99,9 +99,12 @@ int main()
     {
         cout<<"100"<<endl;
         FD_ZERO(& exceptionsfds);
+        cout<<"a"<<endl;
         FD_ZERO(& receivefds);
         exceptionsfds = master;
+        cout<<"b"<<endl;
         receivefds = master;
+        cout<<"c"<<endl;
         struct sockaddr_in client = { };
 
         if( select( fdmax + 1, &receivefds, NULL, &exceptionsfds, NULL ) == - 1 ) {
@@ -118,11 +121,6 @@ int main()
                     if(( newfd = accept( serverSocket , ( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
-
-                        recv(i , &buf , sizeof(buf) , MSG_OOB);
-                        cout<<buf[0]<<endl;
-
-
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
@@ -132,14 +130,13 @@ int main()
                 }
                 else{
                   cout<<"133"<<endl;
-                    if(recv(i , &buf , sizeof(buf) , 0) < 0){
+                    if(recv(i , &buf , strlen(buf)+1 , 0) < 0){
                         perror("Cannot receive message");
                         exit(-2);
                     }
                     else{
                       cout<<"138"<<endl;
                         for(int s = 0; s<256;s++){
-                          cout<<"140"<<endl;
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
@@ -171,6 +168,7 @@ int main()
                         fdmax = best+1;
                     }
                     printf("Connection abandonedened by %d", i);
+                    break;
                 }
                 cout<<"169"<<endl;
                 if(msg == "0"){
