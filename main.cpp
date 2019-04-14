@@ -141,13 +141,13 @@ int main()
                         }
                     }
                 }
-            }/*
+            }
             if( FD_ISSET( i, & exceptionsfds ) ){
 
             // tutaj klient wysłał dane OOB
                 string msg;
                 recv(i , &msg , 1 , MSG_OOB);
-                if(strcmp((char *) &msg , "1")){
+                if(msg == "1"){
                     close(i);
                     FD_CLR(i , &master);
                     if(i==fdmax){
@@ -162,7 +162,7 @@ int main()
                     }
                     printf("Connection abandonedened by %d", i);
                 }
-                if(strcmp((char *) &msg,"0")){
+                if(msg == "0"){
                     printf("Server will be closed");
                     for(int * x = (int*)&master; x!= NULL; x++){
                         if(*x == serverSocket) continue;
@@ -173,7 +173,7 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
-            }*/
+            }
         }
     }
 
