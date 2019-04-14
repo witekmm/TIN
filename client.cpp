@@ -20,6 +20,9 @@ using namespace std;
 
 int main()
 {
+    int serverStatus;
+    int serverStatusSize = sizeof(serverStatus);
+
     struct sockaddr_in serwer =
     {
         .sin_family = AF_INET,
@@ -39,15 +42,8 @@ int main()
     }
 
     socklen_t len = sizeof( serwer );
-    // if( bind( clientSocket,( struct sockaddr * ) & serwer, len ) < 0 )
-    // {
-    //     perror( "bind() ERROR" );
-    //     exit( 3 );
-    // }
 
     printf( "Waiting for connection...\n" );
-
-    //struct sockaddr_in client = { };
 
     if(connect(clientSocket,( struct sockaddr * ) & serwer,len) == -1){
         perror("Cannot connect");
@@ -55,47 +51,32 @@ int main()
     }
     cout<<"socket: "<<clientSocket<<endl;
     printf("Connected.\n" );
-
-    while(1){
+    char buffer[256] = "start";
+    while(buffer != "stop"){
         std::string command;
-        sleep(1);
-        char z;
-        printf("Input command:");
-        cin>>command;
-        if(command == "send"){
-            char buffer[256];
-            cout<<"Input message text:";
-            scanf("%s", buffer);
-            if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){
-                perror("Cannot send");
-                exit( 5 );
-            }
-        }
-        if(command == "exit"){
-            char buffer[5] = "exit";
-            if(send(clientSocket, &buffer , 5, 0) == -1){
-                perror("Cannot send");
-                exit( 5 );
-            }
-
-            sleep(1);
-            break;
-
-        }
-        if(command == "close"){
-            char buffer[6] = "close";
-            if(send(clientSocket, &buffer , 6, 0) == -1){
-                perror("Cannot send");
-                exit( 5 );
-            }
-
-            sleep(1);
-            break;
-
+        cout<<"Input message:";
+        scanf("%255s", buffer);
+        //trzeba sprawdzić czy to na dole jest dobrze
+        //to jest czyszczenie bufora z nadmiarowych znaków
+        //while ((getchar()) != '\n');
+        if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){
+            //Nie mogę wysłać bo pewnie połączenie zostało zerwane
+            //więc idę spać
+            perror("Cannot send");
+            close(clientSocket);
+            exit( 5 );
         }
 
     }
+    buffer = "exit";
+    if(send(clientSocket, &buffer , 5, 0) == -1){
+        perror("Cannot exit");
+        close(clientSocket);
+        exit( 6 );
+    }
+    close(clientSocket);
 
+    return 0;
 
     //shutdown( socket_, SHUT_RDWR );
 }

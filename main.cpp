@@ -24,95 +24,152 @@
 
 using namespace std;
 
-
-void handle_sigint(int sig)
-{
-    printf("Caught signal %d\n", sig);
-}
+struct sockaddr_in{
+    sa_family_t    sin_family;
+    in_port_t      sin_port;
+};
 
 int main()
 {
+    sockaddr_in serwer =
+    {
+        .sin_family = AF_INET,
+        .sin_port = htons( SERWER_PORT )
+    };
 
-    fd_set master; // główna lista deskryptorów plików
-    fd_set exceptionsfds; // pomocnicza lista deskryptorów dla select()
-    fd_set receivefds; //pomocnicza lista deskryptorów dla select()
-    int fdmax;
-    int newfd;
-    int addrlen;
-    int yes = 1;
-    int no = 0;
-    char buf[MAX_MSG_SIZE];
-    FD_ZERO(& master);
-    FD_ZERO(& exceptionsfds);
-    FD_ZERO(& receivefds);
-/*
+    socklen_t len = sizeof( serwer );
+
+    int flag = 1;
+
+    int serverSocket = createSocket(SERWER_IP,serwer);
+    doBind(serverSocket , serwer);
+    doListen(serverSocket);
+    doSelect(serverSocket , &flag);
+
     pthread_t clientThreads[MAX_CONNECTION];
+
     int rc;
     for(int i = 0; i < MAX_CONNECTION; i++ ) {
-      rc = pthread_create(&clientThreads[i], NULL, NULL, (void *)i);
+      rc = pthread_create(&clientThreads[i], NULL, , (void *) i);
 
       if (rc) {
          cout << "Error:unable to create thread," << rc << endl;
          exit(-1);
       }
-   }
-*/
-    struct sockaddr_in serwer =
-    {
-        .sin_family = AF_INET,
-        .sin_port = htons( SERWER_PORT )
-    };
-    if( inet_pton( AF_INET, SERWER_IP, & serwer.sin_addr ) <= 0 ){
-        perror( "inet_pton() ERROR" );
-        exit( 1 );
     }
 
+    return 0;
+}
 
+void commandLine(){
+     string cmd;
+     int exit_flag = 1;
+     while(exit_flag){
+        getline(cin, cmd);
+        if(cmd == "exit"){
+            flag = 0;
+            exit_flag = 0;
+        }
+        else if(cmd == "help"){
+            printf("crtsock - creating socket\n");
+            printf("bindsock - binding socket\n");
+            printf("lissock - turn socket into passive mode\n");
+            printf("selsock - socket is listening\n");
+            printf("exit - close server and cmd\n");
+        }
+        else if(cmd == "crtsock"){
+
+        }
+        else if(cmd == "bindsock"){
+
+        }
+        else if(cmd == "lissock"){
+
+        }
+        else if(cmd == "exit")
+        else{
+            printf("Cannot recognize this command!\n");
+        }
+     }
+
+}
+
+int createSocket( int serverIP, sockaddr_in serwer){
+    int yes = 1;
+    int no = 0;
+
+    if( inet_pton( AF_INET, serverIP, & serwer.sin_addr ) <= 0 ){
+        perror( "inet_pton() ERROR" );
+        return -1;
+    }
 
     const int serverSocket = socket( AF_INET, SOCK_STREAM, 0 );
+
     if( serverSocket < 0 ){
         perror( "socket() ERROR" );
-        exit( 2 );
+        return -1;
     }
 
     if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
         perror( "setsockopt" );
+        close(serverSocket);
+        return -1;
+    }
+    // Funkcja która sprawi że będziemy mogli ominąć TIME_WAIT i bez przeszkód bo nieoczekiwanym
+    // końcu serwera znów zbindować socket
+    /*
+    if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
+        perror( "setsockopt" );
         exit( 1 );
     }
+    */
+    return serverSocket;
+}
 
-    socklen_t len = sizeof( serwer );
-
+int doBind(int serverSocket, sockaddr_in serwer){
     if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
         perror( "bind() ERROR" );
-        exit( 3 );
+        close(serverSocket);
+        return -1;
     }
+    return 0;
+}
 
+int doListen(int serverSocket){
     if( listen( serverSocket, MAX_CONNECTION ) < 0 ){
         perror( "listen() ERROR" );
-        exit( 4 );
+        close(serverSocket);
+        return -1;
     }
+    return 0;
+}
 
+void doSelect(int serverSocket, int& flag){
+
+    fd_set master; // główna lista deskryptorów plików
+    FD_ZERO(& master);
     FD_SET( serverSocket, & master );
+    fd_set receivefds; //pomocnicza lista deskryptorów dla select()
+
+    int fdmax;
+    int newfd;
+    int addrlen;
+
+    char buf[MAX_MSG_SIZE];
+
     fdmax = serverSocket;
 
-    while( 1 )
+    while(* flag)
     {
-        cout<<"100"<<endl;
-        FD_ZERO(& exceptionsfds);
-        cout<<"a"<<endl;
         FD_ZERO(& receivefds);
-        exceptionsfds = master;
-        cout<<"b"<<endl;
         receivefds = master;
-        cout<<"c"<<endl;
         struct sockaddr_in client = { };
 
-        if( select( fdmax + 1, &receivefds, NULL, &exceptionsfds, NULL ) == - 1 ) {
+        if( select( fdmax + 1, &receivefds, NULL, NULL, NULL ) == - 1 ) {
             perror( "select" );
-            exit( 1 );
+            continue;
         }
         for(int i = 0; i <= fdmax; i++ ) {
-
             if( FD_ISSET( i, & receivefds ) ) {
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
@@ -129,10 +186,13 @@ int main()
                 else{
                     if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
-                        exit(-2);
+                        break;
                     }
+<<<<<<< HEAD
                     string mess(buf);
                     cout<<"buf "<<mess<<endl;
+=======
+>>>>>>> eb6e9fb7ff6ae32636d2e346a85c088de8120856
                     if(mess == "exit"){
                         close(i);
                         FD_CLR(i, &master);
@@ -163,6 +223,10 @@ int main()
                         close(serverSocket);
                         printf("Server is sleeping.\n");
                         return 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> eb6e9fb7ff6ae32636d2e346a85c088de8120856
                     }
                     else{
                         for(int s = 0; s<256;s++){
@@ -205,13 +269,17 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
+<<<<<<< HEAD
                 cout<<"183"<<endl;
             }*/
+=======
+
+                cout<<"183"<<endl;
+            }*/
+
+>>>>>>> eb6e9fb7ff6ae32636d2e346a85c088de8120856
         }
     }
-
-    shutdown( serverSocket, SHUT_RDWR );
-    close(serverSocket);
-
-    return 0;
+      shutdown( serverSocket, SHUT_RDWR );
+      close(serverSocket);
 }
