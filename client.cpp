@@ -54,9 +54,11 @@ int main()
     char buffer[256] = "start";
     while(buffer != "stop"){
         std::string command;
-        sleep(1);
         cout<<"Input message:";
-        scanf("%s", buffer);
+        scanf("%255s", buffer);
+        //trzeba sprawdzić czy to na dole jest dobrze
+        //to jest czyszczenie bufora z nadmiarowych znaków
+        //while ((getchar()) != '\n');
         if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){
             //Nie mogę wysłać bo pewnie połączenie zostało zerwane
             //więc idę spać
@@ -67,7 +69,7 @@ int main()
 
     }
     buffer = "exit";
-    if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){
+    if(send(clientSocket, &buffer , 5, 0) == -1){
         perror("Cannot exit");
         close(clientSocket);
         exit( 6 );
