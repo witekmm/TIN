@@ -13,7 +13,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 
-#include <pthread.h>
+//#include <pthread.h>
 
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
@@ -37,7 +37,7 @@ int main()
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
-
+/*
     pthread_t clientThreads[MAX_CONNECTION];
     int rc;
     for(int i = 0; i < MAX_CONNECTION; i++ ) {
@@ -48,7 +48,7 @@ int main()
          exit(-1);
       }
    }
-
+*/
     struct sockaddr_in serwer =
     {
         .sin_family = AF_INET,
@@ -89,8 +89,9 @@ int main()
 
     while( 1 )
     {
-
-      exceptionsfds = master;
+        FD_ZERO(& exceptionsfds);
+        FD_ZERO(& receivefds);
+        exceptionsfds = master;
         receivefds = master;
         struct sockaddr_in client = { };
 
@@ -100,6 +101,7 @@ int main()
         }
 
         for(int i = 0; i <= fdmax; i++ ) {
+            printf("%d", i);
             if( FD_ISSET( i, & receivefds ) ) {
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
@@ -114,10 +116,18 @@ int main()
                     }
                 }
                 else{
-                    recv(i , buf , sizeof(buf) , 0);
-                    cout<<buf;
+                    if(recv(i , buf , sizeof(buf) , 0) < 0){
+                        perror("Cannot receive message");
+                        exit(-2);
+                    }
+                    else{
+                        for(int s = 0; s<256;s++){
+                            if(buf[s] == '\0') break;
+                            printf("%c", buf[s]);
+                        }
+                    }
                 }
-            }
+            }/*
             if( FD_ISSET( i, & exceptionsfds ) ){
               printf("Dupa");
 
@@ -150,7 +160,7 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
-            }
+            }*/
         }
     }
 
