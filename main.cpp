@@ -174,8 +174,9 @@ int doListen(int serverSocket){
 int closeClientSocket(fd_set &master,int socketNumber, int fdmax){
     close(socketNumber);
     FD_CLR(socketNumber , &master);
-    int max = 0;
+    int max = fdmax;
     if(socketNumber == fdmax){
+        max = 0;
         for(int x = fdmax-1; x>0 ;x--)
         {
           if(FD_ISSET(x, &master) == 1)
@@ -214,16 +215,41 @@ void doSelect(int serverSocket, int& flag, int& fd_val, int& flag_error){
         FD_ZERO(& receivefds);
         receivefds = master;
         struct sockaddr_in client = { };
-
+        //obsługa CLI
         if(*flag != 1){
-            if(*flag == 2){
+            if(*flag == 2){//zamknij proces
                 while(*fd_val==0);
                 if(FD_ISSET(*fd_val, &master)){
-                    fdmax = closeClientSocket(&master,*fd_val,fdmax);
+                    if(*fd_val == serverSocket){//próbujemy zamknac serwer
+                        *flag_error = 2;
+                        *flag = 1;
+                    }
+                    else{
+                        fdmax = closeClientSocket(&master,*fd_val,fdmax);
+                        *flag = 1;
+                    }
+                }
+                else{
+                    *flag = 1;
+                    *flag_error = 1;
                 }
             }
-        }
+            else if(*flag == 3){
+                for(int i = 0; i<=fdmax;i++){
+                    if(FD_ISSET(i, &master)){
+                        *fd_val = i;
+                        while(*fd_val != 0);
+                    }
 
+                }
+                *flag = 1;
+            }
+            else if(*flag == 4){
+                *fd_val = serverSocket;
+                *flag = 1;
+            }
+        }
+        //Obsługa klientów
         select_value = select( fdmax + 1, &receivefds, NULL, NULL,  &tv)
         if(select_value == - 1 ) {
             perror( "Select error" );
