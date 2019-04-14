@@ -130,7 +130,7 @@ int main()
                 }
                 else{
                   cout<<"133"<<endl;
-                    if(recv(i , &buf , sizeof(buf) , 0) < 0){
+                    if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
                         exit(-2);
                     }
