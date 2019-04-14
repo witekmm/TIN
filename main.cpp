@@ -12,13 +12,21 @@
 #include <netdb.h>
 #include <sys/select.h>
 #include <unistd.h>
+ #include <signal.h>
+#include <pthread.h>
 
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
-#define MAX_MSG_SIZE 256
+#define MAX_MSG_SIZE 1
 
 using namespace std;
+
+
+void handle_sigint(int sig)
+{
+    printf("Caught signal %d\n", sig);
+}
 
 int main()
 {
@@ -36,7 +44,6 @@ int main()
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
 
-    //pthread_t clientThreads[MAX_CONNECTION];
 
     struct sockaddr_in serwer =
     {
@@ -63,7 +70,7 @@ int main()
 
     socklen_t len = sizeof( serwer );
 
-     if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
+    if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
         perror( "bind() ERROR" );
         exit( 3 );
     }
@@ -89,12 +96,19 @@ int main()
         }
 
         for(int i = 0; i <= fdmax; i++ ) {
+            cout<<"i: "<<i<<endl;
             if( FD_ISSET( i, & receivefds ) ) {
+              cout<<"receive"<<endl;
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
                     if(( newfd = accept( serverSocket , ( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
                         perror( "accept" );
                     } else {
+
+                        recv(i , &buf , sizeof(buf) , MSG_OOB);
+                        cout<<buf[0]<<endl;
+
+
                         FD_SET( newfd, & master ); // dodaj do głównego zestawu
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
@@ -103,12 +117,18 @@ int main()
                     }
                 }
                 else{
-                    recv(i , buf , sizeof(buf) , NULL);
-                    cout<<buf;
+                    recv(i , &buf , sizeof(buf) , 0);
+                    cout<<"norm: "<<buf[0]<<endl;
+
+                    recv(i , &buf , sizeof(buf) , MSG_OOB);
+                    cout<<"OOB: "<<buf[0]<<endl;
                 }
             }
+
+
+            signal(SIGURG, handle_sigint);
+
             if( FD_ISSET( i, & exceptionsfds ) ){
-              printf("Dupa");
 
             // tutaj klient wysłał dane OOB
                 string msg;

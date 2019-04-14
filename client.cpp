@@ -53,12 +53,12 @@ int main()
         perror("Cannon connect");
         exit( 4 );
     }
-
+    cout<<"socket: "<<clientSocket<<endl;
     printf("Connected.\n" );
 
-    string buffer = "1";
+    char buffer = '1';
 
-    sleep(2);
+    sleep(4);
     send(clientSocket, &buffer , 1 , MSG_OOB);
 
 
