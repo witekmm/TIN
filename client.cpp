@@ -65,7 +65,7 @@ int main()
             char buffer[256];
             cout<<"Input message text:";
             scanf("%s", buffer);
-            if(send(clientSocket, &buffer , sizeof(buffer) , 0) == -1){
+            if(send(clientSocket, &buffer , strlen(buffer)+1 , 0) == -1){
                 perror("Cannot send");
                 exit( 5 );
             }
