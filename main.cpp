@@ -15,6 +15,8 @@
  #include <signal.h>
 #include <pthread.h>
 
+//#include <pthread.h>
+
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
@@ -43,8 +45,23 @@ int main()
     FD_ZERO(& master);
     FD_ZERO(& exceptionsfds);
     FD_ZERO(& receivefds);
+<<<<<<< HEAD
 
 
+=======
+/*
+    pthread_t clientThreads[MAX_CONNECTION];
+    int rc;
+    for(int i = 0; i < MAX_CONNECTION; i++ ) {
+      rc = pthread_create(&clientThreads[i], NULL, NULL, (void *)i);
+
+      if (rc) {
+         cout << "Error:unable to create thread," << rc << endl;
+         exit(-1);
+      }
+   }
+*/
+>>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
     struct sockaddr_in serwer =
     {
         .sin_family = AF_INET,
@@ -85,8 +102,9 @@ int main()
 
     while( 1 )
     {
-
-      exceptionsfds = master;
+        FD_ZERO(& exceptionsfds);
+        FD_ZERO(& receivefds);
+        exceptionsfds = master;
         receivefds = master;
         struct sockaddr_in client = { };
 
@@ -96,7 +114,11 @@ int main()
         }
 
         for(int i = 0; i <= fdmax; i++ ) {
+<<<<<<< HEAD
             cout<<"i: "<<i<<endl;
+=======
+            printf("%d", i);
+>>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
             if( FD_ISSET( i, & receivefds ) ) {
               cout<<"receive"<<endl;
                 if( i == serverSocket ) { //NOWE POŁĄCZENIE
@@ -117,6 +139,7 @@ int main()
                     }
                 }
                 else{
+<<<<<<< HEAD
                     recv(i , &buf , sizeof(buf) , 0);
                     cout<<"norm: "<<buf[0]<<endl;
 
@@ -128,6 +151,20 @@ int main()
 
             signal(SIGURG, handle_sigint);
 
+=======
+                    if(recv(i , buf , sizeof(buf) , 0) < 0){
+                        perror("Cannot receive message");
+                        exit(-2);
+                    }
+                    else{
+                        for(int s = 0; s<256;s++){
+                            if(buf[s] == '\0') break;
+                            printf("%c", buf[s]);
+                        }
+                    }
+                }
+            }/*
+>>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
             if( FD_ISSET( i, & exceptionsfds ) ){
 
             // tutaj klient wysłał dane OOB
@@ -159,7 +196,7 @@ int main()
                     close(serverSocket);
                     return 0;
                 }
-            }
+            }*/
         }
     }
 

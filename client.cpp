@@ -50,12 +50,13 @@ int main()
     //struct sockaddr_in client = { };
 
     if(connect(clientSocket,( struct sockaddr * ) & serwer,len) == -1){
-        perror("Cannon connect");
+        perror("Cannot connect");
         exit( 4 );
     }
     cout<<"socket: "<<clientSocket<<endl;
     printf("Connected.\n" );
 
+<<<<<<< HEAD
     char buffer = '1';
 
     sleep(4);
@@ -69,26 +70,33 @@ int main()
         {
             perror( "accept() ERROR" );
             continue;
+=======
+    char buffer[50] = "SIEMKAZTEJSTRONYMICHAŁ123123";
+    std::string command;
+    while(1){
+        sleep(1);
+        printf("Input command:");
+        cin>>command;
+        if(strcmp((char *) &command , "send")){
+            if(send(clientSocket, &buffer , sizeof(buffer) , 0) == -1){
+                perror("Cannot send");
+                exit( 5 );
+            }
+>>>>>>> 4c4b423b6591bfe9843e59f5ea6406ea4fa3c9f4
+        }
+        if(strcmp((char *) &command , "exit")){
+            char stop[] = "1";
+            if(send(clientSocket, &stop , sizeof(stop) , MSG_OOB) == -1){
+                perror("Cannot send");
+                exit( 5 );
+            }
+            sleep(1);
+            break;
+
         }
 
-        char buffer[ MAX_MSG_LEN ] = { };
+    }
 
-        if( recv( clientSocket, buffer, sizeof( buffer ), 0 ) <= 0 )
-        {
-            perror( "recv() ERROR" );
-            exit( 5 );
-        }
-        printf( "|Message from client|: %s \n", buffer );
-
-        strcpy( buffer, "Message from server" );
-        if( send( clientSocket, buffer, strlen( buffer ), 0 ) <= 0 )
-        {
-            perror( "send() ERROR" );
-            exit( 6 );
-        }
-
-        shutdown( clientSocket, SHUT_RDWR );
-    */
 
     //shutdown( socket_, SHUT_RDWR );
 }
