@@ -62,9 +62,9 @@ int main()
         printf("Input command:");
         cin>>command;
         if(command == "send"){
-            char buffer[256];
+            std::string buffer;
             cout<<"Input message text:";
-            scanf("%s", buffer);
+            getline(cin, buffer);
             if(send(clientSocket, &buffer , strlen(buffer)+1 , 0) == -1){
                 perror("Cannot send");
                 exit( 5 );

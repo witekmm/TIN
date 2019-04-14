@@ -20,7 +20,7 @@
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
-#define MAX_MSG_SIZE 1
+#define MAX_MSG_SIZE 4000
 
 using namespace std;
 
@@ -135,8 +135,7 @@ int main()
                         exit(-2);
                     }
                     else{
-                      cout<<"138"<<endl;
-                        for(int s = 0; s<4;s++){
+                        for(int s = 0; s<256;s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
