@@ -56,9 +56,8 @@ int main()
         std::string command;
         cout<<"Input message:";
         scanf("%255s", buffer);
-        //trzeba sprawdzić czy to na dole jest dobrze
         //to jest czyszczenie bufora z nadmiarowych znaków
-        //while ((getchar()) != '\n');
+        while ((getchar()) != '\n');
         if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){
             //Nie mogę wysłać bo pewnie połączenie zostało zerwane
             //więc idę spać

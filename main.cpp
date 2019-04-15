@@ -7,6 +7,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -20,7 +21,7 @@
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
-#define MAX_MSG_SIZE 4000
+#define MAX_MSG_SIZE 256
 
 using namespace std;
 
@@ -28,6 +29,21 @@ struct sockaddr_in{
     sa_family_t    sin_family;
     in_port_t      sin_port;
 };
+
+//zmienne współdzielone
+int g_flag = 1;
+// 1 - serwer słucha a CLI nie wymaga komunikacji z serwerem
+// 2 - CLI wysłał rozkaz odłączenia gniazda
+// 3 - CLI wysłał prośbę o listę gniazd
+// 4 - CLI wysłał prośbę o numer gniazda serwera
+int g_flag_error = 0;
+int g_fd_val = 0;
+/* być może tak trzeba będzie przekazać argumenty do funkcji
+commandLine(wsk_flag,wsk_flag_error,wsk_fd_val);
+int *wsk_flag = &dlugosc;
+int *wsk_flag_error = &flag_error;
+int *wsk_fd_val = &fd_val;
+*/
 
 int main()
 {
@@ -39,54 +55,68 @@ int main()
 
     socklen_t len = sizeof( serwer );
 
-    int flag = 1;
+    pthread_t CLIThread;
 
-    int serverSocket = createSocket(SERWER_IP,serwer);
-    doBind(serverSocket , serwer);
-    doListen(serverSocket);
-    doSelect(serverSocket , &flag);
-
-    pthread_t clientThreads[MAX_CONNECTION];
-
-    int rc;
-    for(int i = 0; i < MAX_CONNECTION; i++ ) {
-      rc = pthread_create(&clientThreads[i], NULL, , (void *) i);
-
-      if (rc) {
-         cout << "Error:unable to create thread," << rc << endl;
-         exit(-1);
-      }
+    if(pthread_create( &CLIThread , NULL, CLI , NULL) != 0){
+      perror("Cannot create CLI thread!\n");
+      return 1;
     }
+
+    int serverSocket = createSocket(SERWER_IP , serwer);
+    doBind(serverSocket , serwer , len);
+    doListen(serverSocket);
+    doSelect(serverSocket , &g_flag, &g_fd_val, &g_flag_error);
 
     return 0;
 }
 
-void commandLine(){
+void *CLI(void *){ commandLine(&g_flag, &g_fd_val, &g_flag_error); }
+
+void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
-     int exit_flag = 1;
-     while(exit_flag){
+     while(flag){
+        printf("Input command:");
         getline(cin, cmd);
         if(cmd == "exit"){
-            flag = 0;
-            exit_flag = 0;
+            *flag = 0;
         }
         else if(cmd == "help"){
-            printf("crtsock - creating socket\n");
-            printf("bindsock - binding socket\n");
-            printf("lissock - turn socket into passive mode\n");
-            printf("selsock - socket is listening\n");
-            printf("exit - close server and cmd\n");
+            printf("exit - close server and cmd.\n");
+            printf("list - show active sockets.\n");
+            printf("server - show server socket number.\n");
+            printf("close - disconnect socket.\n");
         }
-        else if(cmd == "crtsock"){
-
+        else if(cmd == "close"){
+            int fdval = 0;
+            printf("Which socket:");
+            scanf("%d", fdval);
+            while ((getchar()) != '\n');
+            *fd_val = fdval;
+            *flag = 2;
+            while(*flag == 2); //czekamy az drugi wątek zamknie
+            //Taki socket nie istnieje
+            if(*flag_error == 1) printf("Cant find this socket!\n");
+            //Probujemy zamknac np. serwer
+            else if(*flag_error == 2) printf("You can't close this socket!\n");
+            else printf("Socket closed :)\n");
         }
-        else if(cmd == "bindsock"){
-
+        else if(cmd == "list"){
+            *flag = 3;
+            int lastfd = 0;
+            while(*flag == 3){
+                if((*fd_val != 0) && (*fd_val != lastfd)){ //sprawdz czy juz zapisal i czy my go zapisalismy
+                    printf("%d\t", *fd_val); //wypisz fd
+                    lastfd = *fd_val; // zapisz ostatni fd
+                    *fd_val=0; //wyczyszczenie fd_val dla kolejnego numeru fd
+                }
+            }
         }
-        else if(cmd == "lissock"){
-
+        else if(cmd == "server"){
+            *flag = 4;
+            while(*flag == 4);
+            printf("Server socket number is %d", *fd_val);
+            *fd_val = 0;
         }
-        else if(cmd == "exit")
         else{
             printf("Cannot recognize this command!\n");
         }
@@ -126,7 +156,7 @@ int createSocket( int serverIP, sockaddr_in serwer){
     return serverSocket;
 }
 
-int doBind(int serverSocket, sockaddr_in serwer){
+int doBind(int serverSocket, sockaddr_in serwer,socklen_t len){
     if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
         perror( "bind() ERROR" );
         close(serverSocket);
@@ -144,8 +174,30 @@ int doListen(int serverSocket){
     return 0;
 }
 
-void doSelect(int serverSocket, int& flag){
+int closeClientSocket(fd_set &master,int socketNumber, int fdmax){
+    close(socketNumber);
+    FD_CLR(socketNumber , &master);
+    int max = fdmax;
+    if(socketNumber == fdmax){
+        max = 0;
+        for(int x = fdmax-1; x>0 ;x--)
+        {
+          if(FD_ISSET(x, &master) == 1)
+          {
+            max=x;
+            break;
+          }
+        }
+    }
+    printf("Connection with %d has ended.\n", socketNumber);
+    return max;
+}
 
+void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
+
+    struct timeval tv;
+    tv.tv_sec=1;
+    tv.tv_usec=0;
     fd_set master; // główna lista deskryptorów plików
     FD_ZERO(& master);
     FD_SET( serverSocket, & master );
@@ -155,18 +207,59 @@ void doSelect(int serverSocket, int& flag){
     int newfd;
     int addrlen;
 
+    int select_value = 0;
+
     char buf[MAX_MSG_SIZE];
 
     fdmax = serverSocket;
 
-    while(* flag)
+    while( *flag )
     {
         FD_ZERO(& receivefds);
         receivefds = master;
         struct sockaddr_in client = { };
+        //obsługa CLI
+        if(*flag != 1){
+            if(*flag == 2){//zamknij proces
+                while(*fd_val==0);
+                if(FD_ISSET(*fd_val, &master)){
+                    if(*fd_val == serverSocket){//próbujemy zamknac serwer
+                        *flag_error = 2;
+                        *flag = 1;
+                    }
+                    else{
+                        fdmax = closeClientSocket(&master,*fd_val,fdmax);
+                        *flag = 1;
+                    }
+                }
+                else{
+                    *flag_error = 1;
+                    *flag = 1;
+                }
+            }
+            else if(*flag == 3){
+                for(int i = 0; i<=fdmax;i++){
+                    if(FD_ISSET(i, &master)){
+                        *fd_val = i;
+                        while(*fd_val != 0);
+                    }
 
-        if( select( fdmax + 1, &receivefds, NULL, NULL, NULL ) == - 1 ) {
-            perror( "select" );
+                }
+                *flag = 1;
+            }
+            else if(*flag == 4){
+                *fd_val = serverSocket;
+                *flag = 1;
+            }
+        }
+        //Obsługa klientów
+        select_value = select( fdmax + 1, &receivefds, NULL, NULL,  &tv)
+        if(select_value == - 1 ) {
+            perror( "Select error" );
+            continue;
+        }
+        //jeśli coś się stało podczas selecta to sprawdzamy co jeśli nie to continue
+        if(!select_value) {
             continue;
         }
         for(int i = 0; i <= fdmax; i++ ) {
@@ -180,93 +273,42 @@ void doSelect(int serverSocket, int& flag){
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
-                        printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
+                        printf( "Server: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
                 }
-                else{
+                else{ // KLIENT CHCE PISAC
                     if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
                         break;
                     }
+                    string mess(buf);
                     if(mess == "exit"){
-                        close(i);
-                        FD_CLR(i, &master);
-                        int max = 0;
-                        if(i == fdmax){
-                            for(int x = fdmax-1; x>0 ;x--)
-                            {
-                              if(FD_ISSET(x, &master) == 1)
-                              {
-                                max=x;
-                                break;
-                              }
-                            }
-                            fdmax = max;
-                        }
-                        printf("Connection with %d has ended.\n", i);
+                        closeClientSocket(&master,i,fdmax);
                     }
                     else if(mess == "close"){
-                        printf("Server will be closed.\n");
-                        for(int x = 0 ; x<=fdmax ; x++){
-                            if(FD_ISSET(x , &master) && x!=serverSocket){
-                                printf("Connection with %d has ended.\n", x);
-                                close(x);
-                             }
-                        }
-                        FD_ZERO(&master);
-                        shutdown( serverSocket, SHUT_RDWR );
-                        close(serverSocket);
-                        printf("Server is sleeping.\n");
-                        return 0;
+                        *flag = 0;
 
                     }
-                    else{
+                    else{//Przyszła zwykła wiadomość
                         for(int s = 0; s<256;s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
                     }
                 }
-                break;
-            }/*
-            if( FD_ISSET( i, & exceptionsfds ) ){
-
-            // tutaj klient wysłał dane OOB
-                string msg;
-                recv(i , &msg , 1 , MSG_OOB);
-                if(msg == "1"){
-                    close(i);
-                    FD_CLR(i , &master);
-                    if(i==fdmax){
-                        int * x = (int*)&master;
-                        int best = *x;
-                        while(x != NULL){
-                            if(*x == fdmax) continue;
-                            if(*x > best) best = *x;
-                            x++;
-                        }
-                        fdmax = best+1;
-                    }
-                    printf("Connection abandonedened by %d", i);
-                    break;
-                }
-                if(msg == "0"){
-                    printf("Server will be closed");
-                    for(int * x = (int*)&master; x!= NULL; x++){
-                        if(*x == serverSocket) continue;
-                        close(i);
-                    }
-                    FD_ZERO(&master);
-                    shutdown( serverSocket, SHUT_RDWR );
-                    close(serverSocket);
-                    return 0;
-                }
-
-                cout<<"183"<<endl;
-            }*/
-
+            }
         }
     }
+      printf("Server will be closed.\n");
+      for(int x = 0 ; x<=fdmax ; x++){
+          if(FD_ISSET(x , &master) && x!=serverSocket){
+              printf("Connection with %d has ended.\n", x);
+              close(x);
+           }
+      }
+      FD_ZERO(&master);
       shutdown( serverSocket, SHUT_RDWR );
       close(serverSocket);
+      printf("Server is sleeping.\n");
+      return 0;
 }
