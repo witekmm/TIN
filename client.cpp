@@ -52,10 +52,12 @@ int main()
     cout<<"socket: "<<clientSocket<<endl;
     printf("Connected.\n" );
     char buffer[256] = "start";
-    while(buffer != "stop"){
+    while(strcmp(buffer,"stop")!=0){
         std::string command;
         cout<<"Input message:";
         scanf("%255s", buffer);
+        int leng=strlen(buffer);
+        buffer[leng]='\0';
         //to jest czyszczenie bufora z nadmiarowych znaków
         while ((getchar()) != '\n');
         if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){

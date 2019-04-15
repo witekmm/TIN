@@ -48,30 +48,30 @@ int *wsk_fd_val = &fd_val;
 void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
      while(flag){
-        printf("Input command:");
+        puts("Input command:");
         getline(cin, cmd);
         if(cmd == "exit"){
             *flag = 0;
         }
         else if(cmd == "help"){
-            printf("exit - close server and cmd.\n");
-            printf("list - show active sockets.\n");
-            printf("server - show server socket number.\n");
-            printf("close - disconnect socket.\n");
+            puts("exit - close server and cmd.");
+            puts("list - show active sockets.");
+            puts("server - show server socket number.");
+            puts("close - disconnect socket.");
         }
         else if(cmd == "close"){
             int fdval = 0;
-            printf("Which socket:");
+            puts("Which socket:");
             scanf("%d", &fdval);
             while ((getchar()) != '\n');
             *fd_val = fdval;
             *flag = 2;
             while(*flag == 2); //czekamy az drugi wątek zamknie
             //Taki socket nie istnieje
-            if(*flag_error == 1) printf("Cant find this socket!\n");
+            if(*flag_error == 1) puts("Cant find this socket!\n");
             //Probujemy zamknac np. serwer
-            else if(*flag_error == 2) printf("You can't close this socket!\n");
-            else printf("Socket closed :)\n");
+            else if(*flag_error == 2) puts("You can't close this socket!\n");
+            else puts("Socket closed :)\n");
         }
         else if(cmd == "list"){
             *flag = 3;
@@ -83,11 +83,12 @@ void commandLine(int *flag, int *fd_val, int *flag_error){
                     *fd_val=0; //wyczyszczenie fd_val dla kolejnego numeru fd
                 }
             }
+            printf("\n");
         }
         else if(cmd == "server"){
             *flag = 4;
             while(*flag == 4);
-            printf("Server socket number is %d", *fd_val);
+            printf("Server socket number is %d\n", *fd_val);
             *fd_val = 0;
         }
         else{
@@ -121,12 +122,12 @@ int createSocket( string serverIP, sockaddr_in serwer){
     }
     // Funkcja która sprawi że będziemy mogli ominąć TIME_WAIT i bez przeszkód bo nieoczekiwanym
     // końcu serwera znów zbindować socket
-    /*
+
     if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
         perror( "setsockopt" );
         exit( 1 );
     }
-    */
+
     return serverSocket;
 }
 
@@ -163,7 +164,7 @@ int closeClientSocket(fd_set &master,int socketNumber, int fdmax){
           }
         }
     }
-    printf("Connection with %d has ended.\n", socketNumber);
+    printf("\nConnection with %d has ended.\n", socketNumber);
     return max;
 }
 
@@ -247,7 +248,8 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
-                        printf( "Server: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
+                        printf("\nServer: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
+                        puts("Input command:");
                     }
                 }
                 else{ // KLIENT CHCE PISAC
@@ -264,10 +266,13 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
 
                     }
                     else{//Przyszła zwykła wiadomość
+                        printf("The message from %d is:", i);
                         for(int s = 0; s<256;s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
+                        printf("\n");
+                        puts("Input command:");
                     }
                 }
             }
@@ -276,7 +281,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
       printf("Server will be closed.\n");
       for(int x = 0 ; x<=fdmax ; x++){
           if(FD_ISSET(x , &master) && x!=serverSocket){
-              printf("Connection with %d has ended.\n", x);
+              printf("\nConnection with %d has ended.\n", x);
               close(x);
            }
       }
