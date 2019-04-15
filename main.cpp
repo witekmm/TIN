@@ -188,11 +188,6 @@ void doSelect(int serverSocket, int& flag){
                         perror("Cannot receive message");
                         break;
                     }
-<<<<<<< HEAD
-                    string mess(buf);
-                    cout<<"buf "<<mess<<endl;
-=======
->>>>>>> eb6e9fb7ff6ae32636d2e346a85c088de8120856
                     if(mess == "exit"){
                         close(i);
                         FD_CLR(i, &master);
@@ -223,10 +218,7 @@ void doSelect(int serverSocket, int& flag){
                         close(serverSocket);
                         printf("Server is sleeping.\n");
                         return 0;
-<<<<<<< HEAD
-=======
 
->>>>>>> eb6e9fb7ff6ae32636d2e346a85c088de8120856
                     }
                     else{
                         for(int s = 0; s<256;s++){
@@ -269,15 +261,10 @@ void doSelect(int serverSocket, int& flag){
                     close(serverSocket);
                     return 0;
                 }
-<<<<<<< HEAD
-                cout<<"183"<<endl;
-            }*/
-=======
 
                 cout<<"183"<<endl;
             }*/
 
->>>>>>> eb6e9fb7ff6ae32636d2e346a85c088de8120856
         }
     }
       shutdown( serverSocket, SHUT_RDWR );
