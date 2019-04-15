@@ -54,7 +54,7 @@ void commandLine(int *flag, int *fd_val, int *flag_error){
             *flag = 0;
         }
         else if(cmd == "help"){
-            puts("exit - close server and cmd.");
+            puts("exit - close server and CLI.");
             puts("list - show active sockets.");
             puts("server - show server socket number.");
             puts("close - disconnect socket.");
@@ -115,17 +115,17 @@ int createSocket( string serverIP, sockaddr_in serwer){
         return -1;
     }
 
-    if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
-        perror( "setsockopt" );
-        close(serverSocket);
-        return -1;
-    }
+    //if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
+    //    perror( "setsockopt" );
+    //    close(serverSocket);
+    //    return -1;
+    //}
     // Funkcja która sprawi że będziemy mogli ominąć TIME_WAIT i bez przeszkód bo nieoczekiwanym
     // końcu serwera znów zbindować socket
 
     if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
         perror( "setsockopt" );
-        exit( 1 );
+        return -1;
     }
 
     return serverSocket;
@@ -248,6 +248,8 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
+                        char alive = '1';
+                        send(newfd, &alive, 1 , MSG_DONTWAIT);
                         printf("\nServer: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                         puts("Input command:");
                     }
