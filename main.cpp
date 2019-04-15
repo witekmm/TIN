@@ -248,8 +248,6 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
-                        char alive = '1';
-                        send(newfd, &alive, 1 , MSG_DONTWAIT);
                         printf("\nServer: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                         puts("Input command:");
                     }
