@@ -23,6 +23,7 @@ int g_flag = 1;
 char buffer[256];
 
 int createSocket( string serverIP, sockaddr_in serwer){
+    int yes = 1;
     const int clientSocket = socket( AF_INET, SOCK_STREAM, 0 );
     /*
     if( inet_pton( AF_INET, SERWER_IP, & serwer.sin_addr ) <= 0 )
@@ -36,7 +37,7 @@ int createSocket( string serverIP, sockaddr_in serwer){
         perror( "socket() ERROR" );
         return -1;
     }
-    if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
+    if( setsockopt( clientSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
         perror( "setsockopt" );
         close(clientSocket);
         return -1;
@@ -44,7 +45,7 @@ int createSocket( string serverIP, sockaddr_in serwer){
     return clientSocket;
 }
 
-int createConnnection(int clientSocket,sockaddr_in& serwer,socklen_t len ){
+int createConnnection(int clientSocket,sockaddr_in* serwer,socklen_t len ){
     if(connect(clientSocket,( struct sockaddr * ) & serwer,len) == -1){
         perror("Cannot connect!\n");
         return 1;
@@ -73,8 +74,6 @@ int commandLine(int* flag){
 
 void serverConnection(int clientSocket , int *flag){
     char checkBuff;
-    int error_code;
-    int error_code_size = sizeof(error_code);
 
     while(*flag){
         if(recv(clientSocket , &checkBuff , 1 , MSG_PEEK) == 0){
@@ -92,7 +91,7 @@ void serverConnection(int clientSocket , int *flag){
     }
 }
 
-void *CLI(void *){ commandLine(&g_flag)}
+void *CLI(void *){ commandLine(&g_flag); }
 
 int main()
 {
