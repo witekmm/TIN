@@ -30,6 +30,21 @@ struct sockaddr_in{
     in_port_t      sin_port;
 };
 
+//zmienne współdzielone
+int flag = 1;
+// 1 - serwer słucha a CLI nie wymaga komunikacji z serwerem
+// 2 - CLI wysłał rozkaz odłączenia gniazda
+// 3 - CLI wysłał prośbę o listę gniazd
+// 4 - CLI wysłał prośbę o numer gniazda serwera
+int flag_error = 0;
+int fd_val = 0;
+/* być może tak trzeba będzie przekazać argumenty do funkcji
+commandLine(wsk_flag,wsk_flag_error,wsk_fd_val);
+int *wsk_flag = &dlugosc;
+int *wsk_flag_error = &flag_error;
+int *wsk_fd_val = &fd_val;
+*/
+
 int main()
 {
     sockaddr_in serwer =
@@ -39,38 +54,28 @@ int main()
     };
 
     socklen_t len = sizeof( serwer );
-    //zmienne współdzielone
-    int flag = 1;
-    // 1 - serwer słucha
-    // 2 - CLI wysłał rozkaz odłączenia gniazda
-    // 3 - CLI wysłał prośbę o listę gniazd
-    // 4 - CLI wysłał prośbę o numer gniazda serwera
-    int flag_error = 0;
-    int fd_val = 0;
+
+    pthread_t CLIThread;
+
+    if(pthread_create( &CLIThread , NULL, CLI , NULL) != 0){
+      perror("Cannot create CLI thread!\n");
+      return 1;
+    }
 
     int serverSocket = createSocket(SERWER_IP,serwer);
     doBind(serverSocket , serwer);
     doListen(serverSocket);
-    doSelect(serverSocket , &flag);
-
-    pthread_t clientThreads[MAX_CONNECTION];
-
-    int rc;
-    for(int i = 0; i < MAX_CONNECTION; i++ ) {
-      rc = pthread_create(&clientThreads[i], NULL, , (void *) i);
-
-      if (rc) {
-         cout << "Error:unable to create thread," << rc << endl;
-         exit(-1);
-      }
-    }
+    doSelect(serverSocket , &flag, &fd_val, &flag_error);
 
     return 0;
 }
 
-void commandLine(int &flag, int &fd_val, int& flag_error){
+void *CLI(void *){ commandLine(&flag, &fd_val, &flag_error); }
+
+void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
      while(flag){
+        printf("Input command:");
         getline(cin, cmd);
         if(cmd == "exit"){
             *flag = 0;
@@ -188,7 +193,7 @@ int closeClientSocket(fd_set &master,int socketNumber, int fdmax){
     return max;
 }
 
-void doSelect(int serverSocket, int& flag, int& fd_val, int& flag_error){
+void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
 
     struct timeval tv;
     tv.tv_sec=1;
@@ -284,51 +289,14 @@ void doSelect(int serverSocket, int& flag, int& fd_val, int& flag_error){
                         *flag = 0;
 
                     }
-                    else{
+                    else{//Przyszła zwykła wiadomość
                         for(int s = 0; s<256;s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
                     }
                 }
-                break;
-            }/*
-            if( FD_ISSET( i, & exceptionsfds ) ){
-
-            // tutaj klient wysłał dane OOB
-                string msg;
-                recv(i , &msg , 1 , MSG_OOB);
-                if(msg == "1"){
-                    close(i);
-                    FD_CLR(i , &master);
-                    if(i==fdmax){
-                        int * x = (int*)&master;
-                        int best = *x;
-                        while(x != NULL){
-                            if(*x == fdmax) continue;
-                            if(*x > best) best = *x;
-                            x++;
-                        }
-                        fdmax = best+1;
-                    }
-                    printf("Connection abandonedened by %d", i);
-                    break;
-                }
-                if(msg == "0"){
-                    printf("Server will be closed");
-                    for(int * x = (int*)&master; x!= NULL; x++){
-                        if(*x == serverSocket) continue;
-                        close(i);
-                    }
-                    FD_ZERO(&master);
-                    shutdown( serverSocket, SHUT_RDWR );
-                    close(serverSocket);
-                    return 0;
-                }
-
-                cout<<"183"<<endl;
-            }*/
-
+            }
         }
     }
       printf("Server will be closed.\n");
