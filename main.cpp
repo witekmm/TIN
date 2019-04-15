@@ -21,7 +21,7 @@
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
-#define MAX_MSG_SIZE 4000
+#define MAX_MSG_SIZE 256
 
 using namespace std;
 
@@ -31,13 +31,13 @@ struct sockaddr_in{
 };
 
 //zmienne współdzielone
-int flag = 1;
+int g_flag = 1;
 // 1 - serwer słucha a CLI nie wymaga komunikacji z serwerem
 // 2 - CLI wysłał rozkaz odłączenia gniazda
 // 3 - CLI wysłał prośbę o listę gniazd
 // 4 - CLI wysłał prośbę o numer gniazda serwera
-int flag_error = 0;
-int fd_val = 0;
+int g_flag_error = 0;
+int g_fd_val = 0;
 /* być może tak trzeba będzie przekazać argumenty do funkcji
 commandLine(wsk_flag,wsk_flag_error,wsk_fd_val);
 int *wsk_flag = &dlugosc;
@@ -62,15 +62,15 @@ int main()
       return 1;
     }
 
-    int serverSocket = createSocket(SERWER_IP,serwer);
-    doBind(serverSocket , serwer);
+    int serverSocket = createSocket(SERWER_IP , serwer);
+    doBind(serverSocket , serwer , len);
     doListen(serverSocket);
-    doSelect(serverSocket , &flag, &fd_val, &flag_error);
+    doSelect(serverSocket , &g_flag, &g_fd_val, &g_flag_error);
 
     return 0;
 }
 
-void *CLI(void *){ commandLine(&flag, &fd_val, &flag_error); }
+void *CLI(void *){ commandLine(&g_flag, &g_fd_val, &g_flag_error); }
 
 void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
@@ -156,7 +156,7 @@ int createSocket( int serverIP, sockaddr_in serwer){
     return serverSocket;
 }
 
-int doBind(int serverSocket, sockaddr_in serwer){
+int doBind(int serverSocket, sockaddr_in serwer,socklen_t len){
     if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
         perror( "bind() ERROR" );
         close(serverSocket);
@@ -233,8 +233,8 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                     }
                 }
                 else{
-                    *flag = 1;
                     *flag_error = 1;
+                    *flag = 1;
                 }
             }
             else if(*flag == 3){
@@ -273,10 +273,10 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
-                        printf( "selectserver: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
+                        printf( "Server: new connection from %s on socket %d\n", inet_ntoa( client.sin_addr ), newfd );
                     }
                 }
-                else{
+                else{ // KLIENT CHCE PISAC
                     if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
                         break;
