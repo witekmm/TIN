@@ -25,10 +25,10 @@
 
 using namespace std;
 
-struct sockaddr_in{
-    sa_family_t    sin_family;
-    in_port_t      sin_port;
-};
+// struct sockaddr_in{
+//     sa_family_t    sin_family;
+//     in_port_t      sin_port;
+// };
 
 //zmienne współdzielone
 int g_flag = 1;
@@ -44,33 +44,6 @@ int *wsk_flag = &dlugosc;
 int *wsk_flag_error = &flag_error;
 int *wsk_fd_val = &fd_val;
 */
-
-int main()
-{
-    sockaddr_in serwer =
-    {
-        .sin_family = AF_INET,
-        .sin_port = htons( SERWER_PORT )
-    };
-
-    socklen_t len = sizeof( serwer );
-
-    pthread_t CLIThread;
-
-    if(pthread_create( &CLIThread , NULL, CLI , NULL) != 0){
-      perror("Cannot create CLI thread!\n");
-      return 1;
-    }
-
-    int serverSocket = createSocket(SERWER_IP , serwer);
-    doBind(serverSocket , serwer , len);
-    doListen(serverSocket);
-    doSelect(serverSocket , &g_flag, &g_fd_val, &g_flag_error);
-
-    return 0;
-}
-
-void *CLI(void *){ commandLine(&g_flag, &g_fd_val, &g_flag_error); }
 
 void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
@@ -89,7 +62,7 @@ void commandLine(int *flag, int *fd_val, int *flag_error){
         else if(cmd == "close"){
             int fdval = 0;
             printf("Which socket:");
-            scanf("%d", fdval);
+            scanf("%d", &fdval);
             while ((getchar()) != '\n');
             *fd_val = fdval;
             *flag = 2;
@@ -121,17 +94,18 @@ void commandLine(int *flag, int *fd_val, int *flag_error){
             printf("Cannot recognize this command!\n");
         }
      }
-
 }
 
-int createSocket( int serverIP, sockaddr_in serwer){
+void *CLI(void *){ commandLine(&g_flag, &g_fd_val, &g_flag_error); }
+
+int createSocket( string serverIP, sockaddr_in serwer){
     int yes = 1;
     int no = 0;
 
-    if( inet_pton( AF_INET, serverIP, & serwer.sin_addr ) <= 0 ){
-        perror( "inet_pton() ERROR" );
-        return -1;
-    }
+    // if( inet_pton( AF_INET, (char*)&serverIP, & serwer.sin_addr ) <= 0 ){
+    //     perror( "inet_pton() ERROR" );
+    //     return -1;
+    // }
 
     const int serverSocket = socket( AF_INET, SOCK_STREAM, 0 );
 
@@ -228,7 +202,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         *flag = 1;
                     }
                     else{
-                        fdmax = closeClientSocket(&master,*fd_val,fdmax);
+                        fdmax = closeClientSocket(master,*fd_val,fdmax);
                         *flag = 1;
                     }
                 }
@@ -253,7 +227,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
             }
         }
         //Obsługa klientów
-        select_value = select( fdmax + 1, &receivefds, NULL, NULL,  &tv)
+        select_value = select( fdmax + 1, &receivefds, NULL, NULL,  &tv);
         if(select_value == - 1 ) {
             perror( "Select error" );
             continue;
@@ -283,7 +257,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                     }
                     string mess(buf);
                     if(mess == "exit"){
-                        closeClientSocket(&master,i,fdmax);
+                        closeClientSocket(master,i,fdmax);
                     }
                     else if(mess == "close"){
                         *flag = 0;
@@ -310,5 +284,29 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
       shutdown( serverSocket, SHUT_RDWR );
       close(serverSocket);
       printf("Server is sleeping.\n");
-      return 0;
+}
+
+int main()
+{
+    sockaddr_in serwer =
+    {
+        .sin_family = AF_INET,
+        .sin_port = htons( SERWER_PORT )
+    };
+
+    socklen_t len = sizeof( serwer );
+
+    pthread_t CLIThread;
+
+    if(pthread_create( &CLIThread , NULL, CLI , NULL) != 0){
+      perror("Cannot create CLI thread!\n");
+      return 1;
+    }
+
+    int serverSocket = createSocket(SERWER_IP , serwer);
+    doBind(serverSocket , serwer , len);
+    doListen(serverSocket);
+    doSelect(serverSocket , &g_flag, &g_fd_val, &g_flag_error);
+
+    return 0;
 }

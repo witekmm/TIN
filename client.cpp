@@ -67,8 +67,8 @@ int main()
         }
 
     }
-    buffer = "exit";
-    if(send(clientSocket, &buffer , 5, 0) == -1){
+    //buffer = "exit";
+    if(send(clientSocket, "exit" , 5, 0) == -1){
         perror("Cannot exit");
         close(clientSocket);
         exit( 6 );
