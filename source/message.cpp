@@ -16,15 +16,15 @@ class Message{
 
 public:
 
-  Message(string mess){
+  Message(char* mess){
 
     int length = strlen(mess);
     sprintf(header, "%10d", length);
 
     for(int x=0; x<10; x++)
     {
-      if(header[x] == NULL) //continue;
-        header[x] = '0';
+      if(header[x] != NULL) continue;
+        header[x] = 'A';
     }
 
     for(int x=0; x<10; x++){
@@ -44,16 +44,16 @@ public:
   }
 
   int getSendLength(){
-      return strlen(message) + 1
+      return strlen(message) + 1;
   }
-
 
 };
 
 int main()
 {
-  string str = "Przykladowy ciag znakow";
+  char* str = (char*)"Przykladowy ciag znakow";
   Message mess(str);
-  cout<<(string)mess.wiadomosc<<endl;
+  cout<<(string)mess.getMessage()<<endl;
+  cout<<mess.getSendLength()<<endl;
 
 }

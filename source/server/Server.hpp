@@ -11,7 +11,6 @@
 #define SERVER_IP "127.0.0.1"
 #define MAX_CONNECTION 10
 
-
 class Server{
 
   sockaddr_in server{};
