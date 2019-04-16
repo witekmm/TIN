@@ -17,6 +17,9 @@ class Server{
   sockaddr_in server{};
   socklen_t len;
 
+  fd_set master;
+  int fdmax;
+  Network& network;
 public:
 
 
@@ -24,6 +27,10 @@ public:
     server.sin_family = AF_INET,
     server.sin_port = htons(port);
     len = sizeof(server);
+  }
+
+  void setNetwork(Network &netw){
+      network = netw;
   }
 
   sockaddr_in &getServer(){
@@ -69,16 +76,15 @@ public:
   }
 
   void doSelect(int serverSocket){
-      Network network(serverSocket);
 
-      fd_set master;
+
       fd_set receivefds;
       fd_set efds;
 
       FD_ZERO(& master);
       FD_SET( serverSocket, & master );
 
-      int fdmax;
+
 
       while( cos ){
           FD_ZERO(&receivefds);
@@ -96,11 +102,23 @@ public:
                   if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
                   //INTERAKCJA Z UŻYTKOWNIKIEM
                   else network.readHeader(socketNumber);
+              }
               if( FD_ISSET(socketNumber , &efds) ){
                   //DO ZROBIENIA
               }
-          }
-      }
+
+          }//END OF FOR
+      }//END OF WHILE
   }
+
+// -2 - zamykamy serwer więc błąd
+// -1 - nie istnieje taki klient
+// 0 dobrze
+    int closeSocket(int socketNumber){
+        if(socketNumber == serverSocket) return -2
+        if(!FD_ISSET(socketNumber , &master)) return -1;
+
+        return 0;
+    }
 
 };

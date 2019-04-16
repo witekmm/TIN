@@ -9,19 +9,28 @@
 #define MAX_MSG_SIZE 256
 
 #include "Handling.hpp"
+#include "Server.hpp"
 #include "../message.cpp"
 
 class Network{
     int serverSocket;
-    Handling handling;
+    Handling &handling;
+    Server &server
 
 public:
     //konstruktor
     Network(int socketNumber){
         serverSocket = socketNumber;
-        Handling cos();
-        handling = cos();
     }
+
+    void setHandling( Handling &hand){
+        handling = hand;
+    }
+
+    void setServer(Server &serv){
+        server = serv;
+    }
+
     //Połącz z klientem
     int connectClient(fd_set &socketList , int fdmax){
         struct sockaddr_in client = { };
@@ -50,7 +59,7 @@ public:
             return;
         }
         else{
-            handling.handleMessage(message , messageLen);
+            handling.handleMessage(message , messageLen , socketNumber);
             return;
         }
     }
@@ -63,6 +72,13 @@ public:
         else{
             return 0;
         }
+    }
+
+    int disconnectClient(int socketNumber){
+      int error = closeSocket(socketNumber);
+      if(error == -2){
+          handling.incorrectSocket()
+      }
     }
 
 }
