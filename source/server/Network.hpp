@@ -75,10 +75,7 @@ public:
     }
 
     int disconnectClient(int socketNumber){
-      int error = closeSocket(socketNumber);
-      if(error == -2){
-          handling.incorrectSocket()
-      }
+        return closeSocket(socketNumber);
     }
 
 }

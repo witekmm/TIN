@@ -118,7 +118,26 @@ public:
         if(socketNumber == serverSocket) return -2
         if(!FD_ISSET(socketNumber , &master)) return -1;
 
+        if(socketNumber == fdmax) fdmax = findNewFDMax(fdmax);
+        shutdown(socketNumber, SHUT_RDWR);
+        close(socketNumber);
+        FD_CLR(socketNumber, &master);
+
         return 0;
+    }
+
+    int findNewFDMax(int oldMax){
+        int max = 0;
+        for(int x = oldMax-1; x>0 ;x--)
+        {
+          if(FD_ISSET(x, &master) == 1)
+          {
+            max=x;
+            break;
+          }
+        }
+
+      return max;
     }
 
 };
