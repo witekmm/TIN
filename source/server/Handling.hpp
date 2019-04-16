@@ -44,8 +44,8 @@ public:
           int socketNumber = cli.getSocketNumber();
           int error = network.disconnectClient(socketNumber);
           if(error == -2) output.cannotCloseServer();
-          if(error == -1) output.socketDoesntExist();
-          if(!error) output.sockedIsClosed(socketNumber);
+          if(error == -1) output.socketDoesntExist(socketNumber);
+          if(!error) output.socketIsClosed(socketNumber);
       }
       else if(command == "help") output.help();
       else if(command == "server") output.printNumber(network.getServerSocket());
@@ -93,7 +93,7 @@ public:
       }
       if(sendBack(buffer.getFullMessage(),buffer.getHeaderInInteger()+10,socketNumber)==-1){
           network.disconnectClient(socketNumber);
-          output.sockedIsClosed(socketNumber);
+          output.socketIsClosed(socketNumber);
       }
       handleClientCommand(finalMessage,socketNumber);
   }
@@ -107,7 +107,7 @@ public:
       }
       else if(command == "close"){
           int error = network.disconnectClient(socketNumber);
-          if(!error) output.sockedIsClosed(socketNumber);
+          if(!error) output.socketIsClosed(socketNumber);
       }
       else{
           output.messageReceived(command);
