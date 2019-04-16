@@ -46,27 +46,12 @@ int commandLine(int* flag){
 void *CLI(void *){ commandLine(&g_flag); }
 
 int main(int argc, char*argv[])
-{/*
-    sockaddr_in serwer =
-    {
-        .sin_family = AF_INET,
-        .sin_port = htons( SERWER_PORT )
-    };
-    socklen_t len = sizeof( serwer );
-
-    int clientSocket = createSocket(&serwer);
-    if(!clientSocket) return 1;
-    if(createConnnection(clientSocket,&serwer,len)){
-        close(clientSocket);
-        return 1;
-    }*/
+{
     pthread_t CLIThread;
-
     if(pthread_create(&CLIThread, NULL, CLI, NULL) != 0){
       perror("Cannot create CLI thread!\n");
       return 1;
     }
-
     if(argc != 2){
         perror("No port given");
         exit(0);
@@ -74,25 +59,23 @@ int main(int argc, char*argv[])
 
     Server server(atoi(argv[1]));
 
-    if( inet_pton( AF_INET, SERWER_IP, & server.getServer().sin_addr ) <= 0 )
+    if(inet_pton(AF_INET, SERWER_IP, &server.getServer().sin_addr) <= 0)
     {
         perror( "inet_pton() ERROR" );
-        exit( 1 );
+        exit(1);
     }
 
-    const int clientSocket = socket( AF_INET, SOCK_STREAM, 0 );
-    if( clientSocket < 0 )
+    const int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if(clientSocket < 0)
     {
         perror( "socket() ERROR" );
-        exit( 2 );
+        exit(2);
     }
 
-    socklen_t len = sizeof( server.getServer() );
-
-    if(connect(clientSocket, (struct sockaddr*)&server.getServer(), len) == -1){
+    if(connect(clientSocket, (struct sockaddr*)&server.getServer(), server.getLen()) == -1){
         perror("Cannot connect");
         close(clientSocket);
-        exit( 4 );
+        exit(4);
     }
     //send(clientSocket , &checkServ)
     printf("\nConnected. Server socket = %d\n", clientSocket);

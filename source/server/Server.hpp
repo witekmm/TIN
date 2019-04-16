@@ -18,7 +18,7 @@ class Server{
   socklen_t len;
 
 public:
-  
+
   Server(int port){
     server.sin_family = AF_INET,
     server.sin_port = htons(port);
@@ -27,6 +27,10 @@ public:
 
   sockaddr_in &getServer(){
     return this->server;
+  }
+
+  socklen_t &getLen(){
+    return this->len;
   }
 
   int createSocket()
