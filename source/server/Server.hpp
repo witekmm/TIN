@@ -6,6 +6,8 @@
 #include <netdb.h>
 #include <string>
 
+#include "Network.hpp"
+
 #define SERVER_IP "127.0.0.1"
 #define MAX_CONNECTION 10
 
@@ -67,6 +69,8 @@ public:
   }
 
   void doSelect(int serverSocket){
+      Network network(serverSocket);
+
       fd_set master;
       fd_set receivefds;
       fd_set efds;
@@ -86,14 +90,15 @@ public:
               perror("Select error");
               continue;
           }
-          for(int i = 0; i <= fdmax; i++ ) {
-              if( FD_ISSET(i, &receivefds) ) {
-                  if(i == serverSocket) { //NOWE POŁĄCZENIE
-                  }
-                  else { // INTERAKCJA Z KLIENTEM
-                  }
+          for(int socketNumber = 0; socketNumber <= fdmax; socketNumber++ ) {
+              if( FD_ISSET(socketNumber , &receivefds) ) {
+                  //NOWE POŁĄCZENIE
+                  if(socketNumber == serverSocket) fdmax = network.connectClient(&master);
+                  //INTERAKCJA Z UŻYTKOWNIKIEM
+                  else network.communicate(socketNumber);
+              if( FD_ISSET(socketNumber , &efds) ){
+                  //DO ZROBIENIA
               }
-              if()
           }
       }
   }
