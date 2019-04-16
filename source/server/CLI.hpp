@@ -14,10 +14,6 @@ class CLI{
 
 public:
 
-  CLI(){
-      working=1;
-  }
-
   void setHandling(Handling &hand){
       handling = hand;
   }

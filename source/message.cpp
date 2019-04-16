@@ -38,6 +38,23 @@ public:
     message[strlen(message)] = '\0';
   }
 
+  Message(char* mess , int length){
+      for(int i = 0;i<length;i++){
+          message[i] = mess[i];
+      }
+  }
+
+  int getHeaderInInteger(){
+      char temp[10];
+      for(int x=0; x<10; x++)
+      {
+        temp[x] = message[x];
+      }
+      int val = atoi(temp);
+      return val;
+
+  }
+
   char* getMessage()
   {
     return this->message;

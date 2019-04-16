@@ -81,6 +81,13 @@ public:
       output.cannotReceive(socketNumber);
   }
 
-  
+  void handleMessage(char *message,int messageLen, int socketNumber){
+      //sprawdzić czy długość odebranego pliku jest git
+      Message buffer(message , messageLen);
+      if(buffer.getHeaderInInteger != messageLen);
+
+  }
+
+
 
 }

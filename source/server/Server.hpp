@@ -110,7 +110,6 @@ public:
                     else network.readMessage(socketNumber);
                 }
                 if( FD_ISSET(socketNumber , &efds) ){
-                    printf("read OOB data\n");
                     network.readHeaderOOB(socketNumber);
                 }
 
