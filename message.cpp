@@ -8,6 +8,7 @@
 #include <string> // string
 
 using namespace std;
+
 class Message{
 
   char header[10];
@@ -41,7 +42,6 @@ public:
   {
     return this->message;
   }
-
 
 };
 
