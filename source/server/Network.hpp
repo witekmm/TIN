@@ -12,6 +12,8 @@
 #include "Server.hpp"
 #include "../message.cpp"
 
+using namespace std;
+
 class Network{
     int serverSocket;
     Handling &handling;
@@ -19,8 +21,9 @@ class Network{
 
 public:
     //konstruktor
-    Network(int socketNumber){
+    Network(int socketNumber, Server& serv){
         serverSocket = socketNumber;
+        server = serv;
     }
 
     void setHandling( Handling &hand){
@@ -70,20 +73,10 @@ public:
         else return msg;
     }
 
-/*
-    void readHeaderOOB(int socketNumber){
-        char message[MAX_MSG_SIZE];
-        int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , MSG_OOB);
-        if(messageLen == -1){
-            handling.cannotReceive(socketNumber);
-            return;
-        }
-        else{
-            handling.handleMessage(message , messageLen , socketNumber);
-            return;
-        }
+    void exceptionSignal(int socketNumber){
+
     }
-*/
+
     int sendBack(char* message,int messageLen, int socketNumber){
         int sendLen = send(socketNumber , message , messageLen, 0);
         if(sendLen == -1){

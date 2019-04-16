@@ -27,11 +27,42 @@ using namespace std;
 
 int main(int argc, char*argv[])
 {
+    int port;
     if(argc == 1){
         //port hardcoded
     }
+    else if(argc == 2){
+        int port = atoi(argv[2]);
+        if(port < 49152 || port >>65535){
+            puts("Wrong port!");
+            puts("Port will be set automatically.");
+            port = SERWER_PORT;
+        }
+    }
+//warstwa aplikacji/prezentacji
+    Output output();
+    CLI cli();
+//warstwa łącza danych
+    Server server(port);
+    int serverSocket = server.createSocket();
+    if(serverSocket == -1) return 1;
+    if(server.doBind() == -1) return 1;
+    if(server.doListen() == -1) return 1;
+//warstwa sieciowa
+    Network network(serverSocket , server);
+    server.setNetwork(network);
+//warstwa transportowa
+    Handling handling(cli,output,network);
+//podpięcie cli do handling
+    cli.setHandling(handling);
 
-    Server server(atoi(argv[1]));
+    pthread_t serverThread;
+    if(pthread_create( &serverThread , NULL, server.doSelect , NULL) != 0){
+      perror("Cannot create server thread!\n");
+      return 1;
+    }
+
+    cli.commandLine();
 
     return 0;
 }

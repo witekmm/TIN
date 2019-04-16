@@ -21,6 +21,12 @@ class Handling{
 
 public:
 
+  Handling(CLI &cli1,Output& outp,Network &netw){
+      output = outp;
+      network = netw;
+      cli = cli1;
+  }
+// set references
   void setNetwork(Network &netw){
       network = netw;
   }
