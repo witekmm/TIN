@@ -109,6 +109,10 @@ int main()
             }
             g_flag = 1;
         }
+        else if( recv(clientSocket, NULL, 1, 0) == 0){
+          cout<<"\nServer signal. \nClosing client"<<endl;
+          break;
+        }
     }
     close(clientSocket);
     return 0;
