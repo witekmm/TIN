@@ -134,7 +134,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
         receivefds = master;
         struct sockaddr_in client = { };
         //obsługa CLI
-        if(*flag != 1){
+        /*if(*flag != 1){
             if(*flag == 2){//zamknij proces
                 while(*fd_val==0);
                 if(FD_ISSET(*fd_val, &master)){
@@ -165,7 +165,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                 *fd_val = serverSocket;
                 *flag = 1;
             }
-        }
+        }*/
 
         //Obsługa klientów
         select_value = select(fdmax+1, &receivefds, NULL, NULL, &tv);

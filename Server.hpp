@@ -17,6 +17,7 @@ class Server{
 
 public:
 
+
   Server(int port){
     server.sin_family = AF_INET,
     server.sin_port = htons(port);
@@ -30,7 +31,6 @@ public:
   int createSocket()
   {
       int yes = 1;
-      int no = 0;
 
       const int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -64,6 +64,38 @@ public:
           return -1;
       }
       return 0;
+  }
+
+  void doSelect(int serverSocket){
+      fd_set master;
+      fd_set receivefds;
+      fd_set efds;
+
+      FD_ZERO(& master);
+      FD_SET( serverSocket, & master );
+
+      int fdmax;
+
+      while( cos ){
+          FD_ZERO(&receivefds);
+          receivefds = master;
+          FD_ZERO(&efds);
+          efds = master;
+
+          if(select(fdmax+1, &receivefds, NULL, &efds, NULL) == -1){
+              perror("Select error");
+              continue;
+          }
+          for(int i = 0; i <= fdmax; i++ ) {
+              if( FD_ISSET(i, &receivefds) ) {
+                  if(i == serverSocket) { //NOWE POŁĄCZENIE
+                  }
+                  else { // INTERAKCJA Z KLIENTEM
+                  }
+              }
+              if()
+          }
+      }
   }
 
 };
