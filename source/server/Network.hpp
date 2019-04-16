@@ -63,8 +63,11 @@ public:
         }
     }
 
-    string readNext(int socketNumber, string startString){
-
+    char* readNext(int socketNumber){
+        char *msg;
+        int messageLen = recv(socketNumber , msg , MAX_MSG_SIZE , 0);
+        if(messageLen <= 0 ) return NULL;
+        else return msg;
     }
 
 /*

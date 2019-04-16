@@ -81,21 +81,24 @@ public:
   }
   //messageLen to ilość odebranych bajtów w recv()
   void handleMessage(char *message,int messageLen, int socketNumber){
-      //sprawdzić czy długość odebranego pliku jest git
-
       Message buffer(message , messageLen);
       string finalMessage(buffer.getMessage());
       if((buffer.getHeaderInInteger+10) != messageLen){
-
+          char* msg;
+          while(msg = readNext(socketNumber) != NULL){
+              Message temp(msg);
+              string strTemp(temp.getMessage());
+              finalMessage+=strTemp;
+          }
       }
       if(sendBack(buffer.getFullMessage(),buffer.getHeaderInInteger()+10,socketNumber)==-1){
           network.disconnectClient(socketNumber);
           output.sockedIsClosed(socketNumber);
       }
-      handleCommand(finalMessage,socketNumber);
+      handleClientCommand(finalMessage,socketNumber);
   }
 
-  void handleCommand(string command, int socketNumber){
+  void handleClientCommand(string command, int socketNumber){
       if(command == "exit" || command == "stop"){
           closeAllSockets();
           network.closeServerSocket();

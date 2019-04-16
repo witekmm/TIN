@@ -44,6 +44,16 @@ public:
           else header[i] = mess[i];
       }
   }
+
+  Message(char* mess){
+      for(int i = 0 ; i < strlen(mess) ;i++){
+          message[i] = mess[i];
+      }
+      for(int i = 0;i<10;i++){
+          if(mess[i] == 'A') header[i] = ' ';
+          else header[i] = mess[i];
+      }
+  }
   //pobiera długość całego pliku razem z nagłówkiem
   //zwraca w int
   int getHeaderInInteger(){
