@@ -93,9 +93,9 @@ public:
           for(int socketNumber = 0; socketNumber <= fdmax; socketNumber++ ) {
               if( FD_ISSET(socketNumber , &receivefds) ) {
                   //NOWE POŁĄCZENIE
-                  if(socketNumber == serverSocket) fdmax = network.connectClient(&master);
+                  if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
                   //INTERAKCJA Z UŻYTKOWNIKIEM
-                  else network.communicate(socketNumber);
+                  else network.readHeader(socketNumber);
               if( FD_ISSET(socketNumber , &efds) ){
                   //DO ZROBIENIA
               }
