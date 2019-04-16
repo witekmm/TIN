@@ -37,7 +37,6 @@ public:
             handling.connectionCreated(newfd);
             return (newfd > fdmax) newfd : fdmax;
         }
-
     }
 
     void readHeader(int socketNumber){
