@@ -48,12 +48,24 @@ public:
             handling.connectionCreated(newfd);
             return (newfd > fdmax) newfd : fdmax;
         }
-
     }
 
     void readMessage(int socketNumber){
         char message[MAX_MSG_SIZE];
         int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , 0);
+        if(messageLen == -1){
+            handling.cannotReceive(socketNumber);
+            return;
+        }
+        else{
+            handling.handleMessage(message , messageLen , socketNumber);
+            return;
+        }
+    }
+
+    void readHeaderOOB(int socketNumber){
+        char message[MAX_MSG_SIZE];
+        int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , MSG_OOB);
         if(messageLen == -1){
             handling.cannotReceive(socketNumber);
             return;
@@ -75,7 +87,10 @@ public:
     }
 
     int disconnectClient(int socketNumber){
-        return closeSocket(socketNumber);
+      int error = closeSocket(socketNumber);
+      if(error == -2){
+          handling.incorrectSocket()
+      }
     }
 
     int getServerSocket(){

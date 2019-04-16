@@ -64,7 +64,7 @@ int closeClientSocket(fd_set &master, int socketNumber, int fdmax){
 
 void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
 
-    struct timeval tv;
+    struct timeval tv;);
     tv.tv_sec=1;
     tv.tv_usec=0;
     fd_set master; // główna lista deskryptorów plików
@@ -135,9 +135,9 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
     puts("\nServer will be closed.");
     for(int x = 0 ; x<=fdmax ; x++){
         if(FD_ISSET(x, &master) && x!=serverSocket){
-            printf("\nConnection with %d has ended.\n", x);
-            close(x);
-          }
+          printf("\nConnection with %d has ended.\n", x);
+          close(x);
+        }
     }
     FD_ZERO(&master);
     shutdown( serverSocket, SHUT_RDWR );

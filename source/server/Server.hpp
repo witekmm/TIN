@@ -24,7 +24,6 @@ class Server{
   Network& network;
 public:
 
-
   Server(int port){
     server.sin_family = AF_INET,
     server.sin_port = htons(port);
@@ -41,6 +40,10 @@ public:
 
   sockaddr_in &getServer(){
     return this->server;
+  }
+
+  socklen_t &getLen(){
+    return this->len;
   }
 
   int createSocket()
@@ -107,7 +110,8 @@ public:
                     else network.readMessage(socketNumber);
                 }
                 if( FD_ISSET(socketNumber , &efds) ){
-                    //DO ZROBIENIA
+                    printf("read OOB data\n");
+                    network.readHeaderOOB(socketNumber);
                 }
 
             }//END OF FOR
