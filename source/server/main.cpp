@@ -38,58 +38,6 @@ int *wsk_flag_error = &flag_error;
 int *wsk_fd_val = &fd_val;
 */
 
-void commandLine(int *flag, int *fd_val, int *flag_error){
-     string cmd;
-     while(flag)
-     {
-        printf("Input command: ");
-        getline(cin, cmd);
-        if(cmd == "exit"){
-            *flag = 0;
-        }
-        else if(cmd == "help"){
-            puts("exit - close server and CLI.");
-            puts("list - show active sockets.");
-            puts("server - show server socket number.");
-            puts("close - disconnect socket.");
-        }
-        else if(cmd == "close"){
-            int fdval = 0;
-            puts("Which socket:");
-            scanf("%d", &fdval);
-            while ((getchar()) != '\n');
-            *fd_val = fdval;
-            *flag = 2;
-            while(*flag == 2); //czekamy az drugi wątek zamknie
-            //Taki socket nie istnieje
-            if(*flag_error == 1) puts("Cant find this socket!\n");
-            //Probujemy zamknac np. serwer
-            else if(*flag_error == 2) puts("You can't close this socket!\n");
-            else puts("Socket closed :)\n");
-        }
-        else if(cmd == "list"){
-            *flag = 3;
-            int lastfd = 0;
-            while(*flag == 3){
-                if((*fd_val != 0) && (*fd_val != lastfd)){ //sprawdz czy juz zapisal i czy my go zapisalismy
-                    printf("%d\t", *fd_val); //wypisz fd
-                    lastfd = *fd_val; // zapisz ostatni fd
-                    *fd_val=0; //wyczyszczenie fd_val dla kolejnego numeru fd
-                }
-            }
-            puts("");
-        }
-        else if(cmd == "server"){
-            *flag = 4;
-            while(*flag == 4);
-            printf("Server socket number is %d\n", *fd_val);
-            *fd_val = 0;
-        }
-        else{
-            printf("Cannot recognize this command!\n");
-        }
-     }
-}
 
 void *CLI(void *){ commandLine(&g_flag, &g_fd_val, &g_flag_error); }
 
@@ -131,39 +79,6 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
     {
         FD_ZERO(&receivefds);
         receivefds = master;
-        //obsługa CLI
-        /*if(*flag != 1){
-            if(*flag == 2){//zamknij proces
-                while(*fd_val==0);
-                if(FD_ISSET(*fd_val, &master)){
-                    if(*fd_val == serverSocket){//próbujemy zamknac serwer
-                        *flag_error = 2;
-                        *flag = 1;
-                    }
-                    else{
-                        fdmax = closeClientSocket(master,*fd_val,fdmax);
-                        *flag = 1;
-                    }
-                }
-                else{
-                    *flag_error = 1;
-                    *flag = 1;
-                }
-            }
-            else if(*flag == 3){
-                for(int i = 0; i<=fdmax;i++){
-                    if(FD_ISSET(i, &master)){
-                        *fd_val = i;
-                        while(*fd_val != 0);
-                    }
-                }
-                *flag = 1;
-            }
-            else if(*flag == 4){
-                *fd_val = serverSocket;
-                *flag = 1;
-            }
-        }*/
 
         //Obsługa klientów
         struct sockaddr_in client = { };
