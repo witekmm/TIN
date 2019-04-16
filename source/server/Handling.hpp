@@ -88,6 +88,7 @@ public:
   //messageLen to ilość odebranych bajtów w recv()
   void handleMessage(char *message,int messageLen, int socketNumber){
       Message buffer(message , messageLen);
+      int finalLength = messageLen;
       string finalMessage(buffer.getMessage());
       if((buffer.getHeaderInInteger+10) != messageLen){
           char* msg;
@@ -95,6 +96,7 @@ public:
               Message temp(msg);
               string strTemp(temp.getMessage());
               finalMessage+=strTemp;
+              finalLength+=strTemp.length();
           }
       }
       if(sendBack(buffer.getFullMessage(),buffer.getHeaderInInteger()+10,socketNumber)==-1){
