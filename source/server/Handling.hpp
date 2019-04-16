@@ -99,7 +99,8 @@ public:
               finalLength+=strTemp.length();
           }
       }
-      if(sendBack((char *)finalMessage,finalLength-10,socketNumber)==-1){
+      Message tmp(finalMessage);
+      if(sendBack(tmp.getFullMessage(),tmp.getSendLength(),socketNumber)==-1){
           network.disconnectClient(socketNumber);
           output.socketIsClosed(socketNumber);
       }
