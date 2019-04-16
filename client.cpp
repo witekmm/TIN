@@ -4,7 +4,7 @@
 #include <cstring> // strlen()
 #include <stdbool.h>
 #include <string> // string
-
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -25,14 +25,14 @@ char buffer[256];
 int commandLine(int* flag){
     while(*flag){
         char tempBuffer[256];
-        puts("Input command:");
+        printf("Input command: ");
         scanf("%255s", tempBuffer);
-        while ((getchar()) != '\n');
-        int leng=strlen(tempBuffer);
-        tempBuffer[leng]='\0';
+        while((getchar()) != '\n');
+        int leng = strlen(tempBuffer);
+        tempBuffer[leng] = '\0';
         //daje znać że zapisuję do buffer
         *flag = 2;
-        strcpy(buffer , tempBuffer);
+        strcpy(buffer, tempBuffer);
         //wiadomosc w buffer - można wysyłać
         *flag = 3;
         //to jest czyszczenie bufora z nadmiarowych znaków
@@ -57,11 +57,9 @@ int main()
         close(clientSocket);
         return 1;
     }*/
-
-
     pthread_t CLIThread;
 
-    if(pthread_create( &CLIThread , NULL, CLI , NULL) != 0){
+    if(pthread_create(&CLIThread, NULL, CLI, NULL) != 0){
       perror("Cannot create CLI thread!\n");
       return 1;
     }
@@ -86,22 +84,35 @@ int main()
 
     socklen_t len = sizeof( serwer );
 
-    if(connect(clientSocket,( struct sockaddr * ) & serwer,len) == -1){
+    if(connect(clientSocket, (struct sockaddr*)&serwer, len) == -1){
         perror("Cannot connect");
+        close(clientSocket);
         exit( 4 );
     }
-    char checkServ = '1';
     //send(clientSocket , &checkServ)
-    printf("Connected. Server socket = %d\n", clientSocket);
-
-    
+    printf("\nConnected. Server socket = %d\n", clientSocket);
+    fcntl(clientSocket, F_SETFL, O_NONBLOCK);
     while(g_flag){
-        TU MUSI BYC SPRAWDZENIE POLACZENIA KTORE WYRZUCI KLIENTA
+        //TU MUSI BYC SPRAWDZENIE POLACZENIA KTORE WYRZUCI KLIENTA
+
         if(g_flag == 3){
-            if(send(clientSocket, &buffer , strlen(buffer) + 1, 0) == -1){
+            if(send(clientSocket, &buffer, strlen(buffer) + 1, 0) == -1){
                 perror("Cannot send");
-                close(clientSocket);
+                //close(clientSocket);
                 g_flag = 0;
+            }
+
+            // jak to cout jes odkomentowane to spoko,
+            // ale jak zakomentuje to czeka na te 2 odpalenia
+            // po send exit wraca jeszcze jeden -1, a potem dopiero
+            // jest 0 czyli brak połączenia
+            cout<<"recv: "<<recv(clientSocket, NULL, 1, 0)<<endl;
+
+            if((string)buffer == "exit"){
+              if( recv(clientSocket, NULL, 0, 0) == 0){
+                puts("Closing client");
+                break;
+              }
             }
             g_flag = 1;
         }

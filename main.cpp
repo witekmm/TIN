@@ -48,7 +48,7 @@ int *wsk_fd_val = &fd_val;
 void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
      while(flag){
-        puts("Input command:");
+        printf("Input command: ");
         getline(cin, cmd);
         if(cmd == "exit"){
             *flag = 0;
@@ -83,7 +83,7 @@ void commandLine(int *flag, int *fd_val, int *flag_error){
                     *fd_val=0; //wyczyszczenie fd_val dla kolejnego numeru fd
                 }
             }
-            printf("\n");
+            puts("");
         }
         else if(cmd == "server"){
             *flag = 4;
@@ -123,11 +123,10 @@ int createSocket( string serverIP, sockaddr_in serwer){
     // Funkcja która sprawi że będziemy mogli ominąć TIME_WAIT i bez przeszkód bo nieoczekiwanym
     // końcu serwera znów zbindować socket
 
-    if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, & yes, sizeof( int ) ) == - 1 ) {
+    if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == - 1 ) {
         perror( "setsockopt" );
         return -1;
     }
-
     return serverSocket;
 }
 
@@ -149,11 +148,12 @@ int doListen(int serverSocket){
     return 0;
 }
 
-int closeClientSocket(fd_set &master,int socketNumber, int fdmax){
+int closeClientSocket(fd_set &master, int socketNumber, int fdmax){
     close(socketNumber);
-    FD_CLR(socketNumber , &master);
+    FD_CLR(socketNumber, &master);
     int max = fdmax;
-    if(socketNumber == fdmax){
+    if(socketNumber == fdmax)
+    {
         max = 0;
         for(int x = fdmax-1; x>0 ;x--)
         {
@@ -177,20 +177,13 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
     FD_ZERO(& master);
     FD_SET( serverSocket, & master );
     fd_set receivefds; //pomocnicza lista deskryptorów dla select()
-
-    int fdmax;
-    int newfd;
-    int addrlen;
-
-    int select_value = 0;
-
+    int fdmax, newfd, addrlen, select_value=0;
     char buf[MAX_MSG_SIZE];
-
     fdmax = serverSocket;
 
     while( *flag )
     {
-        FD_ZERO(& receivefds);
+        FD_ZERO(&receivefds);
         receivefds = master;
         struct sockaddr_in client = { };
         //obsługa CLI
@@ -218,7 +211,6 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         *fd_val = i;
                         while(*fd_val != 0);
                     }
-
                 }
                 *flag = 1;
             }
@@ -227,10 +219,11 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                 *flag = 1;
             }
         }
+
         //Obsługa klientów
-        select_value = select( fdmax + 1, &receivefds, NULL, NULL,  &tv);
-        if(select_value == - 1 ) {
-            perror( "Select error" );
+        select_value = select(fdmax+1, &receivefds, NULL, NULL, &tv);
+        if(select_value == -1) {
+            perror("Select error");
             continue;
         }
         //jeśli coś się stało podczas selecta to sprawdzamy co jeśli nie to continue
@@ -238,13 +231,14 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
             continue;
         }
         for(int i = 0; i <= fdmax; i++ ) {
-            if( FD_ISSET( i, & receivefds ) ) {
-                if( i == serverSocket ) { //NOWE POŁĄCZENIE
+            if( FD_ISSET(i, &receivefds) ) {
+                if(i == serverSocket) { //NOWE POŁĄCZENIE
                     addrlen = sizeof( client );
-                    if(( newfd = accept( serverSocket , ( struct sockaddr * )& client, (socklen_t *) &addrlen ) ) == - 1 ) {
+                    if(( newfd = accept(serverSocket, (struct sockaddr*)&client, (socklen_t *)&addrlen)) == -1) {
                         perror( "accept" );
-                    } else {
-                        FD_SET( newfd, & master ); // dodaj do głównego zestawu
+                    }
+                    else {
+                        FD_SET( newfd, &master ); // dodaj do głównego zestawu
                         if( newfd > fdmax ) { // śledź maksymalny
                             fdmax = newfd;
                         }
@@ -252,21 +246,20 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                         puts("Input command:");
                     }
                 }
-                else{ // KLIENT CHCE PISAC
+                else { // KLIENT CHCE PISAC
                     if(recv(i , &buf , 256 , 0) < 0){
                         perror("Cannot receive message");
                         break;
                     }
                     string mess(buf);
                     if(mess == "exit"){
-                        closeClientSocket(master,i,fdmax);
+                        closeClientSocket(master, i, fdmax);
                     }
                     else if(mess == "close"){
                         *flag = 0;
-
                     }
                     else{//Przyszła zwykła wiadomość
-                        printf("The message from %d is:", i);
+                        printf("\nThe message from %d is: ", i);
                         for(int s = 0; s<256;s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
@@ -278,7 +271,7 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
             }
         }
     }
-      printf("Server will be closed.\n");
+      puts("\nServer will be closed.");
       for(int x = 0 ; x<=fdmax ; x++){
           if(FD_ISSET(x , &master) && x!=serverSocket){
               printf("\nConnection with %d has ended.\n", x);
