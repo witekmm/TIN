@@ -79,39 +79,6 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
     {
         FD_ZERO(&receivefds);
         receivefds = master;
-        //obsługa CLI
-        /*if(*flag != 1){
-            if(*flag == 2){//zamknij proces
-                while(*fd_val==0);
-                if(FD_ISSET(*fd_val, &master)){
-                    if(*fd_val == serverSocket){//próbujemy zamknac serwer
-                        *flag_error = 2;
-                        *flag = 1;
-                    }
-                    else{
-                        fdmax = closeClientSocket(master,*fd_val,fdmax);
-                        *flag = 1;
-                    }
-                }
-                else{
-                    *flag_error = 1;
-                    *flag = 1;
-                }
-            }
-            else if(*flag == 3){
-                for(int i = 0; i<=fdmax;i++){
-                    if(FD_ISSET(i, &master)){
-                        *fd_val = i;
-                        while(*fd_val != 0);
-                    }
-                }
-                *flag = 1;
-            }
-            else if(*flag == 4){
-                *fd_val = serverSocket;
-                *flag = 1;
-            }
-        }*/
 
         //Obsługa klientów
         struct sockaddr_in client = { };

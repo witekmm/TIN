@@ -7,8 +7,9 @@
 
 #include "Handling.hpp"
 
+using namespace std;
+
 class CLI{
-  int working;
   Handling &handling;
 
 public:
@@ -17,20 +18,20 @@ public:
       working=1;
   }
 
-  void stopServer(){
-      working = 0;
-  }
-
   void setHandling(Handling &hand){
       handling = hand;
   }
 
   void commandLine(){
       string command;
-      while( working ){
-          getline(cin , cmd);
-          handling.handleCommand();
-      }
+      getline(cin , command);
+      handling.handleCommand(command);
+  }
+
+  int getSocketNumber(){
+      int socketNumber;
+      cin>>socketNumber;
+      return socketNumber;
   }
 
 }
