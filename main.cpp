@@ -15,18 +15,13 @@
 #include <unistd.h>
 #include <signal.h>
 #include <pthread.h>
+#include "Server.hpp"
 
-#define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
 #define MAX_MSG_SIZE 256
 
 using namespace std;
-
-// struct sockaddr_in{
-//     sa_family_t    sin_family;
-//     in_port_t      sin_port;
-// };
 
 //zmienne współdzielone
 int g_flag = 1;
@@ -42,6 +37,8 @@ int *wsk_flag = &dlugosc;
 int *wsk_flag_error = &flag_error;
 int *wsk_fd_val = &fd_val;
 */
+
+
 
 void commandLine(int *flag, int *fd_val, int *flag_error){
      string cmd;
@@ -96,55 +93,6 @@ void commandLine(int *flag, int *fd_val, int *flag_error){
 }
 
 void *CLI(void *){ commandLine(&g_flag, &g_fd_val, &g_flag_error); }
-
-int createSocket( string serverIP, sockaddr_in serwer){
-    int yes = 1;
-    int no = 0;
-
-    // if( inet_pton( AF_INET, (char*)&serverIP, & serwer.sin_addr ) <= 0 ){
-    //     perror( "inet_pton() ERROR" );
-    //     return -1;
-    // }
-
-    const int serverSocket = socket( AF_INET, SOCK_STREAM, 0 );
-
-    if( serverSocket < 0 ){
-        perror( "socket() ERROR" );
-        return -1;
-    }
-
-    //if( setsockopt( serverSocket, SOL_SOCKET, SO_OOBINLINE, & no, sizeof( int ) ) == - 1 ) {
-    //    perror( "setsockopt" );
-    //    close(serverSocket);
-    //    return -1;
-    //}
-    // Funkcja która sprawi że będziemy mogli ominąć TIME_WAIT i bez przeszkód bo nieoczekiwanym
-    // końcu serwera znów zbindować socket
-
-    if( setsockopt( serverSocket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == - 1 ) {
-        perror( "setsockopt" );
-        return -1;
-    }
-    return serverSocket;
-}
-
-int doBind(int serverSocket, sockaddr_in serwer,socklen_t len){
-    if( bind( serverSocket,( struct sockaddr * ) & serwer, len ) < 0 ){ // przypisanie lokalnego adresu do gniazda
-        perror( "bind() ERROR" );
-        close(serverSocket);
-        return -1;
-    }
-    return 0;
-}
-
-int doListen(int serverSocket){
-    if( listen( serverSocket, MAX_CONNECTION ) < 0 ){
-        perror( "listen() ERROR" );
-        close(serverSocket);
-        return -1;
-    }
-    return 0;
-}
 
 int closeClientSocket(fd_set &master, int socketNumber, int fdmax){
     shutdown(socketNumber, 2);
@@ -283,26 +231,24 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
     printf("Server is sleeping.\n");
 }
 
-int main()
+int main(int argc, char*argv[])
 {
-    sockaddr_in serwer =
-    {
-        .sin_family = AF_INET,
-        .sin_port = htons( SERWER_PORT )
-    };
+    if(argc != 2){
+        perror("No port given");
+        exit(0);
+    }
 
-    socklen_t len = sizeof( serwer );
+    Server server(atoi(argv[1]));
 
     pthread_t CLIThread;
-
     if(pthread_create( &CLIThread , NULL, CLI , NULL) != 0){
       perror("Cannot create CLI thread!\n");
       return 1;
     }
 
-    int serverSocket = createSocket(SERWER_IP , serwer);
-    doBind(serverSocket , serwer , len);
-    doListen(serverSocket);
+    int serverSocket = server.createSocket();
+    server.doBind(serverSocket);
+    server.doListen(serverSocket);
     doSelect(serverSocket , &g_flag, &g_fd_val, &g_flag_error);
 
     return 0;

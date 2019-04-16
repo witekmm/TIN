@@ -14,6 +14,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#include "Server.hpp"
+
+
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
 #define MAX_MSG_SIZE 256
@@ -42,7 +45,7 @@ int commandLine(int* flag){
 
 void *CLI(void *){ commandLine(&g_flag); }
 
-int main()
+int main(int argc, char*argv[])
 {/*
     sockaddr_in serwer =
     {
@@ -64,12 +67,14 @@ int main()
       return 1;
     }
 
-    struct sockaddr_in serwer =
-    {
-        .sin_family = AF_INET,
-        .sin_port = htons( SERWER_PORT )
-    };
-    if( inet_pton( AF_INET, SERWER_IP, & serwer.sin_addr ) <= 0 )
+    if(argc != 2){
+        perror("No port given");
+        exit(0);
+    }
+
+    Server server(atoi(argv[1]));
+
+    if( inet_pton( AF_INET, SERWER_IP, & server.getServer().sin_addr ) <= 0 )
     {
         perror( "inet_pton() ERROR" );
         exit( 1 );
@@ -82,9 +87,9 @@ int main()
         exit( 2 );
     }
 
-    socklen_t len = sizeof( serwer );
+    socklen_t len = sizeof( server.getServer() );
 
-    if(connect(clientSocket, (struct sockaddr*)&serwer, len) == -1){
+    if(connect(clientSocket, (struct sockaddr*)&server.getServer(), len) == -1){
         perror("Cannot connect");
         close(clientSocket);
         exit( 4 );
