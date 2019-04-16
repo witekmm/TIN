@@ -109,9 +109,9 @@ public:
                     //INTERAKCJA Z UŻYTKOWNIKIEM
                     else network.readMessage(socketNumber);
                 }
-                if( FD_ISSET(socketNumber , &efds) ){
+                /*if( FD_ISSET(socketNumber , &efds) ){
                     network.readHeaderOOB(socketNumber);
-                }
+                }*/
 
             }//END OF FOR
         }//END OF WHILE

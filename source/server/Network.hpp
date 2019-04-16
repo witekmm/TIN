@@ -63,7 +63,11 @@ public:
         }
     }
 
+    string readNext(int socketNumber, string startString){
 
+    }
+
+/*
     void readHeaderOOB(int socketNumber){
         char message[MAX_MSG_SIZE];
         int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , MSG_OOB);
@@ -76,7 +80,7 @@ public:
             return;
         }
     }
-
+*/
     int sendBack(char* message,int messageLen, int socketNumber){
         int sendLen = send(socketNumber , message , messageLen, 0);
         if(sendLen == -1){

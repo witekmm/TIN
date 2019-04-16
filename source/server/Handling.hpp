@@ -111,6 +111,10 @@ public:
       }
   }
 
+  void handling.waitingForCommand(){
+      output.waitingForCommand();// ma wypisać Input command: albo coś w tym stylu
+  }
+
 
 
 }
