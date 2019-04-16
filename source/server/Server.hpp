@@ -107,7 +107,7 @@ public:
                     //NOWE POŁĄCZENIE
                     if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
                     //INTERAKCJA Z UŻYTKOWNIKIEM
-                    else network.readHeader(socketNumber);
+                    else network.readHeaderOOB(socketNumber);
                 }
                 if( FD_ISSET(socketNumber , &efds) ){
                     printf("read OOB data\n");
