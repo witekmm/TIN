@@ -51,7 +51,7 @@ public:
 
     }
 
-    void readHeader(int socketNumber){
+    void readMessage(int socketNumber){
         char message[MAX_MSG_SIZE];
         int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , 0);
         if(messageLen == -1){
@@ -76,6 +76,23 @@ public:
 
     int disconnectClient(int socketNumber){
         return closeSocket(socketNumber);
+    }
+
+    int getServerSocket(){
+        return serverSocket;
+    }
+
+    int getFdMax(){
+        return server.getFdMax();
+    }
+
+    int checkIfSocket(int socketNumber){
+        return server.checkIfSocket(socketNumber);
+    }
+
+    void closeServerSocket(){
+        server.closeServerSocket();
+        server.stopServer();
     }
 
 }

@@ -104,7 +104,7 @@ public:
                     //NOWE POŁĄCZENIE
                     if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
                     //INTERAKCJA Z UŻYTKOWNIKIEM
-                    else network.readHeader(socketNumber);
+                    else network.readMessage(socketNumber);
                 }
                 if( FD_ISSET(socketNumber , &efds) ){
                     //DO ZROBIENIA
@@ -141,6 +141,21 @@ public:
         }
 
       return max;
+    }
+
+    int getFdMax(){
+      return fdmax;
+    }
+
+    int checkIfSocket(int socketNumber){
+        if(FD_ISSET(socketNumber , &master)) return 0
+        else return -1;
+    }
+
+    void closeServerSocket(){
+      FD_ZERO(&master);
+      shutdown( serverSocket, SHUT_RDWR );
+      close(serverSocket);
     }
 
 };
