@@ -88,10 +88,6 @@ public:
       FD_SET(serverSocket, & master );
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4411d5b1d8ec658a392818421bffbe5abe55ca97
 
       while( cos ){
           FD_ZERO(&receivefds);
@@ -125,11 +121,6 @@ public:
         if(socketNumber == serverSocket) return -2
         if(!FD_ISSET(socketNumber , &master)) return -1;
 
-<<<<<<< HEAD
-        return 0;
-    }
-
-=======
         if(socketNumber == fdmax) fdmax = findNewFDMax(fdmax);
         shutdown(socketNumber, SHUT_RDWR);
         close(socketNumber);
@@ -152,5 +143,4 @@ public:
       return max;
     }
 
->>>>>>> 4411d5b1d8ec658a392818421bffbe5abe55ca97
 };
