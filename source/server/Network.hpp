@@ -8,17 +8,19 @@
 
 #define MAX_MSG_SIZE 256
 
-#include "Output.hpp"
 #include "Handling.hpp"
+#include "../message.cpp"
 
 class Network{
     int serverSocket;
-    Handling handling();
+    Handling handling;
 
 public:
     //konstruktor
-    Network(int socketNumbet){
+    Network(int socketNumber){
         serverSocket = socketNumber;
+        Handling cos();
+        handling = cos();
     }
     //Połącz z klientem
     int connectClient(fd_set &socketList , int fdmax){
@@ -53,8 +55,14 @@ public:
         }
     }
 
-    void
-
-    int sendBack()
+    int sendBack(char* message,int messageLen, int socketNumber){
+        int sendLen = send(socketNumber, messageLen, 0);
+        if(sendLen == -1){
+            return -1;
+        }
+        else{
+            return 0;
+        }
+    }
 
 }

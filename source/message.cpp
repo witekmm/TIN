@@ -42,6 +42,10 @@ public:
     return this->message;
   }
 
+  int getSendLength(){
+      return strlen(message) + 1
+  }
+
 
 };
 
