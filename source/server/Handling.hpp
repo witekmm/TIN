@@ -99,7 +99,7 @@ public:
               finalLength+=strTemp.length();
           }
       }
-      if(sendBack(buffer.getFullMessage(),buffer.getHeaderInInteger()+10,socketNumber)==-1){
+      if(sendBack((char *)finalMessage,finalLength-10,socketNumber)==-1){
           network.disconnectClient(socketNumber);
           output.socketIsClosed(socketNumber);
       }
