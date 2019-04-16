@@ -50,7 +50,7 @@ public:
         }
     }
 
-    void readHeader(int socketNumber){
+    void readMessage(int socketNumber){
         char message[MAX_MSG_SIZE];
         int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , 0);
         if(messageLen == -1){
@@ -95,6 +95,23 @@ public:
 =======
         return closeSocket(socketNumber);
 >>>>>>> 4411d5b1d8ec658a392818421bffbe5abe55ca97
+    }
+
+    int getServerSocket(){
+        return serverSocket;
+    }
+
+    int getFdMax(){
+        return server.getFdMax();
+    }
+
+    int checkIfSocket(int socketNumber){
+        return server.checkIfSocket(socketNumber);
+    }
+
+    void closeServerSocket(){
+        server.closeServerSocket();
+        server.stopServer();
     }
 
 }

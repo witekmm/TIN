@@ -78,42 +78,39 @@ public:
       return 0;
   }
 
-  void doSelect(int serverSocket){
+    void doSelect(int serverSocket){
 
+        fd_set receivefds;
+        fd_set efds;
 
-      fd_set receivefds;
-      fd_set efds;
+        FD_ZERO(& master);
+        FD_SET( serverSocket, & master );
 
-      FD_ZERO(& master);
-      FD_SET(serverSocket, & master );
+        while( working ){
+            FD_ZERO(&receivefds);
+            receivefds = master;
+            FD_ZERO(&efds);
+            efds = master;
 
+            if(select(fdmax+1, &receivefds, NULL, &efds, NULL) == -1){
+                perror("Select error");
+                continue;
+            }
+            for(int socketNumber = 0; socketNumber <= fdmax; socketNumber++ ) {
+                if( FD_ISSET(socketNumber , &receivefds) ) {
+                    //NOWE POŁĄCZENIE
+                    if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
+                    //INTERAKCJA Z UŻYTKOWNIKIEM
+                    else network.readMessage(socketNumber);
+                }
+                if( FD_ISSET(socketNumber , &efds) ){
+                    printf("read OOB data\n");
+                    network.readHeaderOOB(socketNumber);
+                }
 
-
-
-      while( cos ){
-          FD_ZERO(&receivefds);
-          receivefds = master;
-          FD_ZERO(&efds);
-          efds = master;
-
-          if(select(fdmax+1, &receivefds, NULL, &efds, NULL) == -1){
-              perror("Select error");
-              continue;
-          }
-          for(int socketNumber = 0; socketNumber <= fdmax; socketNumber++ ) {
-              if( FD_ISSET(socketNumber , &receivefds) ) {
-                  //NOWE POŁĄCZENIE
-                  if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
-                  //INTERAKCJA Z UŻYTKOWNIKIEM
-                  else network.readHeader(socketNumber);
-              }
-              if( FD_ISSET(socketNumber , &efds) ){
-                  //DO ZROBIENIA
-              }
-
-          }//END OF FOR
-      }//END OF WHILE
-  }
+            }//END OF FOR
+        }//END OF WHILE
+    }
 
 // -2 - zamykamy serwer więc błąd
 // -1 - nie istnieje taki klient
@@ -142,6 +139,21 @@ public:
         }
 
       return max;
+    }
+
+    int getFdMax(){
+      return fdmax;
+    }
+
+    int checkIfSocket(int socketNumber){
+        if(FD_ISSET(socketNumber , &master)) return 0
+        else return -1;
+    }
+
+    void closeServerSocket(){
+      FD_ZERO(&master);
+      shutdown( serverSocket, SHUT_RDWR );
+      close(serverSocket);
     }
 
 };

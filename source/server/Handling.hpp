@@ -19,6 +19,8 @@ class Handling{
   CLI &cli;
   Output &output;
 
+public:
+
   void setNetwork(Network &netw){
       network = netw;
   }
@@ -33,7 +35,10 @@ class Handling{
 
   void handleCommand(string command){
       if(command == "exit" || command == "stop"){
-          //stopserver
+          closeAllSockets();
+          network.closeServerSocket();
+          output.serverIsClosed();
+          return;
       }
       else if(command == "close"){
           int socketNumber = cli.getSocketNumber();
@@ -43,9 +48,39 @@ class Handling{
           if(!error) output.sockedIsClosed();
       }
       else if(command == "help") output.help();
-      else if(command == "list"){
+      else if(command == "server") output.printNumber(network.getServerSocket());
+      else if(command == "list") getSocketList();
+      cli.commandLine();
+  }
 
+  void handleMessage()
+
+  void getSocketList(){
+      for(int i = network.getFdMax() ; i>0 ; i--){
+          if(network.checkIfSocket(i) == -1) continue;
+          else output.printNumber(i);
       }
   }
+
+  void closeAllSockets(){
+      for(int i = network.getFdMax() ; i>0 ; i--){
+          if(network.checkIfSocket(i) == -1) continue;
+          else network.disconnectClient(i);
+      }
+  }
+
+  void cannotConnect(){
+      output.cannotConnect();
+  }
+
+  void connectionCreated(int socketNumber){
+      output.connectionCreated(socketNumber);
+  }
+
+  void cannotReceive(int socketNumber){
+      output.cannotReceive(socketNumber);
+  }
+
+  
 
 }
