@@ -45,7 +45,7 @@ public:
           int error = network.disconnectClient(socketNumber);
           if(error == -2) output.cannotCloseServer();
           if(error == -1) output.socketDoesntExist();
-          if(!error) output.sockedIsClosed();
+          if(!error) output.sockedIsClosed(socketNumber);
       }
       else if(command == "help") output.help();
       else if(command == "server") output.printNumber(network.getServerSocket());
@@ -53,7 +53,6 @@ public:
       cli.commandLine();
   }
 
-  void handleMessage()
 
   void getSocketList(){
       for(int i = network.getFdMax() ; i>0 ; i--){
@@ -80,12 +79,36 @@ public:
   void cannotReceive(int socketNumber){
       output.cannotReceive(socketNumber);
   }
-
+  //messageLen to ilość odebranych bajtów w recv()
   void handleMessage(char *message,int messageLen, int socketNumber){
       //sprawdzić czy długość odebranego pliku jest git
-      Message buffer(message , messageLen);
-      if(buffer.getHeaderInInteger != messageLen);
 
+      Message buffer(message , messageLen);
+      string finalMessage(buffer.getMessage());
+      if((buffer.getHeaderInInteger+10) != messageLen){
+
+      }
+      if(sendBack(buffer.getFullMessage(),buffer.getHeaderInInteger()+10,socketNumber)==-1){
+          network.disconnectClient(socketNumber);
+          output.sockedIsClosed(socketNumber);
+      }
+      handleCommand(finalMessage,socketNumber);
+  }
+
+  void handleCommand(string command, int socketNumber){
+      if(command == "exit" || command == "stop"){
+          closeAllSockets();
+          network.closeServerSocket();
+          output.serverIsClosed();
+          return;
+      }
+      else if(command == "close"){
+          int error = network.disconnectClient(socketNumber);
+          if(!error) output.sockedIsClosed(socketNumber);
+      }
+      else{
+          output.messageReceived(command);
+      }
   }
 
 
