@@ -17,6 +17,8 @@ class Server{
   sockaddr_in server{};
   socklen_t len;
 
+  int working;
+
   fd_set master;
   int fdmax;
   Network& network;
@@ -30,6 +32,10 @@ public:
 
   void setNetwork(Network &netw){
       network = netw;
+  }
+
+  void stopServer(){
+      working = 1;
   }
 
   sockaddr_in &getServer(){
@@ -78,41 +84,38 @@ public:
       return 0;
   }
 
-  void doSelect(int serverSocket){
+    void doSelect(int serverSocket){
 
+        fd_set receivefds;
+        fd_set efds;
 
-      fd_set receivefds;
-      fd_set efds;
+        FD_ZERO(& master);
+        FD_SET( serverSocket, & master );
 
-      FD_ZERO(& master);
-      FD_SET(serverSocket, & master );
+        while( working ){
+            FD_ZERO(&receivefds);
+            receivefds = master;
+            FD_ZERO(&efds);
+            efds = master;
 
+            if(select(fdmax+1, &receivefds, NULL, &efds, NULL) == -1){
+                perror("Select error");
+                continue;
+            }
+            for(int socketNumber = 0; socketNumber <= fdmax; socketNumber++ ) {
+                if( FD_ISSET(socketNumber , &receivefds) ) {
+                    //NOWE POŁĄCZENIE
+                    if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
+                    //INTERAKCJA Z UŻYTKOWNIKIEM
+                    else network.readHeader(socketNumber);
+                }
+                if( FD_ISSET(socketNumber , &efds) ){
+                    //DO ZROBIENIA
+                }
 
-
-      while( cos ){
-          FD_ZERO(&receivefds);
-          receivefds = master;
-          FD_ZERO(&efds);
-          efds = master;
-
-          if(select(fdmax+1, &receivefds, NULL, &efds, NULL) == -1){
-              perror("Select error");
-              continue;
-          }
-          for(int socketNumber = 0; socketNumber <= fdmax; socketNumber++ ) {
-              if( FD_ISSET(socketNumber , &receivefds) ) {
-                  //NOWE POŁĄCZENIE
-                  if(socketNumber == serverSocket) fdmax = network.connectClient(&master , fdmax);
-                  //INTERAKCJA Z UŻYTKOWNIKIEM
-                  else network.readHeader(socketNumber);
-              }
-              if( FD_ISSET(socketNumber , &efds) ){
-                  //DO ZROBIENIA
-              }
-
-          }//END OF FOR
-      }//END OF WHILE
-  }
+            }//END OF FOR
+        }//END OF WHILE
+    }
 
 // -2 - zamykamy serwer więc błąd
 // -1 - nie istnieje taki klient
