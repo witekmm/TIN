@@ -92,8 +92,8 @@ int main()
     //send(clientSocket , &checkServ)
     printf("\nConnected. Server socket = %d\n", clientSocket);
     fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+
     while(g_flag){
-        //TU MUSI BYC SPRAWDZENIE POLACZENIA KTORE WYRZUCI KLIENTA
 
         if(g_flag == 3){
             if(send(clientSocket, &buffer, strlen(buffer) + 1, 0) == -1){
@@ -101,25 +101,16 @@ int main()
                 //close(clientSocket);
                 g_flag = 0;
             }
-
-            // jak to cout jes odkomentowane to spoko,
-            // ale jak zakomentuje to czeka na te 2 odpalenia
-            // po send exit wraca jeszcze jeden -1, a potem dopiero
-            // jest 0 czyli brak połączenia
-            cout<<"recv: "<<recv(clientSocket, NULL, 1, 0)<<endl;
-
             if((string)buffer == "exit"){
-              if( recv(clientSocket, NULL, 0, 0) == 0){
-                puts("Closing client");
+              cout<<"Closing client"<<endl;
+              if( recv(clientSocket, NULL, 1, 0) == 0){
                 break;
               }
             }
             g_flag = 1;
         }
     }
-    //serverConnection(clientSocket , &g_flag);
     close(clientSocket);
     return 0;
 
-    //shutdown( socket_, SHUT_RDWR );
 }

@@ -16,8 +16,6 @@
 #include <signal.h>
 #include <pthread.h>
 
-//#include <pthread.h>
-
 #define MAX_CONNECTION 10
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
@@ -149,6 +147,7 @@ int doListen(int serverSocket){
 }
 
 int closeClientSocket(fd_set &master, int socketNumber, int fdmax){
+    shutdown(socketNumber, 2);
     close(socketNumber);
     FD_CLR(socketNumber, &master);
     int max = fdmax;
@@ -260,28 +259,28 @@ void doSelect(int serverSocket, int *flag, int *fd_val, int *flag_error){
                     }
                     else{//Przyszła zwykła wiadomość
                         printf("\nThe message from %d is: ", i);
-                        for(int s = 0; s<256;s++){
+                        for(int s = 0; s<256; s++){
                             if(buf[s] == '\0') break;
                             printf("%c", buf[s]);
                         }
-                        printf("\n");
-                        puts("Input command:");
+                        bzero(buf, 256);
+                        puts("\nInput command:");
                     }
                 }
             }
         }
     }
-      puts("\nServer will be closed.");
-      for(int x = 0 ; x<=fdmax ; x++){
-          if(FD_ISSET(x , &master) && x!=serverSocket){
-              printf("\nConnection with %d has ended.\n", x);
-              close(x);
-           }
-      }
-      FD_ZERO(&master);
-      shutdown( serverSocket, SHUT_RDWR );
-      close(serverSocket);
-      printf("Server is sleeping.\n");
+    puts("\nServer will be closed.");
+    for(int x = 0 ; x<=fdmax ; x++){
+        if(FD_ISSET(x, &master) && x!=serverSocket){
+            printf("\nConnection with %d has ended.\n", x);
+            close(x);
+          }
+    }
+    FD_ZERO(&master);
+    shutdown( serverSocket, SHUT_RDWR );
+    close(serverSocket);
+    printf("Server is sleeping.\n");
 }
 
 int main()
