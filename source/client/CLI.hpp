@@ -12,28 +12,17 @@ using namespace std;
 class CLI{
 
     State *state;
-    char* buffer;
+    string *buffer;
 
     public:
-        CLI(){
-
-        }
 
         void commandLine(){
 
-            cout<<"command state: "<<state<<endl;
             while(*state != STOPPED)
             {
-                string command;
-                //char tempBuffer[256];
                 cout<<"Input message: ";
-                //getline(cin , command);
-                scanf("%255s", buffer);
-                while((getchar()) != '\n');
-                int leng = strlen(buffer);
-                buffer[leng] = '\0';
-                cout<<"command: "<<(string)buffer<<endl;
-        
+                getline(cin , *buffer);
+                
                 *state = SENDING;
                 while(*state == SENDING);
             }
@@ -43,7 +32,7 @@ class CLI{
             this->state = state;
         }
 
-        void setBuffer(char* buffer){
+        void setBuffer(string* buffer){
             this->buffer = buffer;
         }
 };

@@ -24,7 +24,7 @@ class Handling{
     CLI cli;
     State *state;
     int socket;
-    char buffer[256];
+    string *buffer;
 
     public:
             
@@ -32,6 +32,9 @@ class Handling{
             
             this->socket = socket;
             this->state = new State(RUNNING);
+            if(state == NULL){perror("Bad allock"); exit(0);}
+            this->buffer = new string();
+            if(state == NULL){perror("Bad allock"); exit(0);}
         }
 
         void input(){
@@ -47,24 +50,24 @@ class Handling{
             {   
                 if(*state == SENDING)
                 {
-                    cout<<"Sending: "<<buffer<<endl;
-                    /*
-                    if(send(socket, &buffer, strlen(buffer)+1, 0) == -1){
+                    Message mess(*buffer);
+                    
+                    if(send(socket, &mess, mess.getSendLength(), 0) == -1){
                         perror("Cannot send");
                         state = STOPPED;
                     }
-                    */
-                    if((string)buffer == "exit"){
-                        if( recv(socket, NULL, 1, 0) == 0)
+                    
+                    if(*buffer == "exit"){
+                        if( recv(socket, NULL, 1, 0) ==0)
+                            cout<<"Received exit signal. Closing client."<<endl;
                             *state = STOPPED;
                             pthread_exit(0);
                     }
-                    
                     *state = RUNNING;
                 }
                 
                 if( recv(socket, NULL, 1, 0) == 0){
-                    cout<<"\nServer signal. \nClosing client"<<endl;
+                    cout<<"\nServer signal - connection lost. \nClosing client."<<endl;
                     *state = STOPPED;
                     pthread_exit(0);
                 }
@@ -77,8 +80,6 @@ class Handling{
             if(command == "exit"){
                 *(this->state) = STOPPED;
             }
-
-
         }
 
         void setCLI(CLI cli){
@@ -87,5 +88,6 @@ class Handling{
 
         ~Handling(){
             delete state;
+            delete buffer;
         }
 };

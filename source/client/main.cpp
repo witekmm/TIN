@@ -16,7 +16,7 @@
 
 #include "Handling.hpp"
 
-#include "../server/Server.hpp"
+//#include "../server/Server.hpp"
 
 #define MAX_MSG_SIZE 256
 
@@ -69,6 +69,7 @@ int main(int argc, char*argv[])
     
     handler->input();
 
+    close(clientSocket);
     delete handler;
     return 0;
 
