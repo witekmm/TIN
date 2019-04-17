@@ -1,6 +1,6 @@
 # TIN
 Michał Witkowski
- 
+
 Jakub Szachewicz
 
 Wojtek Kurek
@@ -9,16 +9,21 @@ Mateusz Krawczyk
 
 Uruchomienie serwera:
 ```
-./server
+./server (numer portu - opcjonalne)
 ```
 Uruchomienie clienta
 ```
-./client
+./client (numer portu - opcjonalne)
 ```
 Komendy klienta:
-
-send - wysłanie wiadomości(serwer póki co obsługuje tylko wiadomości z jednym słowem)
-
-exit - zakończenie działania aktualnego klienta
-
+```
+exit / stop - zakończenie działania aktualnego klienta
 close - zamknięcie całego serwera
+```
+Komendy CLI:
+```
+list - lista aktywnych aktywnych gniazd
+server - numer gniazda serwera
+close - zamknięcie wybranego gniazda( o wybór numeru gniazda zostaniesz poproszony po wpisaniu komendy)
+exit / stop - zamknięce serwera
+```
