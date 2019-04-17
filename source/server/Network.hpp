@@ -16,8 +16,9 @@ using namespace std;
 
 class Network{
     int serverSocket;
+
     Handling &handling;
-    Server &server
+    Server &server;
 
 public:
     //konstruktor
@@ -30,16 +31,12 @@ public:
         handling = hand;
     }
 
-    void setServer(Server &serv){
-        server = serv;
-    }
-
     //Połącz z klientem
     int connectClient(fd_set &socketList , int fdmax){
         struct sockaddr_in client = { };
         socklen_t addrlen = sizeof( client );
         //połaczenie nieblokujące
-        int newfd = accept4(serverSocket, (struct sockaddr*)&client, &addrlen) , SOCK_NONBLOCK);
+        int newfd = accept4(serverSocket, (struct sockaddr*)&client, &addrlen , SOCK_NONBLOCK);
         //Brak połączenia
         if( newfd == -1){
             handling.cannotConnect();
@@ -49,7 +46,7 @@ public:
         else{
             FD_SET( newfd , socketList);
             handling.connectionCreated(newfd);
-            return (newfd > fdmax) newfd : fdmax;
+            return (newfd > fdmax) ? newfd : fdmax;
         }
     }
 
@@ -74,7 +71,7 @@ public:
     }
 
     void exceptionSignal(int socketNumber){
-
+        disconnectClient(socketNumber);
     }
 
     int sendBack(char* message,int messageLen, int socketNumber){
@@ -91,7 +88,13 @@ public:
 <<<<<<< HEAD
       int error = closeSocket(socketNumber);
       if(error == -2){
-          handling.incorrectSocket()
+          handling.cannotCloseServer();
+      }
+      else if(error == -1){
+          handling.incorrectSocket(socketNumber);
+      }
+      else if(!error){
+          handling.socketIsClosed(socketNumber);
       }
 =======
         return closeSocket(socketNumber);

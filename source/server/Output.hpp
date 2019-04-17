@@ -1,8 +1,5 @@
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h> // exit()
-#include <cstring> // strlen()
-#include <stdbool.h>
 #include <string> // string
 
 using namespace std;
@@ -15,12 +12,12 @@ public:
       cout<<"Server is closed!"<<endl;
   }
   void cannotCloseServer(){
-      cout<<"You can't close server!"<<endl;
+      cout<<"Cannot close server!"<<endl;
   }
   void socketDoesntExist(int socketNumber){
       cout<<"Socket number "<<socketNumber<<" doesn't exist!"<<endl;
   }
-  void sockedIsClosed(int socketNumber){
+  void socketIsClosed(int socketNumber){
       cout<<"Socket number "<<socketNumber<< "is now closed"<<endl;
   }
   void help(){

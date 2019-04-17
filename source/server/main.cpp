@@ -53,6 +53,7 @@ int main(int argc, char*argv[])
     server.setNetwork(network);
 //warstwa transportowa
     Handling handling(cli,output,network);
+    network.setHandling(handling);
 //podpięcie cli do handling
     cli.setHandling(handling);
 
