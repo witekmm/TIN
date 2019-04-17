@@ -15,25 +15,27 @@
 
 //#include "State.hpp"
 #include "CLI.hpp"
+//#include "../message.cpp"
 
 using namespace std;
 
 class Handling{
 
     CLI cli;
-    State state;
+    State *state;
     int socket;
     char buffer[256];
 
     public:
             
         Handling(int &socket){
+            
             this->socket = socket;
-            this->state = RUNNING;
+            this->state = new State(RUNNING);
         }
 
         void input(){
-            cout<<"here state: "<<&state<<endl;
+            
             cli.setState(this->state);
             cli.setBuffer(this->buffer);
             cli.commandLine();
@@ -41,13 +43,11 @@ class Handling{
 
         void run(){
 
-            cout<<"handler state: "<<&state<<endl;
-            while(state != STOPPED)
+            while(*state != STOPPED)
             {   
-                                 
-                if(state == SENDING)
+                if(*state == SENDING)
                 {
-                    cout<<"Sending"<<endl;
+                    cout<<"Sending: "<<buffer<<endl;
                     /*
                     if(send(socket, &buffer, strlen(buffer)+1, 0) == -1){
                         perror("Cannot send");
@@ -55,26 +55,27 @@ class Handling{
                     }
                     */
                     if((string)buffer == "exit"){
-                        cout<<"Closing client"<<endl;
-                        //if( recv(socket, NULL, 1, 0) == 0)
-                            break;
+                        if( recv(socket, NULL, 1, 0) == 0)
+                            *state = STOPPED;
+                            pthread_exit(0);
                     }
                     
-                    state = RUNNING;
+                    *state = RUNNING;
                 }
-                /*
-                else if( recv(socket, NULL, 1, 0) == 0){
+                
+                if( recv(socket, NULL, 1, 0) == 0){
                     cout<<"\nServer signal. \nClosing client"<<endl;
-                    break;
+                    *state = STOPPED;
+                    pthread_exit(0);
                 }
-                */
+                
             }
         }
 
         void handleCommand(string command){
 
             if(command == "exit"){
-                this->state = STOPPED;
+                *(this->state) = STOPPED;
             }
 
 
@@ -84,4 +85,7 @@ class Handling{
             this->cli = cli;
         }
 
+        ~Handling(){
+            delete state;
+        }
 };

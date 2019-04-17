@@ -11,7 +11,7 @@ using namespace std;
 
 class CLI{
 
-    State state;
+    State *state;
     char* buffer;
 
     public:
@@ -21,8 +21,8 @@ class CLI{
 
         void commandLine(){
 
-            cout<<"command state: "<<&state<<endl;
-            while(state != STOPPED)
+            cout<<"command state: "<<state<<endl;
+            while(*state != STOPPED)
             {
                 string command;
                 //char tempBuffer[256];
@@ -34,12 +34,12 @@ class CLI{
                 buffer[leng] = '\0';
                 cout<<"command: "<<(string)buffer<<endl;
         
-                state = SENDING;
-                while(state == SENDING);
+                *state = SENDING;
+                while(*state == SENDING);
             }
         }
 
-        void setState(State &state){
+        void setState(State *state){
             this->state = state;
         }
 
