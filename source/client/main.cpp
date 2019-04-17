@@ -19,6 +19,7 @@
 #include "../server/Server.hpp"
 
 #define MAX_MSG_SIZE 256
+#define SERWER_PORT 50000
 
 using namespace std;
 
@@ -27,12 +28,17 @@ void* start(void *){ handler->run(); }
 
 int main(int argc, char*argv[])
 {
-    if(argc != 2){
-        perror("No port given");
-        exit(0);
+    int port = SERWER_PORT;
+    if(argc == 2){
+        int port = atoi(argv[2]);
+        if(port < 49152 || port >65535){
+            puts("Wrong port!");
+            puts("Port will be set automatically.");
+            port = SERWER_PORT;
+        }
     }
 
-    Server server(atoi(argv[1]));
+    Server server(port;
 
     if(inet_pton(AF_INET, SERWER_IP, &server.getServer().sin_addr) <= 0)
     {
@@ -60,12 +66,13 @@ int main(int argc, char*argv[])
     int clientSocket = 1;
     handler = new Handling(clientSocket);
 
+    // wątek do obsługi wysyłania wiadomości i sprawdzania połączenia z serwerem
     pthread_t CLIThread;
     if(pthread_create(&CLIThread, NULL, start, NULL) != 0){
       perror("Cannot create CLI thread!\n");
       return 1;
     }
-
+    // uruchamia się pętla do obsługi terminala na wątku głównym
     handler->input();
 
     close(clientSocket);
