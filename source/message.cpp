@@ -76,8 +76,7 @@ public:
   }
 
   int getSendLength(){
-      return strlen(message) + 1
+      return strlen(message) + 1;
   }
-
 
 };
