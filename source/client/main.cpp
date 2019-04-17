@@ -27,7 +27,7 @@ void* start(void *){ handler->run(); }
 
 int main(int argc, char*argv[])
 {
-  /*  if(argc != 2){
+    if(argc != 2){
         perror("No port given");
         exit(0);
     }
@@ -57,7 +57,7 @@ int main(int argc, char*argv[])
     cout<<"\nConnected. Server socket = "<<clientSocket<<endl;
     
     fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-*/
+
     int clientSocket = 1;
     handler = new Handling(clientSocket);
     
