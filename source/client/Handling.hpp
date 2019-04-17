@@ -57,12 +57,13 @@ class Handling{
                         *state = STOPPED;
                     }
 
-                    if(*buffer == "exit"){
-                        if( recv(socket, NULL, 1, 0) ==0)
+                    //if(*buffer == "exit"){
+                        if( recv(socket, NULL, 1, 0) ==0){
                             cout<<"Received exit signal. Closing client."<<endl;
                             *state = STOPPED;
                             pthread_exit(0);
-                    }
+                        }
+                    //}
                     *state = RUNNING;
                 }
 
