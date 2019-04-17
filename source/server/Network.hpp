@@ -6,7 +6,7 @@
 #include <netdb.h>
 #include <string>
 
-#define MAX_MSG_SIZE
+#define MAX_MSG_SIZE 1000
 
 #include "Handling.hpp"
 #include "Server.hpp"

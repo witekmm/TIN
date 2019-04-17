@@ -22,7 +22,7 @@ class CLI{
             {
                 cout<<"Input message: ";
                 getline(cin , *buffer);
-                
+
                 *state = SENDING;
                 while(*state == SENDING);
             }
@@ -36,5 +36,3 @@ class CLI{
             this->buffer = buffer;
         }
 };
-
-

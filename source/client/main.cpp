@@ -55,18 +55,18 @@ int main(int argc, char*argv[])
 
     printf("\nConnected. Server socket = %d\n", clientSocket);
     cout<<"\nConnected. Server socket = "<<clientSocket<<endl;
-    
+
     fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 
     int clientSocket = 1;
     handler = new Handling(clientSocket);
-    
+
     pthread_t CLIThread;
     if(pthread_create(&CLIThread, NULL, start, NULL) != 0){
       perror("Cannot create CLI thread!\n");
       return 1;
     }
-    
+
     handler->input();
 
     close(clientSocket);
