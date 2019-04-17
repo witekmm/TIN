@@ -15,7 +15,7 @@
 
 //#include "State.hpp"
 #include "CLI.hpp"
-//#include "../message.cpp"
+#include "../message.cpp"
 
 using namespace std;
 
@@ -54,7 +54,7 @@ class Handling{
                     
                     if(send(socket, &mess, mess.getSendLength(), 0) == -1){
                         perror("Cannot send");
-                        state = STOPPED;
+                        *state = STOPPED;
                     }
                     
                     if(*buffer == "exit"){

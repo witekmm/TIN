@@ -16,7 +16,7 @@
 
 #include "Handling.hpp"
 
-//#include "../server/Server.hpp"
+#include "../server/Server.hpp"
 
 #define MAX_MSG_SIZE 256
 
@@ -53,7 +53,6 @@ int main(int argc, char*argv[])
         exit(4);
     }
 
-    printf("\nConnected. Server socket = %d\n", clientSocket);
     cout<<"\nConnected. Server socket = "<<clientSocket<<endl;
     
     fcntl(clientSocket, F_SETFL, O_NONBLOCK);
