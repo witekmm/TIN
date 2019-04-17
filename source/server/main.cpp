@@ -15,13 +15,16 @@
 #include <unistd.h>
 #include <signal.h>
 #include <pthread.h>
-#include "Server.hpp"
+//#include "Server.hpp"
 
 #define SERWER_PORT 50000
 #define SERWER_IP "127.0.0.1"
 #define MAX_MSG_SIZE 256
 
-#import "Handling.hpp"
+// #include "../message.cpp"
+// #include "Handling.hpp"
+// #include "Network.hpp"
+
 
 using namespace std;
 
