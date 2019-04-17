@@ -26,18 +26,6 @@ public:
       network = netw;
       cli = cli1;
   }
-// set references
-  void setNetwork(Network &netw){
-      network = netw;
-  }
-
-  void setCLI(CLI &cli1){
-      cli = cli1;
-  }
-
-  void setOutput(Output &outp){
-      output = outp;
-  }
 
   void handleCommand(string command){
       if(command == "exit" || command == "stop"){
@@ -67,6 +55,14 @@ public:
       }
   }
 
+  void cannotCloseServer(){
+      output.cannotCloseServer();
+  }
+
+  void incorrectSocket(int socketNumber){
+      output.socketDoesntExist(socketNumber);
+  }
+
   void closeAllSockets(){
       for(int i = network.getFdMax() ; i>0 ; i--){
           if(network.checkIfSocket(i) == -1) continue;
@@ -90,7 +86,7 @@ public:
       Message buffer(message , messageLen);
       int finalLength = messageLen;
       string finalMessage(buffer.getMessage());
-      if((buffer.getHeaderInInteger+10) != messageLen){
+      if(buffer.getSendLength() != messageLen){
           char* msg;
           while(msg = readNext(socketNumber) != NULL){
               Message temp(msg);
@@ -123,8 +119,12 @@ public:
       }
   }
 
-  void handling.waitingForCommand(){
+  void waitingForCommand(){
       output.waitingForCommand();// ma wypisać Input command: albo coś w tym stylu
+  }
+
+  void socketIsClosed(int socketNumber){
+      output.socketIsClosed(socketNumber);
   }
 
 
