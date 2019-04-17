@@ -6,7 +6,7 @@
 #include <netdb.h>
 #include <string>
 
-// #include "Network.hpp"
+#include "Network.hpp"
 
 #define SERVER_IP "127.0.0.1"
 #define MAX_CONNECTION 10
@@ -162,4 +162,4 @@ public:
       close(serverSocket);
     }
 
-}
+};

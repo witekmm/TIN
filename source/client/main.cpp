@@ -37,9 +37,9 @@ int main(int argc, char*argv[])
         }
     }
 
-    Server server(port;
+    Server server(port);
 
-    if(inet_pton(AF_INET, SERWER_IP, &server.getServer().sin_addr) <= 0)
+    if(inet_pton(AF_INET, SERVER_IP, &server.getServer().sin_addr) <= 0)
     {
         perror( "inet_pton() ERROR" );
         exit(1);
@@ -62,7 +62,6 @@ int main(int argc, char*argv[])
 
     fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 
-    int clientSocket = 1;
     handler = new Handling(clientSocket);
 
     // wątek do obsługi wysyłania wiadomości i sprawdzania połączenia z serwerem

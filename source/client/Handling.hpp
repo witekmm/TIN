@@ -28,7 +28,7 @@ class Handling{
 
     public:
 
-        Handling(int &socket){
+        Handling(int socket){
 
             this->socket = socket;
             this->state = new State(RUNNING);
