@@ -27,9 +27,9 @@ class Handling{
     string *buffer;
 
     public:
-            
+
         Handling(int &socket){
-            
+
             this->socket = socket;
             this->state = new State(RUNNING);
             if(state == NULL){perror("Bad allock"); exit(0);}
@@ -38,7 +38,7 @@ class Handling{
         }
 
         void input(){
-            
+
             cli.setState(this->state);
             cli.setBuffer(this->buffer);
             cli.commandLine();
@@ -47,16 +47,16 @@ class Handling{
         void run(){
 
             while(*state != STOPPED)
-            {   
+            {
                 if(*state == SENDING)
                 {
                     Message mess(*buffer);
-                    
-                    if(send(socket, &mess, mess.getSendLength(), 0) == -1){
+
+                    if(send(socket, mess.getFullMessage(), mess.getSendLength(), 0) == -1){
                         perror("Cannot send");
                         *state = STOPPED;
                     }
-                    
+
                     if(*buffer == "exit"){
                         if( recv(socket, NULL, 1, 0) ==0)
                             cout<<"Received exit signal. Closing client."<<endl;
@@ -65,13 +65,13 @@ class Handling{
                     }
                     *state = RUNNING;
                 }
-                
+
                 if( recv(socket, NULL, 1, 0) == 0){
                     cout<<"\nServer signal - connection lost. \nClosing client."<<endl;
                     *state = STOPPED;
                     pthread_exit(0);
                 }
-                
+
             }
         }
 

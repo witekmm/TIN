@@ -6,7 +6,7 @@
 #include <netdb.h>
 #include <string>
 
-#define MAX_MSG_SIZE 256
+#define MAX_MSG_SIZE 1000
 
 #include "Handling.hpp"
 #include "Server.hpp"
@@ -51,7 +51,7 @@ public:
     }
 
     void readMessage(int socketNumber){
-        char message[MAX_MSG_SIZE];
+        char *message;
         int messageLen = recv(socketNumber , &message , MAX_MSG_SIZE , 0);
         if(messageLen == -1){
             handling.cannotReceive(socketNumber);

@@ -7,12 +7,15 @@
 #include <string.h>
 #include <string> // string
 
+#define MAX_MSG_SIZE 1000
+
 using namespace std;
 
 class Message{
 
+
   char header[10];
-  char message[256];
+  char message[MAX_MSG_SIZE+11];
 
 public:
   //konstruktor tworzący MESSAGE z czystej wiadomości
@@ -25,7 +28,7 @@ public:
         message[x] = header[x];
     }
 
-    for(int x=10; x<255; x++){
+    for(int x=10; x<MAX_MSG_SIZE-11; x++){
       if(mess[x-10]=='\0') break;
       message[x]=mess[x-10];
     }
@@ -62,7 +65,7 @@ public:
   }
 
   char* getMessage(){
-      char temp[256];
+      char temp[MAX_MSG_SIZE];
       for(int i = 0 ; i < (getHeaderInInteger()-10) ; i++){
           temp[i] = message[i+10];
       }
