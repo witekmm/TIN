@@ -15,7 +15,6 @@
 #include <pthread.h>
 
 #include "Handling.hpp"
-
 #include "../server/Server.hpp"
 
 #define MAX_MSG_SIZE 256
