@@ -8,8 +8,9 @@
 #include "CLI.hpp"
 #include "Network.hpp"
 #include "Output.hpp"
-
+#include "Network.hpp"
 #include "../message.cpp"
+#include "Server.hpp"
 
 using namespace std;
 
