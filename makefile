@@ -1,10 +1,10 @@
-all: server client
+all: client server
 
-server:	main.cpp
-	g++ -pthread main.cpp -o server
+server: source/server/main.cpp
+	g++ -pthread source/server/main.cpp -o server
 
-client: client.cpp
-	g++ -pthread client.cpp -o client
+client: source/client/main.cpp
+	g++ -pthread source/client/main.cpp -o client
 
 clean:
 	rm -f server client
