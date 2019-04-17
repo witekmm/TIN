@@ -14,16 +14,13 @@ class CLI{
 
 public:
 
-  CLI(){
-      working=1;
-  }
-
   void setHandling(Handling &hand){
       handling = hand;
   }
 
   void commandLine(){
       string command;
+      handling.waitingForCommand();
       getline(cin , command);
       handling.handleCommand(command);
   }

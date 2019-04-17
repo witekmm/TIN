@@ -11,6 +11,8 @@
 #define SERVER_IP "127.0.0.1"
 #define MAX_CONNECTION 10
 
+using namespace std;
+
 class Server{
 
   sockaddr_in server{};
@@ -19,6 +21,8 @@ class Server{
   fd_set master;
   int fdmax;
   Network& network;
+
+  int serverSocket;
 public:
 
   Server(int port){
@@ -43,7 +47,7 @@ public:
   {
       int yes = 1;
 
-      const int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+      const int serverSock = socket(AF_INET, SOCK_STREAM, 0);
 
       if(serverSocket < 0){
           perror( "socket() ERROR" );
@@ -54,10 +58,13 @@ public:
           perror( "setsockopt" );
           return -1;
       }
-      return serverSocket;
+
+      serverSocket = serverSock;
+
+      return serverSock;
   }
 
-  int doBind(int serverSocket)
+  int doBind()
   {
       if( bind(serverSocket, (struct sockaddr*) &(this->server), this->len) < 0)
       {
@@ -68,7 +75,7 @@ public:
       return 0;
   }
 
-  int doListen(int serverSocket){
+  int doListen(){
       if( listen( serverSocket, MAX_CONNECTION ) < 0 ){
           perror( "listen() ERROR" );
           close(serverSocket);
@@ -77,7 +84,7 @@ public:
       return 0;
   }
 
-    void doSelect(int serverSocket){
+    void *doSelect(){
 
         fd_set receivefds;
         fd_set efds;
@@ -103,8 +110,7 @@ public:
                     else network.readMessage(socketNumber);
                 }
                 if( FD_ISSET(socketNumber , &efds) ){
-                    printf("read OOB data\n");
-                    network.readHeaderOOB(socketNumber);
+                    network.exceptionSignal(socketNumber);
                 }
 
             }//END OF FOR
@@ -155,4 +161,4 @@ public:
       close(serverSocket);
     }
 
-};
+}
