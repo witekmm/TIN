@@ -16,7 +16,7 @@
 
 #include "Handling.hpp"
 
-#include "../server/Server.hpp"
+//#include "../server/Server.hpp"
 
 #define MAX_MSG_SIZE 256
 
@@ -27,7 +27,7 @@ void* start(void *){ handler->run(); }
 
 int main(int argc, char*argv[])
 {
-    if(argc != 2){
+  /*  if(argc != 2){
         perror("No port given");
         exit(0);
     }
@@ -57,7 +57,7 @@ int main(int argc, char*argv[])
     cout<<"\nConnected. Server socket = "<<clientSocket<<endl;
     
     fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-
+*/
     int clientSocket = 1;
     handler = new Handling(clientSocket);
     
@@ -69,6 +69,7 @@ int main(int argc, char*argv[])
     
     handler->input();
 
+    close(clientSocket);
     delete handler;
     return 0;
 
