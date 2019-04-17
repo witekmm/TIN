@@ -55,14 +55,6 @@ public:
       }
   }
 
-  void cannotCloseServer(){
-      output.cannotCloseServer();
-  }
-
-  void incorrectSocket(int socketNumber){
-      output.socketDoesntExist(socketNumber);
-  }
-
   void closeAllSockets(){
       for(int i = network.getFdMax() ; i>0 ; i--){
           if(network.checkIfSocket(i) == -1) continue;
@@ -70,17 +62,6 @@ public:
       }
   }
 
-  void cannotConnect(){
-      output.cannotConnect();
-  }
-
-  void connectionCreated(int socketNumber){
-      output.connectionCreated(socketNumber);
-  }
-
-  void cannotReceive(int socketNumber){
-      output.cannotReceive(socketNumber);
-  }
   //messageLen to ilość odebranych bajtów w recv()
   void handleMessage(char *message,int messageLen, int socketNumber){
       Message buffer(message , messageLen);
@@ -118,15 +99,34 @@ public:
           output.messageReceived(command);
       }
   }
+//PIPES
+    void cannotCloseServer(){
+        output.cannotCloseServer();
+    }
 
-  void waitingForCommand(){
-      output.waitingForCommand();// ma wypisać Input command: albo coś w tym stylu
-  }
+    void incorrectSocket(int socketNumber){
+        output.socketDoesntExist(socketNumber);
+    }
 
-  void socketIsClosed(int socketNumber){
-      output.socketIsClosed(socketNumber);
-  }
+    void cannotConnect(){
+        output.cannotConnect();
+    }
 
+    void connectionCreated(int socketNumber){
+        output.connectionCreated(socketNumber);
+    }
+
+    void cannotReceive(int socketNumber){
+        output.cannotReceive(socketNumber);
+    }
+
+    void waitingForCommand(){
+        output.waitingForCommand();// ma wypisać Input command: albo coś w tym stylu
+    }
+
+    void socketIsClosed(int socketNumber){
+        output.socketIsClosed(socketNumber);
+    }
 
 
 }
