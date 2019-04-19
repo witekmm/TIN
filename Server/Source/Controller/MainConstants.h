@@ -17,6 +17,10 @@ public:
   int getServerPort();
   int getMaxConnections();
 
+  void setServerIp(std::string serverIp);
+  void setServerPort(int serverPort);
+  void setMaxConnections(int maxConnections);
+
 }
 
 #ENDIF

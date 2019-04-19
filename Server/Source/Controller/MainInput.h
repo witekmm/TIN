@@ -11,11 +11,17 @@
 
 class MainInput{
   MainConstants constants;
-  int elements;
+  int argc;
+  char* argv[];
 
 public:
   MainInput(int argc, char* argv[]);
 
+  void checkFlag();
+
+  void setServerPort(int serverPort);
+  void setMaxConnections(int maxConnections);
+  void setServerIp(std::string serverIp);
 }
 
 #ENDIF
