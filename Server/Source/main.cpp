@@ -14,12 +14,6 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#include "Handling.hpp"
-#include "../server/Server.hpp"
-
-#define MAX_MSG_SIZE 256
-#define SERWER_PORT 50000
-
 using namespace std;
 
 Handling *handler;

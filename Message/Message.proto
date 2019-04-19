@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package Message;
+
+message Person {
+
+  enum  messageType{
+    LOGIN = 0;
+    PASSWORD = 1;
+    MSG = 2;
+    COMMAND = 3;
+  }
+
+    required string content = 1;
+    required messageType type = 2 [default = MSG];
+
+}

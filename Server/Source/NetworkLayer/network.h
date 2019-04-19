@@ -1,0 +1,9 @@
+#IFNDEF NETWORK_H
+#DEFINE NETWORK_H
+
+class Network{
+
+
+}
+
+#ENDIF
