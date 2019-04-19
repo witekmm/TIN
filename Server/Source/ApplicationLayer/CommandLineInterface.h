@@ -9,7 +9,6 @@
 #DEFINE COMMAND_LINE_INTERFACE_H
 
 class CLI{
-  Handling &handling;
 
 public:
 
