@@ -12,6 +12,6 @@ message Person {
   }
 
     required string content = 1;
-    required messageType type = 2 [default = MSG];
+    required messageType type = 2[default = MSG];
 
 }
