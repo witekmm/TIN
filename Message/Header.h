@@ -1,28 +1,20 @@
 #include <iostream>
+#include <cstdint>
 
 #IFNDEF HEADER_H
 #DEFINE HEADER_H
 
+#include "MessageTypeEnum.h"
+
 class Header{
-  int destination;
-  int start;
-  int size;
-  int id;
+  int32_t start;
+  int32_t destination;  
   MessageType type;
+  int32_t size;
+  int32_t id;
 
 public:
-  Header(int size , MessageType type);
-  enum MessageType{
-    message = 0,
-    command = 1,
-    login = 2,
-    password = 3,
-    group_create = 4,
-    group_delete = 5,
-    group_request = 6,
-    group_accept = 7,
-    group_decline = 8,
-  };
+  Header(int32_t size , MessageType type, int32_t id);
   //SETS
   void setStart(int start);
   void setDestination(int destination);
@@ -32,7 +24,8 @@ public:
   int getDestination();
   MessageType getType();
   int getId();
-
+  //Convert
+  char* convertHeaderToChar();
 }
 
 #ENDIF
