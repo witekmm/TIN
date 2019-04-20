@@ -34,6 +34,8 @@ public:
   int createServerSocket();
   int bindServerSocket();
   int listenServerSocket();
+  //0 if accept gone well, 1 if not
+  int acceptConnection();
   //signal from sockets
   void selectDescriptor();
   //Close choosen socket
@@ -41,7 +43,7 @@ public:
   //Find new fdmax after closing the old one
   void updateFdmax();
   //Clears choosen socket from activeSockets and decreases sockets
-  void clearSocket(int socketNumber)
+  void clearSocket(int socketNumber);
   //return 0 if socket , 1 if not
   int checkIfSocket(int socketNumber);
   //Clears waiting lists
