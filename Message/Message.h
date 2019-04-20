@@ -10,7 +10,7 @@ class Message: public Header{
 public:
   Message(std::string content , int id, MessageType type): Header(content.length() , type , id);
   Message(char* message): Header(message);
-
+//
   std::string getMessage();
   char* getSendMessage();
 }

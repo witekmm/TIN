@@ -9,7 +9,7 @@ Message::Message(std::string content , int id): Header(content.length() , messag
 }
 
 Message::Message(char* message){
-  memcpy(this->content , message+20, size+1);
+  memcpy(this->content , message+20, size);
 }
 
 std::string Message::getMessage(){
