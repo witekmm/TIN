@@ -1,9 +1,10 @@
 #include <iostream>
-#include <cstdint>
+
 
 #IFNDEF HEADER_H
 #DEFINE HEADER_H
-
+#include <cstdint>
+#include <stdio.h>
 #include "MessageTypeEnum.h"
 
 class Header{

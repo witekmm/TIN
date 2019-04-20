@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <stdio.h>
 
 #include "Header.h"
 

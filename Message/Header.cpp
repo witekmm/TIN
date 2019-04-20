@@ -1,6 +1,5 @@
-#include <cstdint>
 #include <iostream>
-#include <stdio.h>
+
 #include "Header.h"
 
 Header::Header(int32_t size, int32_t id){
