@@ -24,6 +24,7 @@ void MainInput::checkFlag(){
       string ip(this->argv[argc]);
       setServerIp(ip);
     }
+    this->argc-=2;
   }
 }
 

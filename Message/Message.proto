@@ -9,6 +9,8 @@ message Person {
     PASSWORD = 1;
     MSG = 2;
     COMMAND = 3;
+    CREATEGROUP = 4;
+    REQUESTGROUP = 5;
   }
 
     required string content = 1;
