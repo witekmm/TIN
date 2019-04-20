@@ -8,8 +8,10 @@
 class Message: public Header{
   std::string content;
 public:
-  Message(std::string content , int id): Header(content.length() , message , id);
+  Message(std::string content , int id, MessageType type): Header(content.length() , type , id);
+  Message(char* message): Header(message);
 
   std::string getMessage();
+  char* getSendMessage();
 }
 #ENDIF
