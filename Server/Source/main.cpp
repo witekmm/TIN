@@ -1,7 +1,7 @@
 #include <iostream>
 #include <pthread.h>
 //FILE INCLUDES
-#include "Controller/"
+#include "Controller/MainInput.h"
 int main(int argc, char*argv[])
 {
   MainInput inputData(argc, argv);
