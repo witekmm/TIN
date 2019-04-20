@@ -18,11 +18,11 @@ MessageType Header::getType(){return this->type;}
 int Header::getId(){return this->id;}
 //
 char* Header::convertHeaderToChar(){
-  int char[20];
+  char header[20];
   char[0]=(char)this->start;
   char[4]=(char)this->destination;
   char[8]=(char)this->type;
   char[12]=(char)this->size;
   char[16]=(char)this->id;
-  return char;
+  return header;
 }
