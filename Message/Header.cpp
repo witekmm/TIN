@@ -19,10 +19,10 @@ int Header::getId(){return this->id;}
 //
 char* Header::convertHeaderToChar(){
   char header[20];
-  char[0]=(char)this->start;
-  char[4]=(char)this->destination;
-  char[8]=(char)this->type;
-  char[12]=(char)this->size;
-  char[16]=(char)this->id;
+  header[0]=(char)this->start;
+  header[4]=(char)this->destination;
+  header[8]=(char)this->type;
+  header[12]=(char)this->size;
+  header[16]=(char)this->id;
   return header;
 }
