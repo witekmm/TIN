@@ -62,12 +62,15 @@ int Network::checkIfSocket(int socketNumber){
 }
 
 void Network::clearLists(){
-  FD_ZERO(&this->readfds);
+  /*FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
   FD_COPY(&this->master,&this->readfds);
   FD_COPY(&this->master,&this->writefds);
-  FD_COPY(&this->master,&this->exceptionfds);
+  FD_COPY(&this->master,&this->exceptionfds);*/
+  this->readfds=this->master;
+  this->writefds=this->master;
+  this->exceptionfds->this->master;
 }
 
 void Network::closeSocket(int socketNumber){
