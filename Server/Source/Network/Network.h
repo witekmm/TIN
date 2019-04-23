@@ -39,7 +39,7 @@ public:
   void selectDescriptor();
   //Close choosen socket
   int closeSocket(int socketNumber);
-  //Find new fdmax after closing the old one
+  //Find new fdmax after closing socket with biggest number
   void updateFdmax();
   //Clears choosen socket from activeSockets and decreases sockets
   void clearSocket(int socketNumber);
