@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package Message;
+
+message Person {
+
+  enum  messageType{
+    MSG = 0;
+    COMMAND = 1;
+    LOGIN = 2;
+    PASSWORD = 3;
+    GROUP_CREATE = 4,
+    GROUP_DELETE = 5,
+    GROUP_REQUEST = 6,
+    GROUP_ACCEPT = 7,
+    GROUP_DECLINE = 8,
+  }
+  required int32 start = 1;
+  required int32 destination = 2;
+  required messageType type = 3[default = MSG];
+  required int32 size = 4;
+  required int32 id = 5;
+  required string content = 5;
+
+
+}
