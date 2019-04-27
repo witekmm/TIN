@@ -5,6 +5,10 @@ Client::Client(int socketNumber){
   this->socketNumber=socketNumber;
 }
 
+Client::~Client(){
+  if(this->clientBuffer!=NULL) delete[] this->clientBuffer;
+}
+
 int Client::sendMessage(char* buffer, int bufferSize){
   int bytesSent = send(this->socketNumber , buffer , bufferSize , MSG_DONTWAIT);
   if(bytesSent==-1) return -1;
@@ -28,4 +32,8 @@ void Client::clearBuffer(){
 
 char* Client::getClientBuffer(){
   return this->clientBuffer;
+}
+
+int getSocketNumber(){
+  return this->socketNumber;
 }

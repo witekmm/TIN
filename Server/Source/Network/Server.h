@@ -10,8 +10,9 @@ class Server{
   socklen_t len;
   //max connections pending on for accept
   int maxConnections;
+  int port;
 public:
-  Server(int maxConnections);
+  Server(int maxConnections, int port);
   //create socket for server
   int createServerSocket();
   //bind server address to socket
@@ -20,6 +21,8 @@ public:
   int listenServerSocket();
   //0 if accept gone well, 1 if not
   int acceptConnection();
+
+  int getSocketNumber();
 };
 
 #endif

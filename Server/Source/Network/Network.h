@@ -25,8 +25,8 @@ class Network{
   int sockets;
 public:
   Network();
-  //server configure
-  int startServer();
+  //quite obvious
+  int startServer(int maxConnections, int port);
   //signal from sockets
   void selectDescriptor();
   //Close choosen socket
@@ -39,6 +39,8 @@ public:
   int checkIfSocket(int socketNumber);
   //Clears waiting lists
   void clearLists();
+  //KLIENT
+  void connectClient();
 };
 
 #endif

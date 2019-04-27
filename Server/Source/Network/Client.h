@@ -9,6 +9,7 @@ class Client{
 
 public:
   Client(int socketNumber);
+  ~Client();
 
   int sendMessage(char* buffer, int bufferSize);
   int receiveMessage(int bytes);
@@ -17,6 +18,7 @@ public:
   void clearBuffer();
 
   char* getClientBuffer();
+  int getSocketNumber();
 
 };
 

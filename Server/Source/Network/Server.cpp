@@ -1,9 +1,12 @@
 #include "NetLibs.h"
 #include "Server.h"
 
-Server::Server(int maxConnections){
+Server::Server(int maxConnections, int port){
+  this->serverAddress.sin_family = AF_INET,
+  this->serverAddress.sin_port = htons(port);
   this->len = sizeof(this->serverAddress);
   this->maxConnections=maxConnections;
+  this->port=port;
 }
 
 int Server::createServerSocket(){
@@ -28,7 +31,7 @@ int Server::bindServerSocket(){
 }
 
 
-int Network::listenServerSocket(){
+int Server::listenServerSocket(){
   if(listen(this->socketNumber, this->maxConnections ) < 0 ){
     shutdown(this->socketNumber, SHUT_RDWR);
     close(this->socketNumber);
@@ -38,7 +41,7 @@ int Network::listenServerSocket(){
   else return 0;
 }
 
-int Network::acceptConnection(){
+int Server::acceptConnection(){
   struct sockaddr_in client = {};
   socklen_t addrlen = sizeof( client );
   //połaczenie nieblokujące
@@ -47,4 +50,8 @@ int Network::acceptConnection(){
   if(newfd == -1) return -1;
   //Połączono
   else return newfd;
+}
+
+int Server::getSocketNumber(){
+  return this->socketNumber;
 }
