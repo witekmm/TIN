@@ -1,17 +1,18 @@
 #include <string>
 #include <stdlib.h>
+using namespace std;
+
 #include "MainInput.h"
 
 MainInput::MainInput(int argc, char* argv[]){
-  MainConstants temp();
-  this->constants=temp(DEFAULT_SERVER_IP,DEFAULT_SERVER_PORT,DEFAULT_MAX_CONNECTIONS);
+  this->constants(string(DEFAULT_SERVER_IP) , DEFAULT_SERVER_PORT , DEFAULT_MAX_CONNECTIONS);
   this->argc=argc-1;
   this->argv=argv;
 }
 
 void MainInput::checkFlag(){
   while(!argc){
-    std::string value(this->argv[this->argc-1]);
+    string value(this->argv[this->argc-1]);
     if(value == "-p"){
       int port=atoi(this->argv[argc]);
       setServerPort(port);
@@ -28,6 +29,10 @@ void MainInput::checkFlag(){
   }
 }
 
+MainConstants MainInput::getConstants(){
+  return this->constants;
+}
+
 void MainInput::setServerPort(int serverPort){
   this->constants.setServerPort(serverPort);
 }
@@ -36,6 +41,6 @@ void MainInput::setMaxConnections(int maxConnections){
   this->constants.setMaxConnections(maxConnections);
 }
 
-void MainInput::setServerIp(std::string serverIp){
+void MainInput::setServerIp(string serverIp){
   this->constants.setServerIp(serverIp);
 }

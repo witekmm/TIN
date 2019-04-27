@@ -7,20 +7,13 @@ message ClientMessage {
   enum  messageType{
     MSG = 0;
     COMMAND = 1;
-    LOGIN = 2;
-    PASSWORD = 3;
-    GROUP_CREATE = 4;
-    GROUP_DELETE = 5;
-    GROUP_REQUEST = 6;
-    GROUP_ACCEPT = 7;
-    GROUP_DECLINE = 8;
+    GROUP_ACCEPT = 2;
+    GROUP_DECLINE = 3;
   }
 
-  required int32 header_type = 1;
-  required messageType type = 4[default = MSG];
+  required messageType type = 1[default = MSG];
   optional int32 start = 2;
   optional int32 destination = 3;
-  optional int32 message_size = 5;
-  optional string content = 6;
+  optional string content = 4;
 
 }

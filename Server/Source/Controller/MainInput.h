@@ -1,13 +1,14 @@
 #include <iostream>
+using namespace std;
 
-#IFNDEF MAIN_INPUT_H
-#DEFINE MAIN_INPUT_H
+#ifndef MAIN_INPUT_H
+#define MAIN_INPUT_H
 
 #include "MainConstants.h"
 
-#DEFINE DEFAULT_SERVER_PORT 50011
-#DEFINE DEFAULT_SERVER_IP "127.0.0.1"
-#DEFINE DEFAULT_MAX_CONNECTIONS 10
+#define DEFAULT_SERVER_PORT 50011
+#define DEFAULT_SERVER_IP "127.0.0.1"
+#define DEFAULT_MAX_CONNECTIONS 10
 
 class MainInput{
   MainConstants constants;
@@ -18,10 +19,10 @@ public:
   MainInput(int argc, char* argv[]);
 
   void checkFlag();
-
+  MainConstants getConstants();
   void setServerPort(int serverPort);
   void setMaxConnections(int maxConnections);
-  void setServerIp(std::string serverIp);
-}
+  void setServerIp(string serverIp);
+};
 
-#ENDIF
+#endif

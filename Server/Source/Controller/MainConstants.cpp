@@ -1,7 +1,8 @@
 #include <string>
+using namespace std;
 #include "MainConstants.h"
 
-std::string& MainConstants::getServerIp(){ return serverIp;}
+string& MainConstants::getServerIp(){ return serverIp;}
 
 int MainConstants::getServerPort(){ return serverPort;}
 
@@ -15,11 +16,11 @@ void MainConstants::setServerPort(int serverPort){
   this->serverPort=serverPort;
 }
 
-void MainConstants::setServerIp(std::string serverIp){
+void MainConstants::setServerIp(string serverIp){
   this->serverIp=serverIp;
 }
 
-MainConstants::MainConstants(std::string serverIp, int serverPort, int maxConnections){
+MainConstants::MainConstants(string serverIp, int serverPort, int maxConnections){
   this->serverIp=serverIp;
   this->serverPort=serverPort;
   this->maxConnections=maxConnections;
