@@ -2,7 +2,7 @@
 #include "Server.h"
 
 Server::Server(int maxConnections){
-  this->len = sizeof(this->server);
+  this->len = sizeof(this->serverAddress);
   this->maxConnections=maxConnections;
 }
 
@@ -19,10 +19,10 @@ int Server::createServerSocket(){
 }
 
 int Server::bindServerSocket(){
-  if( bind(this->socketNumber, (struct sockaddr*) &(this->server), this->len) < 0) {
+  if( bind(this->socketNumber, (struct sockaddr*) &(this->serverAddress), this->len) < 0) {
     shutdown(this->socketNumber, SHUT_RDWR);
     close(this->socketNumber);
-    return 1;
+    return -1;
   }
   else return 0;
 }
@@ -33,7 +33,18 @@ int Network::listenServerSocket(){
     shutdown(this->socketNumber, SHUT_RDWR);
     close(this->socketNumber);
     clearSocket(this->socketNumber);
-    return 1;
+    return -1;
   }
   else return 0;
+}
+
+int Network::acceptConnection(){
+  struct sockaddr_in client = {};
+  socklen_t addrlen = sizeof( client );
+  //połaczenie nieblokujące
+  int newfd = accept4(this->serverSocket, (struct sockaddr*)&client, &addrlen , SOCK_NONBLOCK);
+  //Brak połączenia
+  if(newfd == -1) return -1;
+  //Połączono
+  else return newfd;
 }

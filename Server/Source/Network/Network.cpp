@@ -56,21 +56,6 @@ void Network::closeSocket(int socketNumber){
   updateFdmax();
 }
 
-int Network::acceptConnection(){
-  struct sockaddr_in client = {};
-  socklen_t addrlen = sizeof( client );
-  //połaczenie nieblokujące
-  int newfd = accept4(this->serverSocket, (struct sockaddr*)&client, &addrlen , SOCK_NONBLOCK);
-  //Brak połączenia
-  if(newfd == -1) return 1;
-  //Połączono
-  else{
-    addSocket(newfd);
-    updateFdmax();
-    return 0;
-  }
-}
-
 void Network::selectDescriptor(){
   clearLists();
   if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, NULL) == -1){

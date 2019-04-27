@@ -6,7 +6,7 @@
 class Server{
   int socketNumber;
   //transport address and port
-  sockaddr_in server{};
+  sockaddr_in serverAddress{};
   socklen_t len;
   //max connections pending on for accept
   int maxConnections;

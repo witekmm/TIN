@@ -10,6 +10,7 @@ using namespace std;
 #include <vector>
 
 class Network{
+  Server server;
   //Descriptors list:
   //master - original list
   //readfds - waiting for read action
