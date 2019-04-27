@@ -2,11 +2,10 @@
 #include <string>
 #include <pthread.h>
 //FILE INCLUDES
-#include "Controller/MainInput.h"
+#include "Controller/MainConstants.h"
 int main(int argc, char* argv[])
 {
-  MainInput inputData(argc, argv);
-  MainConstants constants(inputData.getConstants());
+  MainConstants constants(argc,argv);
 
   return 0;
 }

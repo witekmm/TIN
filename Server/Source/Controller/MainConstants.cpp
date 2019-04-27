@@ -1,33 +1,36 @@
 #include <string>
+#include <iostream>
 using namespace std;
 #include "MainConstants.h"
 
-string& MainConstants::getServerIp(){ return serverIp;}
+string& MainConstants::getServerIp(){ return this->serverIp;}
 
-int MainConstants::getServerPort(){ return serverPort;}
+int MainConstants::getServerPort(){ return this->serverPort;}
 
-int MainConstants::getMaxConnections(){ return maxConnections;}
+int MainConstants::getMaxConnections(){ return this->maxConnections;}
 
-void MainConstants::setMaxConnections(int maxConnections){
-  this->maxConnections=maxConnections;
+MainConstants::MainConstants(int argc , char* argv[]){
+  string tmp(DEFAULT_SERVER_IP);
+  this->serverIp=tmp;
+  this->serverPort=DEFAULT_SERVER_PORT;
+  this->maxConnections=DEFAULT_MAX_CONNECTIONS;
+  checkFlag(argc,argv);
 }
 
-void MainConstants::setServerPort(int serverPort){
-  this->serverPort=serverPort;
-}
-
-void MainConstants::setServerIp(string serverIp){
-  this->serverIp=serverIp;
-}
-
-MainConstants::MainConstants(string serverIp, int serverPort, int maxConnections){
-  this->serverIp=serverIp;
-  this->serverPort=serverPort;
-  this->maxConnections=maxConnections;
-}
-
-MainConstants::MainConstants(MainConstants& toCopy){
-  this->serverIp=toCopy.serverIp;
-  this->serverPort=toCopy.serverPort;
-  this->maxConnections=toCopy.maxConnections;
+void MainConstants::checkFlag(int arg, char* argv[]){
+  int argc=arg;
+  while(!argc){
+    string value(argv[argc-1]);
+    if(value == "-p"){
+      this->serverPort=atoi(argv[argc]);
+    }
+    if(value == "-c"){
+      this->maxConnections=atoi(argv[argc]);
+    }
+    if(value == "-i"){
+      string ip(argv[argc]);
+      this->serverIp = ip;
+    }
+    argc-=2;
+  }
 }

@@ -6,23 +6,22 @@ using namespace std;
 #ifndef MAIN_CONSTANTS_H
 #define MAIN_CONSTANTS_H
 
+#define DEFAULT_SERVER_PORT 50011
+#define DEFAULT_SERVER_IP "127.0.0.1"
+#define DEFAULT_MAX_CONNECTIONS 10
+
 class MainConstants{
-  const string serverIp;
-  const int serverPort;
-  const int maxConnections;
+  string serverIp;
+  int serverPort;
+  int maxConnections;
 
 public:
-  MainConstants(string serverIp, int serverPort, int maxConnections);
-  MainConstants(const MainConstants& toCopy);
+  MainConstants(int argc , char* argv[]);
 
   string& getServerIp();
   int getServerPort();
   int getMaxConnections();
-
-  void setServerIp(string serverIp);
-  void setServerPort(int serverPort);
-  void setMaxConnections(int maxConnections);
-
+  void checkFlag(int argc, char* argv[]);
 };
 
 #endif
