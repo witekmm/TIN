@@ -30,7 +30,7 @@ message ClientMessage {
     LOG_OUT = 1;
   }
 
-  required messageType messageType = 1[default = AUTHORIZATION];
+  required messageTypes messageType = 1[default = AUTHORIZATION];
 
   optional groupActionTypes groupActionType = 2;
   optional authorizationTypes authorizationType = 3;

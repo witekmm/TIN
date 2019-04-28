@@ -1,3 +1,4 @@
+using namespace std;
 #include "NetLibs.h"
 #include "ClientStatus.h"
 #ifndef CLIENT_H
@@ -7,6 +8,7 @@ class Client{
   int socketNumber;
   char* clientBuffer;
   ClientStatus status;
+  string login;
 
 public:
   Client(int socketNumber);
@@ -20,6 +22,7 @@ public:
 
   void setNewBuffer(int bufferSize);
   void clearBuffer();
+  void setLogin(string login);
 
   char* getClientBuffer();
   int getSocketNumber();

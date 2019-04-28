@@ -7,10 +7,10 @@ using namespace std;
 
 #include "Server.h"
 #include "Client.h"
-
 #include <vector>
 
 class Network{
+  //representation of server
   Server server;
   //Descriptors list:
   //master - original list
@@ -22,6 +22,7 @@ class Network{
   int fdmax;
   //list of active sockets
   vector<Client> activeClients;
+  //list of sockets that select is listening
   vector<int> activeSockets;
   int sockets;
   //refernece to transport pipe

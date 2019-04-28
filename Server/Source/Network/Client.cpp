@@ -1,3 +1,4 @@
+using namespace std;
 #include "NetLibs.h"
 #include "Client.h"
 
@@ -34,6 +35,10 @@ int Client::receiveMessage(int bytes){
 
 void Client::setNewBuffer(int bufferSize){
   this->clientBuffer == new char[bufferSize];
+}
+
+void Client::setLogin(string login){
+  this->login=login;
 }
 
 void Client::clearBuffer(){
