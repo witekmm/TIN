@@ -1,5 +1,5 @@
 #include "NetLibs.h"
-#include "../Transport/Transport.h"
+#include "../Transport/TRANSPORT_H"
 using namespace std;
 
 #ifndef NETWORK_H
@@ -46,6 +46,8 @@ public:
   void clearLists();
   //KLIENT
   void connectClient();
+  //
+  //int sendMessage()
 };
 
 #endif
