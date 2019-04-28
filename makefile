@@ -1,10 +1,10 @@
 SV = Server/
-NT = Server/Network/
-CT = Server/Controller/
-LG = Server/Logic/
-TT = Server/Transport/
+NT = $(SV)Network/
+CT = $(SV)Controller/
+LG = $(SV)Logic/
+TT = $(SV)Transport/
 MSG = Messages/
-NET = Server/Network/NetLibs.h
+NET = $(NT)NetLibs.h
 OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o
 CC = g++
 FLAGS = -lpthread -pthread -lprotobuf
@@ -26,7 +26,7 @@ Client.o: $(NET) $(NT)Client.h $(NT)Client.cpp
 Network.o: $(NET) $(NT)Network.h $(NT)Network.cpp
 	$(CC) -c $(NT)Network.cpp
 
-Transport.o: $(TT)Transport.cpp $(TT)Transport.h
+Transport.o: $(TT)Transport.cpp $(TT)Transport.h $(NT)Network.h
 	$(CC) -c $(TT)Transport.cpp
 
 main.o: $(SV)main.cpp

@@ -1,6 +1,7 @@
 #include "NetLibs.h"
 #include <stdio.h>
 #include "Network.h"
+#include "../Transport/Transport.h"
 using namespace std;
 Network::Network(Transport& tp):transport(tp), server(){
   this->sockets==0;
@@ -108,4 +109,8 @@ void Network::connectClient(){
   Client NewClient(fdnumber);
   addSocket(fdnumber);
   this->activeClients.push_back(NewClient);
+}
+
+int Network::sendMessage(string message,int size, string client){
+  return 0;
 }

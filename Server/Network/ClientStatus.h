@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CLIENT_STATUS_H
 #define CLIENT_STATUS_H
 
