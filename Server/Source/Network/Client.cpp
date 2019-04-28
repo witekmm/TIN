@@ -6,7 +6,7 @@ Client::Client(int socketNumber){
 }
 
 Client::~Client(){
-  if(this->clientBuffer!=NULL) delete[] this->clientBuffer;
+  if(this->clientBuffer!=nullptr) delete[] this->clientBuffer;
 }
 
 int Client::sendMessage(char* buffer, int bufferSize){
@@ -17,7 +17,7 @@ int Client::sendMessage(char* buffer, int bufferSize){
 
 int Client::receiveMessage(int bytes){
   setNewBuffer(bytes);
-  int bytesReceived = recv(this->socketNumber,this->clientBuffer,bytes,MSG_DONTWAIT)
+  int bytesReceived = recv(this->socketNumber,this->clientBuffer,bytes,MSG_DONTWAIT);
   if(bytesReceived==-1) return -1;
   else return bytesReceived;
 }
@@ -34,6 +34,6 @@ char* Client::getClientBuffer(){
   return this->clientBuffer;
 }
 
-int getSocketNumber(){
+int Client::getSocketNumber(){
   return this->socketNumber;
 }

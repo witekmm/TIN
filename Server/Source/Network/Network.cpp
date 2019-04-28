@@ -1,13 +1,14 @@
 #include "NetLibs.h"
+#include <stdio.h>
 #include "Network.h"
 
 Network::Network(){
-  sockets==0;
+  this->sockets==0;
   FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
   FD_ZERO(&this->master);
-  int fdmax==0;
+  this->fdmax==0;
 }
 
 int Network::startServer(int maxConnections, int port){
@@ -43,7 +44,7 @@ void Network::addSocket(int socketNumber){
 
 void Network::updateFdmax(){
   int max=0;
-  for(int i = 0;int<this->sockets;i++){
+  for(int i = 0 ; i < this->sockets ; i++){
     if(this->activeSockets[i]>max) max = this->activeSockets[i];
   }
   this->fdmax=max;
@@ -65,7 +66,7 @@ void Network::clearLists(){
   FD_COPY(&this->master,&this->exceptionfds);*/
   this->readfds=this->master;
   this->writefds=this->master;
-  this->exceptionfds->this->master;
+  this->exceptionfds=this->master;
 }
 
 void Network::closeSocket(int socketNumber){
@@ -83,23 +84,23 @@ void Network::selectDescriptor(){
   }
   else{
     for(int socketNumber=0;socketNumber<this->sockets;socketNumber++){
-      if(FD_ISSET(socketNumber , &this->readfds)){
+      if(FD_ISSET(this->activeSockets[socketNumber] , &this->readfds)){
         //NOWE POŁĄCZENIE
-        if(socketNumber == serverSocket) connectClient();
-        else //ODBIÓR WIADOMOSCI
+        if(this->activeSockets[socketNumber] == this->server.getSocketNumber()) connectClient();
+        else {}//ODBIÓR WIADOMOSCI
       }
-      if(FD_ISSET(socketNumber , &this->writefds)){
-        pisz;
+      if(FD_ISSET(this->activeSockets[socketNumber] , &this->writefds)){
+        //pisz;
       }
-      if(FD_ISSET(socketNumber , &this->exceptionfds)){
-        sygnał;
+      if(FD_ISSET(this->activeSockets[socketNumber] , &this->exceptionfds)){
+        //sygnał;
       }
     }
   }
 }
 
-void connectClient(){
-  fdnumber = this->server.acceptConnection();
+void Network::connectClient(){
+  int fdnumber = this->server.acceptConnection();
   if(fdnumber==-1) return;
   Client NewClient(fdnumber);
   addSocket(fdnumber);

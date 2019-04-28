@@ -27,10 +27,11 @@ public:
   Network();
   //quite obvious
   int startServer(int maxConnections, int port);
+  void addSocket(int socketNumber);
   //signal from sockets
   void selectDescriptor();
   //Close choosen socket
-  int closeSocket(int socketNumber);
+  void closeSocket(int socketNumber);
   //Find new fdmax after closing socket with biggest number
   void updateFdmax();
   //Clears choosen socket from activeSockets and decreases sockets
