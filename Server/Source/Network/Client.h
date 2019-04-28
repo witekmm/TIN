@@ -1,10 +1,12 @@
 #include "NetLibs.h"
+#include "ClientStatus.h"
 #ifndef CLIENT_H
 #define CLIENT_H
 
 class Client{
   int socketNumber;
   char* clientBuffer;
+  ClientStatus status;
 
 public:
   Client(int socketNumber);

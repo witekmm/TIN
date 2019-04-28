@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package Message;
+
+message ClientMessage {
+
+  enum  messageTypes{
+    AUTHORIZATION = 0;
+    COMMAND = 1;
+    GROUP = 2;
+  }
+
+  enum groupActionTypes{
+    MESSAGE = 0;
+    CREATE = 1;
+    DELETE = 2;
+    REQUEST = 3;
+    ACCEPT = 4;
+    DECLINE = 5;
+    LEAVE = 6;
+  }
+
+  enum authorizationTypes{
+    LOGIN = 0;
+    PASSWORD = 1;
+  }
+
+  enum commandTypes{
+    EXIT = 0;
+    LOG_OUT = 1;
+  }
+
+  required messageType messageType = 1[default = AUTHORIZATION];
+
+  optional groupActionTypes groupActionType = 2;
+  optional authorizationTypes authorizationType = 3;
+  optional commandTypes commandType = 4;
+
+  optional string login = 5;
+  optional string password = 6;
+  optional string groupName = 7;
+  optional string userName = 8;
+  optional int32 sender = 9;
+  optional int32 recipient = 10;
+  optional string messageContent = 11;
+}

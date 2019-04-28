@@ -3,6 +3,7 @@
 
 Client::Client(int socketNumber){
   this->socketNumber=socketNumber;
+  this->status=unauthorized;
 }
 
 Client::~Client(){
