@@ -1,11 +1,14 @@
 #include <iostream>
+#include <string>
 #include <pthread.h>
 //FILE INCLUDES
-#include "Controller/MainInput.h"
-int main(int argc, char*argv[])
+#include "Network/NetLibs.h"
+#include "Controller/MainConstants.h"
+#include "Network/Network.h"
+
+int main(int argc, char* argv[])
 {
-  MainInput inputData(argc, argv);
-  MainConstants constants(MainInput.constants);
+  MainConstants constants(argc,argv);
 
   return 0;
 }

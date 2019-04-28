@@ -1,26 +1,27 @@
 #include <string>
 #include <iostream>
 
-#IFNDEF MAIN_CONSTANTS_H
-#DEFINE MAIN_CONSTANTS_H
+using namespace std;
+
+#ifndef MAIN_CONSTANTS_H
+#define MAIN_CONSTANTS_H
+
+#define DEFAULT_SERVER_PORT 50011
+#define DEFAULT_SERVER_IP "127.0.0.1"
+#define DEFAULT_MAX_CONNECTIONS 10
 
 class MainConstants{
-  const std::string serverIp;
-  const int serverPort;
-  const int maxConnections;
+  string serverIp;
+  int serverPort;
+  int maxConnections;
 
 public:
-  MainConstants(std::string serverIp, int serverPort, int maxConnections);
-  MainConstants(const MainConstants& toCopy);
+  MainConstants(int argc , char* argv[]);
 
-  std::string& getServerIp();
+  string& getServerIp();
   int getServerPort();
   int getMaxConnections();
+  void checkFlag(int argc, char* argv[]);
+};
 
-  void setServerIp(std::string serverIp);
-  void setServerPort(int serverPort);
-  void setMaxConnections(int maxConnections);
-
-}
-
-#ENDIF
+#endif

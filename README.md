@@ -9,17 +9,13 @@ Mateusz Krawczyk
 
 Uruchomienie serwera:
 ```
-./server (numer portu - opcjonalne)
+./server -flaga wartość
+-p numer portu
+-i numer ip
+-c maksymalna ilość wspólnie działających klientów
 ```
-Uruchomienie clienta
-```
-./client (numer portu - opcjonalne)
-```
-Komendy klienta:
-```
-exit / stop - zakończenie działania aktualnego klienta
-close - zamknięcie całego serwera
-```
+
+
 Komendy CLI:
 ```
 list - lista aktywnych aktywnych gniazd

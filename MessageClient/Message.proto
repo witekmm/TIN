@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package Message;
+
+message ClientMessage {
+
+  enum  messageType{
+    MSG = 0;
+    COMMAND = 1;
+    GROUP_ACCEPT = 2;
+    GROUP_DECLINE = 3;
+  }
+
+  required messageType type = 1[default = MSG];
+  optional int32 start = 2;
+  optional int32 destination = 3;
+  optional string content = 4;
+}
