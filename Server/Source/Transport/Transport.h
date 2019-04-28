@@ -7,8 +7,8 @@ using namespace std;
 
 class Transport{
 public:
-  int serializeAndSend(Message::ClientMessage message);
-  Message::ClientMessage receiveAndParse();
+  int serializeAndSend(Message::ClientMessage message, string clientLogin);
+  Message::ClientMessage receiveAndParse(int clientNumber);
 };
 
 #endif
