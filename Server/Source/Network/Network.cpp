@@ -1,7 +1,7 @@
 #include "NetLibs.h"
 #include <stdio.h>
 #include "Network.h"
-
+using namespace std;
 Network::Network(){
   this->sockets==0;
   FD_ZERO(&this->readfds);
@@ -11,8 +11,8 @@ Network::Network(){
   this->fdmax==0;
 }
 
-int Network::startServer(int maxConnections, int port){
-  Server temp(maxConnections, port);
+int Network::startServer(int maxConnections, int port, string ip){
+  Server temp(maxConnections, port, ip);
   this->server=temp;
   if(this->server.createServerSocket() == -1) return -1;
   if(this->server.bindServerSocket() == -1) return -1;
@@ -22,15 +22,18 @@ int Network::startServer(int maxConnections, int port){
 }
 
 void Network::clearSocket(int socketNumber){
-  int i=0;
-  for(i ; i < this->sockets;i++){
-    if(socketNumber == this->activeSockets[i]) break;
+  for(vector<int>::iterator it = this->activeSockets.begin() ; it != this->activeSockets.end(); it++){
+    if(*it == socketNumber){
+      this->activeSockets.erase(it);
+      break;
+    }
   }
-  this->activeSockets.erase(i);
-  for(i = 0 ; i<this->sockets-1 ; i++){
-    if(socketNumber == this->activeClients[i].getSocketNumber()) break;
+  for(vector<Client>::iterator it = this->activeClients.begin() ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      this->activeClients.erase(it);
+      break;
+    }
   }
-  this->activeSockets.erase(i);
   this->sockets--;
   FD_CLR(socketNumber , &master);
 }

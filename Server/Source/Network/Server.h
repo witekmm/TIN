@@ -1,3 +1,4 @@
+using namespace std;
 #include "NetLibs.h"
 
 #ifndef SERVER_H
@@ -15,9 +16,10 @@ class Server{
   //max connections pending on for accept
   int maxConnections;
   int port;
+  string serverIP;
 public:
   Server();
-  Server(int maxConnections, int port);
+  Server(int maxConnections, int port, string ip);
   //create socket for server
   int createServerSocket();
   //bind server address to socket

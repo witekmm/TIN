@@ -9,6 +9,15 @@ Client::~Client(){
   if(this->clientBuffer!=nullptr) delete[] this->clientBuffer;
 }
 
+int Client::operator*(int){
+  return this->socketNumber;
+}
+
+int Client::operator==(int toCheck){
+  if(this->socketNumber==toCheck) return 1;
+  else return 0;
+}
+
 int Client::sendMessage(char* buffer, int bufferSize){
   int bytesSent = send(this->socketNumber , buffer , bufferSize , MSG_DONTWAIT);
   if(bytesSent==-1) return -1;

@@ -1,5 +1,6 @@
 #include "NetLibs.h"
 #include "Server.h"
+using namespace std;
 
 Server::Server(){
   this->serverAddress.sin_family = AF_INET;
@@ -7,17 +8,22 @@ Server::Server(){
   this->len = sizeof(this->serverAddress);
   this->maxConnections=DEFAULT_MAX_CONNECTIONS;
   this->port=DEFAULT_SERVER_PORT;
+
 }
 
-Server::Server(int maxConnections, int port){
+Server::Server(int maxConnections, int port, string ip){
   this->serverAddress.sin_family = AF_INET;
   this->serverAddress.sin_port = htons(port);
   this->len = sizeof(this->serverAddress);
   this->maxConnections=maxConnections;
   this->port=port;
+  this->serverIP=ip;
 }
 
 int Server::createServerSocket(){
+  if( inet_pton( AF_INET, (char*)&this->serverIP, &this->serverAddress.sin_addr ) <= 0 ){
+    return -1;
+  }
   int yes = 1;
   this->socketNumber=socket(AF_INET, SOCK_STREAM, 0);
   if(this->socketNumber < 0) return -1;

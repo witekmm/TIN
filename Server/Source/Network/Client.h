@@ -1,3 +1,4 @@
+#include "NetLibs.h"
 #ifndef CLIENT_H
 #define CLIENT_H
 
@@ -8,6 +9,9 @@ class Client{
 public:
   Client(int socketNumber);
   ~Client();
+
+  int operator*(int);
+  int operator==(int toCheck);
 
   int sendMessage(char* buffer, int bufferSize);
   int receiveMessage(int bytes);

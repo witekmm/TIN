@@ -1,6 +1,7 @@
 #ifndef NETLIBS_H
 #define NETLIBS_H
 
+#include <string>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/time.h>

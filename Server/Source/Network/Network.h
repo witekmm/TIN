@@ -26,7 +26,7 @@ class Network{
 public:
   Network();
   //quite obvious
-  int startServer(int maxConnections, int port);
+  int startServer(int maxConnections, int port, string ip);
   void addSocket(int socketNumber);
   //signal from sockets
   void selectDescriptor();
