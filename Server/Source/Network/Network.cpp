@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "Network.h"
 using namespace std;
-Network::Network(){
+Network::Network(Transport& tp):transport(tp), server(){
   this->sockets==0;
   FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);

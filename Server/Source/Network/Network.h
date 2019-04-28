@@ -1,4 +1,5 @@
 #include "NetLibs.h"
+#include "../Transport/Transport.h"
 using namespace std;
 
 #ifndef NETWORK_H
@@ -23,8 +24,10 @@ class Network{
   vector<Client> activeClients;
   vector<int> activeSockets;
   int sockets;
+  //refernece to transport pipe
+  Transport& transport;
 public:
-  Network();
+  Network(Transport& tp);
   //quite obvious
   int startServer(int maxConnections, int port, string ip);
   void addSocket(int socketNumber);
