@@ -1,3 +1,4 @@
+#pragma once
 using namespace std;
 #include "NetLibs.h"
 #include "ClientStatus.h"
@@ -5,28 +6,48 @@ using namespace std;
 #define CLIENT_H
 
 class Client{
+  string constantBuffer;
+  //buffer for sending
+  string sendingBuffer;
+  int sendingSize;
+  //Info about actual connection
+  bool isSizeSent;
+  bool isMessageSet;
+  //buffer for sending
+  string receivingBuffer;
+  //Info about actual connection
+  bool isSizeReceived;
+  int bytesToReceive;
+  //information about client's session
   int socketNumber;
-  char* clientBuffer;
   ClientStatus status;
   string login;
 
 public:
   Client(int socketNumber);
-  ~Client();
-
-  int operator*(int);
+  //get clients login
+  string operator*(int);
   int operator==(int toCheck);
-
-  int sendMessage(char* buffer, int bufferSize);
-  int receiveMessage(int bytes);
-
-  void setNewBuffer(int bufferSize);
-  void clearBuffer();
+  int operator==(string toCheck);
+  //Sending
+  int sendBuffer();
+  int receiveBuffer();
+  int sendSize();
+  int receiveSize();
+  //Set new message to send
+  void setNewMessage(string content,int bufferSize);
+  //session info set
   void setLogin(string login);
-
-  char* getClientBuffer();
+  //get
+  string getReceivingBuffer();
   int getSocketNumber();
-
+  bool getIsMessageSet();
+  bool getIsSizeSent();
+  bool getIsSizeReceived();
+  //clear recv
+  void messageReceived();
+  //clear send
+  void messageSent();
 };
 
 #endif

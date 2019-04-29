@@ -1,9 +1,10 @@
+#include "NetLibs.h"
+
+using namespace std;
+
 #ifndef NETWORK_H
 #define NETWORK_H
-
-#include "NetLibs.h"
 #include "../Transport/Transport.h"
-using namespace std;
 #include "Server.h"
 #include "Client.h"
 #include <vector>
@@ -47,8 +48,13 @@ public:
   void clearLists();
   //KLIENT
   void connectClient();
-  //
-  //int sendMessage()
+  //this function only pass message to client's buffer
+  //client should send as many bytes as he can whenever he can
+  int setMessage(string message,int size, string client);
+  //send message when network get a signal
+  void sendMessage(Client& client);
+  //receive message when network get a signal
+  void receiveMessage(Client& client);
 };
 
 #endif

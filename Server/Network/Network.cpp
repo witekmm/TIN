@@ -1,6 +1,8 @@
 #include "NetLibs.h"
+#include <thread>
 #include <stdio.h>
 #include "Network.h"
+#include "../Transport/Transport.h"
 using namespace std;
 Network::Network(Transport& tp):transport(tp), server(){
   this->sockets==0;
@@ -108,4 +110,54 @@ void Network::connectClient(){
   Client NewClient(fdnumber);
   addSocket(fdnumber);
   this->activeClients.push_back(NewClient);
+}
+
+int Network::setMessage(string message,int size, string client){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == client){
+      this->activeClients[i].setNewMessage(message,size);
+      return 1;
+    }
+    i++;
+  }
+  return -1;
+}
+
+void Network::sendMessage(Client& client){
+  if(client.getIsMessageSet() == false) {
+    return;
+  }
+  else if(client.getIsSizeSent() == false){
+    int result = client.sendSize();
+    if(result == -1); // CLIENT IS OFFLINE
+  }
+  else{
+    int result = client.sendBuffer();
+    if(result == -1); // CLIENT IS OFFLINE
+    else if(result == 0) return; //full message is not sent yet
+    else{
+      //wiadomosc wyslana - daj znac do transport - 
+      client.messageSent();
+    }
+  }
+}
+
+void Network::receiveMessage(Client& client){
+  if(client.getIsSizeReceived() == false){
+    int result = client.receiveSize();
+    if(result == -1); //CLIENT IS OFFLINE
+    else if(result == 0); // sth gone wrong - repeat
+    else return; //everything is perfect
+  }
+  else{
+    int result = client.receiveBuffer();
+    if(result == -1); //CLIENT IS OFFLINE
+    else if(result == 0) return; //full message is not received yet
+    else{
+      //wiadomosc odebrania daj znac tranposrt
+      client.messageReceived();
+    }
+  }
 }

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef NETLIBS_H
 #define NETLIBS_H
 
