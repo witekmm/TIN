@@ -1,13 +1,14 @@
-#include "NetLibs.h"
-#include "../Transport/TRANSPORT_H"
-using namespace std;
-
 #ifndef NETWORK_H
 #define NETWORK_H
 
+#include "NetLibs.h"
+#include "../Transport/Transport.h"
+using namespace std;
 #include "Server.h"
 #include "Client.h"
 #include <vector>
+
+class Transport;
 
 class Network{
   //representation of server

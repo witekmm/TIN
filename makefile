@@ -5,7 +5,7 @@ LG = Server/Logic/
 TT = Server/Transport/
 MSG = Messages/
 NET = Server/Network/NetLibs.h
-OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o
+OBJS = Transport.o Network.o MainConstants.o Client.o  Server.o  main.o
 CC = g++
 FLAGS = -lpthread -pthread -lprotobuf
 
