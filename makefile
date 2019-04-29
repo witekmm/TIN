@@ -5,14 +5,14 @@ LG = $(SV)Logic/
 TT = $(SV)Transport/
 MSG = Messages/
 NET = $(NT)NetLibs.h
-OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o
+OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o Message.pb.o
 CC = g++
 FLAGS = -lpthread -pthread -lprotobuf
 
 all: server
 
 server: $(OBJS)
-	$(CC) $(OBJS) $(FLAGS) -o server
+	$(CC) $(OBJS) -o server $(FLAGS)
 
 Server.o: $(NET) $(NT)Server.h $(NT)Server.cpp
 	$(CC) -c $(NT)Server.cpp
@@ -31,6 +31,9 @@ Transport.o: $(TT)Transport.cpp $(TT)Transport.h $(NT)Network.h
 
 main.o: $(SV)main.cpp
 	$(CC) -c $(SV)main.cpp
+
+Message.pb.o: $(MSG)Message.pb.cc $(MSG)Message.pb.h
+	$(CC) -c $(MSG)Message.pb.cc
 
 clean:
 	rm -f *.o server

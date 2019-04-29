@@ -26,7 +26,7 @@ class Client{
 public:
   Client(int socketNumber);
   //get clients login
-  string operator*(int);
+  //string operator*(int);
   int operator==(int toCheck);
   int operator==(string toCheck);
   //Sending
@@ -39,7 +39,7 @@ public:
   //session info set
   void setLogin(string login);
   //get
-  string getReceivingBuffer();
+  string &getReceivingBuffer();
   int getSocketNumber();
   bool getIsMessageSet();
   bool getIsSizeSent();

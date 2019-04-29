@@ -113,6 +113,7 @@ void Network::connectClient(){
 }
 
 int Network::setMessage(string message,int size, string client){
+  // MUTEX.WAIT if message is set
   vector<Client>::iterator it = this->activeClients.begin();
   int i=0;
   for(it ; it != this->activeClients.end(); it++){
@@ -138,7 +139,7 @@ void Network::sendMessage(Client& client){
     if(result == -1); // CLIENT IS OFFLINE
     else if(result == 0) return; //full message is not sent yet
     else{
-      //wiadomosc wyslana - daj znac do transport - 
+      //wiadomosc wyslana - i tyle
       client.messageSent();
     }
   }
@@ -156,7 +157,9 @@ void Network::receiveMessage(Client& client){
     if(result == -1); //CLIENT IS OFFLINE
     else if(result == 0) return; //full message is not received yet
     else{
-      //wiadomosc odebrania daj znac tranposrt
+      //wiadomosc odebrania daj znac transport
+      this->transport.receiveAndParse(client.getReceivingBuffer());
+      //i wyczysc wiadomosci
       client.messageReceived();
     }
   }
