@@ -1,6 +1,6 @@
 #include "Transport.h"
 #include "../Network/Network.h"
-#include "../../Messages/Message.pb.h"
+#include "../Logic/HandleMessage.h"
 
 int Transport::serializeAndSend(Message::ClientMessage message, string clientLogin){
   string toSend;

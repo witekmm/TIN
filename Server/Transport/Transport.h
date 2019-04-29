@@ -4,10 +4,13 @@ using namespace std;
 #define TRANSPORT_H
 #include <vector>
 #include "../Network/Network.h"
+#include "../Logic/HandleMessage.h"
 //NUT SURE IF HERE BUT MIGHT BE
 #include "../../Messages/Message.pb.h"
 
 class Network;
+
+class HandleMessage;
 
 class Transport{
   Network& network;
