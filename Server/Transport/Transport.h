@@ -2,6 +2,7 @@
 using namespace std;
 #ifndef TRANSPORT_H
 #define TRANSPORT_H
+#include <vector>
 #include "../Network/Network.h"
 //NUT SURE IF HERE BUT MIGHT BE
 #include "../../Messages/Message.pb.h"
