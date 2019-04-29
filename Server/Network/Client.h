@@ -6,14 +6,15 @@ using namespace std;
 #define CLIENT_H
 
 class Client{
+  string constantBuffer;
   //buffer for sending
   string sendingBuffer;
   int sendingSize;
   //Info about actual connection
   bool isSizeSent;
+  bool isMessageSet;
   //buffer for sending
   string receivingBuffer;
-  int receivingSize;
   //Info about actual connection
   bool isSizeReceived;
   int bytesToReceive;
@@ -27,6 +28,7 @@ public:
   //get clients login
   string operator*(int);
   int operator==(int toCheck);
+  int operator==(string toCheck);
   //Sending
   int sendBuffer();
   int receiveBuffer();
@@ -39,10 +41,13 @@ public:
   //get
   string getReceivingBuffer();
   int getSocketNumber();
+  bool getIsMessageSet();
+  bool getIsSizeSent();
+  bool getIsSizeReceived();
   //clear recv
   void messageReceived();
   //clear send
-  void messageSend();
+  void messageSent();
 };
 
 #endif

@@ -7,7 +7,7 @@ Client::Client(int socketNumber){
   this->socketNumber=socketNumber;
   this->status=unauthorized;
   messageReceived();
-  messageSend();
+  messageSent();
 }
 
 string Client::operator*(int){
@@ -16,6 +16,11 @@ string Client::operator*(int){
 
 int Client::operator==(int toCheck){
   if(this->socketNumber==toCheck) return 1;
+  else return 0;
+}
+
+int Client::operator==(string toCheck){
+  if(this->login == toCheck) return 1;
   else return 0;
 }
 
@@ -92,6 +97,7 @@ int Client::receiveSize(){
 void Client::setNewMessage(string content,int bufferSize){
   this->sendingBuffer = content;
   this->sendingSize = bufferSize;
+  this->isMessageSet = true;
 }
 
 void Client::setLogin(string login){
@@ -112,8 +118,21 @@ void Client::messageReceived(){
   this->receivingBuffer.clear();
 }
 
-void Client::messageSend(){
+void Client::messageSent(){
   this->sendingSize=0;
   this->isSizeSent=false;
+  this->isMessageSet=false;
   this->sendingBuffer.clear();
+}
+
+bool Client::getIsMessageSet(){
+  return this->isMessageSet;
+}
+
+bool Client::getIsSizeSent(){
+  return this->isSizeSent;
+}
+
+bool Client::getIsSizeReceived(){
+  return this->isSizeReceived;
 }

@@ -50,7 +50,11 @@ public:
   void connectClient();
   //this function only pass message to client's buffer
   //client should send as many bytes as he can whenever he can
-  int sendMessage(string message,int size, string client);
+  int setMessage(string message,int size, string client);
+  //send message when network get a signal
+  void sendMessage(Client& client);
+  //receive message when network get a signal
+  void receiveMessage(Client& client);
 };
 
 #endif
