@@ -9,11 +9,11 @@ Client::Client(int socketNumber){
   messageReceived();
   messageSent();
 }
-
+/*
 string Client::operator*(int){
   return this->login;
 }
-
+*/
 int Client::operator==(int toCheck){
   if(this->socketNumber==toCheck) return 1;
   else return 0;
@@ -104,8 +104,9 @@ void Client::setLogin(string login){
   this->login=login;
 }
 
-string Client::getReceivingBuffer(){
-  return this->receivingBuffer;
+string &Client::getReceivingBuffer(){
+  string& temp(this->receivingBuffer);
+  return temp;
 }
 
 int Client::getSocketNumber(){
