@@ -426,10 +426,10 @@ class ClientMessage :
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // optional string messageContent = 11;
+  // optional string messageContent = 9;
   bool has_messagecontent() const;
   void clear_messagecontent();
-  static const int kMessageContentFieldNumber = 11;
+  static const int kMessageContentFieldNumber = 9;
   const ::std::string& messagecontent() const;
   void set_messagecontent(const ::std::string& value);
   #if LANG_CXX11
@@ -814,7 +814,7 @@ inline void ClientMessage::set_allocated_username(::std::string* username) {
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.userName)
 }
 
-// optional string messageContent = 11;
+// optional string messageContent = 9;
 inline bool ClientMessage::has_messagecontent() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }

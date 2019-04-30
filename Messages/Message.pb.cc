@@ -93,7 +93,7 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "zationTypes\0228\n\013commandType\030\004 \001(\0162#.Messa"
   "ge.ClientMessage.commandTypes\022\r\n\005login\030\005"
   " \001(\t\022\020\n\010password\030\006 \001(\t\022\021\n\tgroupName\030\007 \001("
-  "\t\022\020\n\010userName\030\010 \001(\t\022\026\n\016messageContent\030\013 "
+  "\t\022\020\n\010userName\030\010 \001(\t\022\026\n\016messageContent\030\t "
   "\001(\t\"9\n\014messageTypes\022\021\n\rAUTHORIZATION\020\000\022\013"
   "\n\007COMMAND\020\001\022\t\n\005GROUP\020\002\"h\n\020groupActionTyp"
   "es\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE\020\002\022"
@@ -103,7 +103,7 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "s\022\010\n\004EXIT\020\000\022\013\n\007LOG_OUT\020\001"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
-  false, InitDefaults_Message_2eproto,
+  false, InitDefaults_Message_2eproto, 
   descriptor_table_protodef_Message_2eproto,
   "Message.proto", &assign_descriptors_table_Message_2eproto, 664,
 };
@@ -494,9 +494,9 @@ const char* ClientMessage::_InternalParse(const char* begin, const char* end, vo
         ptr += size;
         break;
       }
-      // optional string messageContent = 11;
-      case 11: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 90) goto handle_unusual;
+      // optional string messageContent = 9;
+      case 9: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 74) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.messageContent");
@@ -680,9 +680,9 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional string messageContent = 11;
-      case 11: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (90 & 0xFF)) {
+      // optional string messageContent = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (74 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_messagecontent()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -787,14 +787,14 @@ void ClientMessage::SerializeWithCachedSizes(
       8, this->username(), output);
   }
 
-  // optional string messageContent = 11;
+  // optional string messageContent = 9;
   if (cached_has_bits & 0x00000010u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->messagecontent().data(), static_cast<int>(this->messagecontent().length()),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
       "Message.ClientMessage.messageContent");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      11, this->messagecontent(), output);
+      9, this->messagecontent(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -879,7 +879,7 @@ void ClientMessage::SerializeWithCachedSizes(
         8, this->username(), target);
   }
 
-  // optional string messageContent = 11;
+  // optional string messageContent = 9;
   if (cached_has_bits & 0x00000010u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->messagecontent().data(), static_cast<int>(this->messagecontent().length()),
@@ -887,7 +887,7 @@ void ClientMessage::SerializeWithCachedSizes(
       "Message.ClientMessage.messageContent");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        11, this->messagecontent(), target);
+        9, this->messagecontent(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -946,7 +946,7 @@ size_t ClientMessage::ByteSizeLong() const {
           this->username());
     }
 
-    // optional string messageContent = 11;
+    // optional string messageContent = 9;
     if (cached_has_bits & 0x00000010u) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
