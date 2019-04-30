@@ -107,11 +107,12 @@ inline bool ClientMessage_groupActionTypes_Parse(
 }
 enum ClientMessage_authorizationTypes {
   ClientMessage_authorizationTypes_LOGIN = 0,
-  ClientMessage_authorizationTypes_PASSWORD = 1
+  ClientMessage_authorizationTypes_PASSWORD = 1,
+  ClientMessage_authorizationTypes_BOTH = 2
 };
 bool ClientMessage_authorizationTypes_IsValid(int value);
 const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_LOGIN;
-const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_BOTH;
 const int ClientMessage_authorizationTypes_authorizationTypes_ARRAYSIZE = ClientMessage_authorizationTypes_authorizationTypes_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_authorizationTypes_descriptor();
@@ -314,6 +315,8 @@ class ClientMessage :
     ClientMessage_authorizationTypes_LOGIN;
   static const authorizationTypes PASSWORD =
     ClientMessage_authorizationTypes_PASSWORD;
+  static const authorizationTypes BOTH =
+    ClientMessage_authorizationTypes_BOTH;
   static inline bool authorizationTypes_IsValid(int value) {
     return ClientMessage_authorizationTypes_IsValid(value);
   }
@@ -466,20 +469,6 @@ class ClientMessage :
   ::Message::ClientMessage_commandTypes commandtype() const;
   void set_commandtype(::Message::ClientMessage_commandTypes value);
 
-  // optional int32 sender = 9;
-  bool has_sender() const;
-  void clear_sender();
-  static const int kSenderFieldNumber = 9;
-  ::google::protobuf::int32 sender() const;
-  void set_sender(::google::protobuf::int32 value);
-
-  // optional int32 recipient = 10;
-  bool has_recipient() const;
-  void clear_recipient();
-  static const int kRecipientFieldNumber = 10;
-  ::google::protobuf::int32 recipient() const;
-  void set_recipient(::google::protobuf::int32 value);
-
   // @@protoc_insertion_point(class_scope:Message.ClientMessage)
  private:
   class HasBitSetters;
@@ -496,8 +485,6 @@ class ClientMessage :
   int groupactiontype_;
   int authorizationtype_;
   int commandtype_;
-  ::google::protobuf::int32 sender_;
-  ::google::protobuf::int32 recipient_;
   friend struct ::TableStruct_Message_2eproto;
 };
 // ===================================================================
@@ -825,42 +812,6 @@ inline void ClientMessage::set_allocated_username(::std::string* username) {
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.userName)
-}
-
-// optional int32 sender = 9;
-inline bool ClientMessage::has_sender() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void ClientMessage::clear_sender() {
-  sender_ = 0;
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline ::google::protobuf::int32 ClientMessage::sender() const {
-  // @@protoc_insertion_point(field_get:Message.ClientMessage.sender)
-  return sender_;
-}
-inline void ClientMessage::set_sender(::google::protobuf::int32 value) {
-  _has_bits_[0] |= 0x00000200u;
-  sender_ = value;
-  // @@protoc_insertion_point(field_set:Message.ClientMessage.sender)
-}
-
-// optional int32 recipient = 10;
-inline bool ClientMessage::has_recipient() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
-}
-inline void ClientMessage::clear_recipient() {
-  recipient_ = 0;
-  _has_bits_[0] &= ~0x00000400u;
-}
-inline ::google::protobuf::int32 ClientMessage::recipient() const {
-  // @@protoc_insertion_point(field_get:Message.ClientMessage.recipient)
-  return recipient_;
-}
-inline void ClientMessage::set_recipient(::google::protobuf::int32 value) {
-  _has_bits_[0] |= 0x00000400u;
-  recipient_ = value;
-  // @@protoc_insertion_point(field_set:Message.ClientMessage.recipient)
 }
 
 // optional string messageContent = 11;

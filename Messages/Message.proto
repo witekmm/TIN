@@ -41,7 +41,5 @@ message ClientMessage {
   optional string password = 6;
   optional string groupName = 7;
   optional string userName = 8;
-  optional int32 sender = 9; <- to do wyrzucenia
-  optional int32 recipient = 10; <- to jako string lub mozna zlaczyc z userName
   optional string messageContent = 11;
 }

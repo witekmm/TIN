@@ -58,8 +58,6 @@ const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, password_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, groupname_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, username_),
-  PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, sender_),
-  PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, recipient_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, messagecontent_),
   5,
   6,
@@ -69,12 +67,10 @@ const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF
   1,
   2,
   3,
-  9,
-  10,
   4,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 16, sizeof(::Message::ClientMessage)},
+  { 0, 14, sizeof(::Message::ClientMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -88,7 +84,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Message_2eproto[] =
-  "\n\rMessage.proto\022\007Message\"\226\005\n\rClientMessa"
+  "\n\rMessage.proto\022\007Message\"\375\004\n\rClientMessa"
   "ge\022G\n\013messageType\030\001 \002(\0162#.Message.Client"
   "Message.messageTypes:\rAUTHORIZATION\022@\n\017g"
   "roupActionType\030\002 \001(\0162\'.Message.ClientMes"
@@ -97,20 +93,19 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "zationTypes\0228\n\013commandType\030\004 \001(\0162#.Messa"
   "ge.ClientMessage.commandTypes\022\r\n\005login\030\005"
   " \001(\t\022\020\n\010password\030\006 \001(\t\022\021\n\tgroupName\030\007 \001("
-  "\t\022\020\n\010userName\030\010 \001(\t\022\016\n\006sender\030\t \001(\005\022\021\n\tr"
-  "ecipient\030\n \001(\005\022\026\n\016messageContent\030\013 \001(\t\"9"
-  "\n\014messageTypes\022\021\n\rAUTHORIZATION\020\000\022\013\n\007COM"
-  "MAND\020\001\022\t\n\005GROUP\020\002\"h\n\020groupActionTypes\022\013\n"
-  "\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE\020\002\022\013\n\007RE"
-  "QUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DECLINE\020\005\022\t\n\005LEAV"
-  "E\020\006\"-\n\022authorizationTypes\022\t\n\005LOGIN\020\000\022\014\n\010"
-  "PASSWORD\020\001\"%\n\014commandTypes\022\010\n\004EXIT\020\000\022\013\n\007"
-  "LOG_OUT\020\001"
+  "\t\022\020\n\010userName\030\010 \001(\t\022\026\n\016messageContent\030\013 "
+  "\001(\t\"9\n\014messageTypes\022\021\n\rAUTHORIZATION\020\000\022\013"
+  "\n\007COMMAND\020\001\022\t\n\005GROUP\020\002\"h\n\020groupActionTyp"
+  "es\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE\020\002\022"
+  "\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DECLINE\020\005\022\t\n"
+  "\005LEAVE\020\006\"7\n\022authorizationTypes\022\t\n\005LOGIN\020"
+  "\000\022\014\n\010PASSWORD\020\001\022\010\n\004BOTH\020\002\"%\n\014commandType"
+  "s\022\010\n\004EXIT\020\000\022\013\n\007LOG_OUT\020\001"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
-  false, InitDefaults_Message_2eproto, 
+  false, InitDefaults_Message_2eproto,
   descriptor_table_protodef_Message_2eproto,
-  "Message.proto", &assign_descriptors_table_Message_2eproto, 689,
+  "Message.proto", &assign_descriptors_table_Message_2eproto, 664,
 };
 
 void AddDescriptors_Message_2eproto() {
@@ -185,6 +180,7 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -194,6 +190,7 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const ClientMessage_authorizationTypes ClientMessage::LOGIN;
 const ClientMessage_authorizationTypes ClientMessage::PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage::BOTH;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MIN;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MAX;
 const int ClientMessage::authorizationTypes_ARRAYSIZE;
@@ -250,12 +247,6 @@ class ClientMessage::HasBitSetters {
   static void set_has_username(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000008u;
   }
-  static void set_has_sender(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000200u;
-  }
-  static void set_has_recipient(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000400u;
-  }
   static void set_has_messagecontent(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000010u;
   }
@@ -270,8 +261,6 @@ const int ClientMessage::kLoginFieldNumber;
 const int ClientMessage::kPasswordFieldNumber;
 const int ClientMessage::kGroupNameFieldNumber;
 const int ClientMessage::kUserNameFieldNumber;
-const int ClientMessage::kSenderFieldNumber;
-const int ClientMessage::kRecipientFieldNumber;
 const int ClientMessage::kMessageContentFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -306,8 +295,8 @@ ClientMessage::ClientMessage(const ClientMessage& from)
     messagecontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.messagecontent_);
   }
   ::memcpy(&messagetype_, &from.messagetype_,
-    static_cast<size_t>(reinterpret_cast<char*>(&recipient_) -
-    reinterpret_cast<char*>(&messagetype_)) + sizeof(recipient_));
+    static_cast<size_t>(reinterpret_cast<char*>(&commandtype_) -
+    reinterpret_cast<char*>(&messagetype_)) + sizeof(commandtype_));
   // @@protoc_insertion_point(copy_constructor:Message.ClientMessage)
 }
 
@@ -320,8 +309,8 @@ void ClientMessage::SharedCtor() {
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   messagecontent_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&messagetype_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&recipient_) -
-      reinterpret_cast<char*>(&messagetype_)) + sizeof(recipient_));
+      reinterpret_cast<char*>(&commandtype_) -
+      reinterpret_cast<char*>(&messagetype_)) + sizeof(commandtype_));
 }
 
 ClientMessage::~ClientMessage() {
@@ -375,11 +364,7 @@ void ClientMessage::Clear() {
         reinterpret_cast<char*>(&authorizationtype_) -
         reinterpret_cast<char*>(&messagetype_)) + sizeof(authorizationtype_));
   }
-  if (cached_has_bits & 0x00000700u) {
-    ::memset(&commandtype_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&recipient_) -
-        reinterpret_cast<char*>(&commandtype_)) + sizeof(recipient_));
-  }
+  commandtype_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -507,20 +492,6 @@ const char* ClientMessage::_InternalParse(const char* begin, const char* end, vo
         GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
-        break;
-      }
-      // optional int32 sender = 9;
-      case 9: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 72) goto handle_unusual;
-        msg->set_sender(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
-      // optional int32 recipient = 10;
-      case 10: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 80) goto handle_unusual;
-        msg->set_recipient(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
       // optional string messageContent = 11;
@@ -709,32 +680,6 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
-      // optional int32 sender = 9;
-      case 9: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (72 & 0xFF)) {
-          HasBitSetters::set_has_sender(this);
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &sender_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // optional int32 recipient = 10;
-      case 10: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (80 & 0xFF)) {
-          HasBitSetters::set_has_recipient(this);
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &recipient_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
       // optional string messageContent = 11;
       case 11: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (90 & 0xFF)) {
@@ -842,16 +787,6 @@ void ClientMessage::SerializeWithCachedSizes(
       8, this->username(), output);
   }
 
-  // optional int32 sender = 9;
-  if (cached_has_bits & 0x00000200u) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->sender(), output);
-  }
-
-  // optional int32 recipient = 10;
-  if (cached_has_bits & 0x00000400u) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->recipient(), output);
-  }
-
   // optional string messageContent = 11;
   if (cached_has_bits & 0x00000010u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -944,16 +879,6 @@ void ClientMessage::SerializeWithCachedSizes(
         8, this->username(), target);
   }
 
-  // optional int32 sender = 9;
-  if (cached_has_bits & 0x00000200u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->sender(), target);
-  }
-
-  // optional int32 recipient = 10;
-  if (cached_has_bits & 0x00000400u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->recipient(), target);
-  }
-
   // optional string messageContent = 11;
   if (cached_has_bits & 0x00000010u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -1043,28 +968,12 @@ size_t ClientMessage::ByteSizeLong() const {
     }
 
   }
-  if (cached_has_bits & 0x00000700u) {
-    // optional .Message.ClientMessage.commandTypes commandType = 4;
-    if (cached_has_bits & 0x00000100u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->commandtype());
-    }
-
-    // optional int32 sender = 9;
-    if (cached_has_bits & 0x00000200u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->sender());
-    }
-
-    // optional int32 recipient = 10;
-    if (cached_has_bits & 0x00000400u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->recipient());
-    }
-
+  // optional .Message.ClientMessage.commandTypes commandType = 4;
+  if (cached_has_bits & 0x00000100u) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->commandtype());
   }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -1125,17 +1034,8 @@ void ClientMessage::MergeFrom(const ClientMessage& from) {
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 0x00000700u) {
-    if (cached_has_bits & 0x00000100u) {
-      commandtype_ = from.commandtype_;
-    }
-    if (cached_has_bits & 0x00000200u) {
-      sender_ = from.sender_;
-    }
-    if (cached_has_bits & 0x00000400u) {
-      recipient_ = from.recipient_;
-    }
-    _has_bits_[0] |= cached_has_bits;
+  if (cached_has_bits & 0x00000100u) {
+    set_commandtype(from.commandtype());
   }
 }
 
@@ -1180,8 +1080,6 @@ void ClientMessage::InternalSwap(ClientMessage* other) {
   swap(groupactiontype_, other->groupactiontype_);
   swap(authorizationtype_, other->authorizationtype_);
   swap(commandtype_, other->commandtype_);
-  swap(sender_, other->sender_);
-  swap(recipient_, other->recipient_);
 }
 
 ::google::protobuf::Metadata ClientMessage::GetMetadata() const {
