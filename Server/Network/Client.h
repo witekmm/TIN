@@ -44,6 +44,7 @@ public:
   bool getIsMessageSet();
   bool getIsSizeSent();
   bool getIsSizeReceived();
+  string getLogin();
   //clear recv
   void messageReceived();
   //clear send

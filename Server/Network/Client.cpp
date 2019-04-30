@@ -137,3 +137,7 @@ bool Client::getIsSizeSent(){
 bool Client::getIsSizeReceived(){
   return this->isSizeReceived;
 }
+
+string Client::getLogin(){
+  return this->login;
+}

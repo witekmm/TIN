@@ -158,7 +158,7 @@ void Network::receiveMessage(Client& client){
     else if(result == 0) return; //full message is not received yet
     else{
       //wiadomosc odebrania daj znac transport
-      this->transport.receiveAndParse(client.getReceivingBuffer());
+      this->transport.receiveAndParse(client.getReceivingBuffer() , client.getLogin());
       //i wyczysc wiadomosci
       client.messageReceived();
     }
