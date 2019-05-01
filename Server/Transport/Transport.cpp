@@ -1,6 +1,6 @@
 #include "Transport.h"
 #include "../Network/Network.h"
-#include "../../Messages/Message.pb.h"
+#include "../Logic/HandleMessage.h"
 
 int Transport::serializeAndSend(Message::ClientMessage message, string clientLogin){
   string toSend;
@@ -10,8 +10,8 @@ int Transport::serializeAndSend(Message::ClientMessage message, string clientLog
   return 0;
 }
 
-void Transport::receiveAndParse(string& toParse){
+void Transport::receiveAndParse(string& toParse, string login){
   Message::ClientMessage msg;
   msg.ParseFromString(toParse);
-  //APP.messageSent(msg);
+  handleMessage.checkReceivedMessage(msg , login);
 }

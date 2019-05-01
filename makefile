@@ -7,7 +7,7 @@ MSG = Messages/
 NET = $(NT)NetLibs.h
 OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o Message.pb.o
 CC = g++
-FLAGS = -lpthread -pthread -lprotobuf
+FLAGS = -lpthread -pthread -lprotobuf -std=c++11
 
 all: server
 
@@ -33,7 +33,7 @@ main.o: $(SV)main.cpp
 	$(CC) -c $(SV)main.cpp
 
 Message.pb.o: $(MSG)Message.pb.cc $(MSG)Message.pb.h
-	$(CC) -c $(MSG)Message.pb.cc
+	$(CC) -c  $(MSG)Message.pb.cc
 
 clean:
 	rm -f *.o server
