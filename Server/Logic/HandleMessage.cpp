@@ -1,7 +1,7 @@
 #include "HandleMessage.h"
 #include "../Transport/Transport.h"
 
-int HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login){
+int HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber){
   if(!message.has_messageType()){
     perror("Message is incorrect!");
     return;
@@ -14,11 +14,11 @@ int HandleMessage::checkReceivedMessage(Message::ClientMessage message, string l
     commandHandle(message,login);
   }
   else if(message.messageType() == AUTHORIZATION){
-    authorizationHandle(message,login);
+    authorizationHandle(message,login,socketNumber);
   }
 }
 
-int HandleMessage::groupHandle(Message::ClientMessage message, string login){
+void HandleMessage::groupHandle(Message::ClientMessage message, string login){
   if(!message.has_groupActionType()){
     perror("Message is incorrect!");
     return;
@@ -37,7 +37,7 @@ int HandleMessage::groupHandle(Message::ClientMessage message, string login){
     this->database.requestToGroup(message.groupName() , login);
   }
   else if(message.groupActionType() == ACCEPT){
-    this->database.acceptRequest(message.groupName() , message.userName());
+    this->database.acceptRequest(message.groupName() , message.userName() , login);
   }
   else if(message.groupActionType() == DECLINE){
     this->database.declineRequest(message.groupName() , message.userName());
@@ -47,7 +47,7 @@ int HandleMessage::groupHandle(Message::ClientMessage message, string login){
   }
 }
 
-int HandleMessage::authorizationHandle(Message::ClientMessage message, string login){
+int HandleMessage::authorizationHandle(Message::ClientMessage message, string login,int socketNumber){
   if(!message.has_authorizationType()){
     perror("Message is incorrect!");
     return 0;
@@ -62,17 +62,17 @@ int HandleMessage::authorizationHandle(Message::ClientMessage message, string lo
       perror("No password included!");
       return 0;
     }
-    this->database.logInUser(message.login() , message.password());
+    this->database.logInUser(message.login() , message.password(),socketNumber);
   }
   else if(message.authorizationType() == REGISTER_LOGIN){
-    this->database.addLogin(message.password() , login);
+    this->database.addLogin(message.login() , socketNumber);
   }
   else if(message.authorizationType() == REGISTER_PASSWORD){
-    this->database.addPasswordToLogin(message.login() , message.password());
+    this->database.addPasswordToLogin(message.login() , message.password() , socketNumber);
   }
 }
 
-int HandleMessage::commandHandle(Message::ClientMessage message,string login){
+void HandleMessage::commandHandle(Message::ClientMessage message,string login){
   if(!message.has_commandType()){
     perror("Message is incorrect!");
     return;

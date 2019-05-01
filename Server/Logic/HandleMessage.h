@@ -14,10 +14,10 @@ class HandleMessage{
   HandleDataBase database;
   Transport& transport;
 public:
-  int checkReceivedMessage(Message::ClientMessage message, string login);
-  int authorizationHandle(Message::ClientMessage message,string login);
-  int commandHandle(Message::ClientMessage message,string login);
-  int groupHandle(Message::ClientMessage message,string login);
+  int checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber);
+  int authorizationHandle(Message::ClientMessage message,string login,int socketNumber);
+  void commandHandle(Message::ClientMessage message,string login);
+  void groupHandle(Message::ClientMessage message,string login);
 };
 
 #endif
