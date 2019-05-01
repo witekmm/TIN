@@ -62,6 +62,9 @@ void HandleMessage::authorizationHandle(Message::ClientMessage message, string l
   else if(message.authorizationType() == BOTH){
     this->database.logInUser(message.login() , message.password());
   }
+  else if(message.authorizationType() == REGISTER_LOGIN){
+    this->database.logInUser(message.login() , message.password());
+  }
 }
 
 void HandleMessage::commandHandle(Message::ClientMessage message,string login){

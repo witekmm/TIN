@@ -84,7 +84,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Message_2eproto[] =
-  "\n\rMessage.proto\022\007Message\"\375\004\n\rClientMessa"
+  "\n\rMessage.proto\022\007Message\"\255\005\n\rClientMessa"
   "ge\022G\n\013messageType\030\001 \002(\0162#.Message.Client"
   "Message.messageTypes:\rAUTHORIZATION\022@\n\017g"
   "roupActionType\030\002 \001(\0162\'.Message.ClientMes"
@@ -98,14 +98,15 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "\n\007COMMAND\020\001\022\t\n\005GROUP\020\002\"h\n\020groupActionTyp"
   "es\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE\020\002\022"
   "\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DECLINE\020\005\022\t\n"
-  "\005LEAVE\020\006\"7\n\022authorizationTypes\022\t\n\005LOGIN\020"
-  "\000\022\014\n\010PASSWORD\020\001\022\010\n\004BOTH\020\002\"%\n\014commandType"
-  "s\022\010\n\004EXIT\020\000\022\013\n\007LOG_OUT\020\001"
+  "\005LEAVE\020\006\"g\n\022authorizationTypes\022\n\n\006LOG_IN"
+  "\020\000\022\022\n\016REGISTER_LOGIN\020\001\022\025\n\021REGISTER_PASSW"
+  "ORD\020\002\022\r\n\tINCORRECT\020\003\022\013\n\007CORRECT\020\004\"%\n\014com"
+  "mandTypes\022\010\n\004EXIT\020\000\022\013\n\007LOG_OUT\020\001"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
   false, InitDefaults_Message_2eproto, 
   descriptor_table_protodef_Message_2eproto,
-  "Message.proto", &assign_descriptors_table_Message_2eproto, 664,
+  "Message.proto", &assign_descriptors_table_Message_2eproto, 712,
 };
 
 void AddDescriptors_Message_2eproto() {
@@ -181,6 +182,8 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -188,9 +191,11 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const ClientMessage_authorizationTypes ClientMessage::LOGIN;
-const ClientMessage_authorizationTypes ClientMessage::PASSWORD;
-const ClientMessage_authorizationTypes ClientMessage::BOTH;
+const ClientMessage_authorizationTypes ClientMessage::LOG_IN;
+const ClientMessage_authorizationTypes ClientMessage::REGISTER_LOGIN;
+const ClientMessage_authorizationTypes ClientMessage::REGISTER_PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage::INCORRECT;
+const ClientMessage_authorizationTypes ClientMessage::CORRECT;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MIN;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MAX;
 const int ClientMessage::authorizationTypes_ARRAYSIZE;

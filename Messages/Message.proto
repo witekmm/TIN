@@ -21,9 +21,11 @@ message ClientMessage {
   }
 
   enum authorizationTypes{
-    LOGIN = 0;
-    PASSWORD = 1;
-    BOTH = 2;
+    LOG_IN = 0;
+    REGISTER_LOGIN = 1;
+    REGISTER_PASSWORD = 2;
+    INCORRECT = 3;
+    CORRECT = 4;
   }
 
   enum commandTypes{

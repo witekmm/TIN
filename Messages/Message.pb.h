@@ -106,13 +106,15 @@ inline bool ClientMessage_groupActionTypes_Parse(
     ClientMessage_groupActionTypes_descriptor(), name, value);
 }
 enum ClientMessage_authorizationTypes {
-  ClientMessage_authorizationTypes_LOGIN = 0,
-  ClientMessage_authorizationTypes_PASSWORD = 1,
-  ClientMessage_authorizationTypes_BOTH = 2
+  ClientMessage_authorizationTypes_LOG_IN = 0,
+  ClientMessage_authorizationTypes_REGISTER_LOGIN = 1,
+  ClientMessage_authorizationTypes_REGISTER_PASSWORD = 2,
+  ClientMessage_authorizationTypes_INCORRECT = 3,
+  ClientMessage_authorizationTypes_CORRECT = 4
 };
 bool ClientMessage_authorizationTypes_IsValid(int value);
-const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_LOGIN;
-const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_BOTH;
+const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_LOG_IN;
+const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_CORRECT;
 const int ClientMessage_authorizationTypes_authorizationTypes_ARRAYSIZE = ClientMessage_authorizationTypes_authorizationTypes_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_authorizationTypes_descriptor();
@@ -311,12 +313,16 @@ class ClientMessage :
   }
 
   typedef ClientMessage_authorizationTypes authorizationTypes;
-  static const authorizationTypes LOGIN =
-    ClientMessage_authorizationTypes_LOGIN;
-  static const authorizationTypes PASSWORD =
-    ClientMessage_authorizationTypes_PASSWORD;
-  static const authorizationTypes BOTH =
-    ClientMessage_authorizationTypes_BOTH;
+  static const authorizationTypes LOG_IN =
+    ClientMessage_authorizationTypes_LOG_IN;
+  static const authorizationTypes REGISTER_LOGIN =
+    ClientMessage_authorizationTypes_REGISTER_LOGIN;
+  static const authorizationTypes REGISTER_PASSWORD =
+    ClientMessage_authorizationTypes_REGISTER_PASSWORD;
+  static const authorizationTypes INCORRECT =
+    ClientMessage_authorizationTypes_INCORRECT;
+  static const authorizationTypes CORRECT =
+    ClientMessage_authorizationTypes_CORRECT;
   static inline bool authorizationTypes_IsValid(int value) {
     return ClientMessage_authorizationTypes_IsValid(value);
   }
