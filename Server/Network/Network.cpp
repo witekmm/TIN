@@ -126,6 +126,20 @@ int Network::setMessage(string message,int size, string client){
   return -1;
 }
 
+int Network::setMessage(string message,int size, int socketNumber){
+  // MUTEX.WAIT if message is set
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      this->activeClients[i].setNewMessage(message,size);
+      return 1;
+    }
+    i++;
+  }
+  return -1;
+}
+
 void Network::sendMessage(Client& client){
   if(client.getIsMessageSet() == false) {
     return;
@@ -158,7 +172,7 @@ void Network::receiveMessage(Client& client){
     else if(result == 0) return; //full message is not received yet
     else{
       //wiadomosc odebrania daj znac transport
-      this->transport.receiveAndParse(client.getReceivingBuffer() , client.getLogin());
+      this->transport.receiveAndParse(client.getReceivingBuffer() , client.getLogin() , client.getSocketNumber() );
       //i wyczysc wiadomosci
       client.messageReceived();
     }

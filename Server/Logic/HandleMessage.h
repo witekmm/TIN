@@ -14,8 +14,8 @@ class HandleMessage{
   HandleDataBase database;
   Transport& transport;
 public:
-  int checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber);
-  int authorizationHandle(Message::ClientMessage message,string login,int socketNumber);
+  void checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber);
+  void authorizationHandle(Message::ClientMessage message,string login,int socketNumber);
   void commandHandle(Message::ClientMessage message,string login);
   void groupHandle(Message::ClientMessage message,string login);
 };
