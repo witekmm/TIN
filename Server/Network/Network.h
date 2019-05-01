@@ -1,15 +1,18 @@
 #include "NetLibs.h"
+
 using namespace std;
 
 #ifndef NETWORK_H
 #define NETWORK_H
-
+#include "../Transport/Transport.h"
 #include "Server.h"
 #include "Client.h"
-
 #include <vector>
 
+class Transport;
+
 class Network{
+  //representation of server
   Server server;
   //Descriptors list:
   //master - original list
@@ -21,10 +24,13 @@ class Network{
   int fdmax;
   //list of active sockets
   vector<Client> activeClients;
+  //list of sockets that select is listening
   vector<int> activeSockets;
   int sockets;
+  //refernece to transport pipe
+  Transport& transport;
 public:
-  Network();
+  Network(Transport& tp);
   //quite obvious
   int startServer(int maxConnections, int port, string ip);
   void addSocket(int socketNumber);
@@ -42,6 +48,13 @@ public:
   void clearLists();
   //KLIENT
   void connectClient();
+  //this function only pass message to client's buffer
+  //client should send as many bytes as he can whenever he can
+  int setMessage(string message,int size, string client);
+  //send message when network get a signal
+  void sendMessage(Client& client);
+  //receive message when network get a signal
+  void receiveMessage(Client& client);
 };
 
 #endif

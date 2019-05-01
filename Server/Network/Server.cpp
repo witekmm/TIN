@@ -8,7 +8,7 @@ Server::Server(){
   this->len = sizeof(this->serverAddress);
   this->maxConnections=DEFAULT_MAX_CONNECTIONS;
   this->port=DEFAULT_SERVER_PORT;
-
+  this->serverIP=string(DEFAULT_SERVER_IP);
 }
 
 Server::Server(int maxConnections, int port, string ip){
