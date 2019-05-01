@@ -11,7 +11,7 @@
 class Transport;
 
 class HandleMessage{
-  HandleDataBase database;
+  //HandleDataBase database;
   Transport& transport;
 public:
   void checkReceivedMessage(Message::ClientMessage message, string login);
