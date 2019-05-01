@@ -1,7 +1,7 @@
 #include "HandleMessage.h"
 #include "../Transport/Transport.h"
 
-void HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login){
+int HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login){
   if(!message.has_messageType()){
     perror("Message is incorrect!");
     return;
@@ -18,7 +18,7 @@ void HandleMessage::checkReceivedMessage(Message::ClientMessage message, string 
   }
 }
 
-void HandleMessage::groupHandle(Message::ClientMessage message, string login){
+int HandleMessage::groupHandle(Message::ClientMessage message, string login){
   if(!message.has_groupActionType()){
     perror("Message is incorrect!");
     return;
@@ -47,27 +47,32 @@ void HandleMessage::groupHandle(Message::ClientMessage message, string login){
   }
 }
 
-void HandleMessage::authorizationHandle(Message::ClientMessage message, string login){
+int HandleMessage::authorizationHandle(Message::ClientMessage message, string login){
   if(!message.has_authorizationType()){
     perror("Message is incorrect!");
-    return;
+    return 0;
   }
 
-  if(message.authorizationType() == LOGIN){
-    this->database.checkUserLogin(message.login());
-  }
-  else if(message.authorizationType() == PASSWORD){
-    this->database.checkUserPassword(message.password() , login);
-  }
-  else if(message.authorizationType() == BOTH){
+  if(message.authorizationType() == LOG_IN){
+    if(!message.has_login()){
+      perror("No login included!");
+      return 0;
+    }
+    if(!message.has_password()){
+      perror("No password included!");
+      return 0;
+    }
     this->database.logInUser(message.login() , message.password());
   }
   else if(message.authorizationType() == REGISTER_LOGIN){
-    this->database.logInUser(message.login() , message.password());
+    this->database.addLogin(message.password() , login);
+  }
+  else if(message.authorizationType() == REGISTER_PASSWORD){
+    this->database.addPasswordToLogin(message.login() , message.password());
   }
 }
 
-void HandleMessage::commandHandle(Message::ClientMessage message,string login){
+int HandleMessage::commandHandle(Message::ClientMessage message,string login){
   if(!message.has_commandType()){
     perror("Message is incorrect!");
     return;

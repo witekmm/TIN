@@ -41,7 +41,7 @@ void InitDefaults_Message_2eproto() {
 }
 
 ::google::protobuf::Metadata file_level_metadata_Message_2eproto[1];
-const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_Message_2eproto[4];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_Message_2eproto[5];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_Message_2eproto = nullptr;
 
 const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -59,18 +59,22 @@ const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, groupname_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, username_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, messagecontent_),
-  5,
+  PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, reply_),
+  PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, replycontent_),
   6,
   7,
   8,
+  9,
   0,
   1,
   2,
   3,
   4,
+  10,
+  5,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 14, sizeof(::Message::ClientMessage)},
+  { 0, 16, sizeof(::Message::ClientMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -84,7 +88,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Message_2eproto[] =
-  "\n\rMessage.proto\022\007Message\"\255\005\n\rClientMessa"
+  "\n\rMessage.proto\022\007Message\"\205\006\n\rClientMessa"
   "ge\022G\n\013messageType\030\001 \002(\0162#.Message.Client"
   "Message.messageTypes:\rAUTHORIZATION\022@\n\017g"
   "roupActionType\030\002 \001(\0162\'.Message.ClientMes"
@@ -94,19 +98,21 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "ge.ClientMessage.commandTypes\022\r\n\005login\030\005"
   " \001(\t\022\020\n\010password\030\006 \001(\t\022\021\n\tgroupName\030\007 \001("
   "\t\022\020\n\010userName\030\010 \001(\t\022\026\n\016messageContent\030\t "
-  "\001(\t\"9\n\014messageTypes\022\021\n\rAUTHORIZATION\020\000\022\013"
-  "\n\007COMMAND\020\001\022\t\n\005GROUP\020\002\"h\n\020groupActionTyp"
-  "es\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE\020\002\022"
-  "\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DECLINE\020\005\022\t\n"
-  "\005LEAVE\020\006\"g\n\022authorizationTypes\022\n\n\006LOG_IN"
-  "\020\000\022\022\n\016REGISTER_LOGIN\020\001\022\025\n\021REGISTER_PASSW"
-  "ORD\020\002\022\r\n\tINCORRECT\020\003\022\013\n\007CORRECT\020\004\"%\n\014com"
-  "mandTypes\022\010\n\004EXIT\020\000\022\013\n\007LOG_OUT\020\001"
+  "\001(\t\0221\n\005reply\030\n \001(\0162\".Message.ClientMessa"
+  "ge.replyStatus\022\024\n\014replyContent\030\013 \001(\t\"9\n\014"
+  "messageTypes\022\021\n\rAUTHORIZATION\020\000\022\013\n\007COMMA"
+  "ND\020\001\022\t\n\005GROUP\020\002\"h\n\020groupActionTypes\022\013\n\007M"
+  "ESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE\020\002\022\013\n\007REQU"
+  "EST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DECLINE\020\005\022\t\n\005LEAVE\020"
+  "\006\"K\n\022authorizationTypes\022\n\n\006LOG_IN\020\000\022\022\n\016R"
+  "EGISTER_LOGIN\020\001\022\025\n\021REGISTER_PASSWORD\020\002\"%"
+  "\n\014commandTypes\022\010\n\004EXIT\020\000\022\013\n\007LOG_OUT\020\001\")\n"
+  "\013replyStatus\022\014\n\010POSITIVE\020\000\022\014\n\010NEGATIVE\020\001"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
   false, InitDefaults_Message_2eproto, 
   descriptor_table_protodef_Message_2eproto,
-  "Message.proto", &assign_descriptors_table_Message_2eproto, 712,
+  "Message.proto", &assign_descriptors_table_Message_2eproto, 800,
 };
 
 void AddDescriptors_Message_2eproto() {
@@ -182,8 +188,6 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
     case 0:
     case 1:
     case 2:
-    case 3:
-    case 4:
       return true;
     default:
       return false;
@@ -194,8 +198,6 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
 const ClientMessage_authorizationTypes ClientMessage::LOG_IN;
 const ClientMessage_authorizationTypes ClientMessage::REGISTER_LOGIN;
 const ClientMessage_authorizationTypes ClientMessage::REGISTER_PASSWORD;
-const ClientMessage_authorizationTypes ClientMessage::INCORRECT;
-const ClientMessage_authorizationTypes ClientMessage::CORRECT;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MIN;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MAX;
 const int ClientMessage::authorizationTypes_ARRAYSIZE;
@@ -221,6 +223,27 @@ const ClientMessage_commandTypes ClientMessage::commandTypes_MIN;
 const ClientMessage_commandTypes ClientMessage::commandTypes_MAX;
 const int ClientMessage::commandTypes_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+const ::google::protobuf::EnumDescriptor* ClientMessage_replyStatus_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_Message_2eproto);
+  return file_level_enum_descriptors_Message_2eproto[4];
+}
+bool ClientMessage_replyStatus_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const ClientMessage_replyStatus ClientMessage::POSITIVE;
+const ClientMessage_replyStatus ClientMessage::NEGATIVE;
+const ClientMessage_replyStatus ClientMessage::replyStatus_MIN;
+const ClientMessage_replyStatus ClientMessage::replyStatus_MAX;
+const int ClientMessage::replyStatus_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 // ===================================================================
 
@@ -229,16 +252,16 @@ void ClientMessage::InitAsDefaultInstance() {
 class ClientMessage::HasBitSetters {
  public:
   static void set_has_messagetype(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000020u;
-  }
-  static void set_has_groupactiontype(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000040u;
   }
-  static void set_has_authorizationtype(ClientMessage* msg) {
+  static void set_has_groupactiontype(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000080u;
   }
-  static void set_has_commandtype(ClientMessage* msg) {
+  static void set_has_authorizationtype(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000100u;
+  }
+  static void set_has_commandtype(ClientMessage* msg) {
+    msg->_has_bits_[0] |= 0x00000200u;
   }
   static void set_has_login(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000001u;
@@ -255,6 +278,12 @@ class ClientMessage::HasBitSetters {
   static void set_has_messagecontent(ClientMessage* msg) {
     msg->_has_bits_[0] |= 0x00000010u;
   }
+  static void set_has_reply(ClientMessage* msg) {
+    msg->_has_bits_[0] |= 0x00000400u;
+  }
+  static void set_has_replycontent(ClientMessage* msg) {
+    msg->_has_bits_[0] |= 0x00000020u;
+  }
 };
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -267,6 +296,8 @@ const int ClientMessage::kPasswordFieldNumber;
 const int ClientMessage::kGroupNameFieldNumber;
 const int ClientMessage::kUserNameFieldNumber;
 const int ClientMessage::kMessageContentFieldNumber;
+const int ClientMessage::kReplyFieldNumber;
+const int ClientMessage::kReplyContentFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 ClientMessage::ClientMessage()
@@ -299,9 +330,13 @@ ClientMessage::ClientMessage(const ClientMessage& from)
   if (from.has_messagecontent()) {
     messagecontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.messagecontent_);
   }
+  replycontent_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_replycontent()) {
+    replycontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.replycontent_);
+  }
   ::memcpy(&messagetype_, &from.messagetype_,
-    static_cast<size_t>(reinterpret_cast<char*>(&commandtype_) -
-    reinterpret_cast<char*>(&messagetype_)) + sizeof(commandtype_));
+    static_cast<size_t>(reinterpret_cast<char*>(&reply_) -
+    reinterpret_cast<char*>(&messagetype_)) + sizeof(reply_));
   // @@protoc_insertion_point(copy_constructor:Message.ClientMessage)
 }
 
@@ -313,9 +348,10 @@ void ClientMessage::SharedCtor() {
   groupname_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   messagecontent_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  replycontent_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&messagetype_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&commandtype_) -
-      reinterpret_cast<char*>(&messagetype_)) + sizeof(commandtype_));
+      reinterpret_cast<char*>(&reply_) -
+      reinterpret_cast<char*>(&messagetype_)) + sizeof(reply_));
 }
 
 ClientMessage::~ClientMessage() {
@@ -329,6 +365,7 @@ void ClientMessage::SharedDtor() {
   groupname_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   username_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   messagecontent_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  replycontent_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void ClientMessage::SetCachedSize(int size) const {
@@ -347,7 +384,7 @@ void ClientMessage::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
       login_.ClearNonDefaultToEmptyNoArena();
     }
@@ -363,13 +400,20 @@ void ClientMessage::Clear() {
     if (cached_has_bits & 0x00000010u) {
       messagecontent_.ClearNonDefaultToEmptyNoArena();
     }
+    if (cached_has_bits & 0x00000020u) {
+      replycontent_.ClearNonDefaultToEmptyNoArena();
+    }
   }
-  if (cached_has_bits & 0x000000e0u) {
+  if (cached_has_bits & 0x000000c0u) {
     ::memset(&messagetype_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&authorizationtype_) -
-        reinterpret_cast<char*>(&messagetype_)) + sizeof(authorizationtype_));
+        reinterpret_cast<char*>(&groupactiontype_) -
+        reinterpret_cast<char*>(&messagetype_)) + sizeof(groupactiontype_));
   }
-  commandtype_ = 0;
+  if (cached_has_bits & 0x00000700u) {
+    ::memset(&authorizationtype_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&reply_) -
+        reinterpret_cast<char*>(&authorizationtype_)) + sizeof(reply_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -506,6 +550,34 @@ const char* ClientMessage::_InternalParse(const char* begin, const char* end, vo
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.messageContent");
         object = msg->mutable_messagecontent();
+        if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          goto string_till_end;
+        }
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+        ptr += size;
+        break;
+      }
+      // optional .Message.ClientMessage.replyStatus reply = 10;
+      case 10: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 80) goto handle_unusual;
+        ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
+        if (!::Message::ClientMessage_replyStatus_IsValid(val)) {
+          ::google::protobuf::internal::WriteVarint(10, val, msg->mutable_unknown_fields());
+          break;
+        }
+        msg->set_reply(static_cast<::Message::ClientMessage_replyStatus>(val));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      // optional string replyContent = 11;
+      case 11: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 90) goto handle_unusual;
+        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        ctx->extra_parse_data().SetFieldName("Message.ClientMessage.replyContent");
+        object = msg->mutable_replycontent();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
           parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
           goto string_till_end;
@@ -700,6 +772,40 @@ bool ClientMessage::MergePartialFromCodedStream(
         break;
       }
 
+      // optional .Message.ClientMessage.replyStatus reply = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (80 & 0xFF)) {
+          int value = 0;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::Message::ClientMessage_replyStatus_IsValid(value)) {
+            set_reply(static_cast< ::Message::ClientMessage_replyStatus >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(
+                10, static_cast<::google::protobuf::uint64>(value));
+          }
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional string replyContent = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (90 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_replycontent()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->replycontent().data(), static_cast<int>(this->replycontent().length()),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "Message.ClientMessage.replyContent");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -729,25 +835,25 @@ void ClientMessage::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-  if (cached_has_bits & 0x00000020u) {
+  if (cached_has_bits & 0x00000040u) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->messagetype(), output);
   }
 
   // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-  if (cached_has_bits & 0x00000040u) {
+  if (cached_has_bits & 0x00000080u) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->groupactiontype(), output);
   }
 
   // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-  if (cached_has_bits & 0x00000080u) {
+  if (cached_has_bits & 0x00000100u) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->authorizationtype(), output);
   }
 
   // optional .Message.ClientMessage.commandTypes commandType = 4;
-  if (cached_has_bits & 0x00000100u) {
+  if (cached_has_bits & 0x00000200u) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->commandtype(), output);
   }
@@ -802,6 +908,22 @@ void ClientMessage::SerializeWithCachedSizes(
       9, this->messagecontent(), output);
   }
 
+  // optional .Message.ClientMessage.replyStatus reply = 10;
+  if (cached_has_bits & 0x00000400u) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      10, this->reply(), output);
+  }
+
+  // optional string replyContent = 11;
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->replycontent().data(), static_cast<int>(this->replycontent().length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "Message.ClientMessage.replyContent");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      11, this->replycontent(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -817,25 +939,25 @@ void ClientMessage::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-  if (cached_has_bits & 0x00000020u) {
+  if (cached_has_bits & 0x00000040u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->messagetype(), target);
   }
 
   // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-  if (cached_has_bits & 0x00000040u) {
+  if (cached_has_bits & 0x00000080u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       2, this->groupactiontype(), target);
   }
 
   // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-  if (cached_has_bits & 0x00000080u) {
+  if (cached_has_bits & 0x00000100u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->authorizationtype(), target);
   }
 
   // optional .Message.ClientMessage.commandTypes commandType = 4;
-  if (cached_has_bits & 0x00000100u) {
+  if (cached_has_bits & 0x00000200u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       4, this->commandtype(), target);
   }
@@ -895,6 +1017,23 @@ void ClientMessage::SerializeWithCachedSizes(
         9, this->messagecontent(), target);
   }
 
+  // optional .Message.ClientMessage.replyStatus reply = 10;
+  if (cached_has_bits & 0x00000400u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      10, this->reply(), target);
+  }
+
+  // optional string replyContent = 11;
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->replycontent().data(), static_cast<int>(this->replycontent().length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "Message.ClientMessage.replyContent");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        11, this->replycontent(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -922,7 +1061,7 @@ size_t ClientMessage::ByteSizeLong() const {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     // optional string login = 5;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
@@ -958,27 +1097,40 @@ size_t ClientMessage::ByteSizeLong() const {
           this->messagecontent());
     }
 
-  }
-  if (cached_has_bits & 0x000000c0u) {
-    // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-    if (cached_has_bits & 0x00000040u) {
+    // optional string replyContent = 11;
+    if (cached_has_bits & 0x00000020u) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->groupactiontype());
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->replycontent());
     }
 
+  }
+  // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
+  if (cached_has_bits & 0x00000080u) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->groupactiontype());
+  }
+
+  if (cached_has_bits & 0x00000700u) {
     // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-    if (cached_has_bits & 0x00000080u) {
+    if (cached_has_bits & 0x00000100u) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->authorizationtype());
     }
 
-  }
-  // optional .Message.ClientMessage.commandTypes commandType = 4;
-  if (cached_has_bits & 0x00000100u) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->commandtype());
-  }
+    // optional .Message.ClientMessage.commandTypes commandType = 4;
+    if (cached_has_bits & 0x00000200u) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->commandtype());
+    }
 
+    // optional .Message.ClientMessage.replyStatus reply = 10;
+    if (cached_has_bits & 0x00000400u) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->reply());
+    }
+
+  }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -1029,18 +1181,28 @@ void ClientMessage::MergeFrom(const ClientMessage& from) {
       messagecontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.messagecontent_);
     }
     if (cached_has_bits & 0x00000020u) {
-      messagetype_ = from.messagetype_;
+      _has_bits_[0] |= 0x00000020u;
+      replycontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.replycontent_);
     }
     if (cached_has_bits & 0x00000040u) {
-      groupactiontype_ = from.groupactiontype_;
+      messagetype_ = from.messagetype_;
     }
     if (cached_has_bits & 0x00000080u) {
-      authorizationtype_ = from.authorizationtype_;
+      groupactiontype_ = from.groupactiontype_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
-  if (cached_has_bits & 0x00000100u) {
-    set_commandtype(from.commandtype());
+  if (cached_has_bits & 0x00000700u) {
+    if (cached_has_bits & 0x00000100u) {
+      authorizationtype_ = from.authorizationtype_;
+    }
+    if (cached_has_bits & 0x00000200u) {
+      commandtype_ = from.commandtype_;
+    }
+    if (cached_has_bits & 0x00000400u) {
+      reply_ = from.reply_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -1059,7 +1221,7 @@ void ClientMessage::CopyFrom(const ClientMessage& from) {
 }
 
 bool ClientMessage::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000020) != 0x00000020) return false;
+  if ((_has_bits_[0] & 0x00000040) != 0x00000040) return false;
   return true;
 }
 
@@ -1081,10 +1243,13 @@ void ClientMessage::InternalSwap(ClientMessage* other) {
     GetArenaNoVirtual());
   messagecontent_.Swap(&other->messagecontent_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  replycontent_.Swap(&other->replycontent_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(messagetype_, other->messagetype_);
   swap(groupactiontype_, other->groupactiontype_);
   swap(authorizationtype_, other->authorizationtype_);
   swap(commandtype_, other->commandtype_);
+  swap(reply_, other->reply_);
 }
 
 ::google::protobuf::Metadata ClientMessage::GetMetadata() const {
