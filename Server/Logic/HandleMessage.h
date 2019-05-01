@@ -10,9 +10,11 @@
 
 class Transport;
 
+class HandleDataBase;
+
 class HandleMessage{
-  HandleDataBase database;
   Transport& transport;
+  HandleDataBase& database;
 public:
   void checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber);
   void authorizationHandle(Message::ClientMessage message,string login,int socketNumber);
