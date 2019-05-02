@@ -178,3 +178,56 @@ void Network::receiveMessage(Client& client){
     }
   }
 }
+
+
+void Network::logInClient(int socketNumber, string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      this->activeClients[i].logIn();
+      this->activeClients[i].setLogin(login);
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::authorizeClient(int socketNumber, string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      this->activeClients[i].authorize();
+      this->activeClients[i].setLogin(login);
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::logOutClient(string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == login){
+      this->activeClients[i].logOut();
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::disconnectClient(string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == login){
+      int socketNumber = this->activeClients[i].getSocketNumber();
+      closeSocket(socketNumber);
+      clearSocket(socketNumber);
+      return;
+    }
+    i++;
+  }
+}

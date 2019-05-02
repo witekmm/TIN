@@ -24,3 +24,7 @@ void Transport::receiveAndParse(string& toParse, string login, int socketNumber)
   msg.ParseFromString(toParse);
   handleMessage.checkReceivedMessage(msg,login,socketNumber);
 }
+
+Network& Transport::getNetwork(){
+  return this->network;
+}

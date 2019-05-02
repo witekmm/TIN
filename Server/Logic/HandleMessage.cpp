@@ -80,9 +80,9 @@ void HandleMessage::commandHandle(Message::ClientMessage message,string login){
   }
 
   if(message.commandtype() == Message::ClientMessage::EXIT){
-    //this->transport.disconnect(login);
+    this->transport.getNetwork().disconnectClient(login);
   }
   else if(message.commandtype() == Message::ClientMessage::LOG_OUT){
-    //this->transport.logOut(login);
+    this->transport.getNetwork().logOutClient(login);
   }
 }

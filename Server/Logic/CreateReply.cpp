@@ -160,6 +160,7 @@ void CreateReply::userLogged(string login,int socketNumber){
   message.set_replycontent(content);
   transport.serializeAndSend(message , socketNumber);
   //LOGOWANIE
+  transport.getNetwork().logInClient(socketNumber,login);
 }
 void CreateReply::loginIsForbidden(string login,int socketNumber){
   string content = "Choosen login already exists!";
@@ -191,6 +192,7 @@ void CreateReply::userAccountCreated(string login,int socketNumber){
   message.set_replycontent(content);
   transport.serializeAndSend(message , socketNumber);
   //LOGOWANIE
+  transport.getNetwork().logInClient(socketNumber,login);
 }
 void CreateReply::userAlreadyInGroup(string groupName,string login){
   string content = "You already belong to this group!";

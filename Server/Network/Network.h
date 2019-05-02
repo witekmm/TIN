@@ -56,6 +56,12 @@ public:
   void sendMessage(Client& client);
   //receive message when network get a signal
   void receiveMessage(Client& client);
+  //authorize client
+  void logInClient(int socketNumber, string login);
+  void authorizeClient(int socketNumber, string login);
+  //client stuff
+  void logOutClient(string login);
+  void disconnectClient(string login);
 };
 
 #endif
