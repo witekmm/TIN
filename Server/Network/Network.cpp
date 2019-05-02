@@ -96,15 +96,18 @@ void Network::selectDescriptor(){
         }
         else {
           Client& temp = findClient( this->activeSockets[i] );
-          thread read (&Network::receiveMessage , this , temp);
+          thread read (&Network::receiveMessage , this , std::ref(temp) );
           //thread read (&Network::receiveMessage , this , findClient(this->activeSockets[i]) );
         }//ODBIÓR WIADOMOSCI
       }
       if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
-        //pisz;
+        Client& temp = findClient( this->activeSockets[i] );
+        thread write (&Network::sendMessage , this , std::ref(temp) );
       }
       if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
-        //sygnał;
+        int x = this->activeSockets[i];
+        thread disconnect (&Network::disconnectClientBySN , this , x);
+        //thread disconnect (disconnectClient , x);
       }
     }
   }
@@ -229,6 +232,20 @@ void Network::disconnectClient(string login){
   int i=0;
   for(it ; it != this->activeClients.end(); it++){
     if(*it == login){
+      int socketNumber = this->activeClients[i].getSocketNumber();
+      closeSocket(socketNumber);
+      clearSocket(socketNumber);
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::disconnectClientBySN(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == i){
       int socketNumber = this->activeClients[i].getSocketNumber();
       closeSocket(socketNumber);
       clearSocket(socketNumber);
