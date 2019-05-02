@@ -75,7 +75,7 @@ void CreateReply::requestSend(string groupName,string login){
   string content = "Request has been sent!";
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::GROUP);
-  message.set_groupactiontype(Message::ClientMessage::DELETE);
+  message.set_groupactiontype(Message::ClientMessage::REQUEST);
   message.set_groupname(groupName);
   message.set_reply(Message::ClientMessage::POSITIVE);
   message.set_replycontent(content);
@@ -109,9 +109,18 @@ void CreateReply::requestAccepted(string groupName,string userName,string login)
   message.set_reply(Message::ClientMessage::POSITIVE);
   message.set_replycontent(content);
   transport.serializeAndSend(message , login);
+  // NOW MESSAGE TO USER REQUESTING
+  /*string content = "Your request has been accepted!";
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::GROUP);
+  message.set_groupactiontype(Message::ClientMessage::REQUEST);
+  message.set_groupname(groupName);
+  message.set_reply(Message::ClientMessage::POSITIVE);
+  message.set_replycontent(content);
+  transport.serializeAndSend(message , userName);*/
 }
 void CreateReply::requestDeclined(string groupName,string userName,string login){
-  string content = "Request has been decline!";
+  string content = "Request has been declined!";
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::GROUP);
   message.set_groupactiontype(Message::ClientMessage::DECLINE);
@@ -120,6 +129,15 @@ void CreateReply::requestDeclined(string groupName,string userName,string login)
   message.set_reply(Message::ClientMessage::POSITIVE);
   message.set_replycontent(content);
   transport.serializeAndSend(message , login);
+  // NOW MESSAGE TO USER REQUESTING
+  /*string content = "Your request has been declined!";
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::GROUP);
+  message.set_groupactiontype(Message::ClientMessage::REQUEST);
+  message.set_groupname(groupName);
+  message.set_reply(Message::ClientMessage::NEGATIVE);
+  message.set_replycontent(content);
+  transport.serializeAndSend(message , userName);*/
 }
 void CreateReply::userLeftGroup(string groupName,string login){
   string content = "You left the group!";

@@ -156,3 +156,8 @@ void Client::logOut(){
   if(this->status!=logged) return;
   this->status=unauthorized;
 }
+
+int Client::isLogged(){
+  if(this->status==logged) return 1;
+  return 0;
+}

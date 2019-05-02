@@ -9,6 +9,10 @@ void HandleMessage::checkReceivedMessage(Message::ClientMessage message, string 
   }
 
   if(message.messagetype() == Message::ClientMessage::GROUP){
+    if(!this->transport.getNetwork().isClientLogged(socketNumber)){
+      perror("Client is not logged in!");
+      return;
+    }
     groupHandle(message,login);
   }
   else if(message.messagetype() == Message::ClientMessage::COMMAND){

@@ -231,3 +231,14 @@ void Network::disconnectClient(string login){
     i++;
   }
 }
+
+int Network::isClientLogged(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      return this->activeClients[i].isLogged();
+    }
+    i++;
+  }
+}

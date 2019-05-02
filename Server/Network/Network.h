@@ -62,6 +62,7 @@ public:
   //client stuff
   void logOutClient(string login);
   void disconnectClient(string login);
+  int isClientLogged(int socketNumber);
 };
 
 #endif
