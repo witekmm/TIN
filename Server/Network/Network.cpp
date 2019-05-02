@@ -88,16 +88,22 @@ void Network::selectDescriptor(){
     return;
   }
   else{
-    for(int socketNumber=0;socketNumber<this->sockets;socketNumber++){
-      if(FD_ISSET(this->activeSockets[socketNumber] , &this->readfds)){
+    for(int i=0 ; i<this->sockets ; i++){
+      if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
         //NOWE POŁĄCZENIE
-        if(this->activeSockets[socketNumber] == this->server.getSocketNumber()) connectClient();
-        else {}//ODBIÓR WIADOMOSCI
+        if(this->activeSockets[i] == this->server.getSocketNumber()){
+          thread accept (&Network::connectClient , this);
+        }
+        else {
+          Client& temp = findClient( this->activeSockets[i] );
+          thread read (&Network::receiveMessage , this , temp);
+          //thread read (&Network::receiveMessage , this , findClient(this->activeSockets[i]) );
+        }//ODBIÓR WIADOMOSCI
       }
-      if(FD_ISSET(this->activeSockets[socketNumber] , &this->writefds)){
+      if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
         //pisz;
       }
-      if(FD_ISSET(this->activeSockets[socketNumber] , &this->exceptionfds)){
+      if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
         //sygnał;
       }
     }
@@ -238,6 +244,17 @@ int Network::isClientLogged(int socketNumber){
   for(it ; it != this->activeClients.end(); it++){
     if(*it == socketNumber){
       return this->activeClients[i].isLogged();
+    }
+    i++;
+  }
+}
+
+Client& Network::findClient(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      return this->activeClients.at(i);
     }
     i++;
   }
