@@ -96,3 +96,30 @@ void HandleDataBase::addPasswordToLogin(string login, string password, int socke
   //wysylamy potwierdzenie
   this->createReply.userAccountCreated(login , socketNumber);
 }
+
+int HandleDataBase::rootDeleteGroup(string groupName){
+  //SPRAWDZ CZY GRUPA istnieje
+  // return 0
+  //JESLI nie to usun grupe
+  return 1;
+}
+int HandleDataBase::rootDeleteUser(string login){
+  //SPRAWDZ CZY uzytkownik istnieje
+  // return 0
+  //JESLI nie to usun uzytkownika
+  return 1;
+}
+int HandleDataBase::rootAddUser(string login, int password){
+  //SPRAWDZ CZY uzytkownik istnieje
+  // return 0
+  //JESLI nie to dodaj uzytkownika
+  return 1;
+}
+int HandleDataBase::rootAddGroup(string groupName, string administrator){
+  //SPRAWDZ CZY grupa istnieje
+  // return -1
+  //SPRAWDZ CZY administrator (to login uzytkownika) istnieje
+  // return -2
+  //JESLI nie to dodaj uzytkownika
+  return 1;
+}

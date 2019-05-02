@@ -276,3 +276,34 @@ Client& Network::findClient(int socketNumber){
     i++;
   }
 }
+
+int Network::checkIfClient(string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == login){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int Network::checkIfClient(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+vector<pair<string , int>> Network::getClientsList(){
+  vector<pair<string , int>> list;
+  pair<string , int> apair;
+  for(int i=0 ; i < this->sockets-1 ; i++){
+    apair.first = this->activeClients[i].getLogin();
+    apair.second = this->activeClients[i].getSocketNumber();
+    list.push_back(apair);
+  }
+  return list;
+}
