@@ -141,3 +141,23 @@ bool Client::getIsSizeReceived(){
 string Client::getLogin(){
   return this->login;
 }
+
+void Client::authorize(){
+  if(this->status!=unauthorized) return;
+  this->status=authorized;
+}
+
+void Client::logIn(){
+  if(this->status==logged) return;
+  this->status=authorized;
+}
+
+void Client::logOut(){
+  if(this->status!=logged) return;
+  this->status=unauthorized;
+}
+
+int Client::isLogged(){
+  if(this->status==logged) return 1;
+  return 0;
+}

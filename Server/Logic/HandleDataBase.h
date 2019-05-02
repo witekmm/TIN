@@ -1,11 +1,10 @@
 #ifndef HANDLE_DATA_BASE_H
 #define HANDLE_DATA_BASE_H
+
 using namespace std;
-#include "../../Messages/Message.pb.h"
 #include "CreateReply.h"
 
-#include <iostring>
-#include <mysql.h>
+//#include <mysql.h>
 #include <string>
 
 class HandleDataBase{

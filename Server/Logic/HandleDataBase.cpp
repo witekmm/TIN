@@ -2,8 +2,6 @@
 using namespace std;
 
 void HandleDataBase::sendGroupMessage(string content , string groupName , string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged(login);
   //Sprawdz czy uzytkownik w grupie
   this->createReply.userNotInGroup(groupName , login);
   //jesli tak to dodaj wiadomosc do bazy danych dla wszystkich uzytkownikow grupy
@@ -12,8 +10,6 @@ void HandleDataBase::sendGroupMessage(string content , string groupName , string
 }
 
 void HandleDataBase::createGroup(string groupName , string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged(login);
   //Czy nazwa grupy istnieje
   this->createReply.groupNameExist(groupName , login);
   //Stworz grupe - tworca to administrator
@@ -21,8 +17,6 @@ void HandleDataBase::createGroup(string groupName , string login){
 }
 
 void HandleDataBase::deleteGroup(string groupName , string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged(login);
   //czy grupa istnieje
   this->createReply.groupDoesntExist(groupName , login);
   //czy jest jej administratorem
@@ -32,43 +26,39 @@ void HandleDataBase::deleteGroup(string groupName , string login){
 }
 
 void HandleDataBase::requestToGroup(string groupName , string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged(login);
   //czy grupa istnieje
-  this->createReply.groupDoesntExist( groupName ,  login);
+  this->createReply.groupDoesntExist(groupName , login);
+  //czy naleze do grupy
+  this->createReply.userAlreadyInGroup(groupName , login);
   //dodaj wiadomosc do bazy danych
   //wyslano
-  this->createReply.requestSend( groupName ,  login);
+  this->createReply.requestSend(groupName ,  login);
 }
 
 void HandleDataBase::acceptRequest(string groupName , string userName ,string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged( login);
   //sprawdzy czy jest administratorem grupy
-  this->createReply.noRightsForRequest( groupName ,  login);
+  this->createReply.noRightsToReplyRequest(groupName , login);
   //Sprawdz czy taki request istnieje
-  this->createReply.NoRequestFromThisPerson( userName,  login);
+  this->createReply.NoRequestFromThisPerson(userName , login);
   //usun request z bazy danych
   //dodaj uzytkownika do grupy
   //wyslij potweirdznie dodanie do administratora i uzytkownika dodanego
   this->createReply.requestAccepted( groupName ,  userName , login);
+  //dodaj wiadomosc do bazy danych dla uzytkownika ktory zlozyl prosbe
 }
 
 void HandleDataBase::declineRequest(string groupName , string userName ,string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged( login);
   //sprawdzy czy jest administratorem grupy
-  this->createReply.noRightsForRequest( groupName ,  login);
+  this->createReply.noRightsToReplyRequest( groupName ,  login);
   //Sprawdz czy taki request istnieje
   this->createReply.NoRequestFromThisPerson( userName,  login);
   //usun request z bazy danych
   //wyslij potweirdznie odrzucenia do administratora i uzytkownika dodanego
   this->createReply.requestDeclined( groupName ,  userName , login);
+    //dodaj wiadomosc do bazy danych dla uzytkownika ktory zlozyl prosbe
 }
 
 void HandleDataBase::leaveGroup(string groupName , string login){
-  //Czy uytkownik zalogowany
-  this->createReply.userNotLogged( login);
   //sprawdz cyz nalezy do grupy
   this->createReply.userNotInGroup( groupName ,  login);
   string newAdmin;
@@ -86,7 +76,6 @@ void HandleDataBase::leaveGroup(string groupName , string login){
 }
 
 void HandleDataBase::logInUser(string login, string password, int socketNumber){
-  string dbpass;
   //sprawdz czy istnieje taki login
   //porownaj skrot haslo z bazy danych  i przekaznaego
   this->createReply.incorrectData(login , socketNumber);

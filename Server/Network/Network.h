@@ -51,10 +51,21 @@ public:
   //this function only pass message to client's buffer
   //client should send as many bytes as he can whenever he can
   int setMessage(string message,int size, string client);
+  int setMessage(string message,int size, int socketNumber);
   //send message when network get a signal
   void sendMessage(Client& client);
   //receive message when network get a signal
   void receiveMessage(Client& client);
+  //authorize client
+  void logInClient(int socketNumber, string login);
+  void authorizeClient(int socketNumber, string login);
+  //client stuff
+  void logOutClient(string login);
+  void disconnectClient(string login);
+  void disconnectClientBySN(int socketNumber);
+  int isClientLogged(int socketNumber);
+
+  Client& findClient(int socketNumber);
 };
 
 #endif

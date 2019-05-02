@@ -1,87 +1,92 @@
 #include "HandleMessage.h"
 #include "../Transport/Transport.h"
+#include "HandleDataBase.h"
 
-int HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber){
-  if(!message.has_messageType()){
+void HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber){
+  if(!message.has_messagetype()){
     perror("Message is incorrect!");
     return;
   }
 
-  if(message.messageType() == GROUP){
+  if(message.messagetype() == Message::ClientMessage::GROUP){
+    if(!this->transport.getNetwork().isClientLogged(socketNumber)){
+      perror("Client is not logged in!");
+      return;
+    }
     groupHandle(message,login);
   }
-  else if(message.messageType() == COMMAND){
+  else if(message.messagetype() == Message::ClientMessage::COMMAND){
     commandHandle(message,login);
   }
-  else if(message.messageType() == AUTHORIZATION){
+  else if(message.messagetype() == Message::ClientMessage::AUTHORIZATION){
     authorizationHandle(message,login,socketNumber);
   }
 }
 
 void HandleMessage::groupHandle(Message::ClientMessage message, string login){
-  if(!message.has_groupActionType()){
+  if(!message.has_groupactiontype()){
     perror("Message is incorrect!");
     return;
   }
 
-  if(message.groupActionType() == MESSAGE){
-    this->database.sendGroupMessage(message.messageContent() , message.groupName() , login);
+  if(message.groupactiontype() == Message::ClientMessage::MESSAGE){
+    this->database.sendGroupMessage(message.messagecontent() , message.groupname() , login);
   }
-  else if(message.groupActionType() == CREATE){
-    this->database.createGroup(message.groupName() , login);
+  else if(message.groupactiontype() == Message::ClientMessage::CREATE){
+    this->database.createGroup(message.groupname() , login);
   }
-  else if(message.groupActionType() == DELETE){
-    this->database.deleteGroup(message.groupName() , login);
+  else if(message.groupactiontype() == Message::ClientMessage::DELETE){
+    this->database.deleteGroup(message.groupname() , login);
   }
-  else if(message.groupActionType() == REQUEST){
-    this->database.requestToGroup(message.groupName() , login);
+  else if(message.groupactiontype() == Message::ClientMessage::REQUEST){
+    this->database.requestToGroup(message.groupname() , login);
   }
-  else if(message.groupActionType() == ACCEPT){
-    this->database.acceptRequest(message.groupName() , message.userName() , login);
+  else if(message.groupactiontype() == Message::ClientMessage::ACCEPT){
+    this->database.acceptRequest(message.groupname() , message.username() , login);
   }
-  else if(message.groupActionType() == DECLINE){
-    this->database.declineRequest(message.groupName() , message.userName());
+  else if(message.groupactiontype() == Message::ClientMessage::DECLINE){
+    this->database.declineRequest(message.groupname() , message.username() , login);
   }
-  else if(message.groupActionType() == LEAVE){
-    this->database.leaveGroup(message.groupName() , login);
+  else if(message.groupactiontype() == Message::ClientMessage::LEAVE){
+    this->database.leaveGroup(message.groupname() , login);
   }
 }
 
-int HandleMessage::authorizationHandle(Message::ClientMessage message, string login,int socketNumber){
-  if(!message.has_authorizationType()){
+void HandleMessage::authorizationHandle(Message::ClientMessage message, string login,int socketNumber){
+  if(!message.has_authorizationtype()){
     perror("Message is incorrect!");
-    return 0;
+    return;
   }
 
-  if(message.authorizationType() == LOG_IN){
+  if(message.authorizationtype() == Message::ClientMessage::LOG_IN){
     if(!message.has_login()){
       perror("No login included!");
-      return 0;
+      return;
     }
     if(!message.has_password()){
       perror("No password included!");
-      return 0;
+      return;
     }
     this->database.logInUser(message.login() , message.password(),socketNumber);
   }
-  else if(message.authorizationType() == REGISTER_LOGIN){
+  else if(message.authorizationtype() == Message::ClientMessage::REGISTER_LOGIN){
     this->database.addLogin(message.login() , socketNumber);
   }
-  else if(message.authorizationType() == REGISTER_PASSWORD){
+  else if(message.authorizationtype() == Message::ClientMessage::REGISTER_PASSWORD){
     this->database.addPasswordToLogin(message.login() , message.password() , socketNumber);
   }
 }
 
 void HandleMessage::commandHandle(Message::ClientMessage message,string login){
-  if(!message.has_commandType()){
+  if(!message.has_commandtype()){
     perror("Message is incorrect!");
     return;
   }
 
-  if(message.commandType() == EXIT){
-    this->transport.disconnect(login);
+  if(message.commandtype() == Message::ClientMessage::EXIT){
+    this->transport.getNetwork().disconnectClient(login);
   }
-  else if(message.commandType() == LOG_OUT){
-    this->transport.logOut(login);
+  else if(message.commandtype() == Message::ClientMessage::LOG_OUT){
+    this->transport.getNetwork().logOutClient(login);
   }
 }

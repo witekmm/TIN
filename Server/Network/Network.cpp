@@ -88,17 +88,26 @@ void Network::selectDescriptor(){
     return;
   }
   else{
-    for(int socketNumber=0;socketNumber<this->sockets;socketNumber++){
-      if(FD_ISSET(this->activeSockets[socketNumber] , &this->readfds)){
+    for(int i=0 ; i<this->sockets ; i++){
+      if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
         //NOWE POŁĄCZENIE
-        if(this->activeSockets[socketNumber] == this->server.getSocketNumber()) connectClient();
-        else {}//ODBIÓR WIADOMOSCI
+        if(this->activeSockets[i] == this->server.getSocketNumber()){
+          thread accept (&Network::connectClient , this);
+        }
+        else {
+          Client& temp = findClient( this->activeSockets[i] );
+          thread read (&Network::receiveMessage , this , std::ref(temp) );
+          //thread read (&Network::receiveMessage , this , findClient(this->activeSockets[i]) );
+        }//ODBIÓR WIADOMOSCI
       }
-      if(FD_ISSET(this->activeSockets[socketNumber] , &this->writefds)){
-        //pisz;
+      if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
+        Client& temp = findClient( this->activeSockets[i] );
+        thread write (&Network::sendMessage , this , std::ref(temp) );
       }
-      if(FD_ISSET(this->activeSockets[socketNumber] , &this->exceptionfds)){
-        //sygnał;
+      if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
+        int x = this->activeSockets[i];
+        thread disconnect (&Network::disconnectClientBySN , this , x);
+        //thread disconnect (disconnectClient , x);
       }
     }
   }
@@ -118,6 +127,20 @@ int Network::setMessage(string message,int size, string client){
   int i=0;
   for(it ; it != this->activeClients.end(); it++){
     if(*it == client){
+      this->activeClients[i].setNewMessage(message,size);
+      return 1;
+    }
+    i++;
+  }
+  return -1;
+}
+
+int Network::setMessage(string message,int size, int socketNumber){
+  // MUTEX.WAIT if message is set
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
       this->activeClients[i].setNewMessage(message,size);
       return 1;
     }
@@ -158,9 +181,98 @@ void Network::receiveMessage(Client& client){
     else if(result == 0) return; //full message is not received yet
     else{
       //wiadomosc odebrania daj znac transport
-      this->transport.receiveAndParse(client.getReceivingBuffer() , client.getLogin());
+      this->transport.receiveAndParse(client.getReceivingBuffer() , client.getLogin() , client.getSocketNumber() );
       //i wyczysc wiadomosci
       client.messageReceived();
     }
+  }
+}
+
+
+void Network::logInClient(int socketNumber, string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      this->activeClients[i].logIn();
+      this->activeClients[i].setLogin(login);
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::authorizeClient(int socketNumber, string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      this->activeClients[i].authorize();
+      this->activeClients[i].setLogin(login);
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::logOutClient(string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == login){
+      this->activeClients[i].logOut();
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::disconnectClient(string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == login){
+      int socketNumber = this->activeClients[i].getSocketNumber();
+      closeSocket(socketNumber);
+      clearSocket(socketNumber);
+      return;
+    }
+    i++;
+  }
+}
+
+void Network::disconnectClientBySN(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == i){
+      int socketNumber = this->activeClients[i].getSocketNumber();
+      closeSocket(socketNumber);
+      clearSocket(socketNumber);
+      return;
+    }
+    i++;
+  }
+}
+
+int Network::isClientLogged(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      return this->activeClients[i].isLogged();
+    }
+    i++;
+  }
+}
+
+Client& Network::findClient(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      return this->activeClients.at(i);
+    }
+    i++;
   }
 }

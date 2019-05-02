@@ -17,7 +17,9 @@ class Transport{
   HandleMessage& handleMessage;
 public:
   int serializeAndSend(Message::ClientMessage message, string clientLogin);
-  void receiveAndParse(string& toParse,string login);
+  int serializeAndSend(Message::ClientMessage message, int socketNumber);
+  void receiveAndParse(string& toParse,string login,int socketNumber);
+  Network& getNetwork();
 };
 
 #endif
