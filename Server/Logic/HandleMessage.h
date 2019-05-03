@@ -10,12 +10,14 @@
 
 class Transport;
 
+class HandleDataBase;
+
 class HandleMessage{
-  //HandleDataBase database;
   Transport& transport;
+  HandleDataBase& database;
 public:
-  void checkReceivedMessage(Message::ClientMessage message, string login);
-  void authorizationHandle(Message::ClientMessage message,string login);
+  void checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber);
+  void authorizationHandle(Message::ClientMessage message,string login,int socketNumber);
   void commandHandle(Message::ClientMessage message,string login);
   void groupHandle(Message::ClientMessage message,string login);
 };

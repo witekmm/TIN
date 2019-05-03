@@ -24,13 +24,16 @@ message ClientMessage {
     LOG_IN = 0;
     REGISTER_LOGIN = 1;
     REGISTER_PASSWORD = 2;
-    INCORRECT = 3;
-    CORRECT = 4;
   }
 
   enum commandTypes{
     EXIT = 0;
     LOG_OUT = 1;
+  }
+
+  enum replyStatus{
+    POSITIVE = 0;
+    NEGATIVE = 1;
   }
 
   required messageTypes messageType = 1[default = AUTHORIZATION];
@@ -44,4 +47,7 @@ message ClientMessage {
   optional string groupName = 7;
   optional string userName = 8;
   optional string messageContent = 9;
+
+  optional replyStatus reply = 10;
+  optional string replyContent = 11;
 }

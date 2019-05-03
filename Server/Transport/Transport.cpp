@@ -10,8 +10,21 @@ int Transport::serializeAndSend(Message::ClientMessage message, string clientLog
   return 0;
 }
 
-void Transport::receiveAndParse(string& toParse, string login){
+int Transport::serializeAndSend(Message::ClientMessage message, int socketNumber){
+  string toSend;
+  message.SerializeToString(&toSend);
+  int bytesToSend = toSend.length();
+  if(this->network.setMessage(toSend,bytesToSend,socketNumber) == -1) return -1;
+  return 0;
+}
+
+
+void Transport::receiveAndParse(string& toParse, string login, int socketNumber){
   Message::ClientMessage msg;
   msg.ParseFromString(toParse);
-  handleMessage.checkReceivedMessage(msg , login);
+  handleMessage.checkReceivedMessage(msg,login,socketNumber);
+}
+
+Network& Transport::getNetwork(){
+  return this->network;
 }

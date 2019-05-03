@@ -34,6 +34,10 @@ public:
   int receiveBuffer();
   int sendSize();
   int receiveSize();
+  //AUTHORIZATION
+  void authorize();
+  void logIn();
+  void logOut();
   //Set new message to send
   void setNewMessage(string content,int bufferSize);
   //session info set
