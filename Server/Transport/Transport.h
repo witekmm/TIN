@@ -5,7 +5,6 @@ using namespace std;
 #include <string>
 #include "../Network/Network.h"
 #include "../Logic/HandleMessage.h"
-//NUT SURE IF HERE BUT MIGHT BE
 #include "../../Messages/Message.pb.h"
 #include "../Network/Network.h"
 using namespace std;

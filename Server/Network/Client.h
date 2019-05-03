@@ -38,6 +38,7 @@ public:
   void authorize();
   void logIn();
   void logOut();
+  int isLogged();
   //Set new message to send
   void setNewMessage(string content,int bufferSize);
   //session info set
@@ -53,6 +54,7 @@ public:
   void messageReceived();
   //clear send
   void messageSent();
+
 };
 
 #endif
