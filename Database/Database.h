@@ -8,6 +8,7 @@
 #include <mysql-cppconn-8/jdbc/cppconn/statement.h>
 #include <mysql-cppconn-8/jdbc/cppconn/prepared_statement.h>
 #include <string>
+#include <vector>
 
 #define URL "sql.serwer1973447.home.pl"
 #define USER "29773530_tin"
@@ -20,25 +21,51 @@ class Database {
 
     Database();
     Database(const std::string url, const std::string database, const std::string username, const std::string password);
-
     ~Database();
 
     void connect();
+    // czy user w grupie
     bool userInGroup(std::string groupName, std::string login);
-    void addMsgToGroup(std::string groupName, std::string text);
-    bool groupNameExists(std::string groupName);
-    void createGroup(std::string groupName, int userId);
-    bool isAdministrator(std::string groupName, int userId);
-    void deleteGroup(std::string groupName);
-    bool belongToGroup(std::string groupName, std::string login);
-    bool belongToGroup(std::string groupName, int userId);
-    int getUserId(std::string login);
+    // czy grupa istnieje
+    bool isGroup(std::string groupName);
     int getGroupId(std::string groupName);
+    // stworz grupe z podanym id administratora
+    void createGroup(std::string groupName, int userId);
+    // usun grupe
+    void deleteGroup(std::string groupName);
+    // czy userId to administrator podanej grupy
+    bool isAdministrator(std::string groupName, int userId);
+    // czy nalezy do grupy
+    bool belongsToGroup(std::string groupName, std::string login);
+    bool belongsToGroup(std::string groupName, int userId);
+    int getUserId(std::string login);
+    std::string getUserLogin(int userId);
     void addUserToGroup(std::string groupName, std::string login);
     void addUserToGroup(std::string groupName, int userId);
-    std::string getUserPassword(std::string login);
+    void removeUserFromGroup(std::string groupName, std::string login);
+    void removeUserFromGroup(std::string groupName, int userId);
+    // czy user istnieje
     bool isUser(std::string login);
-    void addUserPassword(std::string login);
+    void addUser(std::string login, std::string password);
+    void deleteUser(std::string login);
+    void deleteUser(int userId);
+    std::string getUserPassword(std::string login);
+    void updateUserPassword(std::string login, std::string newPassword);
+    // usun wszystkie połaczenia z grupa w User_Group
+    void removeAllUsersFromGroup(std::string groupName);
+    // usun wszystkie polaczenia usera z grupami w User_Group
+    void removeUserFromAllGroups(int userId);
+    // usun wszystkie polaczenia w User_Message
+    void removeAllMsgsForUser(int userId);
+    void removeAllUsersForMsg(int msgId);
+    // po prostu za jednym wywolaniem dwa wyzej dla usera
+    void removeAllForUser(int userId);
+    
+    void addMsgToGroup(std::string groupName, std::string sender, int type, std::string text);
+    void addMsgToUser(int msgId, int userId);
+    std::vector<int> getAllUsersFromGroup(std::string groupName);
+    void deleteMsg(int msgId);
+    
 
   private:
 

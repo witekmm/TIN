@@ -28,7 +28,6 @@ Database::~Database()
 {
 	delete res;
 	delete pstmt;
-	//delete stmt;
 	delete con;
 }
 
@@ -48,7 +47,6 @@ bool Database::userInGroup(std::string groupName, std::string login)
 				
 		if(res->next())
 			return true;
-
 		return false;	
 	}
     catch (sql::SQLException &e) {
@@ -58,73 +56,6 @@ bool Database::userInGroup(std::string groupName, std::string login)
 		std::cout << " (MySQL error code: " << e.getErrorCode();
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
         exit(0);
-	}
-}
-
-bool Database::groupNameExists(std::string groupName)
-{
-	sql::SQLString query = "SELECT g.id from `Group` AS g ";
-				   query+= "WHERE g.name = ?";
-
-	pstmt = con->prepareStatement(query);
-	pstmt->setString(1, groupName);
-	res = pstmt->executeQuery();
-				
-	if(res->next())
-		return true;
-	return false;	
-}
-
-void Database::createGroup(std::string groupName, int userId)
-{
-	sql::SQLString query = "INSERT INTO `Group` VALUES (0,?,?)";
-
-	pstmt = con->prepareStatement(query);
-	pstmt->setString(1, groupName);
-	pstmt->setInt(2, userId);
-	pstmt->execute();
-}
-
-bool Database::isAdministrator(std::string groupName, int userId)
-{
-	sql::SQLString query = "SELECT g.id from `Group` AS g ";
-				   query+= "WHERE g.name = ? AND g.leader = ?";
-
-	pstmt = con->prepareStatement(query);
-	pstmt->setString(1, groupName);
-	pstmt->setInt(2, userId);
-	res = pstmt->executeQuery();
-				
-	if(res->next())
-		return true;
-	return false;
-}
-
-void Database::deleteGroup(std::string groupName)
-{
-	sql::SQLString query = "DELETE FROM `Group` WHERE name=?";
-
-	pstmt = con->prepareStatement(query);
-	pstmt->setString(1, groupName);
-	//int updated = 0;
-	//updated += pstmt->executeUpdate();
-	//std::cout<<"updated: "<<updated<<std::endl;
-	pstmt->execute();
-}
-
-int Database::getUserId(std::string login)
-{
-	sql::SQLString query = "SELECT id FROM `User` WHERE login=?";
-	pstmt = con->prepareStatement(query);
-	pstmt->setString(1, login);
-	res = pstmt->executeQuery();
-
-	if(res->next())
-		return res->getInt("id");
-	else
-	{
-		std::cout<<"No user with login: "<<login<<std::endl;
-		return -1;
 	}
 }
 
@@ -144,12 +75,89 @@ int Database::getGroupId(std::string groupName)
 	}
 }
 
-bool Database::belongToGroup(std::string groupName, std::string login)
+bool Database::isGroup(std::string groupName)
 {
-	return belongToGroup(groupName, getUserId(login));
+	return getGroupId(groupName) != -1 ? true : false;	
 }
 
-bool Database::belongToGroup(std::string groupName, int userId)
+void Database::createGroup(std::string groupName, int userId)
+{
+	sql::SQLString query = "INSERT INTO `Group` VALUES (0,?,?)";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, groupName);
+	pstmt->setInt(2, userId);
+	pstmt->execute();
+}
+
+void Database::deleteGroup(std::string groupName)
+{
+	// remove all references in User_Group
+	removeAllUsersFromGroup(groupName);
+
+	sql::SQLString query = "DELETE FROM `Group` WHERE name=?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, groupName);
+	//int updated = 0;
+	//updated += pstmt->executeUpdate();
+	//std::cout<<"updated: "<<updated<<std::endl;
+	pstmt->execute();
+}
+
+bool Database::isAdministrator(std::string groupName, int userId)
+{
+	sql::SQLString query = "SELECT g.id from `Group` AS g ";
+				   query+= "WHERE g.name = ? AND g.leader = ?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, groupName);
+	pstmt->setInt(2, userId);
+	res = pstmt->executeQuery();
+				
+	if(res->next())
+		return true;
+	return false;
+}
+
+int Database::getUserId(std::string login)
+{
+	sql::SQLString query = "SELECT id FROM `User` WHERE login=?";
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, login);
+	res = pstmt->executeQuery();
+
+	if(res->next())
+		return res->getInt("id");
+	else
+	{
+		std::cout<<"No user with login: "<<login<<std::endl;
+		return -1;
+	}
+}
+
+std::string Database::getUserLogin(int userId)
+{
+	sql::SQLString query = "SELECT login FROM `User` WHERE id=?";
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, userId);
+	res = pstmt->executeQuery();
+
+	if(res->next())
+		return res->getString("login");
+	else
+	{
+		std::cout<<"No user with id: "<<userId<<std::endl;
+		return "";
+	}
+}
+
+bool Database::belongsToGroup(std::string groupName, std::string login)
+{
+	return belongsToGroup(groupName, getUserId(login));
+}
+
+bool Database::belongsToGroup(std::string groupName, int userId)
 {
 	sql::SQLString query = "SELECT * from `User_Group` AS ug ";
 				   query+= "JOIN `Group` AS g ON ug.group_id = g.id ";
@@ -174,26 +182,196 @@ void Database::addUserToGroup(std::string groupName, int userId)
 {
 	sql::SQLString query = "INSERT INTO `User_Group` VALUES (?,?)";
 
+	int groupId = getGroupId(groupName);
 	pstmt = con->prepareStatement(query);
 	pstmt->setInt(1, userId);
-	pstmt->setInt(2, getGroupId(groupName));
+	pstmt->setInt(2, groupId);
+	pstmt->execute();
+}
+
+void Database::removeUserFromGroup(std::string groupName, std::string login)
+{
+	removeUserFromGroup(groupName, getUserId(login));
+}
+
+void Database::removeUserFromGroup(std::string groupName, int userId)
+{
+	sql::SQLString query = "DELETE FROM `User_Group` WHERE user_id = ? AND group_id = ?";
+
+	int groupId = getGroupId(groupName);
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, userId);
+	pstmt->setInt(2, groupId);
+	pstmt->execute();
+}
+
+bool Database::isUser(std::string login)
+{
+	return getUserId(login) != -1 ? true : false;
+}
+
+void Database::addUser(std::string login, std::string password)
+{
+	sql::SQLString query = "INSERT INTO `User` VALUES (0,?,?)";
+	
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, login);
+	pstmt->setString(2, password);
+	pstmt->execute();
+}
+
+void Database::deleteUser(std::string login)
+{
+	deleteUser(getUserId(login));
+}
+
+void Database::deleteUser(int userId)
+{
+	removeAllForUser(userId);
+
+	sql::SQLString query = "DELETE FROM `User` WHERE id=?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, userId);
+	//int updated = 0;
+	//updated += pstmt->executeUpdate();
+	//std::cout<<"updated: "<<updated<<std::endl;
 	pstmt->execute();
 }
 
 std::string Database::getUserPassword(std::string login)
 {
 	sql::SQLString query = "SELECT password FROM `User` WHERE login=?";
+	
 	pstmt = con->prepareStatement(query);
 	pstmt->setString(1, login);
 	res = pstmt->executeQuery();
-
 	if(res->next())
 		return res->getString("password");
 	else
-	{
-		std::cout<<"No user with login: "<<login<<std::endl;
 		return "";
+}
+
+void Database::updateUserPassword(std::string login, std::string newPassword)
+{
+	sql::SQLString query = "UPDATE `User` SET password = ? ";
+				   query+= "WHERE login = ?";
+	
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, newPassword);
+	pstmt->setString(2, login);
+	pstmt->executeUpdate();
+}
+
+void Database::removeAllForUser(int userId)
+{
+	removeAllMsgsForUser(userId);
+	removeUserFromAllGroups(userId);
+}
+
+void Database::removeUserFromAllGroups(int userId)
+{
+	sql::SQLString query = "DELETE FROM `User_Group` WHERE user_id = ?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, userId);
+	pstmt->execute();
+}
+
+void Database::removeAllUsersFromGroup(std::string groupName)
+{
+	sql::SQLString query = "DELETE FROM `User_Group` WHERE group_id = ?";
+
+	int groupId = getGroupId(groupName);
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, groupId);
+	pstmt->execute();
+}
+
+void Database::removeAllMsgsForUser(int userId)
+{
+	sql::SQLString query = "DELETE FROM `User_Message` WHERE user_id = ?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, userId);
+	pstmt->execute();
+}
+
+void Database::removeAllUsersForMsg(int msgId)
+{
+	sql::SQLString query = "DELETE FROM `User_Message` WHERE message_id = ?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, msgId);
+	pstmt->execute();
+}
+
+void Database::addMsgToGroup(std::string groupName, std::string sender, int type, std::string text)
+{
+	sql::SQLString query = "INSERT INTO `Message` VALUES (0, NOW(),?,?,?,?); ";
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, type);
+	pstmt->setString(2, groupName);
+	pstmt->setString(3, sender);
+	pstmt->setString(4, text);
+	pstmt->execute();
+
+	// get id of inserted message
+	query = "SELECT LAST_INSERT_ID() as id";
+	pstmt = con->prepareStatement(query);
+	res = pstmt->executeQuery();
+	res->next();
+	int msgId = res->getInt("id");
+
+	std::vector<int> users = getAllUsersFromGroup(groupName);
+	int senderId = getUserId(sender);
+	for(int i : users)
+	{
+		if(i != senderId)
+			addMsgToUser(msgId, i);
 	}
 }
 
-//bool Database::isUser()
+std::vector<int> Database::getAllUsersFromGroup(std::string groupName)
+{
+	std::vector<int> users;
+
+	sql::SQLString query = "SELECT user_id FROM `User_Group` AS ug ";
+				   query+= "JOIN `Group` AS g ON ug.group_id = g.id ";
+				   query+= "WHERE g.name = ?";
+				
+	pstmt = con->prepareStatement(query);
+	pstmt->setString(1, groupName);
+	res = pstmt->executeQuery();
+
+	while(res->next())
+		users.push_back(res->getInt("user_id"));
+
+	return users;
+}
+
+void Database::addMsgToUser(int msgId, int userId)
+{
+	sql::SQLString query = "INSERT INTO `User_Message` VALUES (?,?)";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, userId);
+	pstmt->setInt(2, msgId);
+	pstmt->execute();
+}
+
+void Database::deleteMsg(int msgId)
+{
+	// remove all references in User_Message
+	removeAllUsersForMsg(msgId);
+
+	sql::SQLString query = "DELETE FROM `Message` WHERE id=?";
+
+	pstmt = con->prepareStatement(query);
+	pstmt->setInt(1, msgId);
+	//int updated = 0;
+	//updated += pstmt->executeUpdate();
+	//std::cout<<"updated: "<<updated<<std::endl;
+	pstmt->execute();
+}
+

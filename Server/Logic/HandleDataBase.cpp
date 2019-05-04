@@ -11,7 +11,7 @@ void HandleDataBase::sendGroupMessage(string content , string groupName , string
 }
 
 void HandleDataBase::createGroup(string groupName , string login){
-  //Czy nazwa grupy istnieje - bool Database::groupNameExists(groupName)
+  //Czy nazwa grupy istnieje - bool Database::isGroup(groupName)
   this->createReply.groupNameExist(groupName , login);
   //Stworz grupe - tworca to administrator - void Database::createGroup(groupName, userId)
   this->createReply.groupCreated( groupName , login);
@@ -101,7 +101,7 @@ void HandleDataBase::addPasswordToLogin(string login, string password, int socke
 int HandleDataBase::rootDeleteGroup(string groupName){
   //SPRAWDZ CZY GRUPA istnieje
   // return 0
-  //JESLI nie to usun grupe
+  //JESLI nie to usun grupe - deleteGroup(groupName)
   return 1;
 }
 int HandleDataBase::rootDeleteUser(string login){
@@ -111,9 +111,9 @@ int HandleDataBase::rootDeleteUser(string login){
   return 1;
 }
 int HandleDataBase::rootAddUser(string login, int password){
-  //SPRAWDZ CZY uzytkownik istnieje
+  //SPRAWDZ CZY uzytkownik istnieje  - isUser(login)
   // return 0
-  //JESLI nie to dodaj uzytkownika
+  //JESLI nie to dodaj uzytkownika  - addUser(login)
   return 1;
 }
 int HandleDataBase::rootAddGroup(string groupName, string administrator){
