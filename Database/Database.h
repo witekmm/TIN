@@ -7,6 +7,7 @@
 #include <mysql-cppconn-8/jdbc/cppconn/resultset.h>
 #include <mysql-cppconn-8/jdbc/cppconn/statement.h>
 #include <mysql-cppconn-8/jdbc/cppconn/prepared_statement.h>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -23,7 +24,7 @@ class Database {
     Database(const std::string url, const std::string database, const std::string username, const std::string password);
     ~Database();
 
-    void connect();
+    void manageExcpetion(sql::SQLException &e);
     // czy user w grupie
     bool userInGroup(std::string groupName, std::string login);
     // czy grupa istnieje
@@ -35,6 +36,7 @@ class Database {
     void deleteGroup(std::string groupName);
     // czy userId to administrator podanej grupy
     bool isAdministrator(std::string groupName, int userId);
+    void changeAdministrator(std::string groupName, int userId);
     // czy nalezy do grupy
     bool belongsToGroup(std::string groupName, std::string login);
     bool belongsToGroup(std::string groupName, int userId);
@@ -64,8 +66,11 @@ class Database {
     void addMsgToGroup(std::string groupName, std::string sender, int type, std::string text);
     void addMsgToUser(int msgId, int userId);
     std::vector<int> getAllUsersFromGroup(std::string groupName);
+    std::vector<int> getAllMsgsForUser(std::string login);
+    std::vector<int> getAllMsgsForUser(int userId);
+    std::string getMsgText(int msgId);
+    void createMsg(std::string groupName, std::string sender, int type, std::string text);
     void deleteMsg(int msgId);
-    
 
   private:
 

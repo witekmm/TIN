@@ -6,6 +6,7 @@ void HandleDataBase::sendGroupMessage(string content , string groupName , string
   
   this->createReply.userNotInGroup(groupName , login);
   //jesli tak to dodaj wiadomosc do bazy danych dla wszystkich uzytkownikow grupy
+  // - void Database::addMsgToGroup(groupName, string sender, int type, string text)
   //wyslij potwierdzenie wyslania wiadomosci
   this->createReply.groupMessageConfirmation(groupName , login);
 }
@@ -18,7 +19,7 @@ void HandleDataBase::createGroup(string groupName , string login){
 }
 
 void HandleDataBase::deleteGroup(string groupName , string login){
-  //czy grupa istnieje - bool Database::groupNameExists(groupName)
+  //czy grupa istnieje - bool Database::isGroup(groupName)
   this->createReply.groupDoesntExist(groupName , login);
   //czy jest jej administratorem - bool Database::isAdministrator(groupName, userId)
   this->createReply.noRightsToDeleteGroup(groupName , login);
@@ -27,9 +28,9 @@ void HandleDataBase::deleteGroup(string groupName , string login){
 }
 
 void HandleDataBase::requestToGroup(string groupName , string login){
-  //czy grupa istnieje - bool Database::groupNameExists(groupName)
+  //czy grupa istnieje - bool Database::isGroup(groupName)
   this->createReply.groupDoesntExist(groupName , login);
-  //czy naleze do grupy - bool Database::belongToGroup(groupName, login) lub bool Database::belongToGroup(groupName, userId)
+  //czy naleze do grupy - bool Database::belongsToGroup(groupName, login) lub bool Database::belongToGroup(groupName, userId)
   this->createReply.userAlreadyInGroup(groupName , login);
   //dodaj wiadomosc do bazy danych
   //wyslano
@@ -46,6 +47,7 @@ void HandleDataBase::acceptRequest(string groupName , string userName ,string lo
   //wyslij potweirdznie dodanie do administratora i uzytkownika dodanego
   this->createReply.requestAccepted( groupName ,  userName , login);
   //dodaj wiadomosc do bazy danych dla uzytkownika ktory zlozyl prosbe
+  // addMsgToUser(int msgId, int userId)
 }
 
 void HandleDataBase::declineRequest(string groupName , string userName ,string login){
@@ -107,7 +109,7 @@ int HandleDataBase::rootDeleteGroup(string groupName){
 int HandleDataBase::rootDeleteUser(string login){
   //SPRAWDZ CZY uzytkownik istnieje
   // return 0
-  //JESLI nie to usun uzytkownika
+  //JESLI nie to usun uzytkownika - deleteUser(login)
   return 1;
 }
 int HandleDataBase::rootAddUser(string login, int password){
