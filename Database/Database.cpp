@@ -50,11 +50,11 @@ bool Database::userInGroup(std::string groupName, std::string login)
 				
 		if(res->next())
 			return true;
-		return false;	
 	}
-    catch (sql::SQLException &e) {
+  catch (sql::SQLException &e) {
 		manageException(e);
 	}
+	return false;	
 }
 
 int Database::getGroupId(std::string groupName)
@@ -71,12 +71,12 @@ int Database::getGroupId(std::string groupName)
 		else
 		{
 			std::cout<<"No group with name: "<<groupName<<std::endl;
-			return -1;
 		}
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return -1;
 }
 
 bool Database::isGroup(std::string groupName)
@@ -135,11 +135,11 @@ bool Database::isAdministrator(std::string groupName, int userId)
 					
 		if(res->next())
 			return true;
-		return false;
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return false;
 }
 
 void Database::changeAdministrator(std::string groupName, int userId)
@@ -173,12 +173,12 @@ int Database::getUserId(std::string login)
 		else
 		{
 			std::cout<<"No user with login: "<<login<<std::endl;
-			return -1;
 		}
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return -1;
 }
 
 std::string Database::getUserLogin(int userId)
@@ -195,12 +195,12 @@ std::string Database::getUserLogin(int userId)
 		else
 		{
 			std::cout<<"No user with id: "<<userId<<std::endl;
-			return "";
 		}
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return "";
 }
 
 bool Database::belongsToGroup(std::string groupName, std::string login)
@@ -223,11 +223,11 @@ bool Database::belongsToGroup(std::string groupName, int userId)
 					
 		if(res->next())
 			return true;
-		return false;
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return false;
 }
 
 void Database::addUserToGroup(std::string groupName, std::string login)
@@ -322,11 +322,11 @@ std::string Database::getUserPassword(std::string login)
 		res = pstmt->executeQuery();
 		if(res->next())
 			return res->getString("password");
-		else return "";
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return "";
 }
 
 void Database::updateUserPassword(std::string login, std::string newPassword)
@@ -456,11 +456,11 @@ std::vector<int> Database::getAllUsersFromGroup(std::string groupName)
 
 		while(res->next())
 			users.push_back(res->getInt("user_id"));
-		return users;
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return users;
 }
 
 void Database::addMsgToUser(int msgId, int userId)
@@ -501,6 +501,7 @@ std::vector<int> Database::getAllMsgsForUser(std::string login)
 
 std::vector<int> Database::getAllMsgsForUser(int userId)
 {
+	std::vector<int> msgs;
 	try
 	{
 		sql::SQLString query = "SELECT m.id FROM `Message` AS m ";
@@ -512,14 +513,13 @@ std::vector<int> Database::getAllMsgsForUser(int userId)
 		pstmt->setInt(1, userId);
 		res = pstmt->executeQuery();
 
-		std::vector<int> msgs;
 		while(res->next())
 			msgs.push_back(res->getInt("id"));
-		return msgs;
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return msgs;
 }
 
 std::string Database::getMsgText(int msgId)
@@ -532,9 +532,9 @@ std::string Database::getMsgText(int msgId)
 		res = pstmt->executeQuery();
 		if(res->next())
 			return res->getString("text");
-		else return "";
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return "";
 }
