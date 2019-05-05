@@ -8,8 +8,10 @@ using namespace std;
 #include "Server.h"
 #include "Client.h"
 #include <vector>
-
+#include <utility>
 class Transport;
+
+class Interface;
 
 class Network{
   //representation of server
@@ -64,8 +66,12 @@ public:
   void disconnectClient(string login);
   void disconnectClientBySN(int socketNumber);
   int isClientLogged(int socketNumber);
-
+  //
   Client& findClient(int socketNumber);
+  //client exists?
+  int checkIfClient(string login);
+  int checkIfClient(int socketNumber);
+  vector<pair<string , int>> getClientsList();
 };
 
 #endif

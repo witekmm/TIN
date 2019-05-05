@@ -5,7 +5,7 @@ LG = $(SV)Logic/
 TT = $(SV)Transport/
 MSG = Messages/
 NET = $(NT)NetLibs.h
-OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o Message.pb.o HandleMessage.o HandleDataBase.o CreateReply.o
+OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o Message.pb.o HandleMessage.o HandleDataBase.o CreateReply.o Interface.o
 CC = g++
 FLAGS = -lpthread -pthread -lprotobuf -std=c++11
 
@@ -43,6 +43,9 @@ HandleDataBase.o: $(LG)HandleDataBase.cpp $(LG)HandleDataBase.h
 
 CreateReply.o: $(LG)CreateReply.cpp $(LG)CreateReply.h
 	$(CC) -c $(LG)CreateReply.cpp
+
+Interface.o: $(TT)Interface.cpp $(TT)Interface.h
+	$(CC) -c $(TT)Interface.cpp
 
 clean:
 	rm -f *.o server
