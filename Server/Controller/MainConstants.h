@@ -1,10 +1,10 @@
+#ifndef MAIN_CONSTANTS_H
+#define MAIN_CONSTANTS_H
+
 #include <string>
 #include <iostream>
 
 using namespace std;
-
-#ifndef MAIN_CONSTANTS_H
-#define MAIN_CONSTANTS_H
 
 #define DEFAULT_SERVER_PORT 50011
 #define DEFAULT_SERVER_IP "127.0.0.1"
@@ -16,7 +16,7 @@ class MainConstants{
   int maxConnections;
 
 public:
-  MainConstants(int argc , char* argv[]);
+  MainConstants(int argc, char* argv[]);
 
   string& getServerIp();
   int getServerPort();

@@ -3,7 +3,8 @@
 Database::Database() 
 	: Database(URL, DB, USER, PASSWORD){}
 
-Database::Database(const std::string url_, const std::string db_, const std::string user_, const std::string pass_) : url(url_), db(db_), user(user_), password(pass_) 
+Database::Database(const std::string url_, const std::string db_, const std::string user_, const std::string pass_) 
+	: url(url_), db(db_), user(user_), password(pass_) 
 {
 	try
     {
@@ -12,7 +13,7 @@ Database::Database(const std::string url_, const std::string db_, const std::str
         con->setSchema(db);
     }
     catch (sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 	std::cout<<"Connected"<<std::endl;
 }
@@ -24,7 +25,7 @@ Database::~Database()
 	delete con;
 }
 
-void Database::manageExcpetion(sql::SQLException &e)
+void Database::manageException(sql::SQLException &e)
 {
 	std::cout << "# ERR: SQLException in " << __FILE__;
 	std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
@@ -52,7 +53,7 @@ bool Database::userInGroup(std::string groupName, std::string login)
 		return false;	
 	}
     catch (sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -74,7 +75,7 @@ int Database::getGroupId(std::string groupName)
 		}
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -96,7 +97,7 @@ void Database::createGroup(std::string groupName, int userId)
 		addUserToGroup(groupName, userId);
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -116,7 +117,7 @@ void Database::deleteGroup(std::string groupName)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -137,7 +138,7 @@ bool Database::isAdministrator(std::string groupName, int userId)
 		return false;
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -154,7 +155,7 @@ void Database::changeAdministrator(std::string groupName, int userId)
 		pstmt->executeUpdate();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -176,7 +177,7 @@ int Database::getUserId(std::string login)
 		}
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -198,7 +199,7 @@ std::string Database::getUserLogin(int userId)
 		}
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -225,7 +226,7 @@ bool Database::belongsToGroup(std::string groupName, int userId)
 		return false;
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -246,7 +247,7 @@ void Database::addUserToGroup(std::string groupName, int userId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -267,7 +268,7 @@ void Database::removeUserFromGroup(std::string groupName, int userId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -287,7 +288,7 @@ void Database::addUser(std::string login, std::string password)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -307,7 +308,7 @@ void Database::deleteUser(int userId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -324,7 +325,7 @@ std::string Database::getUserPassword(std::string login)
 		else return "";
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -341,7 +342,7 @@ void Database::updateUserPassword(std::string login, std::string newPassword)
 		pstmt->executeUpdate();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -361,7 +362,7 @@ void Database::removeUserFromAllGroups(int userId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -376,7 +377,7 @@ void Database::removeAllUsersFromGroup(std::string groupName)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -390,7 +391,7 @@ void Database::removeAllMsgsForUser(int userId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -404,7 +405,7 @@ void Database::removeAllUsersForMsg(int msgId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -436,7 +437,7 @@ void Database::addMsgToGroup(std::string groupName, std::string sender, int type
 		}
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -458,7 +459,7 @@ std::vector<int> Database::getAllUsersFromGroup(std::string groupName)
 		return users;
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -473,7 +474,7 @@ void Database::addMsgToUser(int msgId, int userId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -489,7 +490,7 @@ void Database::deleteMsg(int msgId)
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -517,7 +518,7 @@ std::vector<int> Database::getAllMsgsForUser(int userId)
 		return msgs;
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
 
@@ -534,6 +535,6 @@ std::string Database::getMsgText(int msgId)
 		else return "";
 	}
 	catch(sql::SQLException &e) {
-		manageExcpetion(e);
+		manageException(e);
 	}
 }
