@@ -6,6 +6,15 @@ using namespace std;
 Client::Client(int socketNumber){
   this->socketNumber=socketNumber;
   this->status=unauthorized;
+  this->login="unauthorized";
+  pthread_cond_init(&this->cond, NULL);
+  messageReceived();
+  messageSent();
+}
+
+Client::Client(){
+  this->login="unauthorized";
+  this->status=unauthorized;
   messageReceived();
   messageSent();
 }
@@ -95,10 +104,19 @@ int Client::receiveSize(){
 }
 
 void Client::setNewMessage(string content,int bufferSize){
-  this->sendingBuffer = content;
-  this->sendingSize = bufferSize;
-  this->isMessageSet = true;
-}
+  pthread_mutex_lock(&this->mutex);
+  do {
+  	if (this->isMessageSet==0) {
+      this->sendingBuffer = content;
+      this->sendingSize = bufferSize;
+      this->isMessageSet = true;
+  		break;
+  	}
+  	else
+  		pthread_cond_wait(&this->cond, &this->mutex);
+  } while (1);
+  pthread_mutex_unlock(&this->mutex);
+  }
 
 void Client::setLogin(string login){
   this->login=login;
@@ -120,10 +138,13 @@ void Client::messageReceived(){
 }
 
 void Client::messageSent(){
+  pthread_mutex_lock(&this->mutex);
   this->sendingSize=0;
   this->isSizeSent=false;
   this->isMessageSet=false;
   this->sendingBuffer.clear();
+  pthread_cond_signal(&this->cond);
+  pthread_mutex_unlock(&this->mutex);
 }
 
 bool Client::getIsMessageSet(){

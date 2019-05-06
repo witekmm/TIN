@@ -14,6 +14,8 @@ class Transport;
 class Interface;
 
 class Network{
+  bool working;
+  struct timeval tv;
   //representation of server
   Server server;
   //Descriptors list:
@@ -72,6 +74,10 @@ public:
   int checkIfClient(string login);
   int checkIfClient(int socketNumber);
   vector<pair<string , int>> getClientsList();
+  int checkIfClientOccupied(int socketNumber);
+  int checkIfClientOccupied(string login);
+
+  void checkClientsMessagesLoop();
 };
 
 #endif
