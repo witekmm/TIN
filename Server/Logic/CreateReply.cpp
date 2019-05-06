@@ -222,3 +222,13 @@ void CreateReply::userAlreadyInGroup(string groupName,string login){
   message.set_replycontent(content);
   transport.serializeAndSend(message , login);
 }
+
+void CreateReply::sendMessage(string content, string toWho, string fromWho, string whichGroup){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::GROUP);
+  message.set_groupactiontype(Message::ClientMessage::MESSAGE);
+  message.set_groupname(whichGroup);
+  message.set_username(fromWho);
+  message.set_messagecontent(content);
+  transport.serializeAndSend(message , toWho);
+}

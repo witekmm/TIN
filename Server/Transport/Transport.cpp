@@ -28,3 +28,7 @@ void Transport::receiveAndParse(string& toParse, string login, int socketNumber)
 Network& Transport::getNetwork(){
   return this->network;
 }
+
+HandleMessage& Transport::getHandleMessage(){
+  return this->handleMessage;
+}

@@ -19,6 +19,7 @@ public:
   int serializeAndSend(Message::ClientMessage message, int socketNumber);
   void receiveAndParse(string& toParse,string login,int socketNumber);
   Network& getNetwork();
+  HandleMessage& getHandleMessage();
 };
 
 #endif

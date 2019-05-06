@@ -339,7 +339,7 @@ void Network::checkClientsMessagesLoop(){
   while(this->working){
     for(int i = 0; i < this->sockets-1 ; i++){
       if(!this->activeClients[i].getIsMessageSet() && this->activeClients[i].isLogged()){
-        //daj sygnal HandleMessage zeby wyslal wiadomosc jesli istnieje taka w bazie danych
+        this->transport.getHandleMessage().checkIfMessageExistAndSend(this->activeClients[i].getLogin());
       }
     }
   }

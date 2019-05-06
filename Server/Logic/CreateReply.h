@@ -31,6 +31,8 @@ public:
   void loginIsAvailable(string login,int socketNumber);
   void userAlreadyInGroup(string groupName,string login);
   void userAccountCreated(string login,int socketNumber);
+
+  void sendMessage(string content, string toWho, string fromWho, string whichGroup);
 };
 
 #endif

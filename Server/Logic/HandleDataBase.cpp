@@ -97,6 +97,12 @@ void HandleDataBase::addPasswordToLogin(string login, string password, int socke
   this->createReply.userAccountCreated(login , socketNumber);
 }
 
+void HandleDataBase::checkIfMessageExistAndSend(string login){
+  //sprawdz czy istnieje
+  //jest tak to pobierz z bazy danych i wyslij
+//  this->createReply.sendMessage(string content, string toWho, string fromWho, string whichGroup);
+}
+
 int HandleDataBase::rootDeleteGroup(string groupName){
   //SPRAWDZ CZY GRUPA istnieje
   // return 0

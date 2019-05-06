@@ -27,6 +27,7 @@ public:
   void groupHandle(Message::ClientMessage message,string login);
 
   void checkCommand(string command);
+  void checkIfMessageExistAndSend(string login);
 };
 
 #endif
