@@ -1,14 +1,15 @@
-
-using namespace std;
 #ifndef TRANSPORT_H
 #define TRANSPORT_H
-#include <string>
+
 #include "../Network/Network.h"
 #include "../Logic/HandleMessage.h"
 #include "../../Messages/Message.pb.h"
+#include "../Network/Network.h"
+#include <string>
 
-class Network;
+using namespace std;
 
+class Network; 
 class HandleMessage;
 
 class Transport{
