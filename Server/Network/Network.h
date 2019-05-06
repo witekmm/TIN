@@ -31,7 +31,7 @@ class Network{
   //list of sockets that select is listening
   vector<int> activeSockets;
   int sockets;
-  //refernece to transport pipe
+  //reference to transport pipe
   Transport& transport;
 public:
   Network(Transport& tp);
@@ -78,6 +78,9 @@ public:
   int checkIfClientOccupied(string login);
 
   void checkClientsMessagesLoop();
+  bool isWorking();
+
+  void closeServer();
 };
 
 #endif

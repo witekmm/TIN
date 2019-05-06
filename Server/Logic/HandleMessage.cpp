@@ -95,7 +95,7 @@ void HandleMessage::commandHandle(Message::ClientMessage message,string login){
 void HandleMessage::checkCommand(string command){
   if(command == "exit"){
     cout<<"Server will be closed!"<<endl;
-    //this->transport.getNetwork().closeServer();
+    this->transport.getNetwork().closeServer();
   }
   else if(command == "disconnect"){
     cout<<"Please input user login:"<<endl;
@@ -173,7 +173,7 @@ void HandleMessage::checkCommand(string command){
       cout<<"User with choosen doesn't exist!"<<endl;
     }
   }
-  this->interface.mainCommand();
+  return;
 }
 
 void HandleMessage::checkIfMessageExistAndSend(string login){

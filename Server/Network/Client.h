@@ -28,7 +28,6 @@ class Client{
 
 public:
   Client(int socketNumber);
-  Client();
   //get clients login
   //string operator*(int);
   int operator==(int toCheck);

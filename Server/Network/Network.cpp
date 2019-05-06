@@ -4,6 +4,7 @@
 #include "Network.h"
 #include "../Transport/Transport.h"
 using namespace std;
+
 Network::Network(Transport& tp):transport(tp), server(){
   tv.tv_sec = 1;
   tv.tv_usec = 0;
@@ -85,32 +86,33 @@ void Network::closeSocket(int socketNumber){
 }
 
 void Network::selectDescriptor(){
-  clearLists();
-  if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) == -1){
-    perror("Cannot select descriptor");
-    return;
-  }
-  else{
-    for(int i=0 ; i<this->sockets ; i++){
-      if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
-        //NOWE POŁĄCZENIE
-        if(this->activeSockets[i] == this->server.getSocketNumber()){
-          thread accept (&Network::connectClient , this);
+  while(this->working){
+    clearLists();
+    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) < 1){
+      return;
+    }
+    else{
+      for(int i=0 ; i<this->sockets ; i++){
+        if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
+          //NOWE POŁĄCZENIE
+          if(this->activeSockets[i] == this->server.getSocketNumber()){
+            thread accept (&Network::connectClient , this);
+          }
+          else {
+            Client& temp = findClient( this->activeSockets[i] );
+            thread read (&Network::receiveMessage , this , std::ref(temp) );
+            //thread read (&Network::receiveMessage , this , findClient(this->activeSockets[i]) );
+          }//ODBIÓR WIADOMOSCI
         }
-        else {
+        if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
           Client& temp = findClient( this->activeSockets[i] );
-          thread read (&Network::receiveMessage , this , std::ref(temp) );
-          //thread read (&Network::receiveMessage , this , findClient(this->activeSockets[i]) );
-        }//ODBIÓR WIADOMOSCI
-      }
-      if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
-        Client& temp = findClient( this->activeSockets[i] );
-        thread write (&Network::sendMessage , this , std::ref(temp) );
-      }
-      if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
-        int x = this->activeSockets[i];
-        thread disconnect (&Network::disconnectClientBySN , this , x);
-        //thread disconnect (disconnectClient , x);
+          thread write (&Network::sendMessage , this , std::ref(temp) );
+        }
+        if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
+          int x = this->activeSockets[i];
+          thread disconnect (&Network::disconnectClientBySN , this , x);
+          //thread disconnect (disconnectClient , x);
+        }
       }
     }
   }
@@ -343,4 +345,23 @@ void Network::checkClientsMessagesLoop(){
       }
     }
   }
+}
+
+bool Network::isWorking(){
+  return this->working;
+}
+
+void Network::closeServer(){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    int socketNumber = this->activeClients[i].getSocketNumber();
+    closeSocket(socketNumber);
+    clearSocket(socketNumber);
+    i++;
+  }
+  int socketNumber = this->server.getSocketNumber();
+  shutdown(socketNumber, SHUT_RDWR);
+  close(socketNumber);
+  this->working=false;
 }

@@ -8,16 +8,15 @@ Client::Client(int socketNumber){
   this->status=unauthorized;
   this->login="unauthorized";
   pthread_cond_init(&this->cond, NULL);
-  messageReceived();
-  messageSent();
+  this->isSizeReceived=false;
+  this->bytesToReceive=0;
+  this->receivingBuffer.clear();
+  this->sendingSize=0;
+  this->isSizeSent=false;
+  this->isMessageSet=false;
+  this->sendingBuffer.clear();
 }
 
-Client::Client(){
-  this->login="unauthorized";
-  this->status=unauthorized;
-  messageReceived();
-  messageSent();
-}
 /*
 string Client::operator*(int){
   return this->login;
