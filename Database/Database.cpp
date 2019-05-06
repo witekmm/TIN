@@ -79,6 +79,28 @@ int Database::getGroupId(std::string groupName)
 	return -1;
 }
 
+std::string Database::getGroupName(int groupId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT name FROM `Group` WHERE id = ?";
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, groupId);
+		res = pstmt->executeQuery();
+
+		if(res->next())
+			return res->getString("name");
+		else
+		{
+			std::cout<<"No group with id: "<<groupId<<std::endl;
+		}
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+	return "";
+}
+
 bool Database::isGroup(std::string groupName)
 {
 	return getGroupId(groupName) != -1 ? true : false;	
@@ -463,6 +485,60 @@ std::vector<int> Database::getAllUsersFromGroup(std::string groupName)
 	return users;
 }
 
+std::vector<int> Database::getAllGroupsForUser(std::string login)
+{
+	return getAllGroupsForUser(getUserId(login));
+}
+
+std::vector<int> Database::getAllGroupsForUser(int userId)
+{
+	std::vector<int> groups;
+	try
+	{
+		sql::SQLString query = "SELECT group_id FROM `User_Group` AS ug ";
+										query+= "JOIN `User` AS u ON ug.user_id = u.id ";
+										query+= "WHERE u.id = ?";
+					
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, userId);
+		res = pstmt->executeQuery();
+
+		while(res->next())
+			groups.push_back(res->getInt("group_id"));
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+	return groups;
+}
+
+int Database::getOldestMsgForUser(std::string login)
+{
+	return getOldestMsgForUser(getUserId(login));
+}
+    
+int Database::getOldestMsgForUser(int userId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT m.id FROM `Message` AS m ";
+										query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
+										query+= "JOIN `User` AS u ON u.id = um.user_id ";
+										query+= "WHERE u.id = ? ASC LIMIT 1";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, userId);
+		res = pstmt->executeQuery();
+
+		if(res->next())
+			return res->getInt("id");
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+	return -1;
+}
+
 void Database::addMsgToUser(int msgId, int userId)
 {
 	try
@@ -505,9 +581,9 @@ std::vector<int> Database::getAllMsgsForUser(int userId)
 	try
 	{
 		sql::SQLString query = "SELECT m.id FROM `Message` AS m ";
-					query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
-					query+= "JOIN `User` AS u ON u.id = um.user_id ";
-					query+= "WHERE u.id = ?";
+										query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
+										query+= "JOIN `User` AS u ON u.id = um.user_id ";
+										query+= "WHERE u.id = ?";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, userId);
@@ -564,3 +640,7 @@ bool Database::hasMsg(int userId)
 	}
 	return false;
 }
+
+
+
+

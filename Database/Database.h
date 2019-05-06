@@ -31,6 +31,7 @@ class Database {
     // czy grupa istnieje
     bool isGroup(std::string groupName);
     int getGroupId(std::string groupName);
+    std::string getGroupName(int groupId);
     // stworz grupe z podanym id administratora
     void createGroup(std::string groupName, int userId);
     // usun grupe
@@ -68,6 +69,10 @@ class Database {
     void addMsgToGroup(std::string groupName, std::string sender, int type, std::string text);
     void addMsgToUser(int msgId, int userId);
     std::vector<int> getAllUsersFromGroup(std::string groupName);
+    std::vector<int> getAllGroupsForUser(std::string login);
+    std::vector<int> getAllGroupsForUser(int userId);
+    int getOldestMsgForUser(std::string login);
+    int getOldestMsgForUser(int userId);
     std::vector<int> getAllMsgsForUser(std::string login);
     std::vector<int> getAllMsgsForUser(int userId);
     std::string getMsgText(int msgId);
