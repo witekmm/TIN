@@ -2,8 +2,20 @@ using namespace std;
 #include "Interface.h"
 #include "../Logic/HandleMessage.h"
 
-Interface::Interface(){
+Interface::Interface()
+{
   this->working=true;
+}
+
+Interface::~Interface()
+{
+  if(handleMessage!=nullptr)
+    delete handleMessage;
+}
+
+void Interface::setHandleMessage(HandleMessage* hm)
+{
+  this->handleMessage = hm;
 }
 
 void Interface::mainCommand(){
@@ -11,7 +23,7 @@ void Interface::mainCommand(){
     clearInput();
     string command;
     getline(cin , command);
-    this->handleMessage.checkCommand(command);
+    handleMessage->checkCommand(command);
   }
 }
 

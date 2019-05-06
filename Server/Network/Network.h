@@ -11,8 +11,6 @@ using namespace std;
 #include <utility>
 class Transport;
 
-class Interface;
-
 class Network{
   bool working;
   struct timeval tv;

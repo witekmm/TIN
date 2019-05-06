@@ -11,6 +11,7 @@ class Transport;
 class CreateReply{
   Transport& transport;
 public:
+  CreateReply(Transport& t);
   void userNotInGroup(string groupName,string login);
   void groupMessageConfirmation(string groupName,string login);
   void groupNameExist(string groupName,string login);

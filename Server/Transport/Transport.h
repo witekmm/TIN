@@ -4,7 +4,6 @@
 #include "../Network/Network.h"
 #include "../Logic/HandleMessage.h"
 #include "../../Messages/Message.pb.h"
-#include "../Network/Network.h"
 #include <string>
 
 using namespace std;
@@ -16,6 +15,7 @@ class Transport{
   Network& network;
   HandleMessage& handleMessage;
 public:
+  Transport();
   int serializeAndSend(Message::ClientMessage message, string clientLogin);
   int serializeAndSend(Message::ClientMessage message, int socketNumber);
   void receiveAndParse(string& toParse,string login,int socketNumber);

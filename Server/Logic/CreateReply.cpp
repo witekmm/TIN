@@ -2,6 +2,9 @@
 #include "../Transport/Transport.h"
 #include "CreateReply.h"
 
+CreateReply::CreateReply(Transport& t)
+  : transport(t){}
+
 void CreateReply::userNotInGroup(string groupName,string login){
   string content = "You don't belong to this group!";
   Message::ClientMessage message;

@@ -10,6 +10,7 @@ using namespace std;
 class HandleDataBase{
   CreateReply createReply;
 public:
+  HandleDataBase(CreateReply& cr);
   void sendGroupMessage(string content , string groupName , string login);
   void createGroup(string groupName , string login);
   void deleteGroup(string groupName , string login);

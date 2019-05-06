@@ -1,7 +1,17 @@
 #include "HandleMessage.h"
-#include "../Transport/Transport.h"
-#include "HandleDataBase.h"
-#include "../Transport/Interface.h"
+
+HandleMessage::HandleMessage(Transport& t, HandleDataBase& hdb, Interface& i)
+  : transport(t), database(hdb), interface(i){}
+
+Interface& HandleMessage::getInterface()
+{
+  return interface;
+}
+
+// void HandleMessage::setInterface(Interface& i)
+// {
+//   this->interface = i;
+// }
 
 void HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber){
   if(!message.has_messagetype()){
@@ -96,6 +106,7 @@ void HandleMessage::checkCommand(string command){
   if(command == "exit"){
     cout<<"Server will be closed!"<<endl;
     this->transport.getNetwork().closeServer();
+    this->interface.closeInterface();
   }
   else if(command == "disconnect"){
     cout<<"Please input user login:"<<endl;
@@ -179,3 +190,4 @@ void HandleMessage::checkCommand(string command){
 void HandleMessage::checkIfMessageExistAndSend(string login){
   this->database.checkIfMessageExistAndSend(login);
 }
+

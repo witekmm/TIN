@@ -1,6 +1,9 @@
 #include "HandleDataBase.h"
 using namespace std;
 
+HandleDataBase::HandleDataBase(CreateReply& cr)
+  : createReply(cr){}
+
 void HandleDataBase::sendGroupMessage(string content , string groupName , string login){
   //Sprawdz czy uzytkownik w grupie - bool Database::userInGroup(groupName, login)
   

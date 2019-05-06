@@ -5,7 +5,9 @@
 #include "../Transport/Transport.h"
 using namespace std;
 
-Network::Network(Transport& tp):transport(tp), server(){
+Network::Network(Transport& tp)
+  : transport(tp), server()
+{
   tv.tv_sec = 1;
   tv.tv_usec = 0;
   this->working=true;

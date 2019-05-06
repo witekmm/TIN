@@ -15,16 +15,17 @@ class HandleMessage;
 class Interface{
   bool working;
   //Network& network;
-  HandleMessage& handleMessage;
+  HandleMessage* handleMessage;
 public:
   Interface();
+  ~Interface();
   void mainCommand();
   int getNumber();
   string getString();
   int getStringAndEncode();
   void clearInput();
   void closeInterface();
-  void setHandleMessage(HandleMessage& handleMessage);
+  void setHandleMessage(HandleMessage* handleMessage);
 };
 
 #endif
