@@ -84,6 +84,9 @@ void HandleDataBase::logInUser(string login, string password, int socketNumber){
   this->createReply.incorrectData(login , socketNumber);
   //uzytkownik zalogowany
   this->createReply.userLogged(login, socketNumber);
+  //pobierz z bazy danych wszystki grupy do ktorych nalezy login
+  vector<string> groupList;
+  this->createReply.sendGroups(groupList , login , socketNumber);
 }
 
 void HandleDataBase::addLogin(string login, int socketNumber){
@@ -98,6 +101,12 @@ void HandleDataBase::addPasswordToLogin(string login, string password, int socke
   this->createReply.loginIsForbidden(login , socketNumber);
   //wysylamy potwierdzenie
   this->createReply.userAccountCreated(login , socketNumber);
+}
+
+void HandleDataBase::checkIfMessageExistAndSend(string login){
+  //sprawdz czy istnieje
+  //jest tak to pobierz z bazy danych i wyslij
+//  this->createReply.sendMessage(string content, string toWho, string fromWho, string whichGroup);
 }
 
 int HandleDataBase::rootDeleteGroup(string groupName){

@@ -222,3 +222,24 @@ void CreateReply::userAlreadyInGroup(string groupName,string login){
   message.set_replycontent(content);
   transport.serializeAndSend(message , login);
 }
+
+void CreateReply::sendMessage(string content, string toWho, string fromWho, string whichGroup){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::GROUP);
+  message.set_groupactiontype(Message::ClientMessage::MESSAGE);
+  message.set_groupname(whichGroup);
+  message.set_username(fromWho);
+  message.set_messagecontent(content);
+  transport.serializeAndSend(message , toWho);
+}
+
+void CreateReply::sendGroups(vector<string> groupList ,string login ,int socketNumber){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::AUTHORIZATION);
+  message.set_authorizationtype(Message::ClientMessage::LOG_IN);
+  message.set_reply(Message::ClientMessage::POSITIVE);
+  for(int i = 0 ; i < groupList.size() ; i++){
+    message.add_groups( groupList[i] );
+  }
+  transport.serializeAndSend(message , login);
+}

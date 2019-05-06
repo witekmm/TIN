@@ -1,10 +1,13 @@
 #include "NetLibs.h"
-#include <thread>
+
 #include <stdio.h>
 #include "Network.h"
 #include "../Transport/Transport.h"
 using namespace std;
 Network::Network(Transport& tp):transport(tp), server(){
+  tv.tv_sec = 1;
+  tv.tv_usec = 0;
+  this->working=true;
   this->sockets==0;
   FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
@@ -83,7 +86,7 @@ void Network::closeSocket(int socketNumber){
 
 void Network::selectDescriptor(){
   clearLists();
-  if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, NULL) == -1){
+  if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) == -1){
     perror("Cannot select descriptor");
     return;
   }
@@ -297,6 +300,30 @@ int Network::checkIfClient(int socketNumber){
   return 0;
 }
 
+int Network::checkIfClientOccupied(int socketNumber){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == socketNumber){
+      return this->activeClients[i].getIsMessageSet();
+    }
+    i++;
+  }
+  return -1;
+}
+
+int Network::checkIfClientOccupied(string login){
+  vector<Client>::iterator it = this->activeClients.begin();
+  int i=0;
+  for(it ; it != this->activeClients.end(); it++){
+    if(*it == login){
+      return this->activeClients[i].getIsMessageSet();
+    }
+    i++;
+  }
+  return -1;
+}
+
 vector<pair<string , int>> Network::getClientsList(){
   vector<pair<string , int>> list;
   pair<string , int> apair;
@@ -306,4 +333,14 @@ vector<pair<string , int>> Network::getClientsList(){
     list.push_back(apair);
   }
   return list;
+}
+
+void Network::checkClientsMessagesLoop(){
+  while(this->working){
+    for(int i = 0; i < this->sockets-1 ; i++){
+      if(!this->activeClients[i].getIsMessageSet() && this->activeClients[i].isLogged()){
+        this->transport.getHandleMessage().checkIfMessageExistAndSend(this->activeClients[i].getLogin());
+      }
+    }
+  }
 }

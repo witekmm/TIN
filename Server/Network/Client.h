@@ -6,13 +6,16 @@ using namespace std;
 #define CLIENT_H
 
 class Client{
+  pthread_mutex_t mutex;
+  pthread_cond_t cond;
+  bool isMessageSet;
+/////////////
   string constantBuffer;
   //buffer for sending
   string sendingBuffer;
   int sendingSize;
   //Info about actual connection
   bool isSizeSent;
-  bool isMessageSet;
   //buffer for sending
   string receivingBuffer;
   //Info about actual connection
@@ -25,6 +28,7 @@ class Client{
 
 public:
   Client(int socketNumber);
+  Client();
   //get clients login
   //string operator*(int);
   int operator==(int toCheck);
@@ -54,7 +58,6 @@ public:
   void messageReceived();
   //clear send
   void messageSent();
-
 };
 
 #endif

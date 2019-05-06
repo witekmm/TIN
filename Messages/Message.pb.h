@@ -411,6 +411,28 @@ class ClientMessage :
 
   // accessors -------------------------------------------------------
 
+  // repeated string groups = 12;
+  int groups_size() const;
+  void clear_groups();
+  static const int kGroupsFieldNumber = 12;
+  const ::std::string& groups(int index) const;
+  ::std::string* mutable_groups(int index);
+  void set_groups(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_groups(int index, ::std::string&& value);
+  #endif
+  void set_groups(int index, const char* value);
+  void set_groups(int index, const char* value, size_t size);
+  ::std::string* add_groups();
+  void add_groups(const ::std::string& value);
+  #if LANG_CXX11
+  void add_groups(::std::string&& value);
+  #endif
+  void add_groups(const char* value);
+  void add_groups(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& groups() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_groups();
+
   // optional string login = 5;
   bool has_login() const;
   void clear_login();
@@ -543,6 +565,7 @@ class ClientMessage :
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  ::google::protobuf::RepeatedPtrField<::std::string> groups_;
   ::google::protobuf::internal::ArenaStringPtr login_;
   ::google::protobuf::internal::ArenaStringPtr password_;
   ::google::protobuf::internal::ArenaStringPtr groupname_;
@@ -1020,6 +1043,75 @@ inline void ClientMessage::set_allocated_replycontent(::std::string* replyconten
   }
   replycontent_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), replycontent);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.replyContent)
+}
+
+// repeated string groups = 12;
+inline int ClientMessage::groups_size() const {
+  return groups_.size();
+}
+inline void ClientMessage::clear_groups() {
+  groups_.Clear();
+}
+inline const ::std::string& ClientMessage::groups(int index) const {
+  // @@protoc_insertion_point(field_get:Message.ClientMessage.groups)
+  return groups_.Get(index);
+}
+inline ::std::string* ClientMessage::mutable_groups(int index) {
+  // @@protoc_insertion_point(field_mutable:Message.ClientMessage.groups)
+  return groups_.Mutable(index);
+}
+inline void ClientMessage::set_groups(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:Message.ClientMessage.groups)
+  groups_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void ClientMessage::set_groups(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:Message.ClientMessage.groups)
+  groups_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void ClientMessage::set_groups(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  groups_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:Message.ClientMessage.groups)
+}
+inline void ClientMessage::set_groups(int index, const char* value, size_t size) {
+  groups_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.groups)
+}
+inline ::std::string* ClientMessage::add_groups() {
+  // @@protoc_insertion_point(field_add_mutable:Message.ClientMessage.groups)
+  return groups_.Add();
+}
+inline void ClientMessage::add_groups(const ::std::string& value) {
+  groups_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:Message.ClientMessage.groups)
+}
+#if LANG_CXX11
+inline void ClientMessage::add_groups(::std::string&& value) {
+  groups_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:Message.ClientMessage.groups)
+}
+#endif
+inline void ClientMessage::add_groups(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  groups_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:Message.ClientMessage.groups)
+}
+inline void ClientMessage::add_groups(const char* value, size_t size) {
+  groups_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:Message.ClientMessage.groups)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+ClientMessage::groups() const {
+  // @@protoc_insertion_point(field_list:Message.ClientMessage.groups)
+  return groups_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+ClientMessage::mutable_groups() {
+  // @@protoc_insertion_point(field_mutable_list:Message.ClientMessage.groups)
+  return &groups_;
 }
 
 #ifdef __GNUC__

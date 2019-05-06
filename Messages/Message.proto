@@ -50,4 +50,6 @@ message ClientMessage {
 
   optional replyStatus reply = 10;
   optional string replyContent = 11;
+
+  repeated string groups = 12;
 }

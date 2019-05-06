@@ -160,7 +160,7 @@ void HandleMessage::checkCommand(string command){
       cout<<"Group deleted!"<<endl;
     }
     else{
-      cout<<"Group with choosen doesn't exist!"<<endl;
+      cout<<"Group with choosen name doesn't exist!"<<endl;
     }
   }
   else if(command == "deleteuser"){
@@ -174,4 +174,8 @@ void HandleMessage::checkCommand(string command){
     }
   }
   this->interface.mainCommand();
+}
+
+void HandleMessage::checkIfMessageExistAndSend(string login){
+  this->database.checkIfMessageExistAndSend(login);
 }

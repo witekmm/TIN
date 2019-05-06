@@ -21,6 +21,8 @@ public:
   void addLogin(string login, int socketNumber);
   void addPasswordToLogin(string login, string password, int socketNumber);
 
+  void checkIfMessageExistAndSend(string login);
+
   int rootDeleteGroup(string groupName);
   int rootDeleteUser(string login);
   int rootAddUser(string login, int password);
