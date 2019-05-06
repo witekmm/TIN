@@ -73,6 +73,8 @@ class Database {
     std::string getMsgText(int msgId);
     void createMsg(std::string groupName, std::string sender, int type, std::string text);
     void deleteMsg(int msgId);
+    bool hasMsg(std::string login);
+    bool hasMsg(int userId);
 
   private:
 
