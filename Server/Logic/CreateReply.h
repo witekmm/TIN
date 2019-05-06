@@ -32,6 +32,8 @@ public:
   void userAlreadyInGroup(string groupName,string login);
   void userAccountCreated(string login,int socketNumber);
 
+  void sendGroups(vector<string >groupList ,string login ,int socketNumber);
+
   void sendMessage(string content, string toWho, string fromWho, string whichGroup);
 };
 

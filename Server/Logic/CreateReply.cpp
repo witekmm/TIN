@@ -232,3 +232,14 @@ void CreateReply::sendMessage(string content, string toWho, string fromWho, stri
   message.set_messagecontent(content);
   transport.serializeAndSend(message , toWho);
 }
+
+void CreateReply::sendGroups(vector<string> groupList ,string login ,int socketNumber){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::AUTHORIZATION);
+  message.set_authorizationtype(Message::ClientMessage::LOG_IN);
+  message.set_reply(Message::ClientMessage::POSITIVE);
+  for(int i = 0 ; i < groupList.size() ; i++){
+    message.add_groups( groupList[i] );
+  }
+  transport.serializeAndSend(message , login);
+}

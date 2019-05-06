@@ -81,6 +81,9 @@ void HandleDataBase::logInUser(string login, string password, int socketNumber){
   this->createReply.incorrectData(login , socketNumber);
   //uzytkownik zalogowany
   this->createReply.userLogged(login, socketNumber);
+  //pobierz z bazy danych wszystki grupy do ktorych nalezy login
+  vector<string> groupList;
+  this->createReply.sendGroups(groupList , login , socketNumber);
 }
 
 void HandleDataBase::addLogin(string login, int socketNumber){
