@@ -538,3 +538,29 @@ std::string Database::getMsgText(int msgId)
 	}
 	return "";
 }
+
+bool Database::hasMsg(std::string login)
+{
+	return hasMsg(getUserId(login));
+}
+
+bool Database::hasMsg(int userId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT * from `Message` AS m ";
+					   				query+= "JOIN `User_Message` AS um ON um.message_id = m.id ";
+					   				query+= "WHERE um.user_id = ?";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, userId);
+		res = pstmt->executeQuery();
+					
+		if(res->next())
+			return true;
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+	return false;
+}
