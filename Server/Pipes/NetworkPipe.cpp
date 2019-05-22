@@ -1,5 +1,5 @@
 #include "NetworkPipe.h"
-
+using namespace std;
 NetworkPipe::NetworkPipe(): isInputMessageSet(false) , isOutputMessageSet(false){
   this->inputMessage.clear();
   this->outputMessage.clear();
@@ -14,7 +14,7 @@ void NetworkPipe::setInputMessage(string message){
   pthread_mutex_unlock(&this->mutex);
 }
 
-void NetworkPipe::setOutputMessage(Message::ClientMessage& message){
+void NetworkPipe::setOutputMessage(string message){
   pthread_mutex_lock(&this->mutex);
   if(this->isOutputMessageSet==true)
      pthread_cond_wait(&this->outputCond, &this->mutex);
@@ -39,7 +39,7 @@ void NetworkPipe::clearInputMessage(){
   pthread_mutex_unlock(&this->mutex);
 }
 
-void LogicPipe::clearOutputMessage(){
+void NetworkPipe::clearOutputMessage(){
   pthread_mutex_lock(&this->mutex);
   this->isOutputMessageSet=false;
   this->outputMessage.clear();

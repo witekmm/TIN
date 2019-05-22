@@ -2,6 +2,9 @@
 #define NETWORK_PIPE_H
 
 #include <pthread.h>
+#include <string>
+
+using namespace std;
 
 class NetworkPipe{
   //buffer for message to handle
@@ -15,13 +18,13 @@ class NetworkPipe{
   bool isOutputMessageSet;
   pthread_cond_t outputCond;
 public:
-  LogicPipe();
+  NetworkPipe();
 
   void setInputMessage(string message);
   string getInputMessage();
   void clearInputMessage();
 
-  void setOutputBuffer(string message);
+  void setOutputMessage(string message);
   string getOutputMessage();
   void clearOutputMessage();
 };

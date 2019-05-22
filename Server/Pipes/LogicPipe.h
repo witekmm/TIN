@@ -2,7 +2,7 @@
 #define LOGIC_PIPE_H
 
 #include "../../Messages/Message.pb.h"
-
+using namespace std;
 #include <pthread.h>
 
 class LogicPipe{

@@ -3,9 +3,11 @@ NT = $(SV)Network/
 CT = $(SV)Controller/
 LG = $(SV)Logic/
 TT = $(SV)Transport/
+PP = $(SV)Pipes/
+CL = $(SV)Client/
 MSG = Messages/
 NET = $(NT)NetLibs.h
-OBJS = main.o MainConstants.o Client.o Network.o Server.o Transport.o Message.pb.o HandleMessage.o HandleDataBase.o CreateReply.o Interface.o
+OBJS = main.o NetworkPipe.o LogicPipe.o NetworkConnections.o MainConstants.o Client.o Network.o Server.o Message.pb.o
 CC = g++
 FLAGS = -lpthread -pthread -lprotobuf -std=c++11
 
@@ -13,6 +15,15 @@ all: server
 
 server: $(OBJS)
 	$(CC) $(OBJS) -o server $(FLAGS)
+
+NetworkPipe.o: $(PP)NetworkPipe.h $(PP)NetworkPipe.cpp
+	$(CC) -c $(PP)NetworkPipe.cpp
+
+LogicPipe.o: $(PP)LogicPipe.h $(PP)LogicPipe.cpp
+	$(CC) -c $(PP)LogicPipe.cpp
+
+NetworkConnections.o: $(PP)NetworkConnections.h $(PP)NetworkConnections.cpp
+	$(CC) -c $(PP)NetworkConnections.cpp
 
 Server.o: $(NET) $(NT)Server.h $(NT)Server.cpp
 	$(CC) -c $(NT)Server.cpp
@@ -39,7 +50,8 @@ HandleMessage.o: $(LG)HandleMessage.cpp $(LG)HandleMessage.h
 	$(CC) -c $(LG)HandleMessage.cpp
 
 HandleDataBase.o: $(LG)HandleDataBase.cpp $(LG)HandleDataBase.h
-	$(CC) -c $(LG)HandleDataBase.cpp
+	$(CC) -c $(LG)HandleDataBa
+	se.cpp
 
 CreateReply.o: $(LG)CreateReply.cpp $(LG)CreateReply.h
 	$(CC) -c $(LG)CreateReply.cpp
