@@ -7,7 +7,7 @@ PP = $(SV)Pipes/
 CL = $(SV)Client/
 MSG = Messages/
 NET = $(NT)NetLibs.h
-OBJS = main.o NetworkPipe.o LogicPipe.o NetworkConnections.o MainConstants.o Client.o Network.o Server.o Message.pb.o
+OBJS = main.o ServerConnections.o NetworkPipe.o LogicPipe.o NetworkConnections.o MainConstants.o Client.o Network.o Server.o Message.pb.o
 CC = g++
 FLAGS = -lpthread -pthread -lprotobuf -std=c++11
 
@@ -18,6 +18,9 @@ server: $(OBJS)
 
 NetworkPipe.o: $(PP)NetworkPipe.h $(PP)NetworkPipe.cpp
 	$(CC) -c $(PP)NetworkPipe.cpp
+
+ServerConnections.o: $(PP)ServerConnections.cpp $(PP)ServerConnections.h $(PP)ClientStatus.h
+	$(CC) -c $(PP)ServerConnections.cpp
 
 LogicPipe.o: $(PP)LogicPipe.h $(PP)LogicPipe.cpp
 	$(CC) -c $(PP)LogicPipe.cpp
