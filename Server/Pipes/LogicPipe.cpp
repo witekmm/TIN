@@ -1,17 +1,12 @@
 #include "LogicPipe.h"
 
 //dont know what to create
-LogicPipe::LogicPipe(){
-  this->isInputMessageSet=false;
-  this->isOutputMessageSet=false;
-}
+LogicPipe::LogicPipe(): isInputMessageSet(false) , isOutputMessageSet(false) {}
 
 void LogicPipe::setInputMessage(Message::ClientMessage& message){
   pthread_mutex_lock(&this->mutex);
-  if(this->isInputMessageSet==true){
+  if(this->isInputMessageSet==true)
     pthread_cond_wait(&this->inputCond, &this->mutex);
-    pthread_mutex_lock(&this->mutex);
-  }
   this->inputMessage=Message::ClientMessage();
   this->inputMessage.CopyFrom(message);
   this->isInputMessageSet=true;
@@ -20,12 +15,10 @@ void LogicPipe::setInputMessage(Message::ClientMessage& message){
 
 void LogicPipe::setOutputMessage(Message::ClientMessage& message){
   pthread_mutex_lock(&this->mutex);
-  if(this->isOutputMessageSet==true){
+  if(this->isOutputMessageSet==true)
      pthread_cond_wait(&this->outputCond, &this->mutex);
-     pthread_mutex_lock(&this->mutex);
-  }
-  this->OutputMessage=Message::ClientMessage();
-  this->OutputMessage.CopyFrom(message);
+  this->outputMessage=Message::ClientMessage();
+  this->outputMessage.CopyFrom(message);
   this->isOutputMessageSet=true;
   pthread_mutex_unlock(&this->mutex);
 }

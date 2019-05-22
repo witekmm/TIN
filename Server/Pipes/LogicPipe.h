@@ -17,9 +17,11 @@ class LogicPipe{
   pthread_cond_t outputCond;
 public:
   LogicPipe();
+
   void setInputMessage(Message::ClientMessage& message);
   Message::ClientMessage getInputMessage();
   void clearInputMessage();
+
   void setOutputMessage(Message::ClientMessage& message);
   Message::ClientMessage getOutputMessage();
   void clearOutputMessage();
