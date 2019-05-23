@@ -96,8 +96,8 @@ void Network::clearSocket(int socketNumber){
 
 void Network::updateFdmax(){
   int max=0;
-  for(int i = 0 ; i < this->sockets ; i++){
-    if(this->activeSockets[i]>max) max = this->activeSockets[i];
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    if(*it > max) max = *it;
   }
   this->fdmax=max;
 }

@@ -2,6 +2,7 @@
 
 ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): maxConnections(maxConnections), port(port), serverIP(ip) , socketNumber(0){
   this->serverAddress.sin_family = AF_INET;
+  std::cout<<"Port number is:"<<port<<std::endl;
   this->serverAddress.sin_port = htons(port);
   this->len = sizeof(this->serverAddress);
   char temp[ip.length() + 1];
@@ -13,15 +14,14 @@ ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): 
 }
 
 int ServerOperation::createServerSocket(){
-
   int yes = 1;
   this->socketNumber = socket(AF_INET, SOCK_STREAM, 0);
   if(this->socketNumber < 0){
-    perror("Error");
+    perror("Cannot create socket");
     return -1;
   }
   if(setsockopt(this->socketNumber, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == - 1){
-    perror("1");
+    perror("Cannot set option!");
     shutdown(this->socketNumber, SHUT_RDWR);
     close(this->socketNumber);
     return -1;
@@ -31,9 +31,11 @@ int ServerOperation::createServerSocket(){
 }
 
 int ServerOperation::bindServerSocket(){
+  puts("Tu cos");
   if( bind(this->socketNumber, (struct sockaddr*)&(this->serverAddress), this->len) < 0){
     shutdown(this->socketNumber, SHUT_RDWR);
     close(this->socketNumber);
+    perror("Cannot bind adres to socket!");
     return -1;
   }
   else{

@@ -7,9 +7,8 @@
 
 int main(int argc, char* argv[])
 {
-puts("1");
+
   MainConstants constants(argc,argv);
-puts("2");
   Network siec(constants.getMaxConnections() , constants.getServerPort() , constants.getServerIp());
   if(siec.startServer() == -1){
     puts("Cannot run server!!!");
