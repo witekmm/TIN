@@ -6,8 +6,9 @@ ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): 
   this->len = sizeof(this->serverAddress);
   char temp[ip.length() + 1];
   strcpy(temp , ip.c_str());
+  std::cout<<"Server IP Address is:"<<temp<<std::endl;
   if( inet_pton(AF_INET, temp , &this->serverAddress.sin_addr) <= 0){
-    perror("XD");
+    perror("Wrong ip address!");
   }
 }
 
