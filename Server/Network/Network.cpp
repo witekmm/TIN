@@ -101,3 +101,12 @@ void Network::updateFdmax(){
   }
   this->fdmax=max;
 }
+
+int Network::startServer(){
+  int fdnew=createServerSocket();
+  if(fdnew == -1) return -1;
+  addSocket(fdnew);
+  if(bindServerSocket() == -1) return -1;
+  if(listenServerSocket() == -1) return -1;
+  return 0;
+}

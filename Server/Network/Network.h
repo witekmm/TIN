@@ -36,6 +36,8 @@ public:
   void closeServer();
   void clearSocket(int socketNumber);
   void updateFdmax();
+
+  int startServer();
 };
 
 #endif

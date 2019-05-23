@@ -4,7 +4,7 @@
 
 using namespace std;
 
-string& MainConstants::getServerIp(){ return this->serverIp;}
+string MainConstants::getServerIp(){ return this->serverIp;}
 
 int MainConstants::getServerPort(){ return this->serverPort;}
 
