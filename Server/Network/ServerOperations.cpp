@@ -1,6 +1,6 @@
 #include "ServerOperations.h"
 
-ServerOperation::ServerOperation(int maxConnections, int port, string ip): maxConnections(maxConnections), port(port), ip(ip){
+ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): maxConnections(maxConnections), port(port), serverIP(ip){
   this->serverAddress.sin_family = AF_INET;
   this->serverAddress.sin_port = htons(port);
   this->len = sizeof(this->serverAddress);

@@ -1,6 +1,8 @@
 #include "Network.h"
 
-Network::Network(int maxConnections, int port, string ip):working(true), tv.tv_sec(1), tv.tv_usec(0), ServerOperation(maxConnections,port,ip){
+Network::Network(int maxConnections, int port, string ip):working(true), ServerOperation(maxConnections,port,ip){
+  this->tv.tv_sec = 1;
+  this->tv.tv_usec = 0;
   FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
@@ -10,14 +12,20 @@ Network::Network(int maxConnections, int port, string ip):working(true), tv.tv_s
 void Network::waitForSignal(){
   while(this->working){
     clearLists();
-    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) < 1){
-      return;
+    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, NULL) < 1){
+      break;
     }
     else{
       for(int i=0 ; i<this->sockets ; i++){
         if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
           if(this->activeSockets[i] == ServerOperation::getSocketNumber()){
-            if(int newfd = connectClient() > 0) addSocket
+            int newfd = ServerOperation::acceptConnection();
+            if(newfd > 0){
+              addSocket(newfd);
+            }
+            else{
+              puts("cannot connect");
+            }
           }
           else{
             receiveBuffer(this->activeSockets[i]);
@@ -40,21 +48,56 @@ void Network::clearLists(){
   this->exceptionfds=this->master;
 }
 
-void Network::connectClient(){
+void Network::receiveBuffer(int socketNumber){
 
 }
-void Network::receiveBuffer(){
+
+void Network::sendBuffer(int socketNumber){
 
 }
-void Network::sendBuffer(){
 
+void Network::addSocket(int socketNumber){
+  FD_SET(socketNumber , &master);
+  this->activeSockets.push_back(socketNumber);
+  this->sockets++;
+  updateFdmax();
 }
-void addSocket(){
 
+void Network::closeSocket(int socketNumber){
+  shutdown(socketNumber, SHUT_RDWR);
+  close(socketNumber);
+  clearSocket(socketNumber);
+  updateFdmax();
 }
-void closeSocket(){
 
+void Network::closeServer(){
+  for(int i = 0; i < sockets ; i++){
+    if(this->activeSockets[i] != ServerOperation::getSocketNumber()){
+      shutdown(this->activeSockets[i], SHUT_RDWR);
+      close(this->activeSockets[i]);
+      clearSocket(this->activeSockets[i]);
+    }
+  }
+  shutdown(ServerOperation::getSocketNumber(), SHUT_RDWR);
+  close(ServerOperation::getSocketNumber());
+  this->working=false;
 }
-void closeServer(){
 
+void Network::clearSocket(int socketNumber){
+  for(vector<int>::iterator it = this->activeSockets.begin() ; it != this->activeSockets.end(); it++){
+    if(*it == socketNumber){
+      this->activeSockets.erase(it);
+      break;
+    }
+  }
+  this->sockets--;
+  FD_CLR(socketNumber , &this->master);
+}
+
+void Network::updateFdmax(){
+  int max=0;
+  for(int i = 0 ; i < this->sockets ; i++){
+    if(this->activeSockets[i]>max) max = this->activeSockets[i];
+  }
+  this->fdmax=max;
 }

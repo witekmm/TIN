@@ -9,13 +9,13 @@
 
 class ServerOperation{
   int port;
-  string ip;
+  std::string serverIP;
   int maxConnections;
   int socketNumber;
   sockaddr_in serverAddress{};
   socklen_t len;
 public:
-  ServerOperation(int maxConnections, int port, string ip);
+  ServerOperation(int maxConnections, int port, std::string ip);
   int createServerSocket();
   int bindServerSocket();
   int listenServerSocket();

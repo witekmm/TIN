@@ -5,10 +5,11 @@
 #include <memory>
 
 #include "../Pipes/NetworkConnections.h"
-#include "ServerOperation.h"
+#include "ServerOperations.h"
+#include "NetLibs.h"
 
 class Network: public ServerOperation{
-  bool wotking;
+  bool working;
   struct timeval tv;
   //Descriptors list:
   //master - original list
@@ -22,18 +23,19 @@ class Network: public ServerOperation{
   vector<int> activeSockets;
   int sockets;
 
-  Connection clientPipe;
+  Connections clientPipe;
 public:
   Network(int maxConnections, int port, string ip);
-  void connectClient();
   void receiveBuffer(int socketNumber);
   void sendBuffer(int socketNumber);
-  void clearLists();
   void waitForSignal();
 
+  void clearLists();
   void addSocket(int socketNumber);
   void closeSocket(int socketNumber);
   void closeServer();
+  void clearSocket(int socketNumber);
+  void updateFdmax();
 };
 
 #endif
