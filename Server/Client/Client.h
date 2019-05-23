@@ -3,13 +3,7 @@
 
 #include <string>
 
-struct userData{
-  std::string login;
-};
-
 class Client{
-  std::string buffer;
-  userData user;
 };
 
 #endif
