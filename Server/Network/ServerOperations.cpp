@@ -4,13 +4,15 @@ ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): 
   this->serverAddress.sin_family = AF_INET;
   this->serverAddress.sin_port = htons(port);
   this->len = sizeof(this->serverAddress);
+  char temp[ip.length() + 1];
+  strcpy(temp , ip.c_str());
+  if( inet_pton(AF_INET, temp , &this->serverAddress.sin_addr) <= 0){
+    perror("XD");
+  }
 }
 
 int ServerOperation::createServerSocket(){
-  /*if( inet_pton(AF_INET, (char*)&this->serverIP, &this->serverAddress.sin_addr) <= 0){
-    perror("7");
-    return -1;
-  }*/
+
   int yes = 1;
   this->socketNumber = socket(AF_INET, SOCK_STREAM, 0);
   if(this->socketNumber < 0){

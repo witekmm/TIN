@@ -3,6 +3,7 @@
 
 #include "NetLibs.h"
 #include <iostream>
+#include <cstring>
 
 class ServerOperation{
   int port;
