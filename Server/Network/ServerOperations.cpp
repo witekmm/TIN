@@ -70,3 +70,7 @@ int ServerOperation::acceptConnection(){
 int ServerOperation::getSocketNumber(){
   return this->socketNumber;
 }
+
+void ServerOperation::setPort(int port){
+  this->port = port;
+}

@@ -19,6 +19,7 @@ public:
   int listenServerSocket();
   int acceptConnection();
   int getSocketNumber();
+  void setPort(int port);
 };
 
 #endif

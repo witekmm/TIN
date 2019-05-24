@@ -2,6 +2,7 @@
 #define CLI_H
 
 #include "../Network/Network.h"
+#include <thread>
 #include <string>
 #include <iostream>
 #include <limits>
@@ -16,6 +17,7 @@ public:
   bool checkCommandsPropriety(std::vector<std::string> splitedCommand);
   bool handleCommand(std::vector<std::string> splitedCommand);
   bool commandExist(std::string command);
+  void selectThreadWrapper();
 };
 
 #endif

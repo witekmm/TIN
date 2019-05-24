@@ -123,6 +123,5 @@ int Network::startServer(){
   if(fdnew == -1) return -1;
   addSocket(fdnew);
   if(ServerOperation::bindServerSocket() == -1) return -1;
-  if(ServerOperation::listenServerSocket() == -1) return -1;
   return 0;
 }
