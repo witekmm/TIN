@@ -6,8 +6,8 @@
 using namespace std;
 
 Network::Network(Transport& tp):transport(tp), server(){
-  tv.tv_sec = 1;
-  tv.tv_usec = 0;
+  this->tv.tv_sec = 1;
+  this->tv.tv_usec = 0;
   this->working=true;
   this->sockets==0;
   FD_ZERO(&this->readfds);

@@ -9,6 +9,7 @@
 #include "NetLibs.h"
 
 class Network: public ServerOperation{
+  pthread_mutex_t mutex;
   bool working;
   struct timeval tv;
   //Descriptors list:
@@ -21,7 +22,6 @@ class Network: public ServerOperation{
   int fdmax;
   //list of sockets that select is listening
   vector<int> activeSockets;
-  int sockets;
 
   Connections clientPipe;
 public:
@@ -30,7 +30,7 @@ public:
   void sendBuffer(int socketNumber);
   void waitForSignal();
 
-  void clearLists();
+  void prepareLists();
   void addSocket(int socketNumber);
   void closeSocket(int socketNumber);
   void closeServer();

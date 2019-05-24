@@ -10,11 +10,9 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <unistd.h>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 #include <limits.h>
 #include <pthread.h>
 #include <ctime>
+#include <sys/time.h>
 
 #endif

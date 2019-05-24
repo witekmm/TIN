@@ -11,41 +11,59 @@ Network::Network(int maxConnections, int port, string ip):working(true), ServerO
 
 void Network::waitForSignal(){
   while(this->working){
-    clearLists();
-    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, NULL) < 1){
+    pthread_mutex_lock(&this->mutex);
+    prepareLists();
+    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) < 1){
       break;
     }
     else{
-      for(int i=0 ; i<this->sockets ; i++){
-        if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
-          if(this->activeSockets[i] == ServerOperation::getSocketNumber()){
+      for(auto it=this->activeSockets.begin() ; it!=this->activeSockets.end() ; it++){
+        int tmp = *it;
+        if(FD_ISSET(tmp , &this->readfds)){
+          if(tmp == ServerOperation::getSocketNumber()){
             int newfd = ServerOperation::acceptConnection();
             if(newfd > 0){
               addSocket(newfd);
+              break;
             }
             else{
               puts("cannot connect");
             }
           }
           else{
-            receiveBuffer(this->activeSockets[i]);
+            receiveBuffer(tmp);
+            puts("0.0");
           }
         }
-        if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
-          sendBuffer(this->activeSockets[i]);
+        puts("1");
+        if(FD_ISSET(tmp , &this->writefds)){
+          puts("1.1");
+          sendBuffer(tmp);
         }
-        if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
-          closeSocket(this->activeSockets[i]);
+        puts("2");
+        if(FD_ISSET(tmp , &this->exceptionfds)){
+          puts("2.2");
+          closeSocket(tmp);
         }
       }
     }
+    pthread_mutex_unlock(&this->mutex);
   }
 }
 
-void Network::clearLists(){
+void Network::prepareLists(){
+  /*
   this->readfds=this->master;
   this->writefds=this->master;
-  this->exceptionfds=this->master;
+  this->exceptionfds=this->master;*/
+  FD_ZERO(&this->readfds);
+  FD_ZERO(&this->writefds);
+  FD_ZERO(&this->exceptionfds);
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    FD_SET(*it , &this->readfds);
+    FD_SET(*it , &this->writefds);
+    FD_SET(*it , &this->exceptionfds);
+  }
 }
 
 void Network::receiveBuffer(int socketNumber){
@@ -57,9 +75,8 @@ void Network::sendBuffer(int socketNumber){
 }
 
 void Network::addSocket(int socketNumber){
-  FD_SET(socketNumber , &master);
+  FD_SET(socketNumber , &this->master);
   this->activeSockets.push_back(socketNumber);
-  this->sockets++;
   updateFdmax();
 }
 
@@ -71,11 +88,11 @@ void Network::closeSocket(int socketNumber){
 }
 
 void Network::closeServer(){
-  for(int i = 0; i < sockets ; i++){
-    if(this->activeSockets[i] != ServerOperation::getSocketNumber()){
-      shutdown(this->activeSockets[i], SHUT_RDWR);
-      close(this->activeSockets[i]);
-      clearSocket(this->activeSockets[i]);
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    if(*it != ServerOperation::getSocketNumber()){
+      shutdown(*it, SHUT_RDWR);
+      close(*it);
+      clearSocket(*it);
     }
   }
   shutdown(ServerOperation::getSocketNumber(), SHUT_RDWR);
@@ -84,13 +101,12 @@ void Network::closeServer(){
 }
 
 void Network::clearSocket(int socketNumber){
-  for(vector<int>::iterator it = this->activeSockets.begin() ; it != this->activeSockets.end(); it++){
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end(); it++){
     if(*it == socketNumber){
       this->activeSockets.erase(it);
       break;
     }
   }
-  this->sockets--;
   FD_CLR(socketNumber , &this->master);
 }
 
@@ -103,10 +119,10 @@ void Network::updateFdmax(){
 }
 
 int Network::startServer(){
-  int fdnew=createServerSocket();
+  int fdnew=ServerOperation::createServerSocket();
   if(fdnew == -1) return -1;
   addSocket(fdnew);
-  if(bindServerSocket() == -1) return -1;
-  if(listenServerSocket() == -1) return -1;
+  if(ServerOperation::bindServerSocket() == -1) return -1;
+  if(ServerOperation::listenServerSocket() == -1) return -1;
   return 0;
 }

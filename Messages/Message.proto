@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package Message;
 
@@ -36,20 +36,20 @@ message ClientMessage {
     NEGATIVE = 1;
   }
 
-  required messageTypes messageType = 1[default = AUTHORIZATION];
+  messageTypes messageType = 1;
 
-  optional groupActionTypes groupActionType = 2;
-  optional authorizationTypes authorizationType = 3;
-  optional commandTypes commandType = 4;
+  groupActionTypes groupActionType = 2;
+  authorizationTypes authorizationType = 3;
+  commandTypes commandType = 4;
 
-  optional string login = 5;
-  optional string password = 6;
-  optional string groupName = 7;
-  optional string userName = 8;
-  optional string messageContent = 9;
+  string login = 5;
+  string password = 6;
+  string groupName = 7;
+  string userName = 8;
+  string messageContent = 9;
 
-  optional replyStatus reply = 10;
-  optional string replyContent = 11;
+  replyStatus reply = 10;
+  string replyContent = 11;
 
   repeated string groups = 12;
 }
