@@ -73,6 +73,20 @@ namespace Client
             }
         }
 
+        public byte[] Receive()
+        {
+            byte[] buffer = new byte[1024];
+            try
+            {
+                connection.Receive(buffer);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Receive error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return buffer;
+        }
+
         private void ReceiveThreadMethod()
         {
             byte[] buffer = new byte[1024];
