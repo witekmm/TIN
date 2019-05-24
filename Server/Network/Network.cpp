@@ -10,6 +10,7 @@ Network::Network(int maxConnections, int port, string ip):working(true), ServerO
 }
 
 void Network::waitForSignal(){
+  puts("Server is waiting for signal from sockets");
   while(this->working){
     pthread_mutex_lock(&this->mutex);
     prepareLists();
@@ -32,18 +33,16 @@ void Network::waitForSignal(){
           }
           else{
             receiveBuffer(tmp);
-            puts("0.0");
+            break;
           }
         }
-        puts("1");
         if(FD_ISSET(tmp , &this->writefds)){
-          puts("1.1");
           sendBuffer(tmp);
+          break;
         }
-        puts("2");
         if(FD_ISSET(tmp , &this->exceptionfds)){
-          puts("2.2");
           closeSocket(tmp);
+          break;
         }
       }
     }
@@ -80,14 +79,18 @@ void Network::addSocket(int socketNumber){
   updateFdmax();
 }
 
-void Network::closeSocket(int socketNumber){
+int Network::closeSocket(int socketNumber){
+  if(socketNumber==ServerOperation::getSocketNumber()) return 1;
+  if(!checkIfSocket(socketNumber)) return 2;
   shutdown(socketNumber, SHUT_RDWR);
   close(socketNumber);
   clearSocket(socketNumber);
   updateFdmax();
+  return 0;
 }
 
 void Network::closeServer(){
+  pthread_mutex_lock(&this->mutex);
   for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
     if(*it != ServerOperation::getSocketNumber()){
       shutdown(*it, SHUT_RDWR);
@@ -98,6 +101,8 @@ void Network::closeServer(){
   shutdown(ServerOperation::getSocketNumber(), SHUT_RDWR);
   close(ServerOperation::getSocketNumber());
   this->working=false;
+  pthread_mutex_unlock(&this->mutex);
+  ServerOperation::closeServer();
 }
 
 void Network::clearSocket(int socketNumber){
@@ -124,4 +129,24 @@ int Network::startServer(){
   addSocket(fdnew);
   if(ServerOperation::bindServerSocket() == -1) return -1;
   return 0;
+}
+
+void Network::stopWaiting(){
+  pthread_mutex_lock(&this->mutex);
+  this->working=false;
+  pthread_mutex_unlock(&this->mutex);
+}
+
+bool Network::isServerWaiting(){
+  pthread_mutex_lock(&this->mutex);
+  bool temp = this->working;
+  pthread_mutex_unlock(&this->mutex);
+  return temp;
+}
+
+bool Network::checkIfSocket(int socketNumber){
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    if(*it > socketNumber) return true;
+  }
+  return false;
 }

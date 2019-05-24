@@ -32,12 +32,16 @@ public:
 
   void prepareLists();
   void addSocket(int socketNumber);
-  void closeSocket(int socketNumber);
-  void closeServer();
+  int closeSocket(int socketNumber);
   void clearSocket(int socketNumber);
   void updateFdmax();
-
+  bool checkIfSocket(int socketNumber);
+  
   int startServer();
+  void stopWaiting();
+  void closeServer();
+
+  bool isServerWaiting();
 };
 
 #endif

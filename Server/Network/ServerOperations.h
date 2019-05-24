@@ -12,6 +12,8 @@ class ServerOperation{
   int socketNumber;
   sockaddr_in serverAddress{};
   socklen_t len;
+  bool isSocketNumberSet;
+  bool isSocketListening;
 public:
   ServerOperation(int maxConnections, int port, std::string ip);
   int createServerSocket();
@@ -19,6 +21,10 @@ public:
   int listenServerSocket();
   int acceptConnection();
   int getSocketNumber();
+
+  void closeServer();
+  bool getIsSocketNumberSet();
+  bool getIsSocketListening();
   void setPort(int port);
 };
 

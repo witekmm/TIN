@@ -1,6 +1,6 @@
 #include "ServerOperations.h"
 
-ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): maxConnections(maxConnections), port(port), serverIP(ip) , socketNumber(0){
+ServerOperation::ServerOperation(int maxConnections, int port, std::string ip): maxConnections(maxConnections), port(port), serverIP(ip) , socketNumber(0), isSocketNumberSet(false), isSocketListening(false){
   this->serverAddress.sin_family = AF_INET;
   std::cout<<"Port number is:"<<port<<std::endl;
   this->serverAddress.sin_port = htons(port);
@@ -26,12 +26,11 @@ int ServerOperation::createServerSocket(){
     close(this->socketNumber);
     return -1;
   }
-  puts("Socket created.\n");
+  puts("Socket created.");
   return this->socketNumber;
 }
 
 int ServerOperation::bindServerSocket(){
-  puts("Tu cos");
   if( bind(this->socketNumber, (struct sockaddr*)&(this->serverAddress), this->len) < 0){
     shutdown(this->socketNumber, SHUT_RDWR);
     close(this->socketNumber);
@@ -39,7 +38,8 @@ int ServerOperation::bindServerSocket(){
     return -1;
   }
   else{
-    puts("Socket binded to IP.\n");
+    this->isSocketNumberSet=true;
+    puts("Socket binded to IP.");
     return 0;
   }
 }
@@ -51,6 +51,7 @@ int ServerOperation::listenServerSocket(){
     return -1;
   }
   else{
+    this->isSocketListening=true;
     puts("Socket is passive.\n");
     return 0;
   }
@@ -73,4 +74,17 @@ int ServerOperation::getSocketNumber(){
 
 void ServerOperation::setPort(int port){
   this->port = port;
+}
+
+bool ServerOperation::getIsSocketNumberSet(){
+  return this->isSocketNumberSet;
+}
+
+void ServerOperation::closeServer(){
+  this->socketNumber=0;
+  this->isSocketNumberSet=false;
+  this->isSocketListening=false;
+}
+bool ServerOperation::getIsSocketListening(){
+  return this->isSocketListening;
 }
