@@ -18,7 +18,7 @@ void CommandLineInterface::getCommand(){
     }
     //split command into words
     if(checkCommandsPropriety(splitedCommand)){
-      if(handleCommand(splitedCommand) puts("Correct command!");
+      if(handleCommand(splitedCommand)) puts("Correct command!");
       else puts("Incorrect command!");
     }
     else{
