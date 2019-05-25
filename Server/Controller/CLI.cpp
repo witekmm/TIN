@@ -180,12 +180,18 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
   }
   else if(splitedCommand[0] == "close"){
     if(splitedCommand.size() == 1) return false;
+    //sprawdzamy czy to wgl liczba
+    for(auto it = splitedCommand[2].begin() ; it!=splitedCommand[2].end() ; it++){
+      if(!std::isdigit(*it)) return false;
+    }
     int number = std::stoi(splitedCommand[1]);
     int result = Network::closeSocket(number);
+    //zamykanie serwera
     if(result == 1){
       puts("Cannot close server socket");
       return true;
     }
+    //zamykanie nieistniejacego socketa
     else if(result == 2){
       puts("Socket doesnt exist");
       return true;
