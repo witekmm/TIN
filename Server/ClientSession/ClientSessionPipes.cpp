@@ -1,7 +1,7 @@
 #include <pthread.h>
 #include <vector>
 #include <string>
-#include <tuple>
+#include <utility>
 
 #include "../../Messages/Message.pb.h"
 
@@ -76,6 +76,7 @@ void ClientSessionPipes::readBytes(int socketNumber) {
 
     if(result == 1) {
         //Message is successfully read
+        ++writeMessagesCounter;
         pthread_cond_signal(&writeMessagesBufferNotEmpty);
     }
 
@@ -100,8 +101,14 @@ void ClientSessionPipes::writeBytes() {
 void ClientSessionPipes::createClientSession(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
-    //TODO: create Client and ClientSessionPipe associated with socketNumber
-    //TODO: add pair <Client, ClientSessionPipe> to clientSessionPipes vector
+    ClientSessionPipe clientSessionPipe(socketNumber);
+    Client client;
+
+    pair<Client, ClientSessionPipe> session = 
+        make_pair(client, clientSessionPipe);
+
+    
+    clientSessionPipes.push_back(session);
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }

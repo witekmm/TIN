@@ -26,7 +26,7 @@ class ClientSessionPipe {
     int readBytesSize();
 
 public:
-    ClientSessionPipe(int);
+    ClientSessionPipe(int socketNumber);
 
     int getSocketNumber();
 
