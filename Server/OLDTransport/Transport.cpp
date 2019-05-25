@@ -7,7 +7,7 @@ int Transport::serializeAndSend(Message::ClientMessage message, string clientLog
   string toSend;
   message.SerializeToString(&toSend);
   int bytesToSend = toSend.length();
-  if(this->network.setMessage(toSend,bytesToSend,clientLogin) == -1) 
+  if(this->network.setMessage(toSend,bytesToSend,clientLogin) == -1)
     return -1;
   return 0;
 }
@@ -17,7 +17,7 @@ int Transport::serializeAndSend(Message::ClientMessage message, int socketNumber
   string toSend;
   message.SerializeToString(&toSend);
   int bytesToSend = toSend.length();
-  if(this->network.setMessage(toSend,bytesToSend,socketNumber) == -1) 
+  if(this->network.setMessage(toSend,bytesToSend,socketNumber) == -1)
     return -1;
   return 0;
 }

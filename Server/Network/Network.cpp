@@ -1,6 +1,6 @@
 #include "Network.h"
 
-Network::Network(int maxConnections, int port, string ip):working(true), ServerOperation(maxConnections,port,ip){
+Network::Network(int maxConnections, int port, std::string ip):working(true), ServerOperation(maxConnections,port,ip){
   this->tv.tv_sec = 1;
   this->tv.tv_usec = 0;
   FD_ZERO(&this->readfds);
@@ -91,17 +91,7 @@ int Network::closeSocket(int socketNumber){
 
 int Network::closeSocketWithBlocking(int socketNumber){
   pthread_mutex_lock(&this->mutex);
-  if(socketNumber==ServerOperation::getSocketNumber()){
-    pthread_mutex_unlock(&this->mutex);
-    return 1;
-  if(!checkIfSocket(socketNumber)){
-    pthread_mutex_unlock(&this->mutex);
-    return 2;
-  }
-  shutdown(socketNumber, SHUT_RDWR);
-  close(socketNumber);
-  clearSocket(socketNumber);
-  updateFdmax();
+  int result = closeSocket(socketNumber);
   pthread_mutex_unlock(&this->mutex);
   return 0;
 }

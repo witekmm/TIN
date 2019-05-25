@@ -152,6 +152,9 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
         puts("Incorrect port number!");
         return true;
       }
+      std::cout<<"New port number is:"<<number<<std::endl;
+      Network::ServerOperation::setPort(number);
+      return true;
     }
     else if(splitedCommand[1] == "connections"){
       if(Network::ServerOperation::getIsSocketNumberSet()) {
@@ -168,6 +171,9 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
         puts("Incorrect connections number");
         return true;
       }
+      std::cout<<"New connections number is:"<<number<<std::endl;
+      Network::ServerOperation::setConnections(number);
+      return true;
     }
     else{
       return false;

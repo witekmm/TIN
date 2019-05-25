@@ -76,6 +76,10 @@ void ServerOperation::setPort(int port){
   this->port = port;
 }
 
+void ServerOperation::setConnections(int connections){
+  this->maxConnections=connections;
+}
+
 bool ServerOperation::getIsSocketNumberSet(){
   return this->isSocketNumberSet;
 }

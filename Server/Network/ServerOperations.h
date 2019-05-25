@@ -25,7 +25,9 @@ public:
   void closeServer();
   bool getIsSocketNumberSet();
   bool getIsSocketListening();
+
   void setPort(int port);
+  void setConnections(int connections);
 };
 
 #endif

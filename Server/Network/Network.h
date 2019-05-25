@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 
-#include "../Pipes/NetworkConnections.h"
 #include "ServerOperations.h"
 #include "NetLibs.h"
 
@@ -21,11 +20,10 @@ class Network: public ServerOperation{
   //Maximal descriptor number
   int fdmax;
   //list of sockets that select is listening
-  vector<int> activeSockets;
+  std::vector<int> activeSockets;
 
-  Connections clientPipe;
 public:
-  Network(int maxConnections, int port, string ip);
+  Network(int maxConnections, int port, std::string ip);
   void receiveBuffer(int socketNumber);
   void sendBuffer(int socketNumber);
   void waitForSignal();
@@ -33,7 +31,7 @@ public:
   void prepareLists();
   void addSocket(int socketNumber);
   int closeSocket(int socketNumber);
-  int closeSocketWithBlocking(int socketNumber)
+  int closeSocketWithBlocking(int socketNumber);
   void clearSocket(int socketNumber);
   void updateFdmax();
   bool checkIfSocket(int socketNumber);
