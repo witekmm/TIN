@@ -106,6 +106,11 @@ bool Database::isGroup(std::string groupName)
 	return getGroupId(groupName) != -1 ? true : false;	
 }
 
+void Database::createGroup(std::string groupName, std::string login)
+{
+	return createGroup(groupName, getUserId(login));
+}
+
 void Database::createGroup(std::string groupName, int userId)
 {
 	try
