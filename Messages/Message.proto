@@ -7,6 +7,7 @@ message ClientMessage {
   enum  messageTypes{
     AUTHORIZATION = 0;
     GROUP = 1;
+    REPLY = 2;
   }
 
   enum groupActionTypes{
@@ -21,8 +22,7 @@ message ClientMessage {
 
   enum authorizationTypes{
     LOG_IN = 0;
-    REGISTER_LOGIN = 1;
-    REGISTER_PASSWORD = 2;
+    REGISTER = 1;
   }
 
   enum replyStatus{
