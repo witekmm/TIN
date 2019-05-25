@@ -85,10 +85,6 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
     //zaczynamy nasluchiwac
     else if(splitedCommand[1] == "waiting"){
       //czy stworzono socket
-      if(!Network::ServerOperation::getIsSocketNumberSet()) {
-        puts("Server not started!");
-        return true;
-      }
       //Czy jest pasywny
       if(!Network::ServerOperation::getIsSocketListening()){
         puts("Socket not passive!");

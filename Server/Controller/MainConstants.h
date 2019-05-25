@@ -3,6 +3,8 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -22,6 +24,8 @@ public:
   int getServerPort();
   int getMaxConnections();
   void checkFlag(int argc, char* argv[]);
+
+  bool checkIfNumber(string toCheck);
 };
 
 #endif
