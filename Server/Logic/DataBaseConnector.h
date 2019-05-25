@@ -3,9 +3,11 @@
 
 #include "../Database/Database.h"
 #include <string>
+#include <vector>
 
-class DataBaseConnector: public Database{
+class DataBaseConnector{
   Database database;
+public:
   DataBaseConnector();
   void sendGroupMessage(std::string content, std::string groupName, std::string login);
   void createGroup(std::string groupName, std::string login);
@@ -14,8 +16,8 @@ class DataBaseConnector: public Database{
   void acceptRequest(std::string groupName, std::string userName, std::string login);
   void declineRequest(std::string groupName, std::string userName, std::string login);
   void leaveGroup(std::string groupName, std::string login);
-  void logInUser(std::string login, std::string password, int ID);
-  void registerUser(std::string login, std::string password, int ID);
+  int logInUser(std::string login, std::string password);
+  int registerUser(std::string login, std::string password);
 
   void checkIfMessageExistAndSend(std::string login);
 

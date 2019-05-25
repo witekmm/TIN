@@ -30,8 +30,8 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
     return 3;
   }
   if(message.authorizationtype() == Message::ClientMessage::LOG_IN){
-    //jakas funkcja do logowania
-    return 0;
+    //return jakas funkcja do logowania
+
   }
   else if(message.authorizationtype() == Message::ClientMessage::REGISTER){
     //jakas funkcja do registerowania
