@@ -36,10 +36,6 @@
             this.textBoxPort = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBoxLogin = new System.Windows.Forms.TextBox();
-            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ConnectButton
@@ -47,7 +43,7 @@
             this.ConnectButton.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ConnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.ConnectButton.ForeColor = System.Drawing.Color.SeaGreen;
-            this.ConnectButton.Location = new System.Drawing.Point(160, 267);
+            this.ConnectButton.Location = new System.Drawing.Point(160, 212);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(108, 49);
             this.ConnectButton.TabIndex = 0;
@@ -113,51 +109,12 @@
             this.label5.Size = new System.Drawing.Size(100, 23);
             this.label5.TabIndex = 0;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(85, 182);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 22);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "Login:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label7.Location = new System.Drawing.Point(47, 221);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(103, 22);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "Password:";
-            // 
-            // textBoxLogin
-            // 
-            this.textBoxLogin.Location = new System.Drawing.Point(163, 186);
-            this.textBoxLogin.Name = "textBoxLogin";
-            this.textBoxLogin.Size = new System.Drawing.Size(145, 20);
-            this.textBoxLogin.TabIndex = 8;
-            // 
-            // textBoxPassword
-            // 
-            this.textBoxPassword.Location = new System.Drawing.Point(163, 223);
-            this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.PasswordChar = '*';
-            this.textBoxPassword.Size = new System.Drawing.Size(142, 20);
-            this.textBoxPassword.TabIndex = 9;
-            // 
             // ConnectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
-            this.ClientSize = new System.Drawing.Size(401, 366);
-            this.Controls.Add(this.textBoxPassword);
-            this.Controls.Add(this.textBoxLogin);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
+            this.ClientSize = new System.Drawing.Size(402, 293);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxPort);
@@ -172,6 +129,7 @@
             this.Name = "ConnectForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Connection";
+            this.Load += new System.EventHandler(this.ConnectForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,10 +145,6 @@
         private System.Windows.Forms.TextBox textBoxPort;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBoxLogin;
-        private System.Windows.Forms.TextBox textBoxPassword;
     }
 }
 

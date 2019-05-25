@@ -17,8 +17,7 @@ namespace Client
             String serverAddress;
             int port;
             IPAddress serverIP;
-            String login = textBoxLogin.Text,
-                password = textBoxPassword.Text;
+
             try
             {
                 serverAddress = textBoxIP.Text;
@@ -50,9 +49,9 @@ namespace Client
 
             try
             {
-                Client client = new Client(this, serverIP, port, login, password);
+                Client client = new Client(this, serverIP, port);
                 this.Enabled = false;
-                client.Show();
+                LoginForm loginForm = new LoginForm(client);
             }
             catch(SocketException)
             {
@@ -64,5 +63,9 @@ namespace Client
             }
         }
 
+        private void ConnectForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

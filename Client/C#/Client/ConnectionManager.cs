@@ -4,10 +4,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Google.Protobuf;
 
 namespace Client
 {
-    class ConnectionManager
+    public class ConnectionManager
     {
         private readonly IPAddress IP;
         private readonly int port;
@@ -108,6 +109,22 @@ namespace Client
                     client.Close();
                 }
             }
+        }
+        public Boolean CheckUser(String _login, String _password)
+        {
+            User user = new User
+            {
+                Login = _login,
+                Password = _password
+            };
+
+            byte[] bytes = user.ToByteArray();
+            //Send(bytes);
+
+            //byte[] answer = Receive();
+            if (_login.Equals("dupa") && _password.Equals("sraka")) 
+                return true;
+            return false;
         }
     }
 }
