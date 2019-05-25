@@ -10,6 +10,8 @@ class Client {
 
 public:
     void setLogin(string login);
+    string getLogin();
+
     bool isLogged();
 }
 

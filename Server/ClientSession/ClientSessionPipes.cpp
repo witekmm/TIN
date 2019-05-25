@@ -85,6 +85,18 @@ void ClientSessionPipes::readBytes(int socketNumber) {
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
+string ClientSessionPipes::getClientLogin(int socketNumber) {
+    vector<pair<Client, ClientSessionPipe>>::iterator it;
+
+    for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
+        if(it->second.getSocketNumber() == socketNumber) {
+            return it->first.getLogin();
+        }
+    }
+
+    return nullptr;
+}
+
 void ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
@@ -92,10 +104,19 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
             &clientSessionPipesMutex);
     }
 
-    string message = writeBytesBuffer[0];
+    string login = getClientLogin(socketNumber);
+    if(login == nullptr) return;
 
-    //TODO: send bytes
-    //TODO: delete message from writeBytesBuffer only when all bytes sent
+    vector<pair<string, string>>::iterator it;
+
+    for(it = writeBytesBuffer.begin(); it != writeBytesBuffer.end(); ++it) {
+        if(it->first.getLogin() == login) {
+            //TODO: send bytes
+            //TODO: delete message from writeBytesBuffer only when all bytes sent
+
+            break;
+        }
+    }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }

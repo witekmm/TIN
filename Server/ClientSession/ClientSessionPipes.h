@@ -28,6 +28,7 @@ class ClientSessionPipes {
 
     pair<Client, Message::ClientMessage> getWriteMessageBufferMessage();
 
+    string getClientLogin(int socketNumber);
 
 public:
     void readMessage(string login, Message::ClientMessage message);//for Logic, push new Message to send pipe
