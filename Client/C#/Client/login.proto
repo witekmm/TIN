@@ -1,8 +1,9 @@
 ﻿syntax = "proto3";
 
+package Client;
+
 message User
 {
     string login = 1;
-    string password = 2;
-    
+    string password = 2;    
 }

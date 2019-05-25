@@ -2,6 +2,8 @@
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
+using Google.Protobuf;
+
 
 namespace Client
 {
@@ -9,7 +11,7 @@ namespace Client
     {
         private readonly ConnectionManager connectionManager;
         private readonly ConnectForm connectForm;
-        private readonly String Login;
+        private readonly String login;
         private readonly String password; 
         private byte[] buffer;
 
@@ -19,15 +21,22 @@ namespace Client
             this.FormClosing += Client_FormClosing;
 
             connectionManager = new ConnectionManager(_IP, _port, this);
-            connectionManager.Connect();
+            //connectionManager.Connect();
 
             connectForm = _connectForm;
             IPValue.Text = _IP.ToString();
             PortValue.Text = _port.ToString();
             buffer = new byte[1024];
-            Login = _login;
+            login = _login;
             password = _password;
 
+            User user = new User
+            {
+                Login = _login,
+                Password = _password
+            };
+
+            byte[] bytes = user.ToByteArray();
         }
 
         public TextBox ChatText
@@ -56,7 +65,7 @@ namespace Client
             Close();
         }
 
-        private Boolean checkUser()
+        private Boolean CheckUser()
         {
             //connectionManager.Send();
 
@@ -67,5 +76,10 @@ namespace Client
 
             return false;
         }
-    }
+
+        private void Client_Load(object sender, EventArgs e)
+        {
+
+        }
+    } 
 }
