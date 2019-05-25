@@ -12,6 +12,10 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
     //Sprawdzam czy zalogowany
     return HandleAuthorizationType(message, clientId);
   }
+  else if(message.messagetype() == Message::ClientMessage::REPLY){
+    //Sprawdzam czy zalogowany
+    return HandleAuthorizationType(message, clientId);
+  }
   else {
     return 1;
   }
@@ -22,8 +26,7 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
   if(!message.authorizationtype()){
     return 2;
   }
-  std::string toCheck;
-  if(message.login()==toCheck || message.password()==toCheck){
+  if(message.login().empty() || message.password().empty()){
     return 3;
   }
   if(message.authorizationtype() == Message::ClientMessage::LOG_IN){
@@ -37,64 +40,64 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
 }
 
 
-int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId){
+int MessageHandler::HandleGroupType(Message::ClientMessage message){
   if(!message.groupactiontype()){
     return 2;
   }
   std::string toCheck;
   if(message.groupactiontype() == Message::ClientMessage::MESSAGE){
-    if(message.messagecontent() == toCheck || message.groupname() == toCheck){
+    if(message.messagecontent().empty() || message.groupname().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::CREATE){
-    if(message.groupname() == toCheck){
+    if(message.groupname().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DELETE){
-    if(message.groupname() == toCheck){
+    if(message.groupname().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::REQUEST){
-    if(message.groupname() == toCheck){
+    if(message.groupname().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::ACCEPT){
-    if(message.groupname()==toCheck || message.username()==toCheck){
+    if(message.groupname().empty() || message.username().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DECLINE){
-    if(message.groupname()==toCheck || message.username()==toCheck){
+    if(message.groupname().empty() || message.username().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::LEAVE){
-    if(message.groupname()==toCheck){
+    if(message.groupname().empty()){
       return 3;
     }
-    //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
+    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
     //funkcja
     return 0;
   }

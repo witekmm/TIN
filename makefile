@@ -3,13 +3,14 @@ NT = $(SV)Network/
 CT = $(SV)Controller/
 LG = $(SV)Logic/
 CS = $(SV)ClientSession/
+DB = $(SV)Database/
 MSG = Messages/
 NET = $(NT)NetLibs.h
 OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o
 PIPES = ClientSessionPipes.o
-LOGIC = MessageHandler.o
+LOGIC = MessageHandler.o DataBaseConnector.o Database.o
 CC = g++
-FLAGS = -lpthread -pthread -lprotobuf -std=c++11
+FLAGS = -lpthread -pthread -lprotobuf -std=c++11 -L/usr/lib -lmysqlcppconn
 
 all: server
 
@@ -18,6 +19,12 @@ server: $(OBJS) $(LOGIC)
 
 MessageHandler.o: $(LG)MessageHandler.cpp $(LG)MessageHandler.h
 	$(CC) -c $(LG)MessageHandler.cpp
+
+DataBaseConnector.o: $(LG)DataBaseConnector.cpp $(LG)DataBaseConnector.h
+	$(CC) -c $(LG)DataBaseConnector.cpp
+
+Database.o: $(DB)Database.cpp $(DB)Database.h
+	$(CC) -c $(DB)Database.cpp
 
 MainConstants.o: $(CT)MainConstants.h $(CT)MainConstants.cpp
 	$(CC) -c $(CT)MainConstants.cpp
