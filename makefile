@@ -9,15 +9,13 @@ OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o
 PIPES = ClientSessionPipes.o
 LOGIC = MessageHandler.o
 CC = g++
-FLAGS = -lpthread -pthread -lprotobuf -std=c++11
+FLAGS = -std=c++11 -pthread -I/usr/local/include
+LINKER_FLAGS = -L/usr/local/lib -lprotobuf -pthread
 
 all: server
 
-server: $(OBJS) $(LOGIC)
-	$(CC) $(OBJS) $(LOGIC) -o server $(FLAGS)
-
-MessageHandler.o: $(LG)MessageHandler.cpp $(LG)MessageHandler.h
-	$(CC) -c $(LG)MessageHandler.cpp
+server: $(OBJS)
+	$(CC) $(OBJS) -o server1 $(FLAGS) $(LINKER_FLAGS)
 
 MainConstants.o: $(CT)MainConstants.h $(CT)MainConstants.cpp
 	$(CC) -c $(CT)MainConstants.cpp

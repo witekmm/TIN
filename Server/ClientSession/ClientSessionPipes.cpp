@@ -16,12 +16,14 @@ bool ClientSessionPipes::isWriteMessagesBufferEmpty() {
 }
 
 
-Message::ClientMessage ClientSessionPipes::getWriteMessageBufferMessage() {
+pair<Client, Message::ClientMessage> ClientSessionPipes::getWriteMessageBufferMessage() {
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
         if(!it->second.isWriteMessagesBufferEmpty()) {
-            return it->second.getWriteMessageBufferMessage();
+            Message::ClientMessage message = it->second.getWriteMessageBufferMessage();   
+
+            return make_pair(it->first, message);
         }
     }
 }
@@ -46,13 +48,13 @@ Message::ClientMessage  ClientSessionPipes::writeMessage() {
     return message;
 }
 
-void readMessage(Message::ClientMessage message) {
+void readMessage(string login, Message::ClientMessage message) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     string bytes;
     message.SerializeToString(&bytes);
 
-    writeBytesBuffer.push_back(bytes);
+    writeBytesBuffer.push_back(make_pair(login, bytes));
 
     if(writeBytesBuffer.size() == 1) {
         pthread_cond_signal(&writeBytesBufferNotEmpty); 
@@ -83,7 +85,7 @@ void ClientSessionPipes::readBytes(int socketNumber) {
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
-void ClientSessionPipes::writeBytes() {
+void ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
         pthread_cond_wait(&writeBytesBufferNotEmpty, 
@@ -107,13 +109,12 @@ void ClientSessionPipes::createClientSession(int socketNumber) {
     pair<Client, ClientSessionPipe> session = 
         make_pair(client, clientSessionPipe);
 
-    
     clientSessionPipes.push_back(session);
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
-void  ClientSessionPipes::deleteClientSession(int socketNumber) {
+void ClientSessionPipes::deleteClientSession(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
