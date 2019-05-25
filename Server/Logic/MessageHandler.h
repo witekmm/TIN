@@ -2,6 +2,7 @@
 #define MESSAGE_HANDLER_H
 
 #include <string>
+#include <cstddef>
 #include "../../Messages/Message.pb.h"
 
 class MessageHandler{

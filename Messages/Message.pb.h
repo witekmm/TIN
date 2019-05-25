@@ -64,12 +64,13 @@ namespace Message {
 enum ClientMessage_messageTypes {
   ClientMessage_messageTypes_AUTHORIZATION = 0,
   ClientMessage_messageTypes_GROUP = 1,
+  ClientMessage_messageTypes_REPLY = 2,
   ClientMessage_messageTypes_ClientMessage_messageTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   ClientMessage_messageTypes_ClientMessage_messageTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_messageTypes_IsValid(int value);
 const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MIN = ClientMessage_messageTypes_AUTHORIZATION;
-const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MAX = ClientMessage_messageTypes_GROUP;
+const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MAX = ClientMessage_messageTypes_REPLY;
 const int ClientMessage_messageTypes_messageTypes_ARRAYSIZE = ClientMessage_messageTypes_messageTypes_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_messageTypes_descriptor();
@@ -110,14 +111,13 @@ inline bool ClientMessage_groupActionTypes_Parse(
 }
 enum ClientMessage_authorizationTypes {
   ClientMessage_authorizationTypes_LOG_IN = 0,
-  ClientMessage_authorizationTypes_REGISTER_LOGIN = 1,
-  ClientMessage_authorizationTypes_REGISTER_PASSWORD = 2,
+  ClientMessage_authorizationTypes_REGISTER = 1,
   ClientMessage_authorizationTypes_ClientMessage_authorizationTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   ClientMessage_authorizationTypes_ClientMessage_authorizationTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_authorizationTypes_IsValid(int value);
 const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_LOG_IN;
-const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_REGISTER_PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_REGISTER;
 const int ClientMessage_authorizationTypes_authorizationTypes_ARRAYSIZE = ClientMessage_authorizationTypes_authorizationTypes_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_authorizationTypes_descriptor();
@@ -251,6 +251,8 @@ class ClientMessage :
     ClientMessage_messageTypes_AUTHORIZATION;
   static const messageTypes GROUP =
     ClientMessage_messageTypes_GROUP;
+  static const messageTypes REPLY =
+    ClientMessage_messageTypes_REPLY;
   static inline bool messageTypes_IsValid(int value) {
     return ClientMessage_messageTypes_IsValid(value);
   }
@@ -311,10 +313,8 @@ class ClientMessage :
   typedef ClientMessage_authorizationTypes authorizationTypes;
   static const authorizationTypes LOG_IN =
     ClientMessage_authorizationTypes_LOG_IN;
-  static const authorizationTypes REGISTER_LOGIN =
-    ClientMessage_authorizationTypes_REGISTER_LOGIN;
-  static const authorizationTypes REGISTER_PASSWORD =
-    ClientMessage_authorizationTypes_REGISTER_PASSWORD;
+  static const authorizationTypes REGISTER =
+    ClientMessage_authorizationTypes_REGISTER;
   static inline bool authorizationTypes_IsValid(int value) {
     return ClientMessage_authorizationTypes_IsValid(value);
   }

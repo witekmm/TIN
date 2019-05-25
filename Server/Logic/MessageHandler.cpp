@@ -2,7 +2,7 @@
 #include "../../Messages/Message.pb.h"
 
 int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
-  if(!message.has_messagetype()){
+  if(!message.messagetype()){
     return 1;
   }
   if(message.messagetype() == Message::ClientMessage::GROUP){
@@ -12,14 +12,18 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
     //Sprawdzam czy zalogowany
     return HandleAuthorizationType(message, clientId);
   }
+  else {
+    return 1;
+  }
 }
 
 
 int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int clientId){
-  if(!message.has_authorizationtype()){
+  if(!message.authorizationtype()){
     return 2;
   }
-  if(!message.has_login() || !message.has_password()){
+  std::string toCheck;
+  if(message.login()==toCheck || message.password()==toCheck){
     return 3;
   }
   if(message.authorizationtype() == Message::ClientMessage::LOG_IN){
@@ -34,11 +38,12 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
 
 
 int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId){
-  if(!message.has_groupactiontype()){
+  if(!message.groupactiontype()){
     return 2;
   }
+  std::string toCheck;
   if(message.groupactiontype() == Message::ClientMessage::MESSAGE){
-    if(!message.has_messagecontent() || !message.has_groupname()){
+    if(message.messagecontent() == toCheck || message.groupname() == toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
@@ -46,7 +51,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::CREATE){
-    if(!message.has_groupname()){
+    if(message.groupname() == toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
@@ -54,7 +59,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DELETE){
-    if(!message.has_groupname()){
+    if(message.groupname() == toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
@@ -62,7 +67,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::REQUEST){
-    if(!message.has_groupname()){
+    if(message.groupname() == toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
@@ -70,7 +75,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::ACCEPT){
-    if(!message.has_groupname() || !message.has_username()){
+    if(message.groupname()==toCheck || message.username()==toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
@@ -78,7 +83,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DECLINE){
-    if(!message.has_groupname() || !message.has_username()){
+    if(message.groupname()==toCheck || message.username()==toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
@@ -86,7 +91,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::LEAVE){
-    if(!message.has_groupname()){
+    if(message.groupname()==toCheck){
       return 3;
     }
     //pobierz ID uytkownika z ClientSessionPipes i wstaw do funkcji
