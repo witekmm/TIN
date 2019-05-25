@@ -29,7 +29,7 @@ pair<Client, Message::ClientMessage> ClientSessionPipes::getWriteMessageBufferMe
 }
 
 bool ClientSessionPipes::isWriteBytesBufferEmpty() {
-    return writeBytesCounter == 0;
+    return writeBytesBuffer.empty();
 }
 
 Message::ClientMessage  ClientSessionPipes::writeMessage() {
@@ -97,6 +97,10 @@ string ClientSessionPipes::getClientLogin(int socketNumber) {
     return nullptr;
 }
 
+int ClientSessionPipes::sendBytes(int socketNumber, string bytes) {
+    //TODO: send bytes
+}
+
 void ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
@@ -111,9 +115,11 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
 
     for(it = writeBytesBuffer.begin(); it != writeBytesBuffer.end(); ++it) {
         if(it->first.getLogin() == login) {
-            //TODO: send bytes
-            //TODO: delete message from writeBytesBuffer only when all bytes sent
-
+            int result = sendBytes(socketNumber, it->second);
+            if(result != 0) {
+                writeBytesBuffer.erase(it);
+            }
+            
             break;
         }
     }
@@ -135,6 +141,17 @@ void ClientSessionPipes::createClientSession(int socketNumber) {
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
+void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
+    string login = getClientLogin(socketNumber);
+    if(login == nullptr) return;
+
+    writeBytesBuffer.erase(std::remove_if(
+    writeBytesBuffer.begin(), writeBytesBuffer.end(),
+    [](const pair<string, string>& el) { 
+        return el.first.getLogin() == login;
+    }), writeBytesBuffer.end());
+}
+
 void ClientSessionPipes::deleteClientSession(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
@@ -142,7 +159,7 @@ void ClientSessionPipes::deleteClientSession(int socketNumber) {
         if(it->second.getSocketNumber() == socketNumber) {
 
             writeMessagesCounter -= it->second.getWriteMessagesCount();
-            writeBytesCounter -= it->second.getWriteBytesCount();
+            deleteWriteBuffers(socketNumber);
 
             clientSessionPipes.erase(it);
         }
