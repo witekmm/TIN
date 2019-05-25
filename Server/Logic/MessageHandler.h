@@ -13,8 +13,8 @@ public:
   //check message type
   int HandleMessage(Message::ClientMessage message, int clientId);
   //check action type
-  int HandleAuthorizationType(Message::ClientMessage message, int clientId);
-  int HandleGroupType(Message::ClientMessage message, int clientId);
+  int HandleAuthorizationType(Message::ClientMessage message);
+  int HandleGroupType(Message::ClientMessage message);
   //CLICommandHandler
   //will be there
 };

@@ -2,10 +2,11 @@
 #define DATA_BASE_CONNECTOR_H
 
 #include "../Database/Database.h"
+#include "RepliesCreator.h"
 #include <string>
 #include <vector>
 
-class DataBaseConnector{
+class DataBaseConnector: public Reply{
   Database database;
 public:
   DataBaseConnector();
@@ -19,7 +20,7 @@ public:
   int logInUser(std::string login, std::string password);
   int registerUser(std::string login, std::string password);
 
-  void checkIfMessageExistAndSend(std::string login);
+  bool checkIfMessageExistAndSend(std::string login);
 
   int rootDeleteGroup(std::string groupName);
   int rootDeleteUser(std::string login);

@@ -8,18 +8,25 @@ MSG = Messages/
 NET = $(NT)NetLibs.h
 OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o
 PIPES = ClientSessionPipes.o ClientSessionPipe.o Client.o BytesMessage.o
-LOGIC = MessageHandler.o DataBaseConnector.o Database.o
+LOGIC = MessageHandler.o DataBaseConnector.o Database.o RepliesCreator.o
 CC = g++
 FLAGS = -std=c++11 -pthread -I/usr/local/include
-LINKER_FLAGS = -L/usr/local/lib -lprotobuf -pthread
+LINKER_FLAGS = -L/usr/local/lib -lprotobuf
+DB_FLAGS = -L/usr/lib -lmysqlcppconn
 
 all: server
 
-server: $(OBJS) $(PIPES)
-	$(CC) $(OBJS) $(PIPES) -o server1 $(FLAGS) $(LINKER_FLAGS)
+server: $(OBJS) $(PIPES) $(LOGIC)
+	$(CC) $(OBJS) $(PIPES) $(LOGIC) -o server1 $(FLAGS) $(LINKER_FLAGS) $(DB_FLAGS)
 
 DataBaseConnector.o: $(LG)DataBaseConnector.cpp $(LG)DataBaseConnector.h
 	$(CC) -c $(LG)DataBaseConnector.cpp
+
+MessageHandler.o: $(LG)MessageHandler.cpp $(LG)MessageHandler.h
+	$(CC) -c $(LG)MessageHandler.cpp
+
+RepliesCreator.o: $(LG)RepliesCreator.cpp $(LG)RepliesCreator.h
+	$(CC) -c $(LG)RepliesCreator.cpp
 
 Database.o: $(DB)Database.cpp $(DB)Database.h
 	$(CC) -c $(DB)Database.cpp

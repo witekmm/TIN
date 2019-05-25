@@ -3,7 +3,7 @@
 DataBaseConnector::DataBaseConnector()
     : database(){}
 
-void sendGroupMessage(std::string content, std::string groupName, std::string login)
+void DataBaseConnector::sendGroupMessage(std::string content, std::string groupName, std::string login)
 {
   if(!this->database.isGroup(groupName)){
     //wiadomosc
@@ -17,7 +17,7 @@ void sendGroupMessage(std::string content, std::string groupName, std::string lo
   //wiadomosc
 }
 
-void createGroup(std::string groupName, std::string login)
+void DataBaseConnector::createGroup(std::string groupName, std::string login)
 {
   if(this->database.isGroup(groupName)){
     //wiadomosc
@@ -27,7 +27,7 @@ void createGroup(std::string groupName, std::string login)
   //wiadomosc
 }
 
-void deleteGroup(std::string groupName, std::string login)
+void DataBaseConnector::deleteGroup(std::string groupName, std::string login)
 {
   if(!this->database.isGroup(groupName)){
     //wiadomosc
@@ -42,7 +42,7 @@ void deleteGroup(std::string groupName, std::string login)
   //wiadomosc
 }
 
-void requestToGroup(std::string groupName, std::string login)
+void DataBaseConnector::requestToGroup(std::string groupName, std::string login)
 {
   if(!this->database.isGroup(groupName)){
     //wiadomosc
@@ -56,7 +56,7 @@ void requestToGroup(std::string groupName, std::string login)
   //database.addMsgToUser(groupName, login);
 }
 
-void acceptRequest(std::string groupName, std::string userName, std::string login)
+void DataBaseConnector::acceptRequest(std::string groupName, std::string userName, std::string login)
 {
   if(!this->database.isGroup(groupName)){
     //wiadomosc
@@ -71,7 +71,7 @@ void acceptRequest(std::string groupName, std::string userName, std::string logi
   this->database.addUserToGroup(groupName , userName);
 }
 
-void declineRequest(std::string groupName, std::string userName, std::string login)
+void DataBaseConnector::declineRequest(std::string groupName, std::string userName, std::string login)
 {
   if(!this->database.isGroup(groupName)){
     //wiadomosc
@@ -86,7 +86,7 @@ void declineRequest(std::string groupName, std::string userName, std::string log
   this->database.addUserToGroup(groupName , userName);
 }
 
-void leaveGroup(std::string groupName, std::string login)
+void DataBaseConnector::leaveGroup(std::string groupName, std::string login)
 {
   if(!this->database.isGroup(groupName)){
     //wiadomosc
@@ -105,13 +105,13 @@ void leaveGroup(std::string groupName, std::string login)
   this->database.removeUserFromGroup(groupName, login);
 }
 
-int logInUser(std::string login, std::string password)
+int DataBaseConnector::logInUser(std::string login, std::string password)
 {
   if(!this->database.isUser(login)){
     //wiadomosc
     return -1;
   }
-  std::string temp = getUserPassword(login);
+  std::string temp = this->database.getUserPassword(login);
   if(password!=temp){
     //wiadomosc
     return -2;
@@ -121,7 +121,7 @@ int logInUser(std::string login, std::string password)
   return 0;
 }
 
-int registerUser(std::string login, std::string password)
+int DataBaseConnector::registerUser(std::string login, std::string password)
 {
   if(this->database.isUser(login)){
     //wiadomosc
@@ -132,11 +132,11 @@ int registerUser(std::string login, std::string password)
   return 0;
 }
 
-void checkIfMessageExistAndSend(std::string login){
+bool DataBaseConnector::checkIfMessageExistAndSend(std::string login){
   return this->database.hasMsg(login);
 }
 
-int rootDeleteGroup(std::string groupName){
+int DataBaseConnector::rootDeleteGroup(std::string groupName){
   if(!this->database.isGroup(groupName)){
     return -1;
   }
@@ -144,7 +144,7 @@ int rootDeleteGroup(std::string groupName){
   return 0;
 }
 
-int rootDeleteUser(std::string login){
+int DataBaseConnector::rootDeleteUser(std::string login){
   if(!this->database.isUser(login)){
     return -1;
   }
@@ -152,7 +152,7 @@ int rootDeleteUser(std::string login){
   return 0;
 }
 
-int rootAddUser(std::string login, std::string password){
+int DataBaseConnector::rootAddUser(std::string login, std::string password){
   if(this->database.isUser(login)){
     return -1;
   }
@@ -160,8 +160,8 @@ int rootAddUser(std::string login, std::string password){
   return 0;
 }
 
-int rootAddGroup(std::string groupName, std::string administrator){
-  if(!this->database.isUser(login)){
+int DataBaseConnector::rootAddGroup(std::string groupName, std::string administrator){
+  if(!this->database.isUser(administrator)){
     return -1;
   }
   if(this->database.isGroup(groupName)){

@@ -6,23 +6,22 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
     return 1;
   }
   if(message.messagetype() == Message::ClientMessage::GROUP){
-    return HandleGroupType(message, clientId);
+    return HandleGroupType(message);
   }
   else if(message.messagetype() == Message::ClientMessage::AUTHORIZATION){
     //Sprawdzam czy zalogowany
-    return HandleAuthorizationType(message, clientId);
+    return HandleAuthorizationType(message);
   }
-  else if(message.messagetype() == Message::ClientMessage::REPLY){
-    //Sprawdzam czy zalogowany
-    return HandleAuthorizationType(message, clientId);
-  }
+  /*else if(message.messagetype() == Message::ClientMessage::REPLY){
+
+  }*/
   else {
     return 1;
   }
 }
 
 
-int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int clientId){
+int MessageHandler::HandleAuthorizationType(Message::ClientMessage message){
   if(!message.authorizationtype()){
     return 2;
   }
