@@ -9,9 +9,11 @@ namespace Client
     {
         private readonly ConnectionManager connectionManager;
         private readonly ConnectForm connectForm;
+        private readonly String Login;
+        private readonly String password; 
         private byte[] buffer;
 
-        public Client(ConnectForm _connectForm, IPAddress _IP, int _port)
+        public Client(ConnectForm _connectForm, IPAddress _IP, int _port, String _login, String _password)
         {
             InitializeComponent();
             this.FormClosing += Client_FormClosing;
@@ -22,7 +24,10 @@ namespace Client
             connectForm = _connectForm;
             IPValue.Text = _IP.ToString();
             PortValue.Text = _port.ToString();
-            buffer = new byte[1000];
+            buffer = new byte[1024];
+            Login = _login;
+            password = _password;
+
         }
 
         public TextBox ChatText
@@ -49,6 +54,18 @@ namespace Client
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private Boolean checkUser()
+        {
+            //connectionManager.Send();
+
+            //connectionManager.Receive();
+            //if()
+            //return true;
+
+
+            return false;
         }
     }
 }

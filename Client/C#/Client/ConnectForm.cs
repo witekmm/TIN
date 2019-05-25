@@ -17,7 +17,8 @@ namespace Client
             String serverAddress;
             int port;
             IPAddress serverIP;
-
+            String login = textBoxLogin.Text,
+                password = textBoxPassword.Text;
             try
             {
                 serverAddress = textBoxIP.Text;
@@ -49,7 +50,7 @@ namespace Client
 
             try
             {
-                Client client = new Client(this, serverIP, port);
+                Client client = new Client(this, serverIP, port, login, password);
                 this.Enabled = false;
                 client.Show();
             }
@@ -62,5 +63,6 @@ namespace Client
                 MessageBox.Show("Connection: " + ex.Message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
     }
 }
