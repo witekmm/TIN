@@ -20,25 +20,14 @@ Message::ClientMessage ClientSessionPipes::getWriteMessageBufferMessage() {
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
-        if(!it->isWriteMessagesBufferEmpty()) {
-            return it->getWriteMessageBufferMessage();
+        if(!it->second.isWriteMessagesBufferEmpty()) {
+            return it->second.getWriteMessageBufferMessage();
         }
     }
 }
-
 
 bool ClientSessionPipes::isWriteBytesBufferEmpty() {
     return writeBytesCounter == 0;
-}
-
-string ClientSessionPipes::getWriteBytesBufferMessage() {
-    vector<pair<Client, ClientSessionPipe>>::iterator it;
-
-    for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
-        if(!it->isWriteBytesBufferEmpty()) {
-            return it->getWriteBytesBufferMessage();
-        }
-    }
 }
 
 Message::ClientMessage  ClientSessionPipes::writeMessage() {
@@ -57,36 +46,40 @@ Message::ClientMessage  ClientSessionPipes::writeMessage() {
     return message;
 }
 
-void  ClientSessionPipes::readBytes(int socketNumber) {
+void ClientSessionPipes::readBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
-        if(it->getSocketNumber() == socketNumber) {
-            return it->readBytes();
+        if(it->second.getSocketNumber() == socketNumber) {
+            return it->second.readBytes();
         }
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
-string  ClientSessionPipes::writeBytes() {
+void ClientSessionPipes::writeBytes() {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
         pthread_cond_wait(&writeBytesBufferNotEmpty, 
             &clientSessionPipesMutex);
     }
 
-    string bytes = getWriteBytesBufferMessage();
+    vector<pair<Client, ClientSessionPipe>>::iterator it;
 
-    --writeBytesCounter;
+    for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
+        if(!it->second.isWriteBytesBufferEmpty()) {
+            it->second.writeBytes();
+            break;
+        }
+    }
+
     pthread_mutex_unlock(&clientSessionPipesMutex);
-
-    return bytes;
 }
 
-void  ClientSessionPipes::createClientSession(int socketNumber) {
+void ClientSessionPipes::createClientSession(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     //TODO: create Client and ClientSessionPipe associated with socketNumber
@@ -99,10 +92,10 @@ void  ClientSessionPipes::deleteClientSession(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
-        if(it->getSocketNumber() == socketNumber) {
+        if(it->second.getSocketNumber() == socketNumber) {
 
-            writeMessagesCounter -= it->getWriteMessagesCount();
-            writeBytesCounter -= it->getWriteBytesCount();
+            writeMessagesCounter -= it->second.getWriteMessagesCount();
+            writeBytesCounter -= it->second.getWriteBytesCount();
 
             clientSessionPipes.erase(it);
         }

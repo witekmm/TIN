@@ -29,14 +29,12 @@ class ClientSessionPipes {
     Message::ClientMessage getWriteMessageBufferMessage();
 
     bool isWriteBytesBufferEmpty();
-    string getWriteBytesBufferMessage();
 
 public:
     Message::ClientMessage writeMessage();//for Logic, get Message and handle it
 
     void readBytes(int socketNumber);//for Network, read bytes from socket
-
-    string writeBytes(); //for Network, bytes to send
+    void writeBytes(); //for Network, bytes to send
 
     void createClientSession(int socketNumber);
     void deleteClientSession(int socketNumber);
