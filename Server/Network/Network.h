@@ -33,10 +33,11 @@ public:
   void prepareLists();
   void addSocket(int socketNumber);
   int closeSocket(int socketNumber);
+  int closeSocketWithBlocking(int socketNumber)
   void clearSocket(int socketNumber);
   void updateFdmax();
   bool checkIfSocket(int socketNumber);
-  
+
   int startServer();
   void stopWaiting();
   void closeServer();

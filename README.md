@@ -1,9 +1,13 @@
 # TIN - Czat grupowy
 
 Michał Witkowski
+
 Jakub Szachewicz
+
 Wojtek Kurek
+
 Mateusz Krawczyk
+
 
 Uruchomienie serwera:
 ```
