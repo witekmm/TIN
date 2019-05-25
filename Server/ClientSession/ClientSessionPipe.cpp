@@ -1,20 +1,20 @@
 #include <pthread.h>
 #include <vector>
 
-#include "NetLibs.h"
+#include "../Network/NetLibs.h"
 #include "../../Messages/Message.pb.h"
 
 #include "ClientSessionPipe.h"
 
 using namespace std;
 
-ClientSessionPipe(int socket) {
+ClientSessionPipe::ClientSessionPipe(int socket) {
     socketNumber = socket;
     numberOfBytesToRead = MESSAGE_SIZE_BYTES_NUMBER;
     bytesMessageSizeRead = false;
 }
 
-void clearReadBytesVariables() {
+void ClientSessionPipe::clearReadBytesVariables() {
     numberOfBytesToRead = MESSAGE_SIZE_BYTES_NUMBER;
     bytesMessageSizeRead = false;
     readBytesBuffer.clear();
@@ -33,22 +33,25 @@ bool ClientSessionPipe::isWriteMessagesBufferEmpty() {
 }
 
 Message::ClientMessage ClientSessionPipe::getWriteMessageBufferMessage() {
-    return writeMessagesBuffer.pop_back();
+    Message::ClientMessage message = writeMessagesBuffer.back();
+    writeMessagesBuffer.pop_back();
+
+    return message;
 }
 
-void addWriteMessage(Message::ClientMessage message) {
+void ClientSessionPipe::addWriteMessage(Message::ClientMessage message) {
     writeMessagesBuffer.push_back(message);
 }
 
-int readBytesSize() {
+int ClientSessionPipe::readBytesSize() {
     char *tmp = new char[numberOfBytesToRead];
 
-    int bytesReceived = recv(this->socketNumber, &temp, 
+    int bytesReceived = recv(this->socketNumber, &tmp, 
         numberOfBytesToRead, MSG_DONTWAIT);
 
     if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
         bytesMessageSizeRead = true;
-        numberOfBytesToRead = atoi(temp);
+        numberOfBytesToRead = atoi(tmp);
 
         delete [] tmp;
         return 0;
@@ -75,10 +78,10 @@ int readBytesSize() {
     }
 }
 
-int readBytesMessage() {
+int ClientSessionPipe::readBytesMessage() {
     char *tmp = new char[numberOfBytesToRead];
 
-    int bytesReceived = recv(this->socketNumber, &temp, 
+    int bytesReceived = recv(this->socketNumber, &tmp, 
         numberOfBytesToRead, MSG_DONTWAIT);
 
 

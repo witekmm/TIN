@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <vector>
 
-#include "NetLibs.h"
+#include "../Network/NetLibs.h"
 #include "../../Messages/Message.pb.h"
 
 using namespace std;
@@ -24,6 +24,7 @@ class ClientSessionPipe {
     void addWriteMessage(Message::ClientMessage);
 
     int readBytesSize();
+    int readBytesMessage();
 
 public:
     ClientSessionPipe(int socketNumber);
@@ -35,6 +36,6 @@ public:
     Message::ClientMessage getWriteMessageBufferMessage();
 
     int readBytes();
-}
+};
 
 #endif

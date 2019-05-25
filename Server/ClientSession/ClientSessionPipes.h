@@ -36,7 +36,7 @@ class ClientSessionPipes {
 
 public:
     void readMessage(string login, Message::ClientMessage message);//for Logic, push new Message to send pipe
-    Message::ClientMessage writeMessage();//for Logic, get Message and handle it
+    pair<Client, Message::ClientMessage> writeMessage();//for Logic, get Message and handle it
 
     void readBytes(int socketNumber);//for Network, read bytes from socket
     void writeBytes(int socketNumber); //for Network, send bytes
@@ -44,6 +44,6 @@ public:
     void createClientSession(int socketNumber);
     void deleteClientSession(int socketNumber);
 
-}
+};
 
 #endif

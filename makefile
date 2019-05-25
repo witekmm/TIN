@@ -6,14 +6,10 @@ CS = $(SV)ClientSession/
 DB = $(SV)Database/
 MSG = Messages/
 NET = $(NT)NetLibs.h
-OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o
+OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o ClientSessionPipes.o ClientSessionPipe.o Client.o
 PIPES = ClientSessionPipes.o
 LOGIC = MessageHandler.o DataBaseConnector.o Database.o
 CC = g++
-<<<<<<< HEAD
-=======
-
->>>>>>> 6b6554a558efc62dcefe53b29f498f1406b36c71
 FLAGS = -std=c++11 -pthread -I/usr/local/include
 LINKER_FLAGS = -L/usr/local/lib -lprotobuf -pthread
 
@@ -40,8 +36,14 @@ CLI.o: $(CT)CLI.h	$(CT)CLI.cpp $(NT)Network.h $(NT)ServerOperations.h
 ServerOperations.o: $(NET) $(NT)ServerOperations.h $(NT)ServerOperations.cpp
 	$(CC) -c $(NT)ServerOperations.cpp
 
-ClientSessionPipes.o: $(CS)ClientSessionPipes.cpp $(CS)ClientSessionPipes.h
+ClientSessionPipes.o: $(NET) $(CS)ClientSessionPipes.cpp $(CS)ClientSessionPipes.h $(CS)ClientSessionPipes.h $(CS)Client.h
 	$(CC) -c $(CS)ClientSessionPipes.cpp
+	
+ClientSessionPipe.o: $(NET) $(CS)ClientSessionPipe.cpp $(CS)ClientSessionPipe.h
+	$(CC) -c $(CS)ClientSessionPipe.cpp
+
+Client.o: $(CS)Client.cpp $(CS)Client.h
+	$(CC) -c $(CS)Client.cpp
 
 main.o: $(SV)main.cpp
 	$(CC) -c $(SV)main.cpp

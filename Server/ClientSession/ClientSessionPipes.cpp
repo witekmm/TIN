@@ -32,14 +32,14 @@ bool ClientSessionPipes::isWriteBytesBufferEmpty() {
     return writeBytesBuffer.empty();
 }
 
-Message::ClientMessage  ClientSessionPipes::writeMessage() {
+pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteMessagesBufferEmpty()) {
         pthread_cond_wait(&writeMessagesBufferNotEmpty, 
             &clientSessionPipesMutex);
     }
 
-    Message::ClientMessage message = 
+    pair<Client, Message::ClientMessage> message = 
         getWriteMessageBufferMessage();
 
     --writeMessagesCounter;
@@ -48,7 +48,7 @@ Message::ClientMessage  ClientSessionPipes::writeMessage() {
     return message;
 }
 
-void readMessage(string login, Message::ClientMessage message) {
+void ClientSessionPipes::readMessage(string login, Message::ClientMessage message) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     string bytes;
@@ -94,7 +94,7 @@ string ClientSessionPipes::getClientLogin(int socketNumber) {
         }
     }
 
-    return nullptr;
+    return string();
 }
 
 int ClientSessionPipes::sendBytes(int socketNumber, string bytes) {
@@ -109,12 +109,12 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
     }
 
     string login = getClientLogin(socketNumber);
-    if(login == nullptr) return;
+    if(login.empty()) return;
 
     vector<pair<string, string>>::iterator it;
 
     for(it = writeBytesBuffer.begin(); it != writeBytesBuffer.end(); ++it) {
-        if(it->first.getLogin() == login) {
+        if(it->first == login) {
             int result = sendBytes(socketNumber, it->second);
             if(result != 0) {
                 writeBytesBuffer.erase(it);
@@ -143,17 +143,18 @@ void ClientSessionPipes::createClientSession(int socketNumber) {
 
 void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
     string login = getClientLogin(socketNumber);
-    if(login == nullptr) return;
+    if(login.empty()) return;
 
     writeBytesBuffer.erase(std::remove_if(
     writeBytesBuffer.begin(), writeBytesBuffer.end(),
-    [](const pair<string, string>& el) { 
-        return el.first.getLogin() == login;
+    [&login](const pair<string, string>& el) { 
+        return el.first == login;
     }), writeBytesBuffer.end());
 }
 
 void ClientSessionPipes::deleteClientSession(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
+    vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
         if(it->second.getSocketNumber() == socketNumber) {

@@ -13,6 +13,6 @@ public:
     string getLogin();
 
     bool isLogged();
-}
+};
 
 #endif
