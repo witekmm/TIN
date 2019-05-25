@@ -21,9 +21,8 @@ class ClientSessionPipes {
     pthread_cond_t writeMessagesBufferNotEmpty;
     unsigned int writeMessagesCounter;
 
+    vector<string> writeBytesBuffer;
     pthread_cond_t writeBytesBufferNotEmpty;
-    unsigned int writeBytesCounter;
-
 
     bool isWriteMessagesBufferEmpty();
     Message::ClientMessage getWriteMessageBufferMessage();
@@ -31,10 +30,11 @@ class ClientSessionPipes {
     bool isWriteBytesBufferEmpty();
 
 public:
+    void readMessage(Message::ClientMessage);//for Logic, push new Message to send pipe
     Message::ClientMessage writeMessage();//for Logic, get Message and handle it
 
     void readBytes(int socketNumber);//for Network, read bytes from socket
-    void writeBytes(); //for Network, bytes to send
+    void writeBytes(); //for Network, send bytes
 
     void createClientSession(int socketNumber);
     void deleteClientSession(int socketNumber);
