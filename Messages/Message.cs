@@ -24,28 +24,26 @@ namespace Message {
     static MessageReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg1NZXNzYWdlLnByb3RvEgdNZXNzYWdlIoYGCg1DbGllbnRNZXNzYWdlEjgK",
+            "Cg1NZXNzYWdlLnByb3RvEgdNZXNzYWdlIpgFCg1DbGllbnRNZXNzYWdlEjgK",
             "C21lc3NhZ2VUeXBlGAEgASgOMiMuTWVzc2FnZS5DbGllbnRNZXNzYWdlLm1l",
             "c3NhZ2VUeXBlcxJACg9ncm91cEFjdGlvblR5cGUYAiABKA4yJy5NZXNzYWdl",
             "LkNsaWVudE1lc3NhZ2UuZ3JvdXBBY3Rpb25UeXBlcxJEChFhdXRob3JpemF0",
             "aW9uVHlwZRgDIAEoDjIpLk1lc3NhZ2UuQ2xpZW50TWVzc2FnZS5hdXRob3Jp",
-            "emF0aW9uVHlwZXMSOAoLY29tbWFuZFR5cGUYBCABKA4yIy5NZXNzYWdlLkNs",
-            "aWVudE1lc3NhZ2UuY29tbWFuZFR5cGVzEg0KBWxvZ2luGAUgASgJEhAKCHBh",
-            "c3N3b3JkGAYgASgJEhEKCWdyb3VwTmFtZRgHIAEoCRIQCgh1c2VyTmFtZRgI",
-            "IAEoCRIWCg5tZXNzYWdlQ29udGVudBgJIAEoCRIxCgVyZXBseRgKIAEoDjIi",
-            "Lk1lc3NhZ2UuQ2xpZW50TWVzc2FnZS5yZXBseVN0YXR1cxIUCgxyZXBseUNv",
-            "bnRlbnQYCyABKAkSDgoGZ3JvdXBzGAwgAygJIjkKDG1lc3NhZ2VUeXBlcxIR",
-            "Cg1BVVRIT1JJWkFUSU9OEAASCwoHQ09NTUFORBABEgkKBUdST1VQEAIiaAoQ",
-            "Z3JvdXBBY3Rpb25UeXBlcxILCgdNRVNTQUdFEAASCgoGQ1JFQVRFEAESCgoG",
-            "REVMRVRFEAISCwoHUkVRVUVTVBADEgoKBkFDQ0VQVBAEEgsKB0RFQ0xJTkUQ",
-            "BRIJCgVMRUFWRRAGIksKEmF1dGhvcml6YXRpb25UeXBlcxIKCgZMT0dfSU4Q",
-            "ABISCg5SRUdJU1RFUl9MT0dJThABEhUKEVJFR0lTVEVSX1BBU1NXT1JEEAIi",
-            "JQoMY29tbWFuZFR5cGVzEggKBEVYSVQQABILCgdMT0dfT1VUEAEiKQoLcmVw",
-            "bHlTdGF0dXMSDAoIUE9TSVRJVkUQABIMCghORUdBVElWRRABYgZwcm90bzM="));
+            "emF0aW9uVHlwZXMSDQoFbG9naW4YBCABKAkSEAoIcGFzc3dvcmQYBSABKAkS",
+            "EQoJZ3JvdXBOYW1lGAYgASgJEhAKCHVzZXJOYW1lGAcgASgJEhYKDm1lc3Nh",
+            "Z2VDb250ZW50GAggASgJEjEKBXJlcGx5GAkgASgOMiIuTWVzc2FnZS5DbGll",
+            "bnRNZXNzYWdlLnJlcGx5U3RhdHVzEhQKDHJlcGx5Q29udGVudBgKIAEoCRIO",
+            "CgZncm91cHMYCyADKAkiLAoMbWVzc2FnZVR5cGVzEhEKDUFVVEhPUklaQVRJ",
+            "T04QABIJCgVHUk9VUBABImgKEGdyb3VwQWN0aW9uVHlwZXMSCwoHTUVTU0FH",
+            "RRAAEgoKBkNSRUFURRABEgoKBkRFTEVURRACEgsKB1JFUVVFU1QQAxIKCgZB",
+            "Q0NFUFQQBBILCgdERUNMSU5FEAUSCQoFTEVBVkUQBiJLChJhdXRob3JpemF0",
+            "aW9uVHlwZXMSCgoGTE9HX0lOEAASEgoOUkVHSVNURVJfTE9HSU4QARIVChFS",
+            "RUdJU1RFUl9QQVNTV09SRBACIikKC3JlcGx5U3RhdHVzEgwKCFBPU0lUSVZF",
+            "EAASDAoITkVHQVRJVkUQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Message.ClientMessage), global::Message.ClientMessage.Parser, new[]{ "MessageType", "GroupActionType", "AuthorizationType", "CommandType", "Login", "Password", "GroupName", "UserName", "MessageContent", "Reply", "ReplyContent", "Groups" }, null, new[]{ typeof(global::Message.ClientMessage.Types.messageTypes), typeof(global::Message.ClientMessage.Types.groupActionTypes), typeof(global::Message.ClientMessage.Types.authorizationTypes), typeof(global::Message.ClientMessage.Types.commandTypes), typeof(global::Message.ClientMessage.Types.replyStatus) }, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Message.ClientMessage), global::Message.ClientMessage.Parser, new[]{ "MessageType", "GroupActionType", "AuthorizationType", "Login", "Password", "GroupName", "UserName", "MessageContent", "Reply", "ReplyContent", "Groups" }, null, new[]{ typeof(global::Message.ClientMessage.Types.messageTypes), typeof(global::Message.ClientMessage.Types.groupActionTypes), typeof(global::Message.ClientMessage.Types.authorizationTypes), typeof(global::Message.ClientMessage.Types.replyStatus) }, null)
           }));
     }
     #endregion
@@ -80,7 +78,6 @@ namespace Message {
       messageType_ = other.messageType_;
       groupActionType_ = other.groupActionType_;
       authorizationType_ = other.authorizationType_;
-      commandType_ = other.commandType_;
       login_ = other.login_;
       password_ = other.password_;
       groupName_ = other.groupName_;
@@ -130,19 +127,8 @@ namespace Message {
       }
     }
 
-    /// <summary>Field number for the "commandType" field.</summary>
-    public const int CommandTypeFieldNumber = 4;
-    private global::Message.ClientMessage.Types.commandTypes commandType_ = 0;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Message.ClientMessage.Types.commandTypes CommandType {
-      get { return commandType_; }
-      set {
-        commandType_ = value;
-      }
-    }
-
     /// <summary>Field number for the "login" field.</summary>
-    public const int LoginFieldNumber = 5;
+    public const int LoginFieldNumber = 4;
     private string login_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Login {
@@ -153,7 +139,7 @@ namespace Message {
     }
 
     /// <summary>Field number for the "password" field.</summary>
-    public const int PasswordFieldNumber = 6;
+    public const int PasswordFieldNumber = 5;
     private string password_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Password {
@@ -164,7 +150,7 @@ namespace Message {
     }
 
     /// <summary>Field number for the "groupName" field.</summary>
-    public const int GroupNameFieldNumber = 7;
+    public const int GroupNameFieldNumber = 6;
     private string groupName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string GroupName {
@@ -175,7 +161,7 @@ namespace Message {
     }
 
     /// <summary>Field number for the "userName" field.</summary>
-    public const int UserNameFieldNumber = 8;
+    public const int UserNameFieldNumber = 7;
     private string userName_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string UserName {
@@ -186,7 +172,7 @@ namespace Message {
     }
 
     /// <summary>Field number for the "messageContent" field.</summary>
-    public const int MessageContentFieldNumber = 9;
+    public const int MessageContentFieldNumber = 8;
     private string messageContent_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string MessageContent {
@@ -197,7 +183,7 @@ namespace Message {
     }
 
     /// <summary>Field number for the "reply" field.</summary>
-    public const int ReplyFieldNumber = 10;
+    public const int ReplyFieldNumber = 9;
     private global::Message.ClientMessage.Types.replyStatus reply_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Message.ClientMessage.Types.replyStatus Reply {
@@ -208,7 +194,7 @@ namespace Message {
     }
 
     /// <summary>Field number for the "replyContent" field.</summary>
-    public const int ReplyContentFieldNumber = 11;
+    public const int ReplyContentFieldNumber = 10;
     private string replyContent_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string ReplyContent {
@@ -219,9 +205,9 @@ namespace Message {
     }
 
     /// <summary>Field number for the "groups" field.</summary>
-    public const int GroupsFieldNumber = 12;
+    public const int GroupsFieldNumber = 11;
     private static readonly pb::FieldCodec<string> _repeated_groups_codec
-        = pb::FieldCodec.ForString(98);
+        = pb::FieldCodec.ForString(90);
     private readonly pbc::RepeatedField<string> groups_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<string> Groups {
@@ -244,7 +230,6 @@ namespace Message {
       if (MessageType != other.MessageType) return false;
       if (GroupActionType != other.GroupActionType) return false;
       if (AuthorizationType != other.AuthorizationType) return false;
-      if (CommandType != other.CommandType) return false;
       if (Login != other.Login) return false;
       if (Password != other.Password) return false;
       if (GroupName != other.GroupName) return false;
@@ -262,7 +247,6 @@ namespace Message {
       if (MessageType != 0) hash ^= MessageType.GetHashCode();
       if (GroupActionType != 0) hash ^= GroupActionType.GetHashCode();
       if (AuthorizationType != 0) hash ^= AuthorizationType.GetHashCode();
-      if (CommandType != 0) hash ^= CommandType.GetHashCode();
       if (Login.Length != 0) hash ^= Login.GetHashCode();
       if (Password.Length != 0) hash ^= Password.GetHashCode();
       if (GroupName.Length != 0) hash ^= GroupName.GetHashCode();
@@ -296,36 +280,32 @@ namespace Message {
         output.WriteRawTag(24);
         output.WriteEnum((int) AuthorizationType);
       }
-      if (CommandType != 0) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) CommandType);
-      }
       if (Login.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(34);
         output.WriteString(Login);
       }
       if (Password.Length != 0) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(42);
         output.WriteString(Password);
       }
       if (GroupName.Length != 0) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(50);
         output.WriteString(GroupName);
       }
       if (UserName.Length != 0) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(58);
         output.WriteString(UserName);
       }
       if (MessageContent.Length != 0) {
-        output.WriteRawTag(74);
+        output.WriteRawTag(66);
         output.WriteString(MessageContent);
       }
       if (Reply != 0) {
-        output.WriteRawTag(80);
+        output.WriteRawTag(72);
         output.WriteEnum((int) Reply);
       }
       if (ReplyContent.Length != 0) {
-        output.WriteRawTag(90);
+        output.WriteRawTag(82);
         output.WriteString(ReplyContent);
       }
       groups_.WriteTo(output, _repeated_groups_codec);
@@ -345,9 +325,6 @@ namespace Message {
       }
       if (AuthorizationType != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) AuthorizationType);
-      }
-      if (CommandType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CommandType);
       }
       if (Login.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Login);
@@ -390,9 +367,6 @@ namespace Message {
       }
       if (other.AuthorizationType != 0) {
         AuthorizationType = other.AuthorizationType;
-      }
-      if (other.CommandType != 0) {
-        CommandType = other.CommandType;
       }
       if (other.Login.Length != 0) {
         Login = other.Login;
@@ -439,39 +413,35 @@ namespace Message {
             AuthorizationType = (global::Message.ClientMessage.Types.authorizationTypes) input.ReadEnum();
             break;
           }
-          case 32: {
-            CommandType = (global::Message.ClientMessage.Types.commandTypes) input.ReadEnum();
-            break;
-          }
-          case 42: {
+          case 34: {
             Login = input.ReadString();
             break;
           }
-          case 50: {
+          case 42: {
             Password = input.ReadString();
             break;
           }
-          case 58: {
+          case 50: {
             GroupName = input.ReadString();
             break;
           }
-          case 66: {
+          case 58: {
             UserName = input.ReadString();
             break;
           }
-          case 74: {
+          case 66: {
             MessageContent = input.ReadString();
             break;
           }
-          case 80: {
+          case 72: {
             Reply = (global::Message.ClientMessage.Types.replyStatus) input.ReadEnum();
             break;
           }
-          case 90: {
+          case 82: {
             ReplyContent = input.ReadString();
             break;
           }
-          case 98: {
+          case 90: {
             groups_.AddEntriesFrom(input, _repeated_groups_codec);
             break;
           }
@@ -485,8 +455,7 @@ namespace Message {
     public static partial class Types {
       public enum messageTypes {
         [pbr::OriginalName("AUTHORIZATION")] Authorization = 0,
-        [pbr::OriginalName("COMMAND")] Command = 1,
-        [pbr::OriginalName("GROUP")] Group = 2,
+        [pbr::OriginalName("GROUP")] Group = 1,
       }
 
       public enum groupActionTypes {
@@ -503,11 +472,6 @@ namespace Message {
         [pbr::OriginalName("LOG_IN")] LogIn = 0,
         [pbr::OriginalName("REGISTER_LOGIN")] RegisterLogin = 1,
         [pbr::OriginalName("REGISTER_PASSWORD")] RegisterPassword = 2,
-      }
-
-      public enum commandTypes {
-        [pbr::OriginalName("EXIT")] Exit = 0,
-        [pbr::OriginalName("LOG_OUT")] LogOut = 1,
       }
 
       public enum replyStatus {
