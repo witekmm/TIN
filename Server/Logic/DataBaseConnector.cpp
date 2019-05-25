@@ -1,6 +1,10 @@
 #include "DataBaseConnector.h"
 
-void sendGroupMessage(std::string content, std::string groupName, std::string login);
+void sendGroupMessage(std::string content, std::string groupName, std::string login){
+  //Sprawdz czy uzytkownik w grupie - bool Database::userInGroup(groupName, login)
+  //jesli tak to dodaj wiadomosc do bazy danych dla wszystkich uzytkownikow grupy
+
+}
 void createGroup(std::string groupName, std::string login);
 void deleteGroup(std::string groupName, std::string login);
 void requestToGroup(std::string groupName, std::string login);
