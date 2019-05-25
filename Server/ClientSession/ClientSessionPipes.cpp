@@ -54,7 +54,7 @@ void ClientSessionPipes::readMessage(string login, Message::ClientMessage messag
     string bytes;
     message.SerializeToString(&bytes);
 
-    writeBytesBuffer.push_back(make_pair(login, bytes));
+    writeBytesBuffer.push_back(BytesMessage(login, bytes));
 
     if(writeBytesBuffer.size() == 1) {
         pthread_cond_signal(&writeBytesBufferNotEmpty); 
@@ -97,10 +97,6 @@ string ClientSessionPipes::getClientLogin(int socketNumber) {
     return string();
 }
 
-int ClientSessionPipes::sendBytes(int socketNumber, string bytes) {
-    //TODO: send bytes
-}
-
 void ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
@@ -111,11 +107,11 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
     string login = getClientLogin(socketNumber);
     if(login.empty()) return;
 
-    vector<pair<string, string>>::iterator it;
+    vector<BytesMessage>::iterator it;
 
     for(it = writeBytesBuffer.begin(); it != writeBytesBuffer.end(); ++it) {
-        if(it->first == login) {
-            int result = sendBytes(socketNumber, it->second);
+        if(it->getLogin() == login) {
+            int result = it->writeBytes(socketNumber);
             if(result != 0) {
                 writeBytesBuffer.erase(it);
             }
@@ -147,8 +143,8 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
 
     writeBytesBuffer.erase(std::remove_if(
     writeBytesBuffer.begin(), writeBytesBuffer.end(),
-    [&login](const pair<string, string>& el) { 
-        return el.first == login;
+    [&login](BytesMessage& bytesMessage) { 
+        return bytesMessage.getLogin() == login;
     }), writeBytesBuffer.end());
 }
 

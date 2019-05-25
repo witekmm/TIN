@@ -10,6 +10,7 @@
 
 #include "ClientSessionPipe.h"
 #include "Client.h"
+#include "BytesMessage.h"
 
 using namespace std;
 
@@ -22,15 +23,13 @@ class ClientSessionPipes {
     unsigned int writeMessagesCounter;
     bool isWriteMessagesBufferEmpty();
 
-    vector<pair<string, string>> writeBytesBuffer;
+    vector<BytesMessage> writeBytesBuffer;
     pthread_cond_t writeBytesBufferNotEmpty;
     bool isWriteBytesBufferEmpty();
 
     pair<Client, Message::ClientMessage> getWriteMessageBufferMessage();
 
     string getClientLogin(int socketNumber);
-
-    int sendBytes(int socketNumber, string bytes);
 
     void deleteWriteBuffers(int socketNumber);
 

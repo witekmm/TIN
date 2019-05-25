@@ -6,7 +6,7 @@ CS = $(SV)ClientSession/
 DB = $(SV)Database/
 MSG = Messages/
 NET = $(NT)NetLibs.h
-OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o ClientSessionPipes.o ClientSessionPipe.o Client.o
+OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o ClientSessionPipes.o ClientSessionPipe.o Client.o BytesMessage.o
 PIPES = ClientSessionPipes.o
 LOGIC = MessageHandler.o DataBaseConnector.o Database.o
 CC = g++
@@ -36,7 +36,7 @@ CLI.o: $(CT)CLI.h	$(CT)CLI.cpp $(NT)Network.h $(NT)ServerOperations.h
 ServerOperations.o: $(NET) $(NT)ServerOperations.h $(NT)ServerOperations.cpp
 	$(CC) -c $(NT)ServerOperations.cpp
 
-ClientSessionPipes.o: $(NET) $(CS)ClientSessionPipes.cpp $(CS)ClientSessionPipes.h $(CS)ClientSessionPipes.h $(CS)Client.h
+ClientSessionPipes.o: $(NET) $(CS)ClientSessionPipes.cpp $(CS)ClientSessionPipes.h $(CS)ClientSessionPipes.h $(CS)Client.h $(CS)BytesMessage.h
 	$(CC) -c $(CS)ClientSessionPipes.cpp
 	
 ClientSessionPipe.o: $(NET) $(CS)ClientSessionPipe.cpp $(CS)ClientSessionPipe.h
@@ -44,6 +44,9 @@ ClientSessionPipe.o: $(NET) $(CS)ClientSessionPipe.cpp $(CS)ClientSessionPipe.h
 
 Client.o: $(CS)Client.cpp $(CS)Client.h
 	$(CC) -c $(CS)Client.cpp
+
+BytesMessage.o: $(CS)BytesMessage.cpp $(CS)BytesMessage.h
+	$(CC) -c $(CS)BytesMessage.cpp
 
 main.o: $(SV)main.cpp
 	$(CC) -c $(SV)main.cpp
