@@ -15,15 +15,16 @@ class ClientSessionPipe {
 
     vector<Message::ClientMessage> writeMessagesBuffer;
 
+    void addWriteMessage(Message::ClientMessage);
+
 public:
     int getSocketNumber();
 
+    size_t getWriteMessagesCount();
     bool isWriteMessagesBufferEmpty();
     Message::ClientMessage getWriteMessageBufferMessage();
 
     void readBytes();
-
-    size_t getWriteMessagesCount();
 }
 
 #endif
