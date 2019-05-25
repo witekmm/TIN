@@ -65,11 +65,18 @@ void ClientSessionPipes::readBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     vector<pair<Client, ClientSessionPipe>>::iterator it;
+    int result;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
         if(it->second.getSocketNumber() == socketNumber) {
-            it->second.readBytes();
+            result = it->second.readBytes();
+            break;
         }
+    }
+
+    if(result == 1) {
+        //Message is successfully read
+        pthread_cond_signal(&writeMessagesBufferNotEmpty);
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);

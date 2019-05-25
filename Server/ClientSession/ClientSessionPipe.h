@@ -24,7 +24,7 @@ public:
     bool isWriteMessagesBufferEmpty();
     Message::ClientMessage getWriteMessageBufferMessage();
 
-    void readBytes();
+    int readBytes();
 }
 
 #endif

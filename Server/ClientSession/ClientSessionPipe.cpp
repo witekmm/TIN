@@ -24,7 +24,12 @@ void addWriteMessage(Message::ClientMessage message) {
     writeMessagesBuffer.push_back(message);
 }
 
-void ClientSessionPipe::readBytes() {
+int ClientSessionPipe::readBytes() {
     //TODO: read bytes
     //TODO: when full message is received deserialize it and push to writeMessagesBuffer
+
+    //return:
+    //  1: full message is read
+    //  0: part of message is read
+    //  -1: error while reading
 }
