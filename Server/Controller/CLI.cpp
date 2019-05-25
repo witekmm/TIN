@@ -181,7 +181,7 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
       if(!std::isdigit(*it)) return false;
     }
     int number = std::stoi(splitedCommand[1]);
-    int result = Network::closeSocket(number);
+    int result = Network::closeSocketWithBlocking(number);
     //zamykanie serwera
     if(result == 1){
       puts("Cannot close server socket");
@@ -207,6 +207,12 @@ bool CommandLineInterface::commandExist(std::string command){
     return true;
   }
   else if(command == "server"){
+    return true;
+  }
+  else if(command == "help"){
+    return true;
+  }
+  else if(command == "-help"){
     return true;
   }
   else if(command == "listening"){

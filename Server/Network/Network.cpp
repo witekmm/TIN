@@ -89,6 +89,23 @@ int Network::closeSocket(int socketNumber){
   return 0;
 }
 
+int Network::closeSocketWithBlocking(int socketNumber){
+  pthread_mutex_lock(&this->mutex);
+  if(socketNumber==ServerOperation::getSocketNumber()){
+    pthread_mutex_unlock(&this->mutex);
+    return 1;
+  if(!checkIfSocket(socketNumber)){
+    pthread_mutex_unlock(&this->mutex);
+    return 2;
+  }
+  shutdown(socketNumber, SHUT_RDWR);
+  close(socketNumber);
+  clearSocket(socketNumber);
+  updateFdmax();
+  pthread_mutex_unlock(&this->mutex);
+  return 0;
+}
+
 void Network::closeServer(){
   pthread_mutex_lock(&this->mutex);
   for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
