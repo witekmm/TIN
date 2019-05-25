@@ -1,7 +1,5 @@
 #include "HandleMessage.h"
-#include "../Transport/Transport.h"
-#include "HandleDataBase.h"
-#include "../Transport/Interface.h"
+
 
 void HandleMessage::checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber){
   if(!message.has_messagetype()){

@@ -1,5 +1,7 @@
 #include "NetworkConnections.h"
 
+Connections::Connections(){}
+
 void Connections::insertPipe(std::shared_ptr<NetworkPipe> pipe, int fd){
   this->pipes.insert({fd,pipe});
 }

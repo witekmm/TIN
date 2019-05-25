@@ -1,9 +1,8 @@
 #include "HandleDataBase.h"
-using namespace std;
 
 void HandleDataBase::sendGroupMessage(string content , string groupName , string login){
   //Sprawdz czy uzytkownik w grupie - bool Database::userInGroup(groupName, login)
-  
+
   this->createReply.userNotInGroup(groupName , login);
   //jesli tak to dodaj wiadomosc do bazy danych dla wszystkich uzytkownikow grupy
   // - void Database::addMsgToGroup(groupName, string sender, int type, string text)

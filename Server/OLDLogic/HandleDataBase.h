@@ -7,8 +7,7 @@ using namespace std;
 //#include <mysql.h>
 #include <string>
 
-class HandleDataBase{
-  CreateReply createReply;
+class HandleDataBase: public CreateReply{
 public:
   void sendGroupMessage(string content , string groupName , string login);
   void createGroup(string groupName , string login);

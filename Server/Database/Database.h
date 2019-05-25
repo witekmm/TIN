@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #define URL "sql.serwer1973447.home.pl"
 #define USER "29773530_tin"
@@ -65,7 +66,7 @@ class Database {
     void removeAllUsersForMsg(int msgId);
     // po prostu za jednym wywolaniem dwa wyzej dla usera
     void removeAllForUser(int userId);
-    
+
     void addMsgToGroup(std::string groupName, std::string sender, int type, std::string text);
     void addMsgToUser(int msgId, int userId);
     std::vector<int> getAllUsersFromGroup(std::string groupName);

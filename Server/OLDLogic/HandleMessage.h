@@ -6,20 +6,10 @@
 #include <iostream>
 
 #include "../../Messages/Message.pb.h"
-#include "../Transport/Transport.h"
 #include "HandleDataBase.h"
-#include "../Transport/Interface.h"
 
-class Transport;
+class HandleMessage: public HandleDataBase{
 
-class HandleDataBase;
-
-class Interface;
-
-class HandleMessage{
-  Transport& transport;
-  HandleDataBase& database;
-  Interface& interface;
 public:
   void checkReceivedMessage(Message::ClientMessage message);
   void authorizationHandle(Message::ClientMessage message);

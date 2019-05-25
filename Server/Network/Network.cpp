@@ -1,367 +1,159 @@
-#include "NetLibs.h"
-
-#include <stdio.h>
 #include "Network.h"
-#include "../Transport/Transport.h"
-using namespace std;
 
-Network::Network(Transport& tp):transport(tp), server(){
-  tv.tv_sec = 1;
-  tv.tv_usec = 0;
-  this->working=true;
-  this->sockets==0;
+Network::Network(int maxConnections, int port, std::string ip):working(true), ServerOperation(maxConnections,port,ip){
+  this->tv.tv_sec = 1;
+  this->tv.tv_usec = 0;
   FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
   FD_ZERO(&this->master);
-  this->fdmax==0;
 }
 
-int Network::startServer(int maxConnections, int port, string ip){
-  Server temp(maxConnections, port, ip);
-  this->server=temp;
-  if(this->server.createServerSocket() == -1) return -1;
-  if(this->server.bindServerSocket() == -1) return -1;
-  if(this->server.listenServerSocket() == -1) return -1;
-  addSocket(server.getSocketNumber());
+void Network::waitForSignal(){
+  puts("Server is waiting for signal from sockets");
+  while(this->working){
+    pthread_mutex_lock(&this->mutex);
+    prepareLists();
+    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) < 1){
+      break;
+    }
+    else{
+      for(auto it=this->activeSockets.begin() ; it!=this->activeSockets.end() ; it++){
+        int tmp = *it;
+        if(FD_ISSET(tmp , &this->readfds)){
+          if(tmp == ServerOperation::getSocketNumber()){
+            int newfd = ServerOperation::acceptConnection();
+            if(newfd > 0){
+              addSocket(newfd);
+              break;
+            }
+            else{
+              puts("cannot connect");
+            }
+          }
+          else{
+            receiveBuffer(tmp);
+            break;
+          }
+        }
+        if(FD_ISSET(tmp , &this->writefds)){
+          sendBuffer(tmp);
+          break;
+        }
+        if(FD_ISSET(tmp , &this->exceptionfds)){
+          closeSocket(tmp);
+          break;
+        }
+      }
+    }
+    pthread_mutex_unlock(&this->mutex);
+  }
+}
+
+void Network::prepareLists(){
+  /*
+  this->readfds=this->master;
+  this->writefds=this->master;
+  this->exceptionfds=this->master;*/
+  FD_ZERO(&this->readfds);
+  FD_ZERO(&this->writefds);
+  FD_ZERO(&this->exceptionfds);
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    FD_SET(*it , &this->readfds);
+    FD_SET(*it , &this->writefds);
+    FD_SET(*it , &this->exceptionfds);
+  }
+}
+
+void Network::receiveBuffer(int socketNumber){
+
+}
+
+void Network::sendBuffer(int socketNumber){
+
+}
+
+void Network::addSocket(int socketNumber){
+  FD_SET(socketNumber , &this->master);
+  this->activeSockets.push_back(socketNumber);
+  updateFdmax();
+}
+
+int Network::closeSocket(int socketNumber){
+  if(socketNumber==ServerOperation::getSocketNumber()) return 1;
+  if(!checkIfSocket(socketNumber)) return 2;
+  shutdown(socketNumber, SHUT_RDWR);
+  close(socketNumber);
+  clearSocket(socketNumber);
+  updateFdmax();
   return 0;
 }
 
+int Network::closeSocketWithBlocking(int socketNumber){
+  pthread_mutex_lock(&this->mutex);
+  int result = closeSocket(socketNumber);
+  pthread_mutex_unlock(&this->mutex);
+  return 0;
+}
+
+void Network::closeServer(){
+  pthread_mutex_lock(&this->mutex);
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    if(*it != ServerOperation::getSocketNumber()){
+      shutdown(*it, SHUT_RDWR);
+      close(*it);
+      clearSocket(*it);
+    }
+  }
+  shutdown(ServerOperation::getSocketNumber(), SHUT_RDWR);
+  close(ServerOperation::getSocketNumber());
+  this->working=false;
+  pthread_mutex_unlock(&this->mutex);
+  ServerOperation::closeServer();
+}
+
 void Network::clearSocket(int socketNumber){
-  for(vector<int>::iterator it = this->activeSockets.begin() ; it != this->activeSockets.end(); it++){
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end(); it++){
     if(*it == socketNumber){
       this->activeSockets.erase(it);
       break;
     }
   }
-  for(vector<Client>::iterator it = this->activeClients.begin() ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      this->activeClients.erase(it);
-      break;
-    }
-  }
-  this->sockets--;
-  FD_CLR(socketNumber , &master);
-}
-
-void Network::addSocket(int socketNumber){
-  FD_SET(socketNumber , &master);
-  this->activeSockets.push_back(socketNumber);
-  this->sockets++;
-  updateFdmax();
+  FD_CLR(socketNumber , &this->master);
 }
 
 void Network::updateFdmax(){
   int max=0;
-  for(int i = 0 ; i < this->sockets ; i++){
-    if(this->activeSockets[i]>max) max = this->activeSockets[i];
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    if(*it > max) max = *it;
   }
   this->fdmax=max;
 }
 
-int Network::checkIfSocket(int socketNumber){
-  for(int i = 0;i<this->sockets;i++){
-    if(socketNumber==this->activeSockets[i]) return 0;
-  }
-  return 1;
-}
-
-void Network::clearLists(){
-  /*FD_ZERO(&this->readfds);
-  FD_ZERO(&this->writefds);
-  FD_ZERO(&this->exceptionfds);
-  FD_COPY(&this->master,&this->readfds);
-  FD_COPY(&this->master,&this->writefds);
-  FD_COPY(&this->master,&this->exceptionfds);*/
-  this->readfds=this->master;
-  this->writefds=this->master;
-  this->exceptionfds=this->master;
-}
-
-void Network::closeSocket(int socketNumber){
-  shutdown(socketNumber, SHUT_RDWR);
-  close(socketNumber);
-  clearSocket(socketNumber);
-  updateFdmax();
-}
-
-void Network::selectDescriptor(){
-  while(this->working){
-    clearLists();
-    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) < 1){
-      return;
-    }
-    else{
-      for(int i=0 ; i<this->sockets ; i++){
-        if(FD_ISSET(this->activeSockets[i] , &this->readfds)){
-          //NOWE POŁĄCZENIE
-          if(this->activeSockets[i] == this->server.getSocketNumber()){
-            thread accept (&Network::connectClient , this);
-          }
-          else {
-            Client& temp = findClient( this->activeSockets[i] );
-            thread read (&Network::receiveMessage , this , std::ref(temp) );
-            //thread read (&Network::receiveMessage , this , findClient(this->activeSockets[i]) );
-          }//ODBIÓR WIADOMOSCI
-        }
-        if(FD_ISSET(this->activeSockets[i] , &this->writefds)){
-          Client& temp = findClient( this->activeSockets[i] );
-          thread write (&Network::sendMessage , this , std::ref(temp) );
-        }
-        if(FD_ISSET(this->activeSockets[i] , &this->exceptionfds)){
-          int x = this->activeSockets[i];
-          thread disconnect (&Network::disconnectClientBySN , this , x);
-          //thread disconnect (disconnectClient , x);
-        }
-      }
-    }
-  }
-}
-
-void Network::connectClient(){
-  int fdnumber = this->server.acceptConnection();
-  if(fdnumber==-1) return;
-  Client NewClient(fdnumber);
-  addSocket(fdnumber);
-  this->activeClients.push_back(NewClient);
-}
-
-int Network::setMessage(string message,int size, string client){
-  // MUTEX.WAIT if message is set
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == client){
-      this->activeClients[i].setNewMessage(message,size);
-      return 1;
-    }
-    i++;
-  }
-  return -1;
-}
-
-int Network::setMessage(string message,int size, int socketNumber){
-  // MUTEX.WAIT if message is set
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      this->activeClients[i].setNewMessage(message,size);
-      return 1;
-    }
-    i++;
-  }
-  return -1;
-}
-
-void Network::sendMessage(Client& client){
-  if(client.getIsMessageSet() == false) {
-    return;
-  }
-  else if(client.getIsSizeSent() == false){
-    int result = client.sendSize();
-    if(result == -1); // CLIENT IS OFFLINE
-  }
-  else{
-    int result = client.sendBuffer();
-    if(result == -1); // CLIENT IS OFFLINE
-    else if(result == 0) return; //full message is not sent yet
-    else{
-      //wiadomosc wyslana - i tyle
-      client.messageSent();
-    }
-  }
-}
-
-void Network::receiveMessage(Client& client){
-  if(client.getIsSizeReceived() == false){
-    int result = client.receiveSize();
-    if(result == -1); //CLIENT IS OFFLINE
-    else if(result == 0); // sth gone wrong - repeat
-    else return; //everything is perfect
-  }
-  else{
-    int result = client.receiveBuffer();
-    if(result == -1); //CLIENT IS OFFLINE
-    else if(result == 0) return; //full message is not received yet
-    else{
-      //wiadomosc odebrania daj znac transport
-      this->transport.receiveAndParse(client.getReceivingBuffer() , client.getLogin() , client.getSocketNumber() );
-      //i wyczysc wiadomosci
-      client.messageReceived();
-    }
-  }
-}
-
-
-void Network::logInClient(int socketNumber, string login){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      this->activeClients[i].logIn();
-      this->activeClients[i].setLogin(login);
-      return;
-    }
-    i++;
-  }
-}
-
-void Network::authorizeClient(int socketNumber, string login){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      this->activeClients[i].authorize();
-      this->activeClients[i].setLogin(login);
-      return;
-    }
-    i++;
-  }
-}
-
-void Network::logOutClient(string login){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == login){
-      this->activeClients[i].logOut();
-      return;
-    }
-    i++;
-  }
-}
-
-void Network::disconnectClient(string login){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == login){
-      int socketNumber = this->activeClients[i].getSocketNumber();
-      closeSocket(socketNumber);
-      clearSocket(socketNumber);
-      return;
-    }
-    i++;
-  }
-}
-
-void Network::disconnectClientBySN(int socketNumber){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == i){
-      int socketNumber = this->activeClients[i].getSocketNumber();
-      closeSocket(socketNumber);
-      clearSocket(socketNumber);
-      return;
-    }
-    i++;
-  }
-}
-
-int Network::isClientLogged(int socketNumber){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      return this->activeClients[i].isLogged();
-    }
-    i++;
-  }
-}
-
-Client& Network::findClient(int socketNumber){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      return this->activeClients.at(i);
-    }
-    i++;
-  }
-}
-
-int Network::checkIfClient(string login){
-  vector<Client>::iterator it = this->activeClients.begin();
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == login){
-      return 1;
-    }
-  }
+int Network::startServer(){
+  int fdnew=ServerOperation::createServerSocket();
+  if(fdnew == -1) return -1;
+  addSocket(fdnew);
+  if(ServerOperation::bindServerSocket() == -1) return -1;
   return 0;
 }
 
-int Network::checkIfClient(int socketNumber){
-  vector<Client>::iterator it = this->activeClients.begin();
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      return 1;
-    }
-  }
-  return 0;
-}
-
-int Network::checkIfClientOccupied(int socketNumber){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == socketNumber){
-      return this->activeClients[i].getIsMessageSet();
-    }
-    i++;
-  }
-  return -1;
-}
-
-int Network::checkIfClientOccupied(string login){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    if(*it == login){
-      return this->activeClients[i].getIsMessageSet();
-    }
-    i++;
-  }
-  return -1;
-}
-
-vector<pair<string , int>> Network::getClientsList(){
-  vector<pair<string , int>> list;
-  pair<string , int> apair;
-  for(int i=0 ; i < this->sockets-1 ; i++){
-    apair.first = this->activeClients[i].getLogin();
-    apair.second = this->activeClients[i].getSocketNumber();
-    list.push_back(apair);
-  }
-  return list;
-}
-
-void Network::checkClientsMessagesLoop(){
-  while(this->working){
-    for(int i = 0; i < this->sockets-1 ; i++){
-      if(!this->activeClients[i].getIsMessageSet() && this->activeClients[i].isLogged()){
-        this->transport.getHandleMessage().checkIfMessageExistAndSend(this->activeClients[i].getLogin());
-      }
-    }
-  }
-}
-
-bool Network::isWorking(){
-  return this->working;
-}
-
-void Network::closeServer(){
-  vector<Client>::iterator it = this->activeClients.begin();
-  int i=0;
-  for(it ; it != this->activeClients.end(); it++){
-    int socketNumber = this->activeClients[i].getSocketNumber();
-    closeSocket(socketNumber);
-    clearSocket(socketNumber);
-    i++;
-  }
-  int socketNumber = this->server.getSocketNumber();
-  shutdown(socketNumber, SHUT_RDWR);
-  close(socketNumber);
+void Network::stopWaiting(){
+  pthread_mutex_lock(&this->mutex);
   this->working=false;
+  pthread_mutex_unlock(&this->mutex);
+}
+
+bool Network::isServerWaiting(){
+  pthread_mutex_lock(&this->mutex);
+  bool temp = this->working;
+  pthread_mutex_unlock(&this->mutex);
+  return temp;
+}
+
+bool Network::checkIfSocket(int socketNumber){
+  for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
+    if(*it > socketNumber) return true;
+  }
+  return false;
 }

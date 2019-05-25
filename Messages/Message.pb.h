@@ -63,12 +63,14 @@ namespace Message {
 
 enum ClientMessage_messageTypes {
   ClientMessage_messageTypes_AUTHORIZATION = 0,
-  ClientMessage_messageTypes_COMMAND = 1,
-  ClientMessage_messageTypes_GROUP = 2
+  ClientMessage_messageTypes_GROUP = 1,
+  ClientMessage_messageTypes_REPLY = 2,
+  ClientMessage_messageTypes_ClientMessage_messageTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
+  ClientMessage_messageTypes_ClientMessage_messageTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_messageTypes_IsValid(int value);
 const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MIN = ClientMessage_messageTypes_AUTHORIZATION;
-const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MAX = ClientMessage_messageTypes_GROUP;
+const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MAX = ClientMessage_messageTypes_REPLY;
 const int ClientMessage_messageTypes_messageTypes_ARRAYSIZE = ClientMessage_messageTypes_messageTypes_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_messageTypes_descriptor();
@@ -88,7 +90,9 @@ enum ClientMessage_groupActionTypes {
   ClientMessage_groupActionTypes_REQUEST = 3,
   ClientMessage_groupActionTypes_ACCEPT = 4,
   ClientMessage_groupActionTypes_DECLINE = 5,
-  ClientMessage_groupActionTypes_LEAVE = 6
+  ClientMessage_groupActionTypes_LEAVE = 6,
+  ClientMessage_groupActionTypes_ClientMessage_groupActionTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
+  ClientMessage_groupActionTypes_ClientMessage_groupActionTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_groupActionTypes_IsValid(int value);
 const ClientMessage_groupActionTypes ClientMessage_groupActionTypes_groupActionTypes_MIN = ClientMessage_groupActionTypes_MESSAGE;
@@ -107,12 +111,13 @@ inline bool ClientMessage_groupActionTypes_Parse(
 }
 enum ClientMessage_authorizationTypes {
   ClientMessage_authorizationTypes_LOG_IN = 0,
-  ClientMessage_authorizationTypes_REGISTER_LOGIN = 1,
-  ClientMessage_authorizationTypes_REGISTER_PASSWORD = 2
+  ClientMessage_authorizationTypes_REGISTER = 1,
+  ClientMessage_authorizationTypes_ClientMessage_authorizationTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
+  ClientMessage_authorizationTypes_ClientMessage_authorizationTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_authorizationTypes_IsValid(int value);
 const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_LOG_IN;
-const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_REGISTER_PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_REGISTER;
 const int ClientMessage_authorizationTypes_authorizationTypes_ARRAYSIZE = ClientMessage_authorizationTypes_authorizationTypes_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ClientMessage_authorizationTypes_descriptor();
@@ -125,28 +130,11 @@ inline bool ClientMessage_authorizationTypes_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ClientMessage_authorizationTypes>(
     ClientMessage_authorizationTypes_descriptor(), name, value);
 }
-enum ClientMessage_commandTypes {
-  ClientMessage_commandTypes_EXIT = 0,
-  ClientMessage_commandTypes_LOG_OUT = 1
-};
-bool ClientMessage_commandTypes_IsValid(int value);
-const ClientMessage_commandTypes ClientMessage_commandTypes_commandTypes_MIN = ClientMessage_commandTypes_EXIT;
-const ClientMessage_commandTypes ClientMessage_commandTypes_commandTypes_MAX = ClientMessage_commandTypes_LOG_OUT;
-const int ClientMessage_commandTypes_commandTypes_ARRAYSIZE = ClientMessage_commandTypes_commandTypes_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* ClientMessage_commandTypes_descriptor();
-inline const ::std::string& ClientMessage_commandTypes_Name(ClientMessage_commandTypes value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    ClientMessage_commandTypes_descriptor(), value);
-}
-inline bool ClientMessage_commandTypes_Parse(
-    const ::std::string& name, ClientMessage_commandTypes* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<ClientMessage_commandTypes>(
-    ClientMessage_commandTypes_descriptor(), name, value);
-}
 enum ClientMessage_replyStatus {
   ClientMessage_replyStatus_POSITIVE = 0,
-  ClientMessage_replyStatus_NEGATIVE = 1
+  ClientMessage_replyStatus_NEGATIVE = 1,
+  ClientMessage_replyStatus_ClientMessage_replyStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
+  ClientMessage_replyStatus_ClientMessage_replyStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_replyStatus_IsValid(int value);
 const ClientMessage_replyStatus ClientMessage_replyStatus_replyStatus_MIN = ClientMessage_replyStatus_POSITIVE;
@@ -192,13 +180,6 @@ class ClientMessage :
     return *this;
   }
   #endif
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _internal_metadata_.unknown_fields();
-  }
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return _internal_metadata_.mutable_unknown_fields();
-  }
-
   static const ::google::protobuf::Descriptor* descriptor() {
     return default_instance().GetDescriptor();
   }
@@ -268,10 +249,10 @@ class ClientMessage :
   typedef ClientMessage_messageTypes messageTypes;
   static const messageTypes AUTHORIZATION =
     ClientMessage_messageTypes_AUTHORIZATION;
-  static const messageTypes COMMAND =
-    ClientMessage_messageTypes_COMMAND;
   static const messageTypes GROUP =
     ClientMessage_messageTypes_GROUP;
+  static const messageTypes REPLY =
+    ClientMessage_messageTypes_REPLY;
   static inline bool messageTypes_IsValid(int value) {
     return ClientMessage_messageTypes_IsValid(value);
   }
@@ -332,10 +313,8 @@ class ClientMessage :
   typedef ClientMessage_authorizationTypes authorizationTypes;
   static const authorizationTypes LOG_IN =
     ClientMessage_authorizationTypes_LOG_IN;
-  static const authorizationTypes REGISTER_LOGIN =
-    ClientMessage_authorizationTypes_REGISTER_LOGIN;
-  static const authorizationTypes REGISTER_PASSWORD =
-    ClientMessage_authorizationTypes_REGISTER_PASSWORD;
+  static const authorizationTypes REGISTER =
+    ClientMessage_authorizationTypes_REGISTER;
   static inline bool authorizationTypes_IsValid(int value) {
     return ClientMessage_authorizationTypes_IsValid(value);
   }
@@ -355,32 +334,6 @@ class ClientMessage :
   static inline bool authorizationTypes_Parse(const ::std::string& name,
       authorizationTypes* value) {
     return ClientMessage_authorizationTypes_Parse(name, value);
-  }
-
-  typedef ClientMessage_commandTypes commandTypes;
-  static const commandTypes EXIT =
-    ClientMessage_commandTypes_EXIT;
-  static const commandTypes LOG_OUT =
-    ClientMessage_commandTypes_LOG_OUT;
-  static inline bool commandTypes_IsValid(int value) {
-    return ClientMessage_commandTypes_IsValid(value);
-  }
-  static const commandTypes commandTypes_MIN =
-    ClientMessage_commandTypes_commandTypes_MIN;
-  static const commandTypes commandTypes_MAX =
-    ClientMessage_commandTypes_commandTypes_MAX;
-  static const int commandTypes_ARRAYSIZE =
-    ClientMessage_commandTypes_commandTypes_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  commandTypes_descriptor() {
-    return ClientMessage_commandTypes_descriptor();
-  }
-  static inline const ::std::string& commandTypes_Name(commandTypes value) {
-    return ClientMessage_commandTypes_Name(value);
-  }
-  static inline bool commandTypes_Parse(const ::std::string& name,
-      commandTypes* value) {
-    return ClientMessage_commandTypes_Parse(name, value);
   }
 
   typedef ClientMessage_replyStatus replyStatus;
@@ -411,10 +364,10 @@ class ClientMessage :
 
   // accessors -------------------------------------------------------
 
-  // repeated string groups = 12;
+  // repeated string groups = 11;
   int groups_size() const;
   void clear_groups();
-  static const int kGroupsFieldNumber = 12;
+  static const int kGroupsFieldNumber = 11;
   const ::std::string& groups(int index) const;
   ::std::string* mutable_groups(int index);
   void set_groups(int index, const ::std::string& value);
@@ -433,10 +386,9 @@ class ClientMessage :
   const ::google::protobuf::RepeatedPtrField<::std::string>& groups() const;
   ::google::protobuf::RepeatedPtrField<::std::string>* mutable_groups();
 
-  // optional string login = 5;
-  bool has_login() const;
+  // string login = 4;
   void clear_login();
-  static const int kLoginFieldNumber = 5;
+  static const int kLoginFieldNumber = 4;
   const ::std::string& login() const;
   void set_login(const ::std::string& value);
   #if LANG_CXX11
@@ -448,10 +400,9 @@ class ClientMessage :
   ::std::string* release_login();
   void set_allocated_login(::std::string* login);
 
-  // optional string password = 6;
-  bool has_password() const;
+  // string password = 5;
   void clear_password();
-  static const int kPasswordFieldNumber = 6;
+  static const int kPasswordFieldNumber = 5;
   const ::std::string& password() const;
   void set_password(const ::std::string& value);
   #if LANG_CXX11
@@ -463,10 +414,9 @@ class ClientMessage :
   ::std::string* release_password();
   void set_allocated_password(::std::string* password);
 
-  // optional string groupName = 7;
-  bool has_groupname() const;
+  // string groupName = 6;
   void clear_groupname();
-  static const int kGroupNameFieldNumber = 7;
+  static const int kGroupNameFieldNumber = 6;
   const ::std::string& groupname() const;
   void set_groupname(const ::std::string& value);
   #if LANG_CXX11
@@ -478,10 +428,9 @@ class ClientMessage :
   ::std::string* release_groupname();
   void set_allocated_groupname(::std::string* groupname);
 
-  // optional string userName = 8;
-  bool has_username() const;
+  // string userName = 7;
   void clear_username();
-  static const int kUserNameFieldNumber = 8;
+  static const int kUserNameFieldNumber = 7;
   const ::std::string& username() const;
   void set_username(const ::std::string& value);
   #if LANG_CXX11
@@ -493,10 +442,9 @@ class ClientMessage :
   ::std::string* release_username();
   void set_allocated_username(::std::string* username);
 
-  // optional string messageContent = 9;
-  bool has_messagecontent() const;
+  // string messageContent = 8;
   void clear_messagecontent();
-  static const int kMessageContentFieldNumber = 9;
+  static const int kMessageContentFieldNumber = 8;
   const ::std::string& messagecontent() const;
   void set_messagecontent(const ::std::string& value);
   #if LANG_CXX11
@@ -508,10 +456,9 @@ class ClientMessage :
   ::std::string* release_messagecontent();
   void set_allocated_messagecontent(::std::string* messagecontent);
 
-  // optional string replyContent = 11;
-  bool has_replycontent() const;
+  // string replyContent = 10;
   void clear_replycontent();
-  static const int kReplyContentFieldNumber = 11;
+  static const int kReplyContentFieldNumber = 10;
   const ::std::string& replycontent() const;
   void set_replycontent(const ::std::string& value);
   #if LANG_CXX11
@@ -523,38 +470,27 @@ class ClientMessage :
   ::std::string* release_replycontent();
   void set_allocated_replycontent(::std::string* replycontent);
 
-  // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-  bool has_messagetype() const;
+  // .Message.ClientMessage.messageTypes messageType = 1;
   void clear_messagetype();
   static const int kMessageTypeFieldNumber = 1;
   ::Message::ClientMessage_messageTypes messagetype() const;
   void set_messagetype(::Message::ClientMessage_messageTypes value);
 
-  // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-  bool has_groupactiontype() const;
+  // .Message.ClientMessage.groupActionTypes groupActionType = 2;
   void clear_groupactiontype();
   static const int kGroupActionTypeFieldNumber = 2;
   ::Message::ClientMessage_groupActionTypes groupactiontype() const;
   void set_groupactiontype(::Message::ClientMessage_groupActionTypes value);
 
-  // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-  bool has_authorizationtype() const;
+  // .Message.ClientMessage.authorizationTypes authorizationType = 3;
   void clear_authorizationtype();
   static const int kAuthorizationTypeFieldNumber = 3;
   ::Message::ClientMessage_authorizationTypes authorizationtype() const;
   void set_authorizationtype(::Message::ClientMessage_authorizationTypes value);
 
-  // optional .Message.ClientMessage.commandTypes commandType = 4;
-  bool has_commandtype() const;
-  void clear_commandtype();
-  static const int kCommandTypeFieldNumber = 4;
-  ::Message::ClientMessage_commandTypes commandtype() const;
-  void set_commandtype(::Message::ClientMessage_commandTypes value);
-
-  // optional .Message.ClientMessage.replyStatus reply = 10;
-  bool has_reply() const;
+  // .Message.ClientMessage.replyStatus reply = 9;
   void clear_reply();
-  static const int kReplyFieldNumber = 10;
+  static const int kReplyFieldNumber = 9;
   ::Message::ClientMessage_replyStatus reply() const;
   void set_reply(::Message::ClientMessage_replyStatus value);
 
@@ -563,8 +499,6 @@ class ClientMessage :
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::HasBits<1> _has_bits_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
   ::google::protobuf::RepeatedPtrField<::std::string> groups_;
   ::google::protobuf::internal::ArenaStringPtr login_;
   ::google::protobuf::internal::ArenaStringPtr password_;
@@ -575,8 +509,8 @@ class ClientMessage :
   int messagetype_;
   int groupactiontype_;
   int authorizationtype_;
-  int commandtype_;
   int reply_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Message_2eproto;
 };
 // ===================================================================
@@ -590,102 +524,64 @@ class ClientMessage :
 #endif  // __GNUC__
 // ClientMessage
 
-// required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-inline bool ClientMessage::has_messagetype() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
-}
+// .Message.ClientMessage.messageTypes messageType = 1;
 inline void ClientMessage::clear_messagetype() {
   messagetype_ = 0;
-  _has_bits_[0] &= ~0x00000040u;
 }
 inline ::Message::ClientMessage_messageTypes ClientMessage::messagetype() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.messageType)
   return static_cast< ::Message::ClientMessage_messageTypes >(messagetype_);
 }
 inline void ClientMessage::set_messagetype(::Message::ClientMessage_messageTypes value) {
-  assert(::Message::ClientMessage_messageTypes_IsValid(value));
-  _has_bits_[0] |= 0x00000040u;
+  
   messagetype_ = value;
   // @@protoc_insertion_point(field_set:Message.ClientMessage.messageType)
 }
 
-// optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-inline bool ClientMessage::has_groupactiontype() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
-}
+// .Message.ClientMessage.groupActionTypes groupActionType = 2;
 inline void ClientMessage::clear_groupactiontype() {
   groupactiontype_ = 0;
-  _has_bits_[0] &= ~0x00000080u;
 }
 inline ::Message::ClientMessage_groupActionTypes ClientMessage::groupactiontype() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.groupActionType)
   return static_cast< ::Message::ClientMessage_groupActionTypes >(groupactiontype_);
 }
 inline void ClientMessage::set_groupactiontype(::Message::ClientMessage_groupActionTypes value) {
-  assert(::Message::ClientMessage_groupActionTypes_IsValid(value));
-  _has_bits_[0] |= 0x00000080u;
+  
   groupactiontype_ = value;
   // @@protoc_insertion_point(field_set:Message.ClientMessage.groupActionType)
 }
 
-// optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-inline bool ClientMessage::has_authorizationtype() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
+// .Message.ClientMessage.authorizationTypes authorizationType = 3;
 inline void ClientMessage::clear_authorizationtype() {
   authorizationtype_ = 0;
-  _has_bits_[0] &= ~0x00000100u;
 }
 inline ::Message::ClientMessage_authorizationTypes ClientMessage::authorizationtype() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.authorizationType)
   return static_cast< ::Message::ClientMessage_authorizationTypes >(authorizationtype_);
 }
 inline void ClientMessage::set_authorizationtype(::Message::ClientMessage_authorizationTypes value) {
-  assert(::Message::ClientMessage_authorizationTypes_IsValid(value));
-  _has_bits_[0] |= 0x00000100u;
+  
   authorizationtype_ = value;
   // @@protoc_insertion_point(field_set:Message.ClientMessage.authorizationType)
 }
 
-// optional .Message.ClientMessage.commandTypes commandType = 4;
-inline bool ClientMessage::has_commandtype() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void ClientMessage::clear_commandtype() {
-  commandtype_ = 0;
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline ::Message::ClientMessage_commandTypes ClientMessage::commandtype() const {
-  // @@protoc_insertion_point(field_get:Message.ClientMessage.commandType)
-  return static_cast< ::Message::ClientMessage_commandTypes >(commandtype_);
-}
-inline void ClientMessage::set_commandtype(::Message::ClientMessage_commandTypes value) {
-  assert(::Message::ClientMessage_commandTypes_IsValid(value));
-  _has_bits_[0] |= 0x00000200u;
-  commandtype_ = value;
-  // @@protoc_insertion_point(field_set:Message.ClientMessage.commandType)
-}
-
-// optional string login = 5;
-inline bool ClientMessage::has_login() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
+// string login = 4;
 inline void ClientMessage::clear_login() {
   login_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000001u;
 }
 inline const ::std::string& ClientMessage::login() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.login)
   return login_.GetNoArena();
 }
 inline void ClientMessage::set_login(const ::std::string& value) {
-  _has_bits_[0] |= 0x00000001u;
+  
   login_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:Message.ClientMessage.login)
 }
 #if LANG_CXX11
 inline void ClientMessage::set_login(::std::string&& value) {
-  _has_bits_[0] |= 0x00000001u;
+  
   login_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:Message.ClientMessage.login)
@@ -693,59 +589,52 @@ inline void ClientMessage::set_login(::std::string&& value) {
 #endif
 inline void ClientMessage::set_login(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000001u;
+  
   login_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:Message.ClientMessage.login)
 }
 inline void ClientMessage::set_login(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000001u;
+  
   login_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.login)
 }
 inline ::std::string* ClientMessage::mutable_login() {
-  _has_bits_[0] |= 0x00000001u;
+  
   // @@protoc_insertion_point(field_mutable:Message.ClientMessage.login)
   return login_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientMessage::release_login() {
   // @@protoc_insertion_point(field_release:Message.ClientMessage.login)
-  if (!has_login()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000001u;
-  return login_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  
+  return login_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void ClientMessage::set_allocated_login(::std::string* login) {
   if (login != nullptr) {
-    _has_bits_[0] |= 0x00000001u;
+    
   } else {
-    _has_bits_[0] &= ~0x00000001u;
+    
   }
   login_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), login);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.login)
 }
 
-// optional string password = 6;
-inline bool ClientMessage::has_password() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
+// string password = 5;
 inline void ClientMessage::clear_password() {
   password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000002u;
 }
 inline const ::std::string& ClientMessage::password() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.password)
   return password_.GetNoArena();
 }
 inline void ClientMessage::set_password(const ::std::string& value) {
-  _has_bits_[0] |= 0x00000002u;
+  
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:Message.ClientMessage.password)
 }
 #if LANG_CXX11
 inline void ClientMessage::set_password(::std::string&& value) {
-  _has_bits_[0] |= 0x00000002u;
+  
   password_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:Message.ClientMessage.password)
@@ -753,59 +642,52 @@ inline void ClientMessage::set_password(::std::string&& value) {
 #endif
 inline void ClientMessage::set_password(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000002u;
+  
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:Message.ClientMessage.password)
 }
 inline void ClientMessage::set_password(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000002u;
+  
   password_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.password)
 }
 inline ::std::string* ClientMessage::mutable_password() {
-  _has_bits_[0] |= 0x00000002u;
+  
   // @@protoc_insertion_point(field_mutable:Message.ClientMessage.password)
   return password_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientMessage::release_password() {
   // @@protoc_insertion_point(field_release:Message.ClientMessage.password)
-  if (!has_password()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000002u;
-  return password_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  
+  return password_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void ClientMessage::set_allocated_password(::std::string* password) {
   if (password != nullptr) {
-    _has_bits_[0] |= 0x00000002u;
+    
   } else {
-    _has_bits_[0] &= ~0x00000002u;
+    
   }
   password_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), password);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.password)
 }
 
-// optional string groupName = 7;
-inline bool ClientMessage::has_groupname() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
+// string groupName = 6;
 inline void ClientMessage::clear_groupname() {
   groupname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000004u;
 }
 inline const ::std::string& ClientMessage::groupname() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.groupName)
   return groupname_.GetNoArena();
 }
 inline void ClientMessage::set_groupname(const ::std::string& value) {
-  _has_bits_[0] |= 0x00000004u;
+  
   groupname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:Message.ClientMessage.groupName)
 }
 #if LANG_CXX11
 inline void ClientMessage::set_groupname(::std::string&& value) {
-  _has_bits_[0] |= 0x00000004u;
+  
   groupname_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:Message.ClientMessage.groupName)
@@ -813,59 +695,52 @@ inline void ClientMessage::set_groupname(::std::string&& value) {
 #endif
 inline void ClientMessage::set_groupname(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000004u;
+  
   groupname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:Message.ClientMessage.groupName)
 }
 inline void ClientMessage::set_groupname(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000004u;
+  
   groupname_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.groupName)
 }
 inline ::std::string* ClientMessage::mutable_groupname() {
-  _has_bits_[0] |= 0x00000004u;
+  
   // @@protoc_insertion_point(field_mutable:Message.ClientMessage.groupName)
   return groupname_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientMessage::release_groupname() {
   // @@protoc_insertion_point(field_release:Message.ClientMessage.groupName)
-  if (!has_groupname()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000004u;
-  return groupname_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  
+  return groupname_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void ClientMessage::set_allocated_groupname(::std::string* groupname) {
   if (groupname != nullptr) {
-    _has_bits_[0] |= 0x00000004u;
+    
   } else {
-    _has_bits_[0] &= ~0x00000004u;
+    
   }
   groupname_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), groupname);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.groupName)
 }
 
-// optional string userName = 8;
-inline bool ClientMessage::has_username() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
+// string userName = 7;
 inline void ClientMessage::clear_username() {
   username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000008u;
 }
 inline const ::std::string& ClientMessage::username() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.userName)
   return username_.GetNoArena();
 }
 inline void ClientMessage::set_username(const ::std::string& value) {
-  _has_bits_[0] |= 0x00000008u;
+  
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:Message.ClientMessage.userName)
 }
 #if LANG_CXX11
 inline void ClientMessage::set_username(::std::string&& value) {
-  _has_bits_[0] |= 0x00000008u;
+  
   username_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:Message.ClientMessage.userName)
@@ -873,59 +748,52 @@ inline void ClientMessage::set_username(::std::string&& value) {
 #endif
 inline void ClientMessage::set_username(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000008u;
+  
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:Message.ClientMessage.userName)
 }
 inline void ClientMessage::set_username(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000008u;
+  
   username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.userName)
 }
 inline ::std::string* ClientMessage::mutable_username() {
-  _has_bits_[0] |= 0x00000008u;
+  
   // @@protoc_insertion_point(field_mutable:Message.ClientMessage.userName)
   return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientMessage::release_username() {
   // @@protoc_insertion_point(field_release:Message.ClientMessage.userName)
-  if (!has_username()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000008u;
-  return username_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  
+  return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void ClientMessage::set_allocated_username(::std::string* username) {
   if (username != nullptr) {
-    _has_bits_[0] |= 0x00000008u;
+    
   } else {
-    _has_bits_[0] &= ~0x00000008u;
+    
   }
   username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.userName)
 }
 
-// optional string messageContent = 9;
-inline bool ClientMessage::has_messagecontent() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
+// string messageContent = 8;
 inline void ClientMessage::clear_messagecontent() {
   messagecontent_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000010u;
 }
 inline const ::std::string& ClientMessage::messagecontent() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.messageContent)
   return messagecontent_.GetNoArena();
 }
 inline void ClientMessage::set_messagecontent(const ::std::string& value) {
-  _has_bits_[0] |= 0x00000010u;
+  
   messagecontent_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:Message.ClientMessage.messageContent)
 }
 #if LANG_CXX11
 inline void ClientMessage::set_messagecontent(::std::string&& value) {
-  _has_bits_[0] |= 0x00000010u;
+  
   messagecontent_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:Message.ClientMessage.messageContent)
@@ -933,78 +801,66 @@ inline void ClientMessage::set_messagecontent(::std::string&& value) {
 #endif
 inline void ClientMessage::set_messagecontent(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000010u;
+  
   messagecontent_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:Message.ClientMessage.messageContent)
 }
 inline void ClientMessage::set_messagecontent(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000010u;
+  
   messagecontent_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.messageContent)
 }
 inline ::std::string* ClientMessage::mutable_messagecontent() {
-  _has_bits_[0] |= 0x00000010u;
+  
   // @@protoc_insertion_point(field_mutable:Message.ClientMessage.messageContent)
   return messagecontent_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientMessage::release_messagecontent() {
   // @@protoc_insertion_point(field_release:Message.ClientMessage.messageContent)
-  if (!has_messagecontent()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000010u;
-  return messagecontent_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  
+  return messagecontent_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void ClientMessage::set_allocated_messagecontent(::std::string* messagecontent) {
   if (messagecontent != nullptr) {
-    _has_bits_[0] |= 0x00000010u;
+    
   } else {
-    _has_bits_[0] &= ~0x00000010u;
+    
   }
   messagecontent_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), messagecontent);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.messageContent)
 }
 
-// optional .Message.ClientMessage.replyStatus reply = 10;
-inline bool ClientMessage::has_reply() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
-}
+// .Message.ClientMessage.replyStatus reply = 9;
 inline void ClientMessage::clear_reply() {
   reply_ = 0;
-  _has_bits_[0] &= ~0x00000400u;
 }
 inline ::Message::ClientMessage_replyStatus ClientMessage::reply() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.reply)
   return static_cast< ::Message::ClientMessage_replyStatus >(reply_);
 }
 inline void ClientMessage::set_reply(::Message::ClientMessage_replyStatus value) {
-  assert(::Message::ClientMessage_replyStatus_IsValid(value));
-  _has_bits_[0] |= 0x00000400u;
+  
   reply_ = value;
   // @@protoc_insertion_point(field_set:Message.ClientMessage.reply)
 }
 
-// optional string replyContent = 11;
-inline bool ClientMessage::has_replycontent() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
+// string replyContent = 10;
 inline void ClientMessage::clear_replycontent() {
   replycontent_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _has_bits_[0] &= ~0x00000020u;
 }
 inline const ::std::string& ClientMessage::replycontent() const {
   // @@protoc_insertion_point(field_get:Message.ClientMessage.replyContent)
   return replycontent_.GetNoArena();
 }
 inline void ClientMessage::set_replycontent(const ::std::string& value) {
-  _has_bits_[0] |= 0x00000020u;
+  
   replycontent_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:Message.ClientMessage.replyContent)
 }
 #if LANG_CXX11
 inline void ClientMessage::set_replycontent(::std::string&& value) {
-  _has_bits_[0] |= 0x00000020u;
+  
   replycontent_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
   // @@protoc_insertion_point(field_set_rvalue:Message.ClientMessage.replyContent)
@@ -1012,40 +868,37 @@ inline void ClientMessage::set_replycontent(::std::string&& value) {
 #endif
 inline void ClientMessage::set_replycontent(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  _has_bits_[0] |= 0x00000020u;
+  
   replycontent_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:Message.ClientMessage.replyContent)
 }
 inline void ClientMessage::set_replycontent(const char* value, size_t size) {
-  _has_bits_[0] |= 0x00000020u;
+  
   replycontent_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:Message.ClientMessage.replyContent)
 }
 inline ::std::string* ClientMessage::mutable_replycontent() {
-  _has_bits_[0] |= 0x00000020u;
+  
   // @@protoc_insertion_point(field_mutable:Message.ClientMessage.replyContent)
   return replycontent_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ClientMessage::release_replycontent() {
   // @@protoc_insertion_point(field_release:Message.ClientMessage.replyContent)
-  if (!has_replycontent()) {
-    return nullptr;
-  }
-  _has_bits_[0] &= ~0x00000020u;
-  return replycontent_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  
+  return replycontent_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void ClientMessage::set_allocated_replycontent(::std::string* replycontent) {
   if (replycontent != nullptr) {
-    _has_bits_[0] |= 0x00000020u;
+    
   } else {
-    _has_bits_[0] &= ~0x00000020u;
+    
   }
   replycontent_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), replycontent);
   // @@protoc_insertion_point(field_set_allocated:Message.ClientMessage.replyContent)
 }
 
-// repeated string groups = 12;
+// repeated string groups = 11;
 inline int ClientMessage::groups_size() const {
   return groups_.size();
 }
@@ -1139,11 +992,6 @@ template <> struct is_proto_enum< ::Message::ClientMessage_authorizationTypes> :
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Message::ClientMessage_authorizationTypes>() {
   return ::Message::ClientMessage_authorizationTypes_descriptor();
-}
-template <> struct is_proto_enum< ::Message::ClientMessage_commandTypes> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Message::ClientMessage_commandTypes>() {
-  return ::Message::ClientMessage_commandTypes_descriptor();
 }
 template <> struct is_proto_enum< ::Message::ClientMessage_replyStatus> : ::std::true_type {};
 template <>

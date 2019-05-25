@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package Message;
 
@@ -6,8 +6,8 @@ message ClientMessage {
 
   enum  messageTypes{
     AUTHORIZATION = 0;
-    COMMAND = 1;
-    GROUP = 2;
+    GROUP = 1;
+    REPLY = 2;
   }
 
   enum groupActionTypes{
@@ -22,13 +22,7 @@ message ClientMessage {
 
   enum authorizationTypes{
     LOG_IN = 0;
-    REGISTER_LOGIN = 1;
-    REGISTER_PASSWORD = 2;
-  }
-
-  enum commandTypes{
-    EXIT = 0;
-    LOG_OUT = 1;
+    REGISTER = 1;
   }
 
   enum replyStatus{
@@ -36,20 +30,19 @@ message ClientMessage {
     NEGATIVE = 1;
   }
 
-  required messageTypes messageType = 1[default = AUTHORIZATION];
+  messageTypes messageType = 1;
 
-  optional groupActionTypes groupActionType = 2;
-  optional authorizationTypes authorizationType = 3;
-  optional commandTypes commandType = 4;
+  groupActionTypes groupActionType = 2;
+  authorizationTypes authorizationType = 3;
 
-  optional string login = 5;
-  optional string password = 6;
-  optional string groupName = 7;
-  optional string userName = 8;
-  optional string messageContent = 9;
+  string login = 4;
+  string password = 5;
+  string groupName = 6;
+  string userName = 7;
+  string messageContent = 8;
 
-  optional replyStatus reply = 10;
-  optional string replyContent = 11;
+  replyStatus reply = 9;
+  string replyContent = 10;
 
-  repeated string groups = 12;
+  repeated string groups = 11;
 }

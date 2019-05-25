@@ -5,13 +5,14 @@
 
 #include <memory>
 #include <map>
-#include <pthread>
+#include <pthread.h>
 
 class Connections{
   //std::vector < std::pair < std::shared_ptr < NetworkPipe > , int > > pipes;
   std::map< int , std::shared_ptr<NetworkPipe> > pipes;
-  pthread_cond_t threadCond;
+
 public:
+  Connections();
   void insertPipe(std::shared_ptr<NetworkPipe> pipe, int fd);
   void deletePipe(int fd);
 

@@ -41,11 +41,11 @@ void InitDefaults_Message_2eproto() {
 }
 
 ::google::protobuf::Metadata file_level_metadata_Message_2eproto[1];
-const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_Message_2eproto[5];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_Message_2eproto[4];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_Message_2eproto = nullptr;
 
 const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, _has_bits_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -53,7 +53,6 @@ const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, messagetype_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, groupactiontype_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, authorizationtype_),
-  PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, commandtype_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, login_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, password_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, groupname_),
@@ -62,21 +61,9 @@ const ::google::protobuf::uint32 TableStruct_Message_2eproto::offsets[] PROTOBUF
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, reply_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, replycontent_),
   PROTOBUF_FIELD_OFFSET(::Message::ClientMessage, groups_),
-  6,
-  7,
-  8,
-  9,
-  0,
-  1,
-  2,
-  3,
-  4,
-  10,
-  5,
-  ~0u,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 17, sizeof(::Message::ClientMessage)},
+  { 0, -1, sizeof(::Message::ClientMessage)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -90,32 +77,29 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Message_2eproto[] =
-  "\n\rMessage.proto\022\007Message\"\225\006\n\rClientMessa"
-  "ge\022G\n\013messageType\030\001 \002(\0162#.Message.Client"
-  "Message.messageTypes:\rAUTHORIZATION\022@\n\017g"
-  "roupActionType\030\002 \001(\0162\'.Message.ClientMes"
-  "sage.groupActionTypes\022D\n\021authorizationTy"
-  "pe\030\003 \001(\0162).Message.ClientMessage.authori"
-  "zationTypes\0228\n\013commandType\030\004 \001(\0162#.Messa"
-  "ge.ClientMessage.commandTypes\022\r\n\005login\030\005"
-  " \001(\t\022\020\n\010password\030\006 \001(\t\022\021\n\tgroupName\030\007 \001("
-  "\t\022\020\n\010userName\030\010 \001(\t\022\026\n\016messageContent\030\t "
-  "\001(\t\0221\n\005reply\030\n \001(\0162\".Message.ClientMessa"
-  "ge.replyStatus\022\024\n\014replyContent\030\013 \001(\t\022\016\n\006"
-  "groups\030\014 \003(\t\"9\n\014messageTypes\022\021\n\rAUTHORIZ"
-  "ATION\020\000\022\013\n\007COMMAND\020\001\022\t\n\005GROUP\020\002\"h\n\020group"
-  "ActionTypes\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006"
-  "DELETE\020\002\022\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DEC"
-  "LINE\020\005\022\t\n\005LEAVE\020\006\"K\n\022authorizationTypes\022"
-  "\n\n\006LOG_IN\020\000\022\022\n\016REGISTER_LOGIN\020\001\022\025\n\021REGIS"
-  "TER_PASSWORD\020\002\"%\n\014commandTypes\022\010\n\004EXIT\020\000"
-  "\022\013\n\007LOG_OUT\020\001\")\n\013replyStatus\022\014\n\010POSITIVE"
-  "\020\000\022\014\n\010NEGATIVE\020\001"
+  "\n\rMessage.proto\022\007Message\"\206\005\n\rClientMessa"
+  "ge\0228\n\013messageType\030\001 \001(\0162#.Message.Client"
+  "Message.messageTypes\022@\n\017groupActionType\030"
+  "\002 \001(\0162\'.Message.ClientMessage.groupActio"
+  "nTypes\022D\n\021authorizationType\030\003 \001(\0162).Mess"
+  "age.ClientMessage.authorizationTypes\022\r\n\005"
+  "login\030\004 \001(\t\022\020\n\010password\030\005 \001(\t\022\021\n\tgroupNa"
+  "me\030\006 \001(\t\022\020\n\010userName\030\007 \001(\t\022\026\n\016messageCon"
+  "tent\030\010 \001(\t\0221\n\005reply\030\t \001(\0162\".Message.Clie"
+  "ntMessage.replyStatus\022\024\n\014replyContent\030\n "
+  "\001(\t\022\016\n\006groups\030\013 \003(\t\"7\n\014messageTypes\022\021\n\rA"
+  "UTHORIZATION\020\000\022\t\n\005GROUP\020\001\022\t\n\005REPLY\020\002\"h\n\020"
+  "groupActionTypes\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020"
+  "\001\022\n\n\006DELETE\020\002\022\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013"
+  "\n\007DECLINE\020\005\022\t\n\005LEAVE\020\006\".\n\022authorizationT"
+  "ypes\022\n\n\006LOG_IN\020\000\022\014\n\010REGISTER\020\001\")\n\013replyS"
+  "tatus\022\014\n\010POSITIVE\020\000\022\014\n\010NEGATIVE\020\001b\006proto"
+  "3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
   false, InitDefaults_Message_2eproto, 
   descriptor_table_protodef_Message_2eproto,
-  "Message.proto", &assign_descriptors_table_Message_2eproto, 816,
+  "Message.proto", &assign_descriptors_table_Message_2eproto, 681,
 };
 
 void AddDescriptors_Message_2eproto() {
@@ -145,8 +129,8 @@ bool ClientMessage_messageTypes_IsValid(int value) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const ClientMessage_messageTypes ClientMessage::AUTHORIZATION;
-const ClientMessage_messageTypes ClientMessage::COMMAND;
 const ClientMessage_messageTypes ClientMessage::GROUP;
+const ClientMessage_messageTypes ClientMessage::REPLY;
 const ClientMessage_messageTypes ClientMessage::messageTypes_MIN;
 const ClientMessage_messageTypes ClientMessage::messageTypes_MAX;
 const int ClientMessage::messageTypes_ARRAYSIZE;
@@ -190,7 +174,6 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
-    case 2:
       return true;
     default:
       return false;
@@ -199,36 +182,14 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const ClientMessage_authorizationTypes ClientMessage::LOG_IN;
-const ClientMessage_authorizationTypes ClientMessage::REGISTER_LOGIN;
-const ClientMessage_authorizationTypes ClientMessage::REGISTER_PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage::REGISTER;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MIN;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MAX;
 const int ClientMessage::authorizationTypes_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-const ::google::protobuf::EnumDescriptor* ClientMessage_commandTypes_descriptor() {
-  ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_Message_2eproto);
-  return file_level_enum_descriptors_Message_2eproto[3];
-}
-bool ClientMessage_commandTypes_IsValid(int value) {
-  switch (value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const ClientMessage_commandTypes ClientMessage::EXIT;
-const ClientMessage_commandTypes ClientMessage::LOG_OUT;
-const ClientMessage_commandTypes ClientMessage::commandTypes_MIN;
-const ClientMessage_commandTypes ClientMessage::commandTypes_MAX;
-const int ClientMessage::commandTypes_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 const ::google::protobuf::EnumDescriptor* ClientMessage_replyStatus_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_Message_2eproto);
-  return file_level_enum_descriptors_Message_2eproto[4];
+  return file_level_enum_descriptors_Message_2eproto[3];
 }
 bool ClientMessage_replyStatus_IsValid(int value) {
   switch (value) {
@@ -254,46 +215,12 @@ void ClientMessage::InitAsDefaultInstance() {
 }
 class ClientMessage::HasBitSetters {
  public:
-  static void set_has_messagetype(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000040u;
-  }
-  static void set_has_groupactiontype(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000080u;
-  }
-  static void set_has_authorizationtype(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000100u;
-  }
-  static void set_has_commandtype(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000200u;
-  }
-  static void set_has_login(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000001u;
-  }
-  static void set_has_password(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000002u;
-  }
-  static void set_has_groupname(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000004u;
-  }
-  static void set_has_username(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000008u;
-  }
-  static void set_has_messagecontent(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000010u;
-  }
-  static void set_has_reply(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000400u;
-  }
-  static void set_has_replycontent(ClientMessage* msg) {
-    msg->_has_bits_[0] |= 0x00000020u;
-  }
 };
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ClientMessage::kMessageTypeFieldNumber;
 const int ClientMessage::kGroupActionTypeFieldNumber;
 const int ClientMessage::kAuthorizationTypeFieldNumber;
-const int ClientMessage::kCommandTypeFieldNumber;
 const int ClientMessage::kLoginFieldNumber;
 const int ClientMessage::kPasswordFieldNumber;
 const int ClientMessage::kGroupNameFieldNumber;
@@ -312,31 +239,30 @@ ClientMessage::ClientMessage()
 ClientMessage::ClientMessage(const ClientMessage& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_),
       groups_(from.groups_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   login_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_login()) {
+  if (from.login().size() > 0) {
     login_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.login_);
   }
   password_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_password()) {
+  if (from.password().size() > 0) {
     password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
   }
   groupname_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_groupname()) {
+  if (from.groupname().size() > 0) {
     groupname_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.groupname_);
   }
   username_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_username()) {
+  if (from.username().size() > 0) {
     username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
   }
   messagecontent_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_messagecontent()) {
+  if (from.messagecontent().size() > 0) {
     messagecontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.messagecontent_);
   }
   replycontent_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_replycontent()) {
+  if (from.replycontent().size() > 0) {
     replycontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.replycontent_);
   }
   ::memcpy(&messagetype_, &from.messagetype_,
@@ -389,38 +315,15 @@ void ClientMessage::Clear() {
   (void) cached_has_bits;
 
   groups_.Clear();
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
-    if (cached_has_bits & 0x00000001u) {
-      login_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000002u) {
-      password_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000004u) {
-      groupname_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000008u) {
-      username_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000010u) {
-      messagecontent_.ClearNonDefaultToEmptyNoArena();
-    }
-    if (cached_has_bits & 0x00000020u) {
-      replycontent_.ClearNonDefaultToEmptyNoArena();
-    }
-  }
-  if (cached_has_bits & 0x000000c0u) {
-    ::memset(&messagetype_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&groupactiontype_) -
-        reinterpret_cast<char*>(&messagetype_)) + sizeof(groupactiontype_));
-  }
-  if (cached_has_bits & 0x00000700u) {
-    ::memset(&authorizationtype_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&reply_) -
-        reinterpret_cast<char*>(&authorizationtype_)) + sizeof(reply_));
-  }
-  _has_bits_.Clear();
+  login_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  password_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  groupname_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  messagecontent_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  replycontent_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&messagetype_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&reply_) -
+      reinterpret_cast<char*>(&messagetype_)) + sizeof(reply_));
   _internal_metadata_.Clear();
 }
 
@@ -437,179 +340,151 @@ const char* ClientMessage::_InternalParse(const char* begin, const char* end, vo
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
+      // .Message.ClientMessage.messageTypes messageType = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
         ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        if (!::Message::ClientMessage_messageTypes_IsValid(val)) {
-          ::google::protobuf::internal::WriteVarint(1, val, msg->mutable_unknown_fields());
-          break;
-        }
         msg->set_messagetype(static_cast<::Message::ClientMessage_messageTypes>(val));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
+      // .Message.ClientMessage.groupActionTypes groupActionType = 2;
       case 2: {
         if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
         ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        if (!::Message::ClientMessage_groupActionTypes_IsValid(val)) {
-          ::google::protobuf::internal::WriteVarint(2, val, msg->mutable_unknown_fields());
-          break;
-        }
         msg->set_groupactiontype(static_cast<::Message::ClientMessage_groupActionTypes>(val));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
+      // .Message.ClientMessage.authorizationTypes authorizationType = 3;
       case 3: {
         if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
         ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        if (!::Message::ClientMessage_authorizationTypes_IsValid(val)) {
-          ::google::protobuf::internal::WriteVarint(3, val, msg->mutable_unknown_fields());
-          break;
-        }
         msg->set_authorizationtype(static_cast<::Message::ClientMessage_authorizationTypes>(val));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // optional .Message.ClientMessage.commandTypes commandType = 4;
+      // string login = 4;
       case 4: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 32) goto handle_unusual;
-        ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        if (!::Message::ClientMessage_commandTypes_IsValid(val)) {
-          ::google::protobuf::internal::WriteVarint(4, val, msg->mutable_unknown_fields());
-          break;
-        }
-        msg->set_commandtype(static_cast<::Message::ClientMessage_commandTypes>(val));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
-      // optional string login = 5;
-      case 5: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 42) goto handle_unusual;
+        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.login");
         object = msg->mutable_login();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
           goto string_till_end;
         }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
         break;
       }
-      // optional string password = 6;
-      case 6: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 50) goto handle_unusual;
+      // string password = 5;
+      case 5: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 42) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.password");
         object = msg->mutable_password();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
           goto string_till_end;
         }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
         break;
       }
-      // optional string groupName = 7;
-      case 7: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 58) goto handle_unusual;
+      // string groupName = 6;
+      case 6: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 50) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.groupName");
         object = msg->mutable_groupname();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
           goto string_till_end;
         }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
         break;
       }
-      // optional string userName = 8;
-      case 8: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 66) goto handle_unusual;
+      // string userName = 7;
+      case 7: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 58) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.userName");
         object = msg->mutable_username();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
           goto string_till_end;
         }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
         break;
       }
-      // optional string messageContent = 9;
-      case 9: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 74) goto handle_unusual;
+      // string messageContent = 8;
+      case 8: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 66) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.messageContent");
         object = msg->mutable_messagecontent();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
           goto string_till_end;
         }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
         break;
       }
-      // optional .Message.ClientMessage.replyStatus reply = 10;
-      case 10: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 80) goto handle_unusual;
+      // .Message.ClientMessage.replyStatus reply = 9;
+      case 9: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 72) goto handle_unusual;
         ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
-        if (!::Message::ClientMessage_replyStatus_IsValid(val)) {
-          ::google::protobuf::internal::WriteVarint(10, val, msg->mutable_unknown_fields());
-          break;
-        }
         msg->set_reply(static_cast<::Message::ClientMessage_replyStatus>(val));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // optional string replyContent = 11;
-      case 11: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 90) goto handle_unusual;
+      // string replyContent = 10;
+      case 10: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 82) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("Message.ClientMessage.replyContent");
         object = msg->mutable_replycontent();
         if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
           goto string_till_end;
         }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
         ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
         ptr += size;
         break;
       }
-      // repeated string groups = 12;
-      case 12: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 98) goto handle_unusual;
+      // repeated string groups = 11;
+      case 11: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 90) goto handle_unusual;
         do {
           ptr = ::google::protobuf::io::ReadSize(ptr, &size);
           GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
           ctx->extra_parse_data().SetFieldName("Message.ClientMessage.groups");
           object = msg->add_groups();
           if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8Verify;
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
             goto string_till_end;
           }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8Verify(ptr, size, ctx));
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
           ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
           ptr += size;
           if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 98 && (ptr += 1));
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 90 && (ptr += 1));
         break;
       }
       default: {
@@ -646,201 +521,162 @@ bool ClientMessage::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
+      // .Message.ClientMessage.messageTypes messageType = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
           int value = 0;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::Message::ClientMessage_messageTypes_IsValid(value)) {
-            set_messagetype(static_cast< ::Message::ClientMessage_messageTypes >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(
-                1, static_cast<::google::protobuf::uint64>(value));
-          }
+          set_messagetype(static_cast< ::Message::ClientMessage_messageTypes >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
+      // .Message.ClientMessage.groupActionTypes groupActionType = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
           int value = 0;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::Message::ClientMessage_groupActionTypes_IsValid(value)) {
-            set_groupactiontype(static_cast< ::Message::ClientMessage_groupActionTypes >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(
-                2, static_cast<::google::protobuf::uint64>(value));
-          }
+          set_groupactiontype(static_cast< ::Message::ClientMessage_groupActionTypes >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
+      // .Message.ClientMessage.authorizationTypes authorizationType = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (24 & 0xFF)) {
           int value = 0;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::Message::ClientMessage_authorizationTypes_IsValid(value)) {
-            set_authorizationtype(static_cast< ::Message::ClientMessage_authorizationTypes >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(
-                3, static_cast<::google::protobuf::uint64>(value));
-          }
+          set_authorizationtype(static_cast< ::Message::ClientMessage_authorizationTypes >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional .Message.ClientMessage.commandTypes commandType = 4;
+      // string login = 4;
       case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (32 & 0xFF)) {
-          int value = 0;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          if (::Message::ClientMessage_commandTypes_IsValid(value)) {
-            set_commandtype(static_cast< ::Message::ClientMessage_commandTypes >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(
-                4, static_cast<::google::protobuf::uint64>(value));
-          }
+        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_login()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->login().data(), static_cast<int>(this->login().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.login"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional string login = 5;
+      // string password = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (42 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_login()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->login().data(), static_cast<int>(this->login().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.login");
+                input, this->mutable_password()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->password().data(), static_cast<int>(this->password().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.password"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional string password = 6;
+      // string groupName = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (50 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_password()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->password().data(), static_cast<int>(this->password().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.password");
+                input, this->mutable_groupname()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->groupname().data(), static_cast<int>(this->groupname().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.groupName"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional string groupName = 7;
+      // string userName = 7;
       case 7: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (58 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_groupname()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->groupname().data(), static_cast<int>(this->groupname().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.groupName");
+                input, this->mutable_username()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->username().data(), static_cast<int>(this->username().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.userName"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional string userName = 8;
+      // string messageContent = 8;
       case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (66 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_username()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->username().data(), static_cast<int>(this->username().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.userName");
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // optional string messageContent = 9;
-      case 9: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (74 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_messagecontent()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->messagecontent().data(), static_cast<int>(this->messagecontent().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.messageContent");
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.messageContent"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional .Message.ClientMessage.replyStatus reply = 10;
-      case 10: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (80 & 0xFF)) {
+      // .Message.ClientMessage.replyStatus reply = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (72 & 0xFF)) {
           int value = 0;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::Message::ClientMessage_replyStatus_IsValid(value)) {
-            set_reply(static_cast< ::Message::ClientMessage_replyStatus >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(
-                10, static_cast<::google::protobuf::uint64>(value));
-          }
+          set_reply(static_cast< ::Message::ClientMessage_replyStatus >(value));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // optional string replyContent = 11;
+      // string replyContent = 10;
+      case 10: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (82 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_replycontent()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->replycontent().data(), static_cast<int>(this->replycontent().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.replyContent"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string groups = 11;
       case 11: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (90 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_replycontent()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->replycontent().data(), static_cast<int>(this->replycontent().length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.replyContent");
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // repeated string groups = 12;
-      case 12: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (98 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->add_groups()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->groups(this->groups_size() - 1).data(),
             static_cast<int>(this->groups(this->groups_size() - 1).length()),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "Message.ClientMessage.groups");
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Message.ClientMessage.groups"));
         } else {
           goto handle_unusual;
         }
@@ -874,105 +710,98 @@ void ClientMessage::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cached_has_bits = _has_bits_[0];
-  // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-  if (cached_has_bits & 0x00000040u) {
+  // .Message.ClientMessage.messageTypes messageType = 1;
+  if (this->messagetype() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->messagetype(), output);
   }
 
-  // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-  if (cached_has_bits & 0x00000080u) {
+  // .Message.ClientMessage.groupActionTypes groupActionType = 2;
+  if (this->groupactiontype() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->groupactiontype(), output);
   }
 
-  // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-  if (cached_has_bits & 0x00000100u) {
+  // .Message.ClientMessage.authorizationTypes authorizationType = 3;
+  if (this->authorizationtype() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->authorizationtype(), output);
   }
 
-  // optional .Message.ClientMessage.commandTypes commandType = 4;
-  if (cached_has_bits & 0x00000200u) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      4, this->commandtype(), output);
-  }
-
-  // optional string login = 5;
-  if (cached_has_bits & 0x00000001u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string login = 4;
+  if (this->login().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->login().data(), static_cast<int>(this->login().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.login");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      5, this->login(), output);
+      4, this->login(), output);
   }
 
-  // optional string password = 6;
-  if (cached_has_bits & 0x00000002u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string password = 5;
+  if (this->password().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->password().data(), static_cast<int>(this->password().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.password");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      6, this->password(), output);
+      5, this->password(), output);
   }
 
-  // optional string groupName = 7;
-  if (cached_has_bits & 0x00000004u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string groupName = 6;
+  if (this->groupname().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->groupname().data(), static_cast<int>(this->groupname().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.groupName");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      7, this->groupname(), output);
+      6, this->groupname(), output);
   }
 
-  // optional string userName = 8;
-  if (cached_has_bits & 0x00000008u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string userName = 7;
+  if (this->username().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->username().data(), static_cast<int>(this->username().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.userName");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      8, this->username(), output);
+      7, this->username(), output);
   }
 
-  // optional string messageContent = 9;
-  if (cached_has_bits & 0x00000010u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string messageContent = 8;
+  if (this->messagecontent().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->messagecontent().data(), static_cast<int>(this->messagecontent().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.messageContent");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      9, this->messagecontent(), output);
+      8, this->messagecontent(), output);
   }
 
-  // optional .Message.ClientMessage.replyStatus reply = 10;
-  if (cached_has_bits & 0x00000400u) {
+  // .Message.ClientMessage.replyStatus reply = 9;
+  if (this->reply() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      10, this->reply(), output);
+      9, this->reply(), output);
   }
 
-  // optional string replyContent = 11;
-  if (cached_has_bits & 0x00000020u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string replyContent = 10;
+  if (this->replycontent().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->replycontent().data(), static_cast<int>(this->replycontent().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.replyContent");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      11, this->replycontent(), output);
+      10, this->replycontent(), output);
   }
 
-  // repeated string groups = 12;
+  // repeated string groups = 11;
   for (int i = 0, n = this->groups_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->groups(i).data(), static_cast<int>(this->groups(i).length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.groups");
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      12, this->groups(i), output);
+      11, this->groups(i), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -988,111 +817,104 @@ void ClientMessage::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cached_has_bits = _has_bits_[0];
-  // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-  if (cached_has_bits & 0x00000040u) {
+  // .Message.ClientMessage.messageTypes messageType = 1;
+  if (this->messagetype() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->messagetype(), target);
   }
 
-  // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-  if (cached_has_bits & 0x00000080u) {
+  // .Message.ClientMessage.groupActionTypes groupActionType = 2;
+  if (this->groupactiontype() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       2, this->groupactiontype(), target);
   }
 
-  // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-  if (cached_has_bits & 0x00000100u) {
+  // .Message.ClientMessage.authorizationTypes authorizationType = 3;
+  if (this->authorizationtype() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->authorizationtype(), target);
   }
 
-  // optional .Message.ClientMessage.commandTypes commandType = 4;
-  if (cached_has_bits & 0x00000200u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      4, this->commandtype(), target);
-  }
-
-  // optional string login = 5;
-  if (cached_has_bits & 0x00000001u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string login = 4;
+  if (this->login().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->login().data(), static_cast<int>(this->login().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.login");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->login(), target);
+        4, this->login(), target);
   }
 
-  // optional string password = 6;
-  if (cached_has_bits & 0x00000002u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string password = 5;
+  if (this->password().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->password().data(), static_cast<int>(this->password().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.password");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        6, this->password(), target);
+        5, this->password(), target);
   }
 
-  // optional string groupName = 7;
-  if (cached_has_bits & 0x00000004u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string groupName = 6;
+  if (this->groupname().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->groupname().data(), static_cast<int>(this->groupname().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.groupName");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        7, this->groupname(), target);
+        6, this->groupname(), target);
   }
 
-  // optional string userName = 8;
-  if (cached_has_bits & 0x00000008u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string userName = 7;
+  if (this->username().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->username().data(), static_cast<int>(this->username().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.userName");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        8, this->username(), target);
+        7, this->username(), target);
   }
 
-  // optional string messageContent = 9;
-  if (cached_has_bits & 0x00000010u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string messageContent = 8;
+  if (this->messagecontent().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->messagecontent().data(), static_cast<int>(this->messagecontent().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.messageContent");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        9, this->messagecontent(), target);
+        8, this->messagecontent(), target);
   }
 
-  // optional .Message.ClientMessage.replyStatus reply = 10;
-  if (cached_has_bits & 0x00000400u) {
+  // .Message.ClientMessage.replyStatus reply = 9;
+  if (this->reply() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      10, this->reply(), target);
+      9, this->reply(), target);
   }
 
-  // optional string replyContent = 11;
-  if (cached_has_bits & 0x00000020u) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+  // string replyContent = 10;
+  if (this->replycontent().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->replycontent().data(), static_cast<int>(this->replycontent().length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.replyContent");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        11, this->replycontent(), target);
+        10, this->replycontent(), target);
   }
 
-  // repeated string groups = 12;
+  // repeated string groups = 11;
   for (int i = 0, n = this->groups_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->groups(i).data(), static_cast<int>(this->groups(i).length()),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "Message.ClientMessage.groups");
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(12, this->groups(i), target);
+      WriteStringToArray(11, this->groups(i), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1112,16 +934,11 @@ size_t ClientMessage::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  // required .Message.ClientMessage.messageTypes messageType = 1 [default = AUTHORIZATION];
-  if (has_messagetype()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->messagetype());
-  }
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string groups = 12;
+  // repeated string groups = 11;
   total_size += 1 *
       ::google::protobuf::internal::FromIntSize(this->groups_size());
   for (int i = 0, n = this->groups_size(); i < n; i++) {
@@ -1129,77 +946,72 @@ size_t ClientMessage::ByteSizeLong() const {
       this->groups(i));
   }
 
-  cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000003fu) {
-    // optional string login = 5;
-    if (cached_has_bits & 0x00000001u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->login());
-    }
-
-    // optional string password = 6;
-    if (cached_has_bits & 0x00000002u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->password());
-    }
-
-    // optional string groupName = 7;
-    if (cached_has_bits & 0x00000004u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->groupname());
-    }
-
-    // optional string userName = 8;
-    if (cached_has_bits & 0x00000008u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->username());
-    }
-
-    // optional string messageContent = 9;
-    if (cached_has_bits & 0x00000010u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->messagecontent());
-    }
-
-    // optional string replyContent = 11;
-    if (cached_has_bits & 0x00000020u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->replycontent());
-    }
-
+  // string login = 4;
+  if (this->login().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->login());
   }
-  // optional .Message.ClientMessage.groupActionTypes groupActionType = 2;
-  if (cached_has_bits & 0x00000080u) {
+
+  // string password = 5;
+  if (this->password().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->password());
+  }
+
+  // string groupName = 6;
+  if (this->groupname().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->groupname());
+  }
+
+  // string userName = 7;
+  if (this->username().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->username());
+  }
+
+  // string messageContent = 8;
+  if (this->messagecontent().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->messagecontent());
+  }
+
+  // string replyContent = 10;
+  if (this->replycontent().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->replycontent());
+  }
+
+  // .Message.ClientMessage.messageTypes messageType = 1;
+  if (this->messagetype() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->messagetype());
+  }
+
+  // .Message.ClientMessage.groupActionTypes groupActionType = 2;
+  if (this->groupactiontype() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->groupactiontype());
   }
 
-  if (cached_has_bits & 0x00000700u) {
-    // optional .Message.ClientMessage.authorizationTypes authorizationType = 3;
-    if (cached_has_bits & 0x00000100u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->authorizationtype());
-    }
-
-    // optional .Message.ClientMessage.commandTypes commandType = 4;
-    if (cached_has_bits & 0x00000200u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->commandtype());
-    }
-
-    // optional .Message.ClientMessage.replyStatus reply = 10;
-    if (cached_has_bits & 0x00000400u) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->reply());
-    }
-
+  // .Message.ClientMessage.authorizationTypes authorizationType = 3;
+  if (this->authorizationtype() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->authorizationtype());
   }
+
+  // .Message.ClientMessage.replyStatus reply = 9;
+  if (this->reply() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->reply());
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -1228,51 +1040,41 @@ void ClientMessage::MergeFrom(const ClientMessage& from) {
   (void) cached_has_bits;
 
   groups_.MergeFrom(from.groups_);
-  cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x000000ffu) {
-    if (cached_has_bits & 0x00000001u) {
-      _has_bits_[0] |= 0x00000001u;
-      login_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.login_);
-    }
-    if (cached_has_bits & 0x00000002u) {
-      _has_bits_[0] |= 0x00000002u;
-      password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
-    }
-    if (cached_has_bits & 0x00000004u) {
-      _has_bits_[0] |= 0x00000004u;
-      groupname_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.groupname_);
-    }
-    if (cached_has_bits & 0x00000008u) {
-      _has_bits_[0] |= 0x00000008u;
-      username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
-    }
-    if (cached_has_bits & 0x00000010u) {
-      _has_bits_[0] |= 0x00000010u;
-      messagecontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.messagecontent_);
-    }
-    if (cached_has_bits & 0x00000020u) {
-      _has_bits_[0] |= 0x00000020u;
-      replycontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.replycontent_);
-    }
-    if (cached_has_bits & 0x00000040u) {
-      messagetype_ = from.messagetype_;
-    }
-    if (cached_has_bits & 0x00000080u) {
-      groupactiontype_ = from.groupactiontype_;
-    }
-    _has_bits_[0] |= cached_has_bits;
+  if (from.login().size() > 0) {
+
+    login_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.login_);
   }
-  if (cached_has_bits & 0x00000700u) {
-    if (cached_has_bits & 0x00000100u) {
-      authorizationtype_ = from.authorizationtype_;
-    }
-    if (cached_has_bits & 0x00000200u) {
-      commandtype_ = from.commandtype_;
-    }
-    if (cached_has_bits & 0x00000400u) {
-      reply_ = from.reply_;
-    }
-    _has_bits_[0] |= cached_has_bits;
+  if (from.password().size() > 0) {
+
+    password_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.password_);
+  }
+  if (from.groupname().size() > 0) {
+
+    groupname_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.groupname_);
+  }
+  if (from.username().size() > 0) {
+
+    username_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.username_);
+  }
+  if (from.messagecontent().size() > 0) {
+
+    messagecontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.messagecontent_);
+  }
+  if (from.replycontent().size() > 0) {
+
+    replycontent_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.replycontent_);
+  }
+  if (from.messagetype() != 0) {
+    set_messagetype(from.messagetype());
+  }
+  if (from.groupactiontype() != 0) {
+    set_groupactiontype(from.groupactiontype());
+  }
+  if (from.authorizationtype() != 0) {
+    set_authorizationtype(from.authorizationtype());
+  }
+  if (from.reply() != 0) {
+    set_reply(from.reply());
   }
 }
 
@@ -1291,7 +1093,6 @@ void ClientMessage::CopyFrom(const ClientMessage& from) {
 }
 
 bool ClientMessage::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000040) != 0x00000040) return false;
   return true;
 }
 
@@ -1302,7 +1103,6 @@ void ClientMessage::Swap(ClientMessage* other) {
 void ClientMessage::InternalSwap(ClientMessage* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_has_bits_[0], other->_has_bits_[0]);
   groups_.InternalSwap(CastToBase(&other->groups_));
   login_.Swap(&other->login_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
@@ -1319,7 +1119,6 @@ void ClientMessage::InternalSwap(ClientMessage* other) {
   swap(messagetype_, other->messagetype_);
   swap(groupactiontype_, other->groupactiontype_);
   swap(authorizationtype_, other->authorizationtype_);
-  swap(commandtype_, other->commandtype_);
   swap(reply_, other->reply_);
 }
 
