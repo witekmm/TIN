@@ -2,15 +2,11 @@
 #define CREATE_REPLY_H
 using namespace std;
 #include "../../Messages/Message.pb.h"
-#include "../Transport/Transport.h"
 
 #include <string>
 
-class Transport;
-
 class CreateReply{
-  Transport& transport;
-public:
+public:/*
   void userNotInGroup(string groupName,string login);
   void groupMessageConfirmation(string groupName,string login);
   void groupNameExist(string groupName,string login);
@@ -34,7 +30,7 @@ public:
 
   void sendGroups(vector<string >groupList ,string login ,int socketNumber);
 
-  void sendMessage(string content, string toWho, string fromWho, string whichGroup);
+  void sendMessage(string content, string toWho, string fromWho, string whichGroup);*/
 };
 
 #endif
