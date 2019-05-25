@@ -1,0 +1,4 @@
+#ifndef MESSAHE_HANDLER_H
+#define MESSAHE_HANDLER_H
+
+class
