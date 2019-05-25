@@ -61,31 +61,62 @@ int readBytesSize() {
         if(numberOfBytesToRead == 0) {
             numberOfBytesToRead = atoi(readBytesBuffer.c_str());
             bytesMessageSizeRead = true;
+
+            readBytesBuffer.clear();
         }
 
         delete [] tmp;
         return 0;
     } else {
+        clearReadBytesVariables();
+        delete [] tmp;
+
+        return -1;
+    }
+}
+
+int readBytesMessage() {
+    char *tmp = new char[numberOfBytesToRead];
+
+    int bytesReceived = recv(this->socketNumber, &temp, 
+        numberOfBytesToRead, MSG_DONTWAIT);
+
+
+    if(bytesReceived > 0) {
+        numberOfBytesToRead -= bytesReceived;
+
+        string tmpString(tmp, bytesReceived);
+        readBytesBuffer += tmpString;
+
+        if(numberOfBytesToRead == 0) {
+            Message::ClientMessage message;
+            message.ParseFromString(readBytesBuffer);
+
+            addWriteMessage(message);
+
+            clearReadBytesVariables();
+            delete [] tmp;
+            return 1;
+        }
+
+        delete [] tmp;
+        return 0;
+
+    } else {
+        clearReadBytesVariables();
         delete [] tmp;
         return -1;
     }
 }
 
 int ClientSessionPipe::readBytes() {
+    int result;
+
     if(!bytesMessageSizeRead) {
-        int result = readBytesSize();
-        return result;
+        result = readBytesSize();
     } else {
-        
+        int result = readBytesSize();
     }
 
-
-
-    //TODO: read bytes
-    //TODO: when full message is received deserialize it and push to writeMessagesBuffer
-
-    //return:
-    //  1: full message is read
-    //  0: part of message is read
-    //  -1: error while reading
+    return result;
 }

@@ -23,6 +23,8 @@ class ClientSessionPipe {
     void clearReadBytesVariables();
     void addWriteMessage(Message::ClientMessage);
 
+    int readBytesSize();
+
 public:
     ClientSessionPipe(int);
 
