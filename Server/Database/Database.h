@@ -35,6 +35,7 @@ class Database {
     std::string getGroupName(int groupId);
     // stworz grupe z podanym id administratora
     void createGroup(std::string groupName, int userId);
+    void createGroup(std::string groupName, std::string login);
     // usun grupe
     void deleteGroup(std::string groupName);
     // czy userId to administrator podanej grupy

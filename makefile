@@ -10,6 +10,10 @@ OBJS = main.o CLI.o MainConstants.o Network.o ServerOperations.o Message.pb.o
 PIPES = ClientSessionPipes.o
 LOGIC = MessageHandler.o DataBaseConnector.o Database.o
 CC = g++
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6b6554a558efc62dcefe53b29f498f1406b36c71
 FLAGS = -std=c++11 -pthread -I/usr/local/include
 LINKER_FLAGS = -L/usr/local/lib -lprotobuf -pthread
 

@@ -4,7 +4,9 @@
 #include "../Database/Database.h"
 #include <string>
 
-class DataBaseConnector: private Database{
+class DataBaseConnector: public Database{
+  Database database;
+  DataBaseConnector();
   void sendGroupMessage(std::string content, std::string groupName, std::string login);
   void createGroup(std::string groupName, std::string login);
   void deleteGroup(std::string groupName, std::string login);
