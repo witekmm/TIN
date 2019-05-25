@@ -1,3 +1,1 @@
-#!/bin/bash
-g++ -Wall -I/usr/include/cppconn -o $2 $1 -L/usr/lib -lmysqlcppconn
-#g++ -o $2 $1 -L/usr/include/mysql -lmysqlclient -I/usr/include/mysql
+g++ -I/usr/include/cppconn $1 $2 -o database -L/usr/lib -lmysqlcppconn

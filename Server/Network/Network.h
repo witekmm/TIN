@@ -1,19 +1,19 @@
+#ifndef NETWORK_H
+#define NETWORK_H
+
+#include "../Transport/Transport.h"
+#include <vector>
+#include <utility>
 #include "NetLibs.h"
+#include "Server.h"
+#include "Client.h"
 
 using namespace std;
 
-#ifndef NETWORK_H
-#define NETWORK_H
-#include "../Transport/Transport.h"
-#include "Server.h"
-#include "Client.h"
-#include <vector>
-#include <utility>
 class Transport;
-
 class Interface;
-
-class Network{
+class Network
+{
   //representation of server
   Server server;
   //Descriptors list:
@@ -29,11 +29,11 @@ class Network{
   //list of sockets that select is listening
   vector<int> activeSockets;
   int sockets;
-  //refernece to transport pipe
+  //reference to transport pipe
   Transport& transport;
+
 public:
   Network(Transport& tp);
-  //quite obvious
   int startServer(int maxConnections, int port, string ip);
   void addSocket(int socketNumber);
   //signal from sockets
@@ -66,12 +66,13 @@ public:
   void disconnectClient(string login);
   void disconnectClientBySN(int socketNumber);
   int isClientLogged(int socketNumber);
-  //
+
   Client& findClient(int socketNumber);
   //client exists?
   int checkIfClient(string login);
   int checkIfClient(int socketNumber);
-  vector<pair<string , int>> getClientsList();
+  vector<pair<string, int>> getClientsList();
+
 };
 
 #endif

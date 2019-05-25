@@ -3,15 +3,7 @@
 using namespace std;
 
 Server::Server()
-  : Server(DEFAULT_MAX_CONNECTIONS, DEFAULT_SERVER_PORT, DEFAULT_SERVER_IP)
-{
-  // this->serverAddress.sin_family = AF_INET;
-  // this->serverAddress.sin_port = htons(DEFAULT_SERVER_PORT);
-  // this->len = sizeof(this->serverAddress);
-  // this->maxConnections = DEFAULT_MAX_CONNECTIONS;
-  // this->port = DEFAULT_SERVER_PORT;
-  // this->serverIP = string(DEFAULT_SERVER_IP);
-}
+  : Server(DEFAULT_MAX_CONNECTIONS, DEFAULT_SERVER_PORT, DEFAULT_SERVER_IP){}
 
 Server::Server(int maxConnections, int port, string ip)
 {
@@ -25,27 +17,29 @@ Server::Server(int maxConnections, int port, string ip)
 
 int Server::createServerSocket()
 {
-  if( inet_pton(AF_INET, (char*)&this->serverIP, &this->serverAddress.sin_addr) <= 0){
+  if( inet_pton(AF_INET, (char*)&serverIP, &serverAddress.sin_addr) <= 0){
     return -1;
   }
   int yes = 1;
-  this->socketNumber = socket(AF_INET, SOCK_STREAM, 0);
-  if(this->socketNumber < 0) return -1;
-  if(setsockopt(this->socketNumber, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == - 1)
+  socketNumber = socket(AF_INET, SOCK_STREAM, 0);
+ 
+  if(socketNumber < 0) 
+    return -1;
+  if(setsockopt(socketNumber, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
   {
-    shutdown(this->socketNumber, SHUT_RDWR);
-    close(this->socketNumber);
+    shutdown(socketNumber, SHUT_RDWR);
+    close(socketNumber);
     return -1;
   }
-  return this->socketNumber;
+  return socketNumber;
 }
 
 int Server::bindServerSocket()
 {
-  if( bind(this->socketNumber, (struct sockaddr*)&(this->serverAddress), this->len) < 0) 
+  if( bind(socketNumber, (struct sockaddr*)&serverAddress, len) < 0) 
   {
-    shutdown(this->socketNumber, SHUT_RDWR);
-    close(this->socketNumber);
+    shutdown(socketNumber, SHUT_RDWR);
+    close(socketNumber);
     return -1;
   }
   else return 0;
@@ -53,10 +47,10 @@ int Server::bindServerSocket()
 
 int Server::listenServerSocket()
 {
-  if(listen(this->socketNumber, this->maxConnections) < 0)
+  if(listen(socketNumber, maxConnections) < 0)
   {
-    shutdown(this->socketNumber, SHUT_RDWR);
-    close(this->socketNumber);
+    shutdown(socketNumber, SHUT_RDWR);
+    close(socketNumber);
     return -1;
   }
   else return 0;
@@ -65,13 +59,12 @@ int Server::listenServerSocket()
 int Server::acceptConnection()
 {
   struct sockaddr_in client = {};
-  socklen_t addrlen = sizeof( client );
+  socklen_t addrlen = sizeof(client);
   //połaczenie nieblokujące
-  int newfd = accept4(this->socketNumber, (struct sockaddr*)&client, &addrlen, SOCK_NONBLOCK);
-  //Brak połączenia
-  if(newfd == -1) return -1;
-  //Połączono
-  else return newfd;
+  int newfd = accept4(socketNumber, (struct sockaddr*)&client, &addrlen, SOCK_NONBLOCK);
+  if(newfd == -1)  //Brak połączenia
+    return -1;
+  else return newfd; //Połączono
 }
 
 int Server::getSocketNumber(){

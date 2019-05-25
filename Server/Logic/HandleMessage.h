@@ -16,7 +16,8 @@ class HandleDataBase;
 
 class Interface;
 
-class HandleMessage{
+class HandleMessage
+{
   Transport& transport;
   HandleDataBase& database;
   Interface& interface;
