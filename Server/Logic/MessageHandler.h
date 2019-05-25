@@ -2,9 +2,11 @@
 #define MESSAGE_HANDLER_H
 
 #include <string>
+#include <cstddef>
 #include "../../Messages/Message.pb.h"
+#include "DataBaseConnector.h"
 
-class MessageHandler{
+class MessageHandler: private DataBaseConnector{
 public:
   //There have to be function that monitors users buffers
   //will be there

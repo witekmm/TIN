@@ -11,10 +11,10 @@
 class HandleMessage: public HandleDataBase{
 
 public:
-  void checkReceivedMessage(Message::ClientMessage message, string login,int socketNumber);
-  void authorizationHandle(Message::ClientMessage message,string login,int socketNumber);
-  void commandHandle(Message::ClientMessage message,string login);
-  void groupHandle(Message::ClientMessage message,string login);
+  void checkReceivedMessage(Message::ClientMessage message);
+  void authorizationHandle(Message::ClientMessage message);
+  void commandHandle(Message::ClientMessage message);
+  void groupHandle(Message::ClientMessage message);
 
   void checkCommand(string command);
   void checkIfMessageExistAndSend(string login);

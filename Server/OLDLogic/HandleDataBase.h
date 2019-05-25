@@ -8,7 +8,7 @@ using namespace std;
 #include <string>
 
 class HandleDataBase: public CreateReply{
-public:/*
+public:
   void sendGroupMessage(string content , string groupName , string login);
   void createGroup(string groupName , string login);
   void deleteGroup(string groupName , string login);
@@ -26,7 +26,7 @@ public:/*
   int rootDeleteUser(string login);
   int rootAddUser(string login, int password);
   int rootAddGroup(string groupName, string administrator);
-*/
+
 };
 
 #endif

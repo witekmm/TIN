@@ -77,7 +77,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Message_2eproto[] =
-  "\n\rMessage.proto\022\007Message\"\230\005\n\rClientMessa"
+  "\n\rMessage.proto\022\007Message\"\206\005\n\rClientMessa"
   "ge\0228\n\013messageType\030\001 \001(\0162#.Message.Client"
   "Message.messageTypes\022@\n\017groupActionType\030"
   "\002 \001(\0162\'.Message.ClientMessage.groupActio"
@@ -87,19 +87,19 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "me\030\006 \001(\t\022\020\n\010userName\030\007 \001(\t\022\026\n\016messageCon"
   "tent\030\010 \001(\t\0221\n\005reply\030\t \001(\0162\".Message.Clie"
   "ntMessage.replyStatus\022\024\n\014replyContent\030\n "
-  "\001(\t\022\016\n\006groups\030\013 \003(\t\",\n\014messageTypes\022\021\n\rA"
-  "UTHORIZATION\020\000\022\t\n\005GROUP\020\001\"h\n\020groupAction"
-  "Types\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001\022\n\n\006DELETE"
-  "\020\002\022\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n\007DECLINE\020\005"
-  "\022\t\n\005LEAVE\020\006\"K\n\022authorizationTypes\022\n\n\006LOG"
-  "_IN\020\000\022\022\n\016REGISTER_LOGIN\020\001\022\025\n\021REGISTER_PA"
-  "SSWORD\020\002\")\n\013replyStatus\022\014\n\010POSITIVE\020\000\022\014\n"
-  "\010NEGATIVE\020\001b\006proto3"
+  "\001(\t\022\016\n\006groups\030\013 \003(\t\"7\n\014messageTypes\022\021\n\rA"
+  "UTHORIZATION\020\000\022\t\n\005GROUP\020\001\022\t\n\005REPLY\020\002\"h\n\020"
+  "groupActionTypes\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020"
+  "\001\022\n\n\006DELETE\020\002\022\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013"
+  "\n\007DECLINE\020\005\022\t\n\005LEAVE\020\006\".\n\022authorizationT"
+  "ypes\022\n\n\006LOG_IN\020\000\022\014\n\010REGISTER\020\001\")\n\013replyS"
+  "tatus\022\014\n\010POSITIVE\020\000\022\014\n\010NEGATIVE\020\001b\006proto"
+  "3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
   false, InitDefaults_Message_2eproto, 
   descriptor_table_protodef_Message_2eproto,
-  "Message.proto", &assign_descriptors_table_Message_2eproto, 699,
+  "Message.proto", &assign_descriptors_table_Message_2eproto, 681,
 };
 
 void AddDescriptors_Message_2eproto() {
@@ -120,6 +120,7 @@ bool ClientMessage_messageTypes_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -129,6 +130,7 @@ bool ClientMessage_messageTypes_IsValid(int value) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const ClientMessage_messageTypes ClientMessage::AUTHORIZATION;
 const ClientMessage_messageTypes ClientMessage::GROUP;
+const ClientMessage_messageTypes ClientMessage::REPLY;
 const ClientMessage_messageTypes ClientMessage::messageTypes_MIN;
 const ClientMessage_messageTypes ClientMessage::messageTypes_MAX;
 const int ClientMessage::messageTypes_ARRAYSIZE;
@@ -172,7 +174,6 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
-    case 2:
       return true;
     default:
       return false;
@@ -181,8 +182,7 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const ClientMessage_authorizationTypes ClientMessage::LOG_IN;
-const ClientMessage_authorizationTypes ClientMessage::REGISTER_LOGIN;
-const ClientMessage_authorizationTypes ClientMessage::REGISTER_PASSWORD;
+const ClientMessage_authorizationTypes ClientMessage::REGISTER;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MIN;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MAX;
 const int ClientMessage::authorizationTypes_ARRAYSIZE;
