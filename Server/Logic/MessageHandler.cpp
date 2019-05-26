@@ -2,7 +2,14 @@
 #include "../../Messages/Message.pb.h"
 
 MessageHandler::MessageHandler(std::shared_ptr<ClientSessionPipes> clients):
- DataBaseConnector(clients) , clients(clients){}
+ DataBaseConnector(clients) , clients(clients), working(true){}
+
+void MessageHandler::LogicThreadLoop(){
+  while(this->working){
+    std::pair<Client, Message::ClientMessage> result = this->clients->writeMessage();
+
+  }
+}
 
 int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
   if(!message.messagetype()){

@@ -21,7 +21,7 @@ pair<Client, Message::ClientMessage> ClientSessionPipes::getWriteMessageBufferMe
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
         if(!it->second.isWriteMessagesBufferEmpty()) {
-            Message::ClientMessage message = it->second.getWriteMessageBufferMessage();   
+            Message::ClientMessage message = it->second.getWriteMessageBufferMessage();
 
             return make_pair(it->first, message);
         }
@@ -35,11 +35,11 @@ bool ClientSessionPipes::isWriteBytesBufferEmpty() {
 pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteMessagesBufferEmpty()) {
-        pthread_cond_wait(&writeMessagesBufferNotEmpty, 
+        pthread_cond_wait(&writeMessagesBufferNotEmpty,
             &clientSessionPipesMutex);
     }
 
-    pair<Client, Message::ClientMessage> message = 
+    pair<Client, Message::ClientMessage> message =
         getWriteMessageBufferMessage();
 
     --writeMessagesCounter;
@@ -57,7 +57,7 @@ void ClientSessionPipes::readMessage(string login, Message::ClientMessage messag
     writeBytesBuffer.push_back(BytesMessage(login, bytes));
 
     if(writeBytesBuffer.size() == 1) {
-        pthread_cond_signal(&writeBytesBufferNotEmpty); 
+        pthread_cond_signal(&writeBytesBufferNotEmpty);
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
@@ -100,7 +100,7 @@ string ClientSessionPipes::getClientLogin(int socketNumber) {
 void ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
-        pthread_cond_wait(&writeBytesBufferNotEmpty, 
+        pthread_cond_wait(&writeBytesBufferNotEmpty,
             &clientSessionPipesMutex);
     }
 
@@ -115,7 +115,7 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
             if(result != 0) {
                 writeBytesBuffer.erase(it);
             }
-            
+
             break;
         }
     }
@@ -129,7 +129,7 @@ void ClientSessionPipes::createClientSession(int socketNumber) {
     ClientSessionPipe clientSessionPipe(socketNumber);
     Client client;
 
-    pair<Client, ClientSessionPipe> session = 
+    pair<Client, ClientSessionPipe> session =
         make_pair(client, clientSessionPipe);
 
     clientSessionPipes.push_back(session);
@@ -143,7 +143,7 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
 
     writeBytesBuffer.erase(std::remove_if(
     writeBytesBuffer.begin(), writeBytesBuffer.end(),
-    [&login](BytesMessage& bytesMessage) { 
+    [&login](BytesMessage& bytesMessage) {
         return bytesMessage.getLogin() == login;
     }), writeBytesBuffer.end());
 }
