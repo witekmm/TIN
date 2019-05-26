@@ -610,6 +610,30 @@ void Database::deleteMsg(int msgId)
 	}
 }
 
+void Database::deleteMsgOfTypeForGroup(std::string groupName, int type)
+{
+	try
+	{
+		sql::SQLString query = "SELECT id from `Message` AS m ";
+					   query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
+					   query+= "JOIN `User` AS u ON u.id = um.user_id ";
+						 query+= "JOIN `User_Group` AS ug on u.id = ug.user_id";
+						 query+= "JOIN `Group` AS g on g.id = ug.group_id";
+					   query+= "WHERE g.name = ? AND g.type = ? ";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setString(1, groupName);
+		pstmt->setInt(2, type);
+		res = pstmt->executeQuery();
+				
+		while(res->next())
+			deleteMsg(res->getInt("id"));
+	}
+  catch (sql::SQLException &e) {
+		manageException(e);
+	}
+}
+
 std::vector<int> Database::getAllMsgsForUser(std::string login)
 {
 	return getAllMsgsForUser(getUserId(login));
