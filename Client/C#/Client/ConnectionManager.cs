@@ -112,17 +112,20 @@ namespace Client
         }
         public Boolean CheckUser(String _login, String _password)
         {
-            User user = new User
+            ClientMessage user = new ClientMessage
             {
                 Login = _login,
-                Password = _password
+                Password = _password,
+                AuthorizationType = 0,
+                MessageType = 0
             };
 
             byte[] bytes = user.ToByteArray();
-            //Send(bytes);
+            Send(bytes);
 
-            //byte[] answer = Receive();
-            if (_login.Equals("dupa") && _password.Equals("sraka")) 
+            byte[] answer = Receive();
+            ClientMessage response = ClientMessage.Parser.ParseFrom(answer);
+            if (response.Reply == 0) 
                 return true;
             return false;
         }

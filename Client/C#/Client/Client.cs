@@ -17,7 +17,7 @@ namespace Client
             this.FormClosing += Client_FormClosing;
 
             connectionManager = new ConnectionManager(_IP, _port, this);
-            //connectionManager.Connect();
+            connectionManager.Connect();
 
             connectForm = _connectForm;
             IPValue.Text = _IP.ToString();
