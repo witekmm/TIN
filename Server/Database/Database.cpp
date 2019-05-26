@@ -610,7 +610,7 @@ void Database::deleteMsg(int msgId)
 	}
 }
 
-int Database::isMsgOfTypeForGroup(std::string groupName, int type)
+int Database::isMsgOfTypeForGroup(std::string groupName, std::string login, int type)
 {
 	try
 	{
@@ -619,11 +619,12 @@ int Database::isMsgOfTypeForGroup(std::string groupName, int type)
 					   query+= "JOIN `User` AS u ON u.id = um.user_id ";
 						 query+= "JOIN `User_Group` AS ug on u.id = ug.user_id";
 						 query+= "JOIN `Group` AS g on g.id = ug.group_id";
-					   query+= "WHERE g.name = ? AND g.type = ? ";
+					   query+= "WHERE g.name = ? AND g.type = ? AND u.login = ?";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setString(1, groupName);
 		pstmt->setInt(2, type);
+		pstmt->setString(3, login);
 		res = pstmt->executeQuery();
 				
 		if(res->next())
@@ -635,9 +636,9 @@ int Database::isMsgOfTypeForGroup(std::string groupName, int type)
 	return -1;
 }
 
-void Database::deleteMsgOfTypeForGroup(std::string groupName, int type)
+void Database::deleteMsgOfTypeForGroup(std::string groupName, std::string login, int type)
 {
-	int msgId = isMsgOfTypeForGroup(groupName, type);
+	int msgId = isMsgOfTypeForGroup(groupName, login, type);
 	if(msgId != -1)
 		deleteMsg(res->getInt("id"));
 }
