@@ -32,7 +32,7 @@ Opcjonalne flagi uruchomienia programu:
   1) Wymagana jest instalacja [Protocol Buffers](https://developers.google.com/protocol-buffers/) w wersji [v3.7.1](https://github.com/protocolbuffers/protobuf/releases/tag/v3.7.1)
   Należy pobrać paczkę [protobuf-cpp-3.7.1.tar.gz](https://github.com/protocolbuffers/protobuf/releases/tag/v3.7.1) i postępować zgodnie z instrukcjami wewnątrz pliku `src/README.md`
   2) Wymagana jest instalacja sterowników do bazy danych MySQL.
-  2.1) Należy zainstalować libboost-all-dev
+        2.1) Należy zainstalować libboost-all-dev
       ``` 
       sudo apt-get install libboost-all-dev
       ```

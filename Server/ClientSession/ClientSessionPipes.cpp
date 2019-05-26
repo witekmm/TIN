@@ -192,3 +192,16 @@ vector<Client> ClientSessionPipes::getLoggedClients() {
 
     return loggedClients;
 }
+
+void ClientSessionPipes::setClientLogin(long localId, string login) {
+    pthread_mutex_lock(&clientSessionPipesMutex);
+    vector<pair<Client, ClientSessionPipe>>::iterator it;
+
+    for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
+        if(it->first.getLocalId() == localId) {
+            it->first.setLogin(login);
+        }
+    }
+
+    pthread_mutex_unlock(&clientSessionPipesMutex);
+}

@@ -110,6 +110,16 @@ public:
     */
     vector<Client> getLoggedClients();
 
+    /**
+    * Set client as logged.
+    *
+    * Used by Logic thread to set client login.
+    *
+    * @param localId localId of client to be logged.
+    * @param login login of client to be logged.
+    */
+    void setClientLogin(long localId, string login);
+
 };
 
 #endif
