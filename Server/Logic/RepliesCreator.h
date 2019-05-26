@@ -20,6 +20,7 @@ public:
   void correctLoginMessage(int clientId, std::vector<std::string> groups);
 
   void createAndSetMessage(std::string sender, std::string content,int type , int clientId);
+  void logInChoosenUser(int clientId, std::string login);
   //uywane przez DataBaseConnector
   //void userNotInGroup(std::string groupName, std::string login);
   //void groupNameExist(std::string groupName, std::string login);
