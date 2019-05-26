@@ -80,6 +80,8 @@ void ClientSessionPipes::readBytes(int socketNumber) {
         //Message is successfully read
         ++writeMessagesCounter;
         pthread_cond_signal(&writeMessagesBufferNotEmpty);
+    } else if (result == -1) {
+        deleteClientSession(socketNumber);
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
@@ -108,16 +110,20 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
     if(localId < 0) return;
 
     vector<BytesMessage>::iterator it;
+    int result;
 
     for(it = writeBytesBuffer.begin(); it != writeBytesBuffer.end(); ++it) {
         if(it->getLocalId() == localId) {
-            int result = it->writeBytes(socketNumber);
-            if(result != 0) {
-                writeBytesBuffer.erase(it);
-            }
-
+            result = it->writeBytes(socketNumber);
             break;
         }
+    }
+
+    
+    if(result == 1) {
+        writeBytesBuffer.erase(it);
+    } else if(result == -1) {
+        deleteClientSession(socketNumber);
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
