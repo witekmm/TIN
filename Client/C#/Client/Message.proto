@@ -1,0 +1,48 @@
+﻿syntax = "proto3";
+
+package Client;
+
+message ClientMessage {
+
+  enum  messageTypes{
+    AUTHORIZATION = 0;
+    GROUP = 1;
+    REPLY = 2;
+  }
+
+  enum groupActionTypes{
+    MESSAGE = 0;
+    CREATE = 1;
+    DELETE = 2;
+    REQUEST = 3;
+    ACCEPT = 4;
+    DECLINE = 5;
+    LEAVE = 6;
+  }
+
+  enum authorizationTypes{
+    LOG_IN = 0;
+    REGISTER = 1;
+  }
+
+  enum replyStatus{
+    POSITIVE = 0;
+    NEGATIVE = 1;
+  }
+
+  messageTypes messageType = 1;
+
+  groupActionTypes groupActionType = 2;
+  authorizationTypes authorizationType = 3;
+
+  string login = 4;
+  string password = 5;
+  string groupName = 6;
+  string userName = 7;
+  string messageContent = 8;
+
+  replyStatus reply = 9;
+  string replyContent = 10;
+
+  repeated string groups = 11;
+}
