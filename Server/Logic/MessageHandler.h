@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <utility>
 
 #include "../../Messages/Message.pb.h"
 #include "DataBaseConnector.h"
@@ -10,15 +11,19 @@
 
 class MessageHandler: public DataBaseConnector{
   std::shared_ptr<ClientSessionPipes> clients;
+  bool working;
 public:
   MessageHandler(std::shared_ptr<ClientSessionPipes> clients);
   //There have to be function that monitors users buffers
   //will be there
   //check message type
-  int HandleMessage(Message::ClientMessage message, int clientId);
+  void LogicThreadLoop();
+  void DataBaseMessageCheckLoop();
+
+  int HandleMessage(Message::ClientMessage message, int clientId, std::string clientlogin,bool islogged);
   //check action type
   int HandleAuthorizationType(Message::ClientMessage message);
-  int HandleGroupType(Message::ClientMessage message, int clientId);
+  int HandleGroupType(Message::ClientMessage message, std::string login);
   //CLICommandHandler
   //will be there
 };
