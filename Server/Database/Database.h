@@ -85,6 +85,8 @@ class Database {
     void deleteMsgOfTypeForGroup(std::string groupName, std::string login, int type);
     bool hasMsg(std::string login);
     bool hasMsg(int userId);
+    int getMsgType(int msgId);
+    std::string getMsgSender(int msgId);
 
   private:
 

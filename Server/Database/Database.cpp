@@ -714,6 +714,43 @@ bool Database::hasMsg(int userId)
 	return false;
 }
 
+int Database::getMsgType(int msgId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT type from `Message` AS m ";
+					   				query+= "WHERE m.id = ?";
 
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, msgId);
+		res = pstmt->executeQuery();
+					
+		if(res->next())
+			return res->getInt("type");
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+	return -1;
+}
 
+std::string Database::getMsgSender(int msgId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT sender from `Message` AS m ";
+					   				query+= "WHERE m.id = ?";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, msgId);
+		res = pstmt->executeQuery();
+					
+		if(res->next())
+			return res->getString("sender");
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+	return "";
+}
 
