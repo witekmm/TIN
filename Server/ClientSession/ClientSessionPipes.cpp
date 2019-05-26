@@ -48,13 +48,13 @@ pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     return message;
 }
 
-void ClientSessionPipes::readMessage(string login, Message::ClientMessage message) {
+void ClientSessionPipes::readMessage(long localId, Message::ClientMessage message) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     string bytes;
     message.SerializeToString(&bytes);
 
-    writeBytesBuffer.push_back(BytesMessage(login, bytes));
+    writeBytesBuffer.push_back(BytesMessage(localId, bytes));
 
     if(writeBytesBuffer.size() == 1) {
         pthread_cond_signal(&writeBytesBufferNotEmpty); 
@@ -85,16 +85,16 @@ void ClientSessionPipes::readBytes(int socketNumber) {
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
-string ClientSessionPipes::getClientLogin(int socketNumber) {
+long ClientSessionPipes::getClientLocalId(int socketNumber) {
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
         if(it->second.getSocketNumber() == socketNumber) {
-            return it->first.getLogin();
+            return it->first.getLocalId();
         }
     }
 
-    return string();
+    return -1;
 }
 
 void ClientSessionPipes::writeBytes(int socketNumber) {
@@ -104,13 +104,13 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
             &clientSessionPipesMutex);
     }
 
-    string login = getClientLogin(socketNumber);
-    if(login.empty()) return;
+    long localId = getClientLocalId(socketNumber);
+    if(localId < 0) return;
 
     vector<BytesMessage>::iterator it;
 
     for(it = writeBytesBuffer.begin(); it != writeBytesBuffer.end(); ++it) {
-        if(it->getLogin() == login) {
+        if(it->getLocalId() == localId) {
             int result = it->writeBytes(socketNumber);
             if(result != 0) {
                 writeBytesBuffer.erase(it);
@@ -138,13 +138,13 @@ void ClientSessionPipes::createClientSession(int socketNumber) {
 }
 
 void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
-    string login = getClientLogin(socketNumber);
-    if(login.empty()) return;
+    long localId = getClientLocalId(socketNumber);
+    if(localId < 0) return;
 
     writeBytesBuffer.erase(std::remove_if(
     writeBytesBuffer.begin(), writeBytesBuffer.end(),
-    [&login](BytesMessage& bytesMessage) { 
-        return bytesMessage.getLogin() == login;
+    [&localId](BytesMessage& bytesMessage) { 
+        return bytesMessage.getLocalId() == localId;
     }), writeBytesBuffer.end());
 }
 

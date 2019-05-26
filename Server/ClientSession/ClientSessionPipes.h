@@ -29,12 +29,12 @@ class ClientSessionPipes {
 
     pair<Client, Message::ClientMessage> getWriteMessageBufferMessage();
 
-    string getClientLogin(int socketNumber);
+    long getClientLocalId(int socketNumber);
 
     void deleteWriteBuffers(int socketNumber);
 
 public:
-    void readMessage(string login, Message::ClientMessage message);//for Logic, push new Message to send pipe
+    void readMessage(long localId, Message::ClientMessage message);//for Logic, push new Message to send pipe
     pair<Client, Message::ClientMessage> writeMessage();//for Logic, get Message and handle it
 
     void readBytes(int socketNumber);//for Network, read bytes from socket

@@ -5,13 +5,17 @@
 
 using namespace std;
 
-BytesMessage::BytesMessage(string log, string bytesBuff) {
-    login = log;
+BytesMessage::BytesMessage(long id, string bytesBuff) {
+    localId = id;
     bytesBuffer = bytesBuff;
 
     sizeSent = false;
     numberOfBytesToSend = MESSAGE_SIZE_BYTES_NUMBER;
     
+}
+
+long BytesMessage::getLocalId() {
+    return localId;
 }
 
 string BytesMessage::getLogin() {

@@ -7,6 +7,7 @@
 using namespace std;
 
 class BytesMessage {
+    long localId;
     string login;
 
     string bytesBuffer;
@@ -14,7 +15,9 @@ class BytesMessage {
     int numberOfBytesToSend;
 
 public:
-    BytesMessage(string login, string bytesBuffer);
+    BytesMessage(long localId, string bytesBuffer);
+
+    long getLocalId();
 
     string getLogin();
     int getBufferSize();
