@@ -6,9 +6,9 @@
 using namespace std;
 
 class Client {
-    static unsigned int localClientCounter;
+    static long localClientCounter;
 
-    unsigned int localId;
+    long localId;
     string login;
 
 public:
@@ -17,7 +17,7 @@ public:
     void setLogin(string login);
     string getLogin();
 
-    unsigned int getLocalId();
+    long getLocalId();
 
     bool isLogged();
 };
