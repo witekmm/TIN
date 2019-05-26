@@ -1,5 +1,5 @@
 #include "CreateReply.h"
-/*
+
 void CreateReply::userNotInGroup(string groupName,string login){
   string content = "You don't belong to this group!";
   Message::ClientMessage message;
@@ -240,4 +240,4 @@ void CreateReply::sendGroups(vector<string> groupList ,string login ,int socketN
     message.add_groups( groupList[i] );
   }
   transport.serializeAndSend(message , login);
-}*/
+}

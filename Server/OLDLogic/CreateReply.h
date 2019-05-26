@@ -6,7 +6,7 @@ using namespace std;
 #include <string>
 
 class CreateReply{
-public:/*
+public:
   void userNotInGroup(string groupName,string login);
   void groupMessageConfirmation(string groupName,string login);
   void groupNameExist(string groupName,string login);
@@ -30,7 +30,7 @@ public:/*
 
   void sendGroups(vector<string >groupList ,string login ,int socketNumber);
 
-  void sendMessage(string content, string toWho, string fromWho, string whichGroup);*/
+  void sendMessage(string content, string toWho, string fromWho, string whichGroup);
 };
 
 #endif
