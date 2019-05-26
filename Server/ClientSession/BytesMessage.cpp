@@ -24,7 +24,7 @@ string BytesMessage::getLogin() {
 }
 
 int BytesMessage::getBufferSize() {
-    //TODO: implement this function
+    return bytesBuffer.length();
 }
 
 int BytesMessage::sendSize(int socketNumber) {
