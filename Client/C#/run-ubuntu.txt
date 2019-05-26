@@ -1,8 +1,0 @@
-//sudo apt-get update
-//sudo apt-get upgrade
-
-sudo apt-get install mono-complete
-
-mcs -pkg:dotnet -r:System.Windows.Forms.dll *.cs
-
-mono Client.exe
