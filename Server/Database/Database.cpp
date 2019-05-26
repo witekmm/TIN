@@ -610,7 +610,7 @@ void Database::deleteMsg(int msgId)
 	}
 }
 
-void Database::deleteMsgOfTypeForGroup(std::string groupName, int type)
+int Database::isMsgOfTypeForGroup(std::string groupName, int type)
 {
 	try
 	{
@@ -626,12 +626,20 @@ void Database::deleteMsgOfTypeForGroup(std::string groupName, int type)
 		pstmt->setInt(2, type);
 		res = pstmt->executeQuery();
 				
-		while(res->next())
-			deleteMsg(res->getInt("id"));
+		if(res->next())
+			return res->getInt("id");
 	}
   catch (sql::SQLException &e) {
 		manageException(e);
 	}
+	return -1;
+}
+
+void Database::deleteMsgOfTypeForGroup(std::string groupName, int type)
+{
+	int msgId = isMsgOfTypeForGroup(groupName, type);
+	if(msgId != -1)
+		deleteMsg(res->getInt("id"));
 }
 
 std::vector<int> Database::getAllMsgsForUser(std::string login)
