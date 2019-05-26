@@ -43,6 +43,8 @@ public:
     void createClientSession(int socketNumber);
     void deleteClientSession(int socketNumber);
 
+    vector<Client> getLoggedClients();
+
 };
 
 #endif

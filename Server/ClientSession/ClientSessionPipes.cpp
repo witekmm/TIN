@@ -164,3 +164,20 @@ void ClientSessionPipes::deleteClientSession(int socketNumber) {
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
+
+vector<Client> ClientSessionPipes::getLoggedClients() {
+    pthread_mutex_lock(&clientSessionPipesMutex);
+    vector<Client> loggedClients;
+
+    vector<pair<Client, ClientSessionPipe>>::iterator it;
+
+    for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
+        if(it->first.isLogged()) {
+            loggedClients.push_back(it->first);
+        }
+    }
+
+    pthread_mutex_unlock(&clientSessionPipesMutex);
+
+    return loggedClients;
+}
