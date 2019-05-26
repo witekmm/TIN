@@ -36,6 +36,10 @@ void Reply::correctLoginMessage(int clientId, std::vector<std::string> groups){
   this->clients->readMessage(clientId,message);
 }
 
+void Reply::logInChoosenUser(int clientId, std::string login){
+  this->clients->setClientLogin(clientId, login);
+}
+
 void Reply::createAndSetMessage(std::string sender, std::string content,int type, int clientId){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::GROUP);

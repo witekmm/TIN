@@ -142,6 +142,7 @@ int DataBaseConnector::logInUser(std::string login, std::string password, int cl
   for(auto it = groups.begin() ; it!=groups.end() ; it++){
     groupsByString.push_back( this->database.getGroupName(*it) );
   }
+  Reply::logInChoosenUser(clientId, login);
   Reply::correctLoginMessage(clientId, groupsByString);
   return 0;
 }
@@ -153,6 +154,7 @@ int DataBaseConnector::registerUser(std::string login, std::string password, int
   }
   this->database.addUser(login, password);
   //zaloguj
+  Reply::logInChoosenUser(clientId, login);
   Reply::correctMessage(clientId);
   return 0;
 }
