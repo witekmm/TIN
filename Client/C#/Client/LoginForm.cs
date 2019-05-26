@@ -59,6 +59,7 @@ namespace Client
             {
                 logged = true;
                 this.Hide();
+                client.ConnectionManager.ReceiveThread.Start();
                 client.Show();
             }
             else

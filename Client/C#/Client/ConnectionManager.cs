@@ -26,6 +26,11 @@ namespace Client
             connected = false;
         }
 
+        public Thread ReceiveThread
+        {
+            get { return receiveThread; }
+        }
+
         public void Disconnect(Boolean wasConnected)
         {
             try
@@ -54,7 +59,7 @@ namespace Client
                         throw new Exception("Canceled");
                 }
                 connected = true;
-                receiveThread.Start();
+                //receiveThread.Start();
             }
             catch(Exception ex)
             {
@@ -123,8 +128,13 @@ namespace Client
             byte[] bytes = user.ToByteArray();
             Send(bytes);
 
-            byte[] answer = Receive();
-            ClientMessage response = ClientMessage.Parser.ParseFrom(answer);
+            byte[] answer = null;
+            do
+            {
+                answer = Receive();
+            } while (answer.Length < 1);
+
+                ClientMessage response = ClientMessage.Parser.ParseFrom(answer);
             if (response.Reply == 0) 
                 return true;
             return false;
