@@ -2,20 +2,12 @@
 
 Reply::Reply(std::shared_ptr<ClientSessionPipes> clients): clients(clients) {}
 
-void Reply::incorrectGroupTypeMessage(int clientId, std::string error){
+void Reply::incorrectMessage(int clientId, std::string error){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::NEGATIVE);
   message.set_replycontent(error);
   //wyslij
-  this->clients->readMessage(clientId,message);
-}
-
-void Reply::incorrectAuthorizationTypeMessage(int clientId , std::string error){
-  Message::ClientMessage message;
-  message.set_messagetype(Message::ClientMessage::REPLY);
-  message.set_reply(Message::ClientMessage::NEGATIVE);
-  message.set_replycontent(error);
   this->clients->readMessage(clientId,message);
 }
 
@@ -40,24 +32,27 @@ void Reply::logInChoosenUser(int clientId, std::string login){
   this->clients->setClientLogin(clientId, login);
 }
 
-void Reply::createAndSetMessage(std::string sender, std::string content,int type, int clientId){
+void Reply::createAndSetMessage(std::string sender, std::string content, std::string groupName, int type, int clientId){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::GROUP);
   switch (type){
     case 1:
       message.set_groupactiontype(Message::ClientMessage::MESSAGE);
+      message.set_messagecontent(content);
+      message.set_username(sender);
       break;
     case 2:
       message.set_groupactiontype(Message::ClientMessage::REQUEST);
+      message.set_username(sender);
       break;
     case 3:
       message.set_groupactiontype(Message::ClientMessage::ACCEPT);
+      message.set_groupname(groupName);
       break;
     case 4:
       message.set_groupactiontype(Message::ClientMessage::DECLINE);
+      message.set_groupname(groupName);
       break;
   }
-  message.set_username(sender);
-  message.set_messagecontent(content);
   this->clients->readMessage(clientId,message);
 }

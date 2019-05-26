@@ -12,14 +12,12 @@ class Reply{
   std::shared_ptr<ClientSessionPipes> clients;
 public:
   Reply(std::shared_ptr<ClientSessionPipes> clients);
-  void incorrectGroupTypeMessage(int clientId, std::string error);
-  void incorrectAuthorizationTypeMessage(int clientId , std::string error);
-
+  void incorrectMessage(int clientId, std::string error);
   void correctMessage(int clientId);
 
   void correctLoginMessage(int clientId, std::vector<std::string> groups);
 
-  void createAndSetMessage(std::string sender, std::string content,int type , int clientId);
+  void createAndSetMessage(std::string sender, std::string content, std::string groupName,int type , int clientId);
   void logInChoosenUser(int clientId, std::string login);
   //uywane przez DataBaseConnector
   //void userNotInGroup(std::string groupName, std::string login);

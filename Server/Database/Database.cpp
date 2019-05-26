@@ -1,10 +1,10 @@
 #include "Database.h"
 
-Database::Database() 
+Database::Database()
 	: Database(URL, DB, USER, PASSWORD){}
 
-Database::Database(const std::string url_, const std::string db_, const std::string user_, const std::string pass_) 
-	: url(url_), db(db_), user(user_), password(pass_) 
+Database::Database(const std::string url_, const std::string db_, const std::string user_, const std::string pass_)
+	: url(url_), db(db_), user(user_), password(pass_)
 {
 	try
     {
@@ -47,14 +47,14 @@ bool Database::userInGroup(std::string groupName, std::string login)
 		pstmt->setString(1, groupName);
 		pstmt->setString(2, login);
 		res = pstmt->executeQuery();
-				
+
 		if(res->next())
 			return true;
 	}
   catch (sql::SQLException &e) {
 		manageException(e);
 	}
-	return false;	
+	return false;
 }
 
 int Database::getGroupId(std::string groupName)
@@ -103,7 +103,7 @@ std::string Database::getGroupName(int groupId)
 
 bool Database::isGroup(std::string groupName)
 {
-	return getGroupId(groupName) != -1 ? true : false;	
+	return getGroupId(groupName) != -1 ? true : false;
 }
 
 void Database::createGroup(std::string groupName, std::string login)
@@ -159,7 +159,7 @@ bool Database::isAdministrator(std::string groupName, int userId)
 		pstmt->setString(1, groupName);
 		pstmt->setInt(2, userId);
 		res = pstmt->executeQuery();
-					
+
 		if(res->next())
 			return true;
 	}
@@ -175,7 +175,7 @@ void Database::changeAdministrator(std::string groupName, int userId)
 	{
 		sql::SQLString query = "UPDATE `Group` SET leader = ? ";
 					   query+= "WHERE name = ?";
-		
+
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, userId);
 		pstmt->setString(2, groupName);
@@ -247,7 +247,7 @@ bool Database::belongsToGroup(std::string groupName, int userId)
 		pstmt->setString(1, groupName);
 		pstmt->setInt(2, userId);
 		res = pstmt->executeQuery();
-					
+
 		if(res->next())
 			return true;
 	}
@@ -362,7 +362,7 @@ void Database::updateUserPassword(std::string login, std::string newPassword)
 	{
 		sql::SQLString query = "UPDATE `User` SET password = ? ";
 					query+= "WHERE login = ?";
-		
+
 		pstmt = con->prepareStatement(query);
 		pstmt->setString(1, newPassword);
 		pstmt->setString(2, login);
@@ -447,10 +447,10 @@ void Database::addMsgToAdministrator(std::string groupName, std::string sender, 
 		pstmt->setString(1, groupName);
 		res = pstmt->executeQuery();
 
-		int adminId;			
+		int adminId;
 		if(res->next())
 			adminId = res->getInt("leader");
-		
+
 		int msgId = createMsg(groupName, sender, type, text);
 		addMsgToUser(msgId, adminId);
 	}
@@ -511,7 +511,7 @@ std::vector<int> Database::getAllUsersFromGroup(std::string groupName)
 		sql::SQLString query = "SELECT user_id FROM `User_Group` AS ug ";
 					query+= "JOIN `Group` AS g ON ug.group_id = g.id ";
 					query+= "WHERE g.name = ?";
-					
+
 		pstmt = con->prepareStatement(query);
 		pstmt->setString(1, groupName);
 		res = pstmt->executeQuery();
@@ -538,7 +538,7 @@ std::vector<int> Database::getAllGroupsForUser(int userId)
 		sql::SQLString query = "SELECT group_id FROM `User_Group` AS ug ";
 										query+= "JOIN `User` AS u ON ug.user_id = u.id ";
 										query+= "WHERE u.id = ?";
-					
+
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, userId);
 		res = pstmt->executeQuery();
@@ -556,7 +556,7 @@ int Database::getOldestMsgForUser(std::string login)
 {
 	return getOldestMsgForUser(getUserId(login));
 }
-    
+
 int Database::getOldestMsgForUser(int userId)
 {
 	try
@@ -641,7 +641,7 @@ int Database::isMsgOfTypeForGroup(std::string groupName, std::string login, int 
 		pstmt->setInt(2, type);
 		pstmt->setString(3, login);
 		res = pstmt->executeQuery();
-				
+
 		if(res->next())
 			return res->getInt("id");
 	}
@@ -719,7 +719,7 @@ bool Database::hasMsg(int userId)
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, userId);
 		res = pstmt->executeQuery();
-					
+
 		if(res->next())
 			return true;
 	}
@@ -739,7 +739,7 @@ int Database::getMsgType(int msgId)
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, msgId);
 		res = pstmt->executeQuery();
-					
+
 		if(res->next())
 			return res->getInt("type");
 	}
@@ -759,7 +759,7 @@ std::string Database::getMsgSender(int msgId)
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, msgId);
 		res = pstmt->executeQuery();
-					
+
 		if(res->next())
 			return res->getString("sender");
 	}
@@ -769,3 +769,26 @@ std::string Database::getMsgSender(int msgId)
 	return "";
 }
 
+std::string Database::getMsgGroupName(int msgId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT name from `Group` AS g ";
+					   query+= "JOIN `User_Group` AS ug ON g.id = ug.group_id ";
+					   query+= "JOIN `User` AS u ON u.id = ug.user_id ";
+						 query+= "JOIN `User_Message` AS um on u.id = um.user_id";
+						 query+= "JOIN `Message` AS m on m.id = um.message_id";
+					   query+= "WHERE m.id = ?";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, msgId);
+		res = pstmt->executeQuery();
+
+		if(res->next())
+			return res->getString("name");
+	}
+  catch (sql::SQLException &e) {
+		manageException(e);
+	}
+	return "";
+}

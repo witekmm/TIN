@@ -11,30 +11,30 @@ void MessageHandler::LogicThreadLoop(){
     switch (res)
     {
       case -3:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "Login doesn't exist!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!");
         break;
       case -2:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "Wrong password!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Wrong password!");
         break;
       case -1:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "Login doesn't exist!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!");
         break;
       case 0:
         break;
       case 1:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "No message type!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "No message type!");
         break;
       case 2:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "No action type!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "No action type!");
         break;
       case 3:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "Missing pools!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Missing pools!");
         break;
       case 4:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "Not logged in!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Not logged in!");
         break;
       case 5:
-        DataBaseConnector::Reply::incorrectAuthorizationTypeMessage(result.first.getLocalId() , "Already logged in!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!");
         break;
     }
   }

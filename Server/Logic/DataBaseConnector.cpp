@@ -6,11 +6,11 @@ DataBaseConnector::DataBaseConnector(std::shared_ptr<ClientSessionPipes> clients
 void DataBaseConnector::sendGroupMessage(std::string content, std::string groupName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
   if(!this->database.belongsToGroup(groupName , login)){
-    Reply::incorrectGroupTypeMessage(clientId, "You can't send message to group you do not belong");
+    Reply::incorrectMessage(clientId, "You can't send message to group you do not belong");
     return;
   }
   this->database.addMsgToGroup(groupName, login, 1, content);
@@ -20,7 +20,7 @@ void DataBaseConnector::sendGroupMessage(std::string content, std::string groupN
 void DataBaseConnector::createGroup(std::string groupName, std::string login, int clientId)
 {
   if(this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group name already in use");
+    Reply::incorrectMessage(clientId, "Group name already in use");
     return;
   }
   this->database.createGroup(groupName, login);
@@ -30,12 +30,12 @@ void DataBaseConnector::createGroup(std::string groupName, std::string login, in
 void DataBaseConnector::deleteGroup(std::string groupName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
   int id = this->database.getUserId(login);
   if(!this->database.isAdministrator(groupName, id)){
-    Reply::incorrectGroupTypeMessage(clientId, "You can't delete group you are not a administrator");
+    Reply::incorrectMessage(clientId, "You can't delete group you are not a administrator");
     return;
   }
   this->database.deleteGroup(groupName);
@@ -45,15 +45,15 @@ void DataBaseConnector::deleteGroup(std::string groupName, std::string login, in
 void DataBaseConnector::requestToGroup(std::string groupName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
   if(this->database.belongsToGroup(groupName , login)){
-    Reply::incorrectGroupTypeMessage(clientId, "You already belong to choosen group");
+    Reply::incorrectMessage(clientId, "You already belong to choosen group");
     return;
   }
-  if((this->database.isMsgOfTypeForGroup(groupName , login , 2)) == -1){
-    Reply::incorrectGroupTypeMessage(clientId, "No request from this user");
+  if((this->database.isMsgOfTypeForGroup(groupName , login , 2)) != -1){
+    Reply::incorrectMessage(clientId, "No request from this user");
     return;
   }
   this->database.addMsgToAdministrator(groupName, login , 2 , "");
@@ -63,17 +63,17 @@ void DataBaseConnector::requestToGroup(std::string groupName, std::string login,
 void DataBaseConnector::acceptRequest(std::string groupName, std::string userName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
   int id = this->database.getUserId(login);
   if(!this->database.isAdministrator(groupName, id)){
-    Reply::incorrectGroupTypeMessage(clientId, "You have no right to reply for request");
+    Reply::incorrectMessage(clientId, "You have no right to reply for request");
     return;
   }
   int msgid = this->database.isMsgOfTypeForGroup(groupName , userName, 2);
   if(msgid == -1){
-    Reply::incorrectGroupTypeMessage(clientId, "No request from this user");
+    Reply::incorrectMessage(clientId, "No request from this user");
     return;
   }
   //usun go
@@ -87,17 +87,17 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
 void DataBaseConnector::declineRequest(std::string groupName, std::string userName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
   int id = this->database.getUserId(login);
   if(!this->database.isAdministrator(groupName, id)){
-    Reply::incorrectGroupTypeMessage(clientId, "You have no right to reply for request");
+    Reply::incorrectMessage(clientId, "You have no right to reply for request");
     return;
   }
   int msgid = this->database.isMsgOfTypeForGroup(groupName , userName, 2);
   if(msgid == -1){
-    Reply::incorrectGroupTypeMessage(clientId, "No request from this user");
+    Reply::incorrectMessage(clientId, "No request from this user");
     return;
   }
   //usun go
@@ -109,12 +109,14 @@ void DataBaseConnector::declineRequest(std::string groupName, std::string userNa
 
 void DataBaseConnector::leaveGroup(std::string groupName, std::string login, int clientId)
 {
+  //czy grupa istnieje
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectGroupTypeMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
+  //czy nalezy do grupy
   if(!this->database.belongsToGroup(groupName , login)){
-    Reply::incorrectGroupTypeMessage(clientId, "You can't leave group you don't belong");
+    Reply::incorrectMessage(clientId, "You can't leave group you don't belong");
     return;
   }
   int id = this->database.getUserId(login);
@@ -129,20 +131,23 @@ void DataBaseConnector::leaveGroup(std::string groupName, std::string login, int
 
 int DataBaseConnector::logInUser(std::string login, std::string password, int clientId)
 {
+  //czy uzytkownik istnieje
   if(!this->database.isUser(login)){
     return -1;
   }
   std::string temp = this->database.getUserPassword(login);
+  //czy haslo sie zgadza
   if(password!=temp){
     return -2;
   }
-  //ZALOGUJ
+  //zaloguj
+  Reply::logInChoosenUser(clientId, login);
+  //wyslij odpowiedz i dolacz wszystkie grupy
   std::vector<int> groups = this->database.getAllGroupsForUser(login);
   std::vector<std::string> groupsByString;
   for(auto it = groups.begin() ; it!=groups.end() ; it++){
     groupsByString.push_back( this->database.getGroupName(*it) );
   }
-  Reply::logInChoosenUser(clientId, login);
   Reply::correctLoginMessage(clientId, groupsByString);
   return 0;
 }
@@ -204,6 +209,8 @@ void DataBaseConnector::getAllUsersMessagesAndSend(std::string login, int id){
     int type = this->database.getMsgType(*it);
     std::string content = this->database.getMsgText(*it);
     std::string sender = this->database.getMsgSender(*it);
+    std::string groupName = this->database.getMsgGroupName(*it);
+    Reply::createAndSetMessage(sender , content ,groupName, type , id);
   }
 }
 
