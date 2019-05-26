@@ -41,7 +41,13 @@ void MessageHandler::LogicThreadLoop(){
 }
 
 void MessageHandler::DataBaseMessageCheckLoop(){
-
+  while(this->working){
+    std::vector<Client> users = this->clients->getLoggedClients();
+    for(auto it = users.begin() ; it != users.end() ; it++){
+      Client temp = *it;
+      DataBaseConnector::getAllUsersMessagesAndSend( temp.getLogin() , temp.getLocalId() );
+    }
+  }
 }
 
 int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId, std::string clientlogin,bool islogged){
@@ -50,11 +56,11 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId, 
   }
   if(message.messagetype() == Message::ClientMessage::GROUP){
     if(!islogged) return 4;
-    return HandleGroupType(message, clientlogin);
+    return HandleGroupType(message, clientlogin, clientId);
   }
   else if(message.messagetype() == Message::ClientMessage::AUTHORIZATION){
     if(islogged) return 5;
-    return HandleAuthorizationType(message);
+    return HandleAuthorizationType(message, clientId);
   }
   /*else if(message.messagetype() == Message::ClientMessage::REPLY){
 
@@ -62,7 +68,7 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId, 
 }
 
 
-int MessageHandler::HandleAuthorizationType(Message::ClientMessage message){
+int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int clientId){
   if(!message.authorizationtype()){
     return 2;
   }
@@ -70,16 +76,16 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message){
     return 3;
   }
   if(message.authorizationtype() == Message::ClientMessage::LOG_IN){
-    return DataBaseConnector::logInUser(message.login() , message.password());
+    return DataBaseConnector::logInUser(message.login() , message.password(), clientId);
 
   }
   else if(message.authorizationtype() == Message::ClientMessage::REGISTER){
-    return DataBaseConnector::registerUser(message.login() , message.password());
+    return DataBaseConnector::registerUser(message.login() , message.password() , clientId);
   }
 }
 
 
-int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string login){
+int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string login, int clientId){
   if(!message.groupactiontype()){
     return 2;
   }
@@ -87,49 +93,49 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string 
     if(message.messagecontent().empty() || message.groupname().empty()){
       return 3;
     }
-    DataBaseConnector::sendGroupMessage(message.messagecontent() , message.groupname() , login);
+    DataBaseConnector::sendGroupMessage(message.messagecontent() , message.groupname() , login, clientId);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::CREATE){
     if(message.groupname().empty()){
       return 3;
     }
-    DataBaseConnector::createGroup( message.groupname() , login);
+    DataBaseConnector::createGroup( message.groupname() , login, clientId);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DELETE){
     if(message.groupname().empty()){
       return 3;
     }
-    DataBaseConnector::deleteGroup( message.groupname() , login);
+    DataBaseConnector::deleteGroup( message.groupname() , login, clientId);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::REQUEST){
     if(message.groupname().empty()){
       return 3;
     }
-    DataBaseConnector::requestToGroup( message.groupname() , login);
+    DataBaseConnector::requestToGroup( message.groupname() , login, clientId);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::ACCEPT){
     if(message.groupname().empty() || message.username().empty()){
       return 3;
     }
-    DataBaseConnector::acceptRequest( message.groupname(), message.username() , login);
+    DataBaseConnector::acceptRequest( message.groupname(), message.username() , login, clientId);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DECLINE){
     if(message.groupname().empty() || message.username().empty()){
       return 3;
     }
-    DataBaseConnector::declineRequest( message.groupname(), message.username() , login);
+    DataBaseConnector::declineRequest( message.groupname(), message.username() , login, clientId);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::LEAVE){
     if(message.groupname().empty()){
       return 3;
     }
-    DataBaseConnector::leaveGroup( message.groupname() , login);
+    DataBaseConnector::leaveGroup( message.groupname() , login , clientId);
     return 0;
   }
 }

@@ -25,6 +25,7 @@ void Network::waitForSignal(){
             int newfd = ServerOperation::acceptConnection();
             if(newfd > 0){
               addSocket(newfd);
+              this->clients->createClientSession(newfd);
               break;
             }
             else{
@@ -32,16 +33,15 @@ void Network::waitForSignal(){
             }
           }
           else{
-            receiveBuffer(tmp);
-            break;
+            this->clients->readBytes(tmp);
           }
         }
         if(FD_ISSET(tmp , &this->writefds)){
-          sendBuffer(tmp);
-          break;
+          this->clients->writeBytes(tmp);
         }
         if(FD_ISSET(tmp , &this->exceptionfds)){
           closeSocket(tmp);
+          this->clients->deleteClientSession(tmp);
           break;
         }
       }
@@ -63,14 +63,6 @@ void Network::prepareLists(){
     FD_SET(*it , &this->writefds);
     FD_SET(*it , &this->exceptionfds);
   }
-}
-
-void Network::receiveBuffer(int socketNumber){
-
-}
-
-void Network::sendBuffer(int socketNumber){
-
 }
 
 void Network::addSocket(int socketNumber){

@@ -12,15 +12,15 @@ class DataBaseConnector: public Reply{
   Database database;
 public:
   DataBaseConnector(std::shared_ptr<ClientSessionPipes> clients);
-  void sendGroupMessage(std::string content, std::string groupName, std::string login);
-  void createGroup(std::string groupName, std::string login);
-  void deleteGroup(std::string groupName, std::string login);
-  void requestToGroup(std::string groupName, std::string login);
-  void acceptRequest(std::string groupName, std::string userName, std::string login);
-  void declineRequest(std::string groupName, std::string userName, std::string login);
-  void leaveGroup(std::string groupName, std::string login);
-  int logInUser(std::string login, std::string password);
-  int registerUser(std::string login, std::string password);
+  void sendGroupMessage(std::string content, std::string groupName, std::string login, int clientId);
+  void createGroup(std::string groupName, std::string login, int clientId);
+  void deleteGroup(std::string groupName, std::string login, int clientId);
+  void requestToGroup(std::string groupName, std::string login, int clientId);
+  void acceptRequest(std::string groupName, std::string userName, std::string login, int clientId);
+  void declineRequest(std::string groupName, std::string userName, std::string login, int clientId);
+  void leaveGroup(std::string groupName, std::string login, int clientId);
+  int logInUser(std::string login, std::string password, int clientId);
+  int registerUser(std::string login, std::string password, int clientId);
 
   bool checkIfMessageExistAndSend(std::string login);
 
@@ -28,6 +28,8 @@ public:
   int rootDeleteUser(std::string login);
   int rootAddUser(std::string login, std::string password);
   int rootAddGroup(std::string groupName, std::string administrator);
+
+  void getAllUsersMessagesAndSend(std::string login, int id);
 };
 
 #endif
