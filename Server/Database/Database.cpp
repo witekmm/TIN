@@ -785,7 +785,7 @@ std::string Database::getMsgGroupName(int msgId)
 		res = pstmt->executeQuery();
 				
 		if(res->next())
-			return res->getString("name");
+			return res->getString("name");  
 	}
   catch (sql::SQLException &e) {
 		manageException(e);
