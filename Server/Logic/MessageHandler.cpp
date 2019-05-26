@@ -1,23 +1,24 @@
 #include "MessageHandler.h"
 #include "../../Messages/Message.pb.h"
 
+MessageHandler::MessageHandler(std::shared_ptr<ClientSessionPipes> clients):
+ DataBaseConnector(clients) , clients(clients){}
+
 int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
   if(!message.messagetype()){
     return 1;
   }
   if(message.messagetype() == Message::ClientMessage::GROUP){
-    return HandleGroupType(message);
+      //Sprawdzam czy zalogowany
+    return HandleGroupType(message, clientId);
   }
   else if(message.messagetype() == Message::ClientMessage::AUTHORIZATION){
-    //Sprawdzam czy zalogowany
+
     return HandleAuthorizationType(message);
   }
   /*else if(message.messagetype() == Message::ClientMessage::REPLY){
 
   }*/
-  else {
-    return 1;
-  }
 }
 
 
@@ -29,75 +30,68 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message){
     return 3;
   }
   if(message.authorizationtype() == Message::ClientMessage::LOG_IN){
-    //return jakas funkcja do logowania
+    return DataBaseConnector::logInUser(message.login() , message.password());
 
   }
   else if(message.authorizationtype() == Message::ClientMessage::REGISTER){
-    //jakas funkcja do registerowania
-    return 0;
+    return DataBaseConnector::registerUser(message.login() , message.password());
   }
 }
 
 
-int MessageHandler::HandleGroupType(Message::ClientMessage message){
+int MessageHandler::HandleGroupType(Message::ClientMessage message, int clientId){
   if(!message.groupactiontype()){
     return 2;
   }
-  std::string toCheck;
+  std::string login;
+  //login = this->clients->getUserLogin(clientId);
   if(message.groupactiontype() == Message::ClientMessage::MESSAGE){
     if(message.messagecontent().empty() || message.groupname().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::sendGroupMessage(message.messagecontent() , message.groupname() , login);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::CREATE){
     if(message.groupname().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::createGroup( message.groupname() , login);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DELETE){
     if(message.groupname().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::deleteGroup( message.groupname() , login);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::REQUEST){
     if(message.groupname().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::requestToGroup( message.groupname() , login);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::ACCEPT){
     if(message.groupname().empty() || message.username().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::acceptRequest( message.groupname(), message.username() , login);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::DECLINE){
     if(message.groupname().empty() || message.username().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::declineRequest( message.groupname(), message.username() , login);
     return 0;
   }
   else if(message.groupactiontype() == Message::ClientMessage::LEAVE){
     if(message.groupname().empty()){
       return 3;
     }
-    //pobierz login uytkownika z ClientSessionPipes i wstaw do funkcji
-    //funkcja
+    DataBaseConnector::leaveGroup( message.groupname() , login);
     return 0;
   }
 }

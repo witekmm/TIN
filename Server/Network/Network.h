@@ -7,6 +7,8 @@
 #include "ServerOperations.h"
 #include "NetLibs.h"
 
+#include "../ClientSession/ClientSessionPipes.h"
+
 class Network: public ServerOperation{
   pthread_mutex_t mutex;
   bool working;
@@ -21,9 +23,9 @@ class Network: public ServerOperation{
   int fdmax;
   //list of sockets that select is listening
   std::vector<int> activeSockets;
-
+  std::shared_ptr<ClientSessionPipes> clients;
 public:
-  Network(int maxConnections, int port, std::string ip);
+  Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients);
   void receiveBuffer(int socketNumber);
   void sendBuffer(int socketNumber);
   void waitForSignal();
