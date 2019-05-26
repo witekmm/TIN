@@ -88,6 +88,7 @@ class Database {
     bool hasMsg(int userId);
     int getMsgType(int msgId);
     std::string getMsgSender(int msgId);
+    std::string getMsgGroupName(int msgId);
 
   private:
 
