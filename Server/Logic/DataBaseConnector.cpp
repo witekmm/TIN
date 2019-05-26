@@ -52,7 +52,10 @@ void DataBaseConnector::requestToGroup(std::string groupName, std::string login)
     Reply::incorrectGroupTypeMessage(login, "You already belong to choosen group");
     return;
   }
-  //tu jeszcze dodania zapytania do bazy
+  if(!this->database.isMsgOfTypeForGroup(groupName , 2 , login)){
+    Reply::incorrectGroupTypeMessage(login, "Request from this user already exist");
+    return;
+  }
   this->database.addMsgToAdministrator(groupName, login , 2 , "");
   Reply::correctMessage(login);
 }
@@ -68,9 +71,12 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
     Reply::incorrectGroupTypeMessage(login, "You have no right to reply for request");
     return;
   }
-  //sprawdz czy taki request istnieje i go usun z bazy danych
-
-  //
+  if(!this->database.isMsgOfTypeForGroup(groupName , 2 , userName)){
+    Reply::incorrectGroupTypeMessage(login, "No request from this user");
+    return;
+  }
+  //usun go
+  //this->database.deleteMsgOfTypeForGroup(groupName , 2 , userName);
   int msgid = this->database.createMsg(groupName , login , 3 , "");
   this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   this->database.addUserToGroup(groupName , userName);
@@ -88,9 +94,12 @@ void DataBaseConnector::declineRequest(std::string groupName, std::string userNa
     Reply::incorrectGroupTypeMessage(login, "You have no right to reply for request");
     return;
   }
-  //sprawdz czy taki request istnieje
-
-  //
+  if(!this->database.isMsgOfTypeForGroup(groupName , 2 , userName)){
+    Reply::incorrectGroupTypeMessage(login, "No request from this user");
+    return;
+  }
+  //usun go
+  //this->database.deleteMsgOfTypeForGroup(groupName , 2 , userName);
   int msgid = this->database.createMsg(groupName , login , 4 , "");
   this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   Reply::correctMessage(login);
