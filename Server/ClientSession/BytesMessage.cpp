@@ -12,7 +12,6 @@ BytesMessage::BytesMessage(long id, string bytesBuff) {
 
     sizeSent = false;
     numberOfBytesToSend = MESSAGE_SIZE_BYTES_NUMBER;
-    
 }
 
 long BytesMessage::getLocalId() {
@@ -34,6 +33,7 @@ int BytesMessage::sendSize(int socketNumber) {
     memcpy(tmp , (char*)&bufferSize , MESSAGE_SIZE_BYTES_NUMBER);
 
     if(numberOfBytesToSend < MESSAGE_SIZE_BYTES_NUMBER) {
+        //Buffer size wasn't send fully. Cut and send lacking bytes.
         int sentSizeBytesNumber = 
             MESSAGE_SIZE_BYTES_NUMBER - numberOfBytesToSend;
 
@@ -44,6 +44,7 @@ int BytesMessage::sendSize(int socketNumber) {
         numberOfBytesToSend, MSG_DONTWAIT);
 
     if(bytesSent == -1) {
+        //Error while sending buffer size
         delete [] tmp;
         return -1;
     }
@@ -51,6 +52,7 @@ int BytesMessage::sendSize(int socketNumber) {
     numberOfBytesToSend -= bytesSent;
 
     if(numberOfBytesToSend == 0) {
+        //Buffer size fully send
         sizeSent = true;
         numberOfBytesToSend = getBufferSize();
 
@@ -69,14 +71,17 @@ int BytesMessage::sendBuffer(int socketNumber) {
         numberOfBytesToSend, MSG_DONTWAIT);
 
     if(bytesSent == -1) {
+        //Error while sending buffer
         return -1;
     }
 
     numberOfBytesToSend -= bytesSent;
 
     if(numberOfBytesToSend == 0) {
+        //Buffer fully send
         return 1;
     } else {
+        //Buffer partially send
         bytesBuffer.erase(0, bytesSent);
         return 0;
     }

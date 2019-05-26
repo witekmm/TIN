@@ -81,6 +81,7 @@ void ClientSessionPipes::readBytes(int socketNumber) {
         ++writeMessagesCounter;
         pthread_cond_signal(&writeMessagesBufferNotEmpty);
     } else if (result == -1) {
+        //Error while reading message, client disconnected
         deleteClientSession(socketNumber);
     }
 
@@ -118,11 +119,12 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
             break;
         }
     }
-
     
     if(result == 1) {
+        //Message fully send, erase it from vector of messages to be send
         writeBytesBuffer.erase(it);
     } else if(result == -1) {
+        //Error while sending message, client disconnected
         deleteClientSession(socketNumber);
     }
 
@@ -147,6 +149,10 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
     long localId = getClientLocalId(socketNumber);
     if(localId < 0) return;
 
+    /*
+        Erase all messages which are addressed to disconnected client
+        associated with socketNumber
+    */
     writeBytesBuffer.erase(std::remove_if(
     writeBytesBuffer.begin(), writeBytesBuffer.end(),
     [&localId](BytesMessage& bytesMessage) { 
@@ -160,7 +166,6 @@ void ClientSessionPipes::deleteClientSession(int socketNumber) {
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
         if(it->second.getSocketNumber() == socketNumber) {
-
             writeMessagesCounter -= it->second.getWriteMessagesCount();
             deleteWriteBuffers(socketNumber);
 

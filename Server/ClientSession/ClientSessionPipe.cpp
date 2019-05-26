@@ -50,12 +50,14 @@ int ClientSessionPipe::readBytesSize() {
         numberOfBytesToRead, MSG_DONTWAIT);
 
     if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
+        //Message size fully read
         bytesMessageSizeRead = true;
         numberOfBytesToRead = atoi(tmp);
 
         delete [] tmp;
         return 0;
     } else if(bytesReceived >= 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
+        //Message size partially read
         numberOfBytesToRead -= bytesReceived;
 
         string tmpString(tmp, bytesReceived);
@@ -71,6 +73,7 @@ int ClientSessionPipe::readBytesSize() {
         delete [] tmp;
         return 0;
     } else {
+        //Error while reading message size 
         clearReadBytesVariables();
         delete [] tmp;
 
@@ -92,6 +95,7 @@ int ClientSessionPipe::readBytesMessage() {
         readBytesBuffer += tmpString;
 
         if(numberOfBytesToRead == 0) {
+            //Message fully read, parse it and add to message buffer
             Message::ClientMessage message;
             message.ParseFromString(readBytesBuffer);
 
@@ -106,6 +110,7 @@ int ClientSessionPipe::readBytesMessage() {
         return 0;
 
     } else {
+        //Error while reading message
         clearReadBytesVariables();
         delete [] tmp;
         return -1;

@@ -8,6 +8,7 @@ using namespace std;
 class Client {
     static long localClientCounter;
 
+    //id unique in program execution context 
     long localId;
     string login;
 
