@@ -76,6 +76,7 @@ class Database {
     std::vector<int> getAllGroupsForUser(int userId);
     int getOldestMsgForUser(std::string login);
     int getOldestMsgForUser(int userId);
+    void deleteOldestMsgForUser(std::string login);
     std::vector<int> getAllMsgsForUser(std::string login);
     std::vector<int> getAllMsgsForUser(int userId);
     std::string getMsgText(int msgId);

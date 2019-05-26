@@ -579,6 +579,21 @@ int Database::getOldestMsgForUser(int userId)
 	return -1;
 }
 
+void Database::deleteOldestMsgForUser(std::string login)
+{
+	int msgId = getOldestMsgForUser(login);
+	try
+	{
+		sql::SQLString query = "DELETE FROM `User_Message` WHERE message_id = ?";
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, msgId);
+		pstmt->execute();
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+}
+
 void Database::addMsgToUser(int msgId, int userId)
 {
 	try
