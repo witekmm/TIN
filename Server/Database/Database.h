@@ -68,6 +68,7 @@ class Database {
     // po prostu za jednym wywolaniem dwa wyzej dla usera
     void removeAllForUser(int userId);
 
+    void addMsgToAdministrator(std::string groupName, std::string sender, int type, std::string text);
     void addMsgToGroup(std::string groupName, std::string sender, int type, std::string text);
     void addMsgToUser(int msgId, int userId);
     std::vector<int> getAllUsersFromGroup(std::string groupName);
@@ -78,7 +79,7 @@ class Database {
     std::vector<int> getAllMsgsForUser(std::string login);
     std::vector<int> getAllMsgsForUser(int userId);
     std::string getMsgText(int msgId);
-    void createMsg(std::string groupName, std::string sender, int type, std::string text);
+    int createMsg(std::string groupName, std::string sender, int type, std::string text);
     void deleteMsg(int msgId);
     bool hasMsg(std::string login);
     bool hasMsg(int userId);

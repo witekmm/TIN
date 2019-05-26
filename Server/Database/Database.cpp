@@ -436,7 +436,30 @@ void Database::removeAllUsersForMsg(int msgId)
 	}
 }
 
-void Database::addMsgToGroup(std::string groupName, std::string sender, int type, std::string text)
+void Database::addMsgToAdministrator(std::string groupName, std::string sender, int type, std::string text)
+{
+	try
+	{
+		sql::SQLString query = "SELECT leader from `Group` AS g ";
+					   query+= "WHERE g.name = ?";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setString(1, groupName);
+		res = pstmt->executeQuery();
+
+		int adminId;			
+		if(res->next())
+			adminId = res->getInt("leader");
+		
+		int msgId = createMsg(groupName, sender, type, text);
+		addMsgToUser(msgId, adminId);
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+}
+
+int Database::createMsg(std::string groupName, std::string sender, int type, std::string text)
 {
 	try
 	{
@@ -454,6 +477,18 @@ void Database::addMsgToGroup(std::string groupName, std::string sender, int type
 		res = pstmt->executeQuery();
 		res->next();
 		int msgId = res->getInt("id");
+		return msgId;
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
+}
+
+void Database::addMsgToGroup(std::string groupName, std::string sender, int type, std::string text)
+{
+	try
+	{
+		int msgId = createMsg(groupName, sender, type, text);
 
 		std::vector<int> users = getAllUsersFromGroup(groupName);
 		int senderId = getUserId(sender);
