@@ -55,7 +55,7 @@ int ClientSessionPipe::readBytesSize() {
 
         delete [] tmp;
         return 0;
-    } else if(bytesReceived > 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
+    } else if(bytesReceived >= 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
         numberOfBytesToRead -= bytesReceived;
 
         string tmpString(tmp, bytesReceived);
@@ -85,7 +85,7 @@ int ClientSessionPipe::readBytesMessage() {
         numberOfBytesToRead, MSG_DONTWAIT);
 
 
-    if(bytesReceived > 0) {
+    if(bytesReceived >= 0) {
         numberOfBytesToRead -= bytesReceived;
 
         string tmpString(tmp, bytesReceived);

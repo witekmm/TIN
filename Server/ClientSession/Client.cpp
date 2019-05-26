@@ -4,7 +4,7 @@
 
 using namespace std;
 
-unsigned int Client::localClientCounter = 0;
+long Client::localClientCounter = 0;
 
 Client::Client() {
     localId = ++localClientCounter;
@@ -22,6 +22,6 @@ bool Client::isLogged() {
     return !login.empty();
 }
 
-unsigned int Client::getLocalId() {
+long Client::getLocalId() {
     return localId;
 }
