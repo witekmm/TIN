@@ -1,6 +1,7 @@
 #include <string>
 #include <cstring>
 
+#include "../Network/NetLibs.h"
 #include "BytesMessage.h"
 
 using namespace std;

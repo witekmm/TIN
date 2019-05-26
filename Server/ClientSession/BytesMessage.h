@@ -1,8 +1,12 @@
 #ifndef BYTES_MESSAGE_H
 #define BYTES_MESSAGE_H
 
+#define MESSAGE_SIZE_BYTES_NUMBER 4
+
 #include <string>
 #include <cstring>
+
+#include "../Network/NetLibs.h"
 
 using namespace std;
 
