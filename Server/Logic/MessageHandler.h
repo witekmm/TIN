@@ -18,11 +18,12 @@ public:
   //will be there
   //check message type
   void LogicThreadLoop();
+  void DataBaseMessageCheckLoop();
 
-  int HandleMessage(Message::ClientMessage message, int clientId);
+  int HandleMessage(Message::ClientMessage message, int clientId, std::string clientlogin,bool islogged);
   //check action type
   int HandleAuthorizationType(Message::ClientMessage message);
-  int HandleGroupType(Message::ClientMessage message, int clientId);
+  int HandleGroupType(Message::ClientMessage message, std::string login);
   //CLICommandHandler
   //will be there
 };
