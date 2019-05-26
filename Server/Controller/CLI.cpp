@@ -28,6 +28,7 @@ void CommandLineInterface::getCommand(){
 bool CommandLineInterface::checkCommandsPropriety(std::vector<std::string> splitedCommand){
   for(auto it = splitedCommand.begin() ; it!=splitedCommand.end() ; it++){
     if(it == splitedCommand.begin() && *it=="closebylogin") return true;
+    if(it == splitedCommand.begin() && (*it=="add" || *it=="delete")) return true;
     if(!commandExist(*it)) return false;
   }
   return true;
