@@ -1,0 +1,1 @@
+g++ -I/usr/include/cppconn $1 $2 -o database -L/usr/lib -lmysqlcppconn
