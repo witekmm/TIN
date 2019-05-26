@@ -36,6 +36,7 @@ void Network::waitForSignal(){
             if(this->clients->readBytes(tmp) == -1){
                 closeSocket(tmp);
                 this->clients->deleteClientSession(tmp);
+                break;
             }
           }
         }
@@ -43,6 +44,7 @@ void Network::waitForSignal(){
           if(this->clients->writeBytes(tmp) == -1){
               closeSocket(tmp);
               this->clients->deleteClientSession(tmp);
+              break;
           }
         }
         if(FD_ISSET(tmp , &this->exceptionfds)){
