@@ -26,8 +26,6 @@ class Network: public ServerOperation{
   std::shared_ptr<ClientSessionPipes> clients;
 public:
   Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients);
-  void receiveBuffer(int socketNumber);
-  void sendBuffer(int socketNumber);
   void waitForSignal();
 
   void prepareLists();

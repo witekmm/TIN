@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <vector>
 
 #include "../../Messages/Message.pb.h"
 #include "DataBaseConnector.h"
@@ -22,8 +23,8 @@ public:
 
   int HandleMessage(Message::ClientMessage message, int clientId, std::string clientlogin,bool islogged);
   //check action type
-  int HandleAuthorizationType(Message::ClientMessage message);
-  int HandleGroupType(Message::ClientMessage message, std::string login);
+  int HandleAuthorizationType(Message::ClientMessage message, int clientId);
+  int HandleGroupType(Message::ClientMessage message, std::string login, int clientId);
   //CLICommandHandler
   //will be there
 };
