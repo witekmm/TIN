@@ -110,7 +110,7 @@ int ClientSessionPipes::writeBytes(int socketNumber) {
     }
 
     long localId = getClientLocalId(socketNumber);
-    if(localId < 0) return;
+    if(localId < 0) return -1;
 
     vector<BytesMessage>::iterator it;
     int result;
