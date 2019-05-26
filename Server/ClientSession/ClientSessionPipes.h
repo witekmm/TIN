@@ -65,8 +65,9 @@ public:
     * and delegates read task to be executed in certain client session pipe context.
     *
     * @param socketNumber socket number which is eager to be read from.
+    * @return 1 if completed receiving message, 0 if part of message was received, -1 when error occured
     */
-    void readBytes(int socketNumber);
+    int readBytes(int socketNumber);
 
     /**
     * Writes bytes to passed socket number.
@@ -76,8 +77,9 @@ public:
     * and if such exists it try to send via passed socket number.
     *
     * @param socketNumber socket number which is eager to read from server.
+    * @return 1 if completed sending message, 0 if part of message was send, -1 when error occured
     */
-    void writeBytes(int socketNumber);
+    int writeBytes(int socketNumber);
 
     /**
     * Creates new client session associated with passed socket number.

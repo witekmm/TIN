@@ -63,7 +63,7 @@ void ClientSessionPipes::readMessage(long localId, Message::ClientMessage messag
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
-void ClientSessionPipes::readBytes(int socketNumber) {
+int ClientSessionPipes::readBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
     vector<pair<Client, ClientSessionPipe>>::iterator it;
@@ -86,6 +86,8 @@ void ClientSessionPipes::readBytes(int socketNumber) {
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
+
+    return result;
 }
 
 long ClientSessionPipes::getClientLocalId(int socketNumber) {
@@ -100,7 +102,7 @@ long ClientSessionPipes::getClientLocalId(int socketNumber) {
     return -1;
 }
 
-void ClientSessionPipes::writeBytes(int socketNumber) {
+int ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
     if(isWriteBytesBufferEmpty()) {
         pthread_cond_wait(&writeBytesBufferNotEmpty,
@@ -129,6 +131,8 @@ void ClientSessionPipes::writeBytes(int socketNumber) {
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
+
+    return result;
 }
 
 void ClientSessionPipes::createClientSession(int socketNumber) {
