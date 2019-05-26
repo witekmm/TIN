@@ -22,6 +22,8 @@ public:
   int logInUser(std::string login, std::string password, int clientId);
   int registerUser(std::string login, std::string password, int clientId);
 
+  void deleteLastUserMessage(std::string login);
+
   bool checkIfMessageExistAndSend(std::string login);
 
   int rootDeleteGroup(std::string groupName);

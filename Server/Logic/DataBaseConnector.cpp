@@ -204,3 +204,7 @@ void DataBaseConnector::getAllUsersMessagesAndSend(std::string login, int id){
     std::string sender = this->database.getMsgSender(*it);
   }
 }
+
+void DataBaseConnector::deleteLastUserMessage(std::string login){
+  this->database.deleteOldestMsgForUser(login);
+}

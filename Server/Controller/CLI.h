@@ -14,7 +14,7 @@
 #include <memory>
 #include <functional>
 
-class CommandLineInterface: private Network, private MessageHandler{
+class CommandLineInterface: public Network, public MessageHandler{
   bool working;
 public:
   CommandLineInterface(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients);
@@ -22,7 +22,10 @@ public:
   bool checkCommandsPropriety(std::vector<std::string> splitedCommand);
   bool handleCommand(std::vector<std::string> splitedCommand);
   bool commandExist(std::string command);
+
   void selectThreadWrapper();
+  void dataBaseThreadWrapper();
+  void logicThreadWrapper();
 };
 
 #endif

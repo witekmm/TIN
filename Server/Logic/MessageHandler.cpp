@@ -44,8 +44,8 @@ void MessageHandler::DataBaseMessageCheckLoop(){
   while(this->working){
     std::vector<Client> users = this->clients->getLoggedClients();
     for(auto it = users.begin() ; it != users.end() ; it++){
-      Client temp = *it;
-      DataBaseConnector::getAllUsersMessagesAndSend( temp.getLogin() , temp.getLocalId() );
+      //Client temp = *it;
+      DataBaseConnector::getAllUsersMessagesAndSend( it->getLogin() , it->getLocalId() );
     }
   }
 }
@@ -62,9 +62,11 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId, 
     if(islogged) return 5;
     return HandleAuthorizationType(message, clientId);
   }
-  /*else if(message.messagetype() == Message::ClientMessage::REPLY){
-
-  }*/
+  else if(message.messagetype() == Message::ClientMessage::REPLY){
+    if(!islogged) return 4;
+    DataBaseConnector::deleteLastUserMessage(clientlogin);
+    return 0;
+  }
 }
 
 
