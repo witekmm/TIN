@@ -11,6 +11,7 @@
 class MessageHandler: public DataBaseConnector{
   std::shared_ptr<ClientSessionPipes> clients;
 public:
+  MessageHandler(std::shared_ptr<ClientSessionPipes> clients);
   //There have to be function that monitors users buffers
   //will be there
   //check message type

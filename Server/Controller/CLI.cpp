@@ -1,6 +1,6 @@
 #include "CLI.h"
 
-CommandLineInterface::CommandLineInterface(int maxConnections, int port, std::string ip): Network(maxConnections,port,ip) , working(true)
+CommandLineInterface::CommandLineInterface(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients): Network(maxConnections,port,ip,clients), MessageHandler(clients) , working(true)
 {}
 
 void CommandLineInterface::getCommand(){
@@ -44,6 +44,10 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
     puts("set port NUMBER_OF_PORT - obvious");
     puts("set connections NUMBER_OF_CONNECTIONS - set max number of connections");
     puts("close NUMBER_OF_SOCKET - obvious");
+    puts("add user user_name user_password");
+    puts("add group group_name admin_name");
+    puts("delete user user_name");
+    puts("delete group group_name");
     puts("closebylogin CLIENT_LOGIN - obvious");
     return true;
   }
@@ -206,6 +210,54 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
   else if(splitedCommand[0] == "closebylogin"){
     return false;
   }
+  else if(splitedCommand[0] == "add"){
+    if(splitedCommand.size() != 4) return false;
+    if(splitedCommand[1] == "user"){
+      std::hash<std::string> hasher;
+      std::string password = std::to_string(hasher(splitedCommand[3]));
+      int result = MessageHandler::DataBaseConnector::rootAddUser(splitedCommand[2], password);
+      if(result == -1){
+        puts("Login already in use!");
+        return true;
+      }
+      puts("User created");
+      return true;
+    }
+    else if(splitedCommand[1] == "group"){
+      int result = MessageHandler::DataBaseConnector::rootAddGroup(splitedCommand[2], splitedCommand[3]);
+      if(result == -1){
+        puts("User passed as admin doesn't exist!");
+        return true;
+      }
+      else if(result == -2){
+        puts("Group already exist!");
+        return true;
+      }
+      puts("Group created");
+      return true;
+    }
+    else return false;
+  }
+  else if(splitedCommand[0] == "delete"){
+    if(splitedCommand.size() != 3) return false;
+    if(splitedCommand[1] == "user"){
+      if(MessageHandler::DataBaseConnector::rootDeleteUser(splitedCommand[2]) == -1){
+        puts("User doesn't exist!");
+        return true;
+      }
+      puts("User deleted!");
+      return true;
+    }
+    else if(splitedCommand[1] == "group"){
+      if(MessageHandler::DataBaseConnector::rootDeleteGroup(splitedCommand[2]) == -1){
+        puts("Group doesn't exist!");
+        return true;
+      }
+      puts("Group deleted!");
+      return true;
+    }
+    else return false;
+  }
 }
 
 bool CommandLineInterface::commandExist(std::string command){
@@ -240,6 +292,18 @@ bool CommandLineInterface::commandExist(std::string command){
     return true;
   }
   else if(command == "connections"){
+    return true;
+  }
+  else if(command == "add"){
+    return true;
+  }
+  else if(command == "delete"){
+    return true;
+  }
+  else if(command == "user"){
+    return true;
+  }
+  else if(command == "group"){
     return true;
   }
   else{

@@ -1,6 +1,6 @@
 #include "Network.h"
 
-Network::Network(int maxConnections, int port, std::string ip):working(true), ServerOperation(maxConnections,port,ip){
+Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):clients(clients) , working(true), ServerOperation(maxConnections,port,ip){
   this->tv.tv_sec = 1;
   this->tv.tv_usec = 0;
   FD_ZERO(&this->readfds);

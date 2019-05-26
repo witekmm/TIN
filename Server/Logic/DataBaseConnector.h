@@ -2,14 +2,16 @@
 #define DATA_BASE_CONNECTOR_H
 
 #include "../Database/Database.h"
+#include "../ClientSession/ClientSessionPipes.h"
 #include "RepliesCreator.h"
+#include <memory>
 #include <string>
 #include <vector>
 
 class DataBaseConnector: public Reply{
   Database database;
 public:
-  DataBaseConnector();
+  DataBaseConnector(std::shared_ptr<ClientSessionPipes> clients);
   void sendGroupMessage(std::string content, std::string groupName, std::string login);
   void createGroup(std::string groupName, std::string login);
   void deleteGroup(std::string groupName, std::string login);

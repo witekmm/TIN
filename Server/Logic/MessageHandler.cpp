@@ -1,6 +1,9 @@
 #include "MessageHandler.h"
 #include "../../Messages/Message.pb.h"
 
+MessageHandler::MessageHandler(std::shared_ptr<ClientSessionPipes> clients):
+ DataBaseConnector(clients) , clients(clients){}
+
 int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId){
   if(!message.messagetype()){
     return 1;

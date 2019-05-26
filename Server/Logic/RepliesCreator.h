@@ -11,6 +11,7 @@
 class Reply{
   std::shared_ptr<ClientSessionPipes> clients;
 public:
+  Reply(std::shared_ptr<ClientSessionPipes> clients);
   void incorrectGroupTypeMessage(std::string login, std::string error);
   void incorrectAuthorizationTypeMessage(int clientsId , std::string error);
 

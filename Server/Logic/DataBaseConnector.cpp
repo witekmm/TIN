@@ -1,7 +1,7 @@
 #include "DataBaseConnector.h"
 
-DataBaseConnector::DataBaseConnector()
-    : database(){}
+DataBaseConnector::DataBaseConnector(std::shared_ptr<ClientSessionPipes> clients)
+    : database() , Reply(clients){}
 
 void DataBaseConnector::sendGroupMessage(std::string content, std::string groupName, std::string login)
 {
@@ -53,6 +53,7 @@ void DataBaseConnector::requestToGroup(std::string groupName, std::string login)
     return;
   }
   //tu jeszcze dodania zapytania do bazy
+  this->database.addMsgToAdministrator(groupName, login , 2 , "");
   Reply::correctMessage(login);
 }
 
@@ -68,6 +69,10 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
     return;
   }
   //sprawdz czy taki request istnieje i go usun z bazy danych
+
+  //
+  int msgid = this->database.createMsg(groupName , login , 3 , "");
+  this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   this->database.addUserToGroup(groupName , userName);
   Reply::correctMessage(login);
 }
@@ -84,6 +89,10 @@ void DataBaseConnector::declineRequest(std::string groupName, std::string userNa
     return;
   }
   //sprawdz czy taki request istnieje
+
+  //
+  int msgid = this->database.createMsg(groupName , login , 4 , "");
+  this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   Reply::correctMessage(login);
 }
 

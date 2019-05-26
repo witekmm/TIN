@@ -1,5 +1,7 @@
 #include "RepliesCreator.h"
 
+Reply::Reply(std::shared_ptr<ClientSessionPipes> clients): clients(clients) {}
+
 void Reply::incorrectGroupTypeMessage(std::string login, std::string error){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
