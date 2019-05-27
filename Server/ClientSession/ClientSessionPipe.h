@@ -5,6 +5,7 @@
 
 #include <pthread.h>
 #include <vector>
+#include <cstring>
 
 #include "../Network/NetLibs.h"
 #include "../../Messages/Message.pb.h"
