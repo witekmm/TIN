@@ -436,7 +436,7 @@ void Database::removeAllUsersForMsg(int msgId)
 	}
 }
 
-void Database::addMsgToAdministrator(std::string groupName, std::string sender, int type, std::string text)
+std::string Database::addMsgToAdministrator(std::string groupName, std::string sender, int type, std::string text)
 {
 	try
 	{
@@ -453,10 +453,12 @@ void Database::addMsgToAdministrator(std::string groupName, std::string sender, 
 
 		int msgId = createMsg(groupName, sender, type, text);
 		addMsgToUser(msgId, adminId);
+		return getUserLogin(adminId);
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return "";
 }
 
 int Database::createMsg(std::string groupName, std::string sender, int type, std::string text)
@@ -594,7 +596,7 @@ void Database::deleteOldestMsgForUser(std::string login)
 	}
 }
 
-void Database::addMsgToUser(int msgId, int userId)
+std::string Database::addMsgToUser(int msgId, int userId)
 {
 	try
 	{
@@ -603,10 +605,12 @@ void Database::addMsgToUser(int msgId, int userId)
 		pstmt->setInt(1, userId);
 		pstmt->setInt(2, msgId);
 		pstmt->execute();
+		return getUserLogin(userId);
 	}
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return "";
 }
 
 void Database::deleteMsg(int msgId)

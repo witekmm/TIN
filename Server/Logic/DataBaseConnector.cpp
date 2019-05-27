@@ -15,6 +15,12 @@ void DataBaseConnector::sendGroupMessage(std::string content, std::string groupN
   }
   this->database.addMsgToGroup(groupName, login, 1, content);
   Reply::correctMessage(clientId);
+  std::vector<Client> loggedclients = Reply::getLoggedClients();
+  for(auto it = loggedclients.begin() ; it != loggedclients.end() ; it++){
+    if(this->database.belongsToGroup(groupName , it->getLogin())){
+      Reply::createAndSetMessage(login , content ,groupName, 1 , it->getLocalId());
+    }
+  }
 }
 
 void DataBaseConnector::createGroup(std::string groupName, std::string login, int clientId)
@@ -56,8 +62,11 @@ void DataBaseConnector::requestToGroup(std::string groupName, std::string login,
     Reply::incorrectMessage(clientId, "No request from this user");
     return;
   }
-  this->database.addMsgToAdministrator(groupName, login , 2 , "");
   Reply::correctMessage(clientId);
+  std::string adminName = this->database.addMsgToAdministrator(groupName, login , 2 , "");
+  int adminId = Reply::findClientID(adminName);
+  if(adminId == -1) return;
+  else Reply::createAndSetMessage(login , "" ,groupName, 2 , adminId);
 }
 
 void DataBaseConnector::acceptRequest(std::string groupName, std::string userName, std::string login, int clientId)
@@ -77,11 +86,14 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
     return;
   }
   //usun go
+  Reply::correctMessage(clientId);
   this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
   msgid = this->database.createMsg(groupName , login , 3 , "");
-  this->database.addMsgToUser(msgid , this->database.getUserId(userName));
+  std::string user = this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   this->database.addUserToGroup(groupName , userName);
-  Reply::correctMessage(clientId);
+  int userId = Reply::findClientID(user);
+  if(userId == -1) return;
+  else Reply::createAndSetMessage(login , "" ,groupName, 2 , userId);
 }
 
 void DataBaseConnector::declineRequest(std::string groupName, std::string userName, std::string login, int clientId)
@@ -101,10 +113,13 @@ void DataBaseConnector::declineRequest(std::string groupName, std::string userNa
     return;
   }
   //usun go
+  Reply::correctMessage(clientId);
   this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
   msgid = this->database.createMsg(groupName , login , 4 , "");
-  this->database.addMsgToUser(msgid , this->database.getUserId(userName));
-  Reply::correctMessage(clientId);
+  std::string user = this->database.addMsgToUser(msgid , this->database.getUserId(userName));
+  int userId = Reply::findClientID(user);
+  if(userId == -1) return;
+  else Reply::createAndSetMessage(login , "" ,groupName, 2 , userId);
 }
 
 void DataBaseConnector::leaveGroup(std::string groupName, std::string login, int clientId)
@@ -149,6 +164,7 @@ int DataBaseConnector::logInUser(std::string login, std::string password, int cl
     groupsByString.push_back( this->database.getGroupName(*it) );
   }
   Reply::correctLoginMessage(clientId, groupsByString);
+  getAllUsersMessagesAndSend(login , clientId);
   return 0;
 }
 

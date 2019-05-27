@@ -19,6 +19,9 @@ public:
 
   void createAndSetMessage(std::string sender, std::string content, std::string groupName,int type , int clientId);
   void logInChoosenUser(int clientId, std::string login);
+
+  std::vector<Client> getLoggedClients();
+  int findClientID(std::string login);
   //uywane przez DataBaseConnector
   //void userNotInGroup(std::string groupName, std::string login);
   //void groupNameExist(std::string groupName, std::string login);

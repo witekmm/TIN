@@ -56,3 +56,15 @@ void Reply::createAndSetMessage(std::string sender, std::string content, std::st
   }
   this->clients->readMessage(clientId,message);
 }
+
+std::vector<Client> Reply::getLoggedClients(){
+  return this->clients->getLoggedClients();
+}
+
+int Reply::findClientID(std::string login){
+  std::vector<Client> temp = getLoggedClients();
+  for(auto it = temp.begin() ; it != temp.end() ; it++){
+    if(login == it->getLogin()) return it->getLocalId();
+  }
+  return -1;
+}

@@ -8,8 +8,8 @@ void CommandLineInterface::getCommand(){
   std::thread logicThread (&CommandLineInterface::logicThreadWrapper , this);
   logicThread.detach();
 
-  std::thread dataBaseThread (&CommandLineInterface::dataBaseThreadWrapper , this);
-  dataBaseThread.detach();
+//  std::thread dataBaseThread (&CommandLineInterface::dataBaseThreadWrapper , this);
+//  dataBaseThread.detach();
 
   while(this->working){
     std::cin.clear();
