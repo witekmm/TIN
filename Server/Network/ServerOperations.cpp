@@ -65,7 +65,7 @@ int ServerOperation::acceptConnection(){
   //Brak połączenia
   if(newfd == -1) return -1;
   //Połączono
-  printf("New connection on socket %d", newfd);
+  printf("New connection on socket %d\n", newfd);
   return newfd;
 }
 

@@ -34,11 +34,12 @@ class ClientSessionPipes {
     void deleteWriteBuffers(int socketNumber);
 
 public:
+    ClientSessionPipes();
 
     /**
     * Reads message and localId of message recipient.
     *
-    * Used by Logic thread to push new messages that 
+    * Used by Logic thread to push new messages that
     * are to be send to recipient associated with passed localId.
     *
     * @param localId localId associated with message recipient.
@@ -50,7 +51,7 @@ public:
     * Writes received and deserialized message with association with
     * client which has sent this message
     *
-    * Used by Logic thread to pull new messages that 
+    * Used by Logic thread to pull new messages that
     * are to be handled.
     *
     * @return pair of deserialized message and sender Client object.

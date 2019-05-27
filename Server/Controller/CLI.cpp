@@ -6,19 +6,14 @@ CommandLineInterface::CommandLineInterface(int maxConnections, int port, std::st
 
 void CommandLineInterface::getCommand(){
 
-  //std::thread logicThread (&CommandLineInterface::logicThreadWrapper , this);
-  //logicThread.detach();
-  //pthread_t logicthread;
-  //pthread_create(&logicthread, NULL, &CommandLineInterface::logicThreadWrapper, this);
-
-//  std::thread dataBaseThread (&CommandLineInterface::dataBaseThreadWrapper , this);
-//  dataBaseThread.detach();
+  pthread_t logicthread;
+  pthread_create(&logicthread, NULL, &CommandLineInterface::logicThreadWrapper, this);
 
   while(this->working){
     std::cin.clear();
     //clear buffer
     std::string command;
-    puts("Command: ");
+    puts("COMMAND: ");
     std::getline(std::cin , command);
     //get command
     std::istringstream split(command);
@@ -36,6 +31,7 @@ void CommandLineInterface::getCommand(){
     }
   }
 }
+
 bool CommandLineInterface::checkCommandsPropriety(std::vector<std::string> splitedCommand){
   for(auto it = splitedCommand.begin() ; it!=splitedCommand.end() ; it++){
     if(it == splitedCommand.begin() && *it=="closebylogin") return true;

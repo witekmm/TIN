@@ -11,6 +11,10 @@
 
 using namespace std;
 
+ClientSessionPipes::ClientSessionPipes(){
+  pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
+}
+
 bool ClientSessionPipes::isWriteMessagesBufferEmpty() {
     return writeMessagesCounter == 0;
 }
@@ -121,7 +125,7 @@ int ClientSessionPipes::writeBytes(int socketNumber) {
             break;
         }
     }
-    
+
     if(result == 1) {
         //Message fully send, erase it from vector of messages to be send
         writeBytesBuffer.erase(it);
@@ -159,7 +163,7 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
     */
     writeBytesBuffer.erase(std::remove_if(
     writeBytesBuffer.begin(), writeBytesBuffer.end(),
-    [&localId](BytesMessage& bytesMessage) { 
+    [&localId](BytesMessage& bytesMessage) {
         return bytesMessage.getLocalId() == localId;
     }), writeBytesBuffer.end());
 }

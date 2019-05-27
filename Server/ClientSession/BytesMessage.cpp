@@ -34,13 +34,13 @@ int BytesMessage::sendSize(int socketNumber) {
 
     if(numberOfBytesToSend < MESSAGE_SIZE_BYTES_NUMBER) {
         //Buffer size wasn't send fully. Cut and send lacking bytes.
-        int sentSizeBytesNumber = 
+        int sentSizeBytesNumber =
             MESSAGE_SIZE_BYTES_NUMBER - numberOfBytesToSend;
 
         strncpy(tmp, tmp + sentSizeBytesNumber, numberOfBytesToSend);
     }
-
-    int bytesSent = send(socketNumber, tmp, 
+    
+    int bytesSent = send(socketNumber, tmp,
         numberOfBytesToSend, MSG_DONTWAIT);
 
     if(bytesSent == -1) {
@@ -67,7 +67,7 @@ int BytesMessage::sendSize(int socketNumber) {
 int BytesMessage::sendBuffer(int socketNumber) {
     const char* tmp = bytesBuffer.c_str();
 
-    int bytesSent = send(socketNumber, tmp, 
+    int bytesSent = send(socketNumber, tmp,
         numberOfBytesToSend, MSG_DONTWAIT);
 
     if(bytesSent == -1) {

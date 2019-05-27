@@ -1,22 +1,22 @@
 #include "Network.h"
 
-Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
+Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):
+clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
   this->tv.tv_sec = 1;
   this->tv.tv_usec = 0;
   FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
   FD_ZERO(&this->master);
+  pthread_mutex_init(&this->mutex, NULL);
 }
 
 void Network::waitForSignal(){
-  perror("Server is waiting for signal from sockets");
   pthread_mutex_lock(&this->mutex);
   this->working=true;
   pthread_mutex_unlock(&this->mutex);
   while(this->working){
     pthread_mutex_lock(&this->mutex);
-    puts("MUT");
     prepareLists();
     if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, 0) < 1){
       break;
@@ -28,7 +28,6 @@ void Network::waitForSignal(){
           if(tmp == ServerOperation::getSocketNumber()){
             int newfd = ServerOperation::acceptConnection();
             if(newfd > 0){
-              puts("NEW CLIENT CONNECTED");
               addSocket(newfd);
               this->clients->createClientSession(newfd);
               break;
@@ -38,6 +37,7 @@ void Network::waitForSignal(){
             }
           }
           else{
+            std::cout<<"READING FROM SOCKET "<<tmp<<std::endl;
             if(this->clients->readBytes(tmp) == -1){
                 closeSocket(tmp);
                 this->clients->deleteClientSession(tmp);
@@ -46,11 +46,13 @@ void Network::waitForSignal(){
           }
         }
         if(FD_ISSET(tmp , &this->writefds)){
+          std::cout<<"WRITING TO SOCKET "<<tmp<<std::endl;
           if(this->clients->writeBytes(tmp) == -1){
               closeSocket(tmp);
               this->clients->deleteClientSession(tmp);
               break;
           }
+          std::cout<<"WRITING IS ENDED"<<std::endl;
         }
         if(FD_ISSET(tmp , &this->exceptionfds)){
           closeSocket(tmp);
@@ -64,17 +66,17 @@ void Network::waitForSignal(){
 }
 
 void Network::prepareLists(){
-  this->readfds=this->master;
+  /*this->readfds=this->master;
   this->writefds=this->master;
-  this->exceptionfds = this->master;
-  /*FD_ZERO(&this->readfds);
+  this->exceptionfds = this->master;*/
+  FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
   for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
     FD_SET(*it , &this->readfds);
     FD_SET(*it , &this->writefds);
     FD_SET(*it , &this->exceptionfds);
-  }*/
+  }
 }
 
 void Network::addSocket(int socketNumber){
@@ -94,10 +96,10 @@ int Network::closeSocket(int socketNumber){
 }
 
 int Network::closeSocketWithBlocking(int socketNumber){
-  pthread_mutex_lock(&this->mutex);
+  pthread_mutex_trylock(&this->mutex);
   int result = closeSocket(socketNumber);
   pthread_mutex_unlock(&this->mutex);
-  return 0;
+  return result;
 }
 
 void Network::closeServer(){
@@ -149,9 +151,7 @@ void Network::stopWaiting(){
 }
 
 bool Network::isServerWaiting(){
-  puts("X");
   pthread_mutex_lock(&this->mutex);
-  puts("D");
   bool temp = this->working;
   pthread_mutex_unlock(&this->mutex);
   return temp;

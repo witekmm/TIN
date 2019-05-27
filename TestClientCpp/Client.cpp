@@ -71,10 +71,11 @@ void sendBuffer(int socket){
   strcpy(bufferFull , buffer);
   strcat(bufferFull , buffer2);
   int bytessentalready=0;
+  cout<<"TO SEND:"<<bytesToSent<<endl;
   puts("sending");
   while(bytesToSent!=0){
     int bytesSent = send(socket , bufferFull+bytessentalready , strlen(bufferFull)+1-bytessentalready , 0);
-    printf("%d", bytesSent);
+    if(bytesSent!=0) cout<<"IN ONE PART SENT:"<<bytesSent<<endl;
     if(bytesSent==-1){
       perror("CANNOT SEND");
       return;
@@ -121,7 +122,6 @@ int main()
     }
     //send(clientSocket , &checkServ)
     printf("\nConnected. Server socket = %d\n", clientSocket);
-    fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 
     while(g_flag){
 
