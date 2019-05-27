@@ -29,7 +29,7 @@ size_t ClientSessionPipe::getWriteMessagesCount() {
 }
 
 bool ClientSessionPipe::isWriteMessagesBufferEmpty() {
-    return writeMessagesBuffer.empty(); 
+    return writeMessagesBuffer.empty();
 }
 
 Message::ClientMessage ClientSessionPipe::getWriteMessageBufferMessage() {
@@ -46,13 +46,16 @@ void ClientSessionPipe::addWriteMessage(Message::ClientMessage message) {
 int ClientSessionPipe::readBytesSize() {
     char *tmp = new char[numberOfBytesToRead];
 
-    int bytesReceived = recv(this->socketNumber, &tmp, 
+    int bytesReceived = recv(this->socketNumber, &tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
 
     if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size fully read
         bytesMessageSizeRead = true;
-        numberOfBytesToRead = atoi(tmp);
+      //  numberOfBytesToRead = atoi(tmp);
+        int* tmpp;
+        memcpy(tmpp , tmp , 4);
+        numberOfBytesToRead = *tmpp;
 
         delete [] tmp;
         return 0;
@@ -73,7 +76,7 @@ int ClientSessionPipe::readBytesSize() {
         delete [] tmp;
         return 0;
     } else {
-        //Error while reading message size 
+        //Error while reading message size
         clearReadBytesVariables();
         delete [] tmp;
 
@@ -84,7 +87,7 @@ int ClientSessionPipe::readBytesSize() {
 int ClientSessionPipe::readBytesMessage() {
     char *tmp = new char[numberOfBytesToRead];
 
-    int bytesReceived = recv(this->socketNumber, &tmp, 
+    int bytesReceived = recv(this->socketNumber, &tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
 
 
