@@ -6,7 +6,9 @@ MessageHandler::MessageHandler(std::shared_ptr<ClientSessionPipes> clients):
 
 void MessageHandler::LogicThreadLoop(){
   while(this->working){
+    puts("WE SIE ZABLOKUJ");
     std::pair<Client, Message::ClientMessage> result = this->clients->writeMessage();
+    puts("RUSZYLO CZY NIE");
     int res = HandleMessage(result.second , result.first.getLocalId() , result.first.getLogin() , result.first.isLogged());
     switch (res)
     {
@@ -36,16 +38,6 @@ void MessageHandler::LogicThreadLoop(){
       case 5:
         DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!");
         break;
-    }
-  }
-}
-
-void MessageHandler::DataBaseMessageCheckLoop(){
-  while(this->working){
-    std::vector<Client> users = this->clients->getLoggedClients();
-    for(auto it = users.begin() ; it != users.end() ; it++){
-      //Client temp = *it;
-      DataBaseConnector::getAllUsersMessagesAndSend( it->getLogin() , it->getLocalId() );
     }
   }
 }

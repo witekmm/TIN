@@ -329,10 +329,6 @@ void * CommandLineInterface::selectThreadWrapper(void * Object){
   ((CommandLineInterface *)Object)->Network::waitForSignal();
 }
 
-void CommandLineInterface::dataBaseThreadWrapper(){
-  MessageHandler::LogicThreadLoop();
-}
-
 void * CommandLineInterface::logicThreadWrapper(void * Object){
-  ((CommandLineInterface *)Object)->MessageHandler::DataBaseMessageCheckLoop();
+  ((CommandLineInterface *)Object)->MessageHandler::LogicThreadLoop();
 }

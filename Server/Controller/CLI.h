@@ -25,7 +25,6 @@ public:
 
   static void * selectThreadWrapper(void * Object);
   static void * logicThreadWrapper(void * Object);
-  void dataBaseThreadWrapper();
 };
 
 #endif

@@ -13,6 +13,8 @@ using namespace std;
 
 ClientSessionPipes::ClientSessionPipes(){
   pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
+  pthread_cond_init(&this->writeMessagesBufferNotEmpty, NULL);
+  pthread_cond_init(&this->writeBytesBufferNotEmpty, NULL);
 }
 
 bool ClientSessionPipes::isWriteMessagesBufferEmpty() {

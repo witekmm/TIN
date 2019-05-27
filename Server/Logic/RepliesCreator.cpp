@@ -8,6 +8,7 @@ void Reply::incorrectMessage(int clientId, std::string error){
   message.set_reply(Message::ClientMessage::NEGATIVE);
   message.set_replycontent(error);
   //wyslij
+  puts("INCORRECT MESSAGE");
   this->clients->readMessage(clientId,message);
 }
 
@@ -15,6 +16,7 @@ void Reply::correctMessage(int clientId){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::POSITIVE);
+  puts("CORRECT MESSAGE");
   this->clients->readMessage(clientId,message);
 }
 
@@ -22,6 +24,7 @@ void Reply::correctLoginMessage(int clientId, std::vector<std::string> groups){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::POSITIVE);
+  puts("CORRECT LOGIN MESSAGE");
   for(auto it = groups.begin(); it != groups.end() ; it++){
     message.add_groups( *it );
   }
