@@ -63,8 +63,14 @@ void sendBuffer(int socket){
   char* buffer = new char[4];
   puts("4");
   memcpy(buffer , &bytesToSent , 4);
+  //JEST ZAJEBISCIE
+  //cout<<(int *)*buffer<<endl;
   puts("4.5");
-  char buffer2[msg.length()+1];
+  //char buffer2[msg.length()+1];
+  char *buffer2 = new char[msg.length()];
+  //buffer2 = msg.c_str();
+  strcpy(buffer2 , msg.c_str());
+  //cout<<buffer2<<endl;
   //buffer2 = msg.c_str();
   puts("5");
   char *bufferFull = new char[msg.length() + 5];
@@ -74,14 +80,19 @@ void sendBuffer(int socket){
   cout<<"TO SEND:"<<bytesToSent<<endl;
   puts("sending");
   while(bytesToSent!=0){
-    int bytesSent = send(socket , bufferFull+bytessentalready , strlen(bufferFull)+1-bytessentalready , 0);
+    int bytesSent = write(socket , bufferFull , bytesToSent);
     if(bytesSent!=0) cout<<"IN ONE PART SENT:"<<bytesSent<<endl;
     if(bytesSent==-1){
       perror("CANNOT SEND");
       return;
     }
+
     bytesToSent -= bytesSent;
     bytessentalready += bytesSent;
+    char *buffer3 = new char[bytesToSent];
+    strcpy(buffer3 , bufferFull+bytesSent);
+    strcpy(bufferFull , buffer3);
+    delete[] buffer3;
   }
   puts("SENT");
   delete[] buffer;

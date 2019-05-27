@@ -45,19 +45,18 @@ void ClientSessionPipe::addWriteMessage(Message::ClientMessage message) {
 
 int ClientSessionPipe::readBytesSize() {
     char *tmp = new char[numberOfBytesToRead];
-
-    int bytesReceived = recv(this->socketNumber, &tmp,
+    //char *tmp = (char *)malloc(numberOfBytesToRead);
+    int bytesReceived = recv(this->socketNumber, tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
-
+    cout<<"Received: "<<bytesReceived<<" bytes."<<endl;
     if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size fully read
         bytesMessageSizeRead = true;
       //  numberOfBytesToRead = atoi(tmp);
-        int* tmpp;
-        memcpy(tmpp , tmp , 4);
-        numberOfBytesToRead = *tmpp;
-
+        numberOfBytesToRead = (int)*tmp;
+        cout<<"Size is gonna be "<<numberOfBytesToRead<<" bytes"<<endl;
         delete [] tmp;
+        //free(tmp);
         return 0;
     } else if(bytesReceived >= 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size partially read
@@ -72,14 +71,14 @@ int ClientSessionPipe::readBytesSize() {
 
             readBytesBuffer.clear();
         }
-
+        //free(tmp);
         delete [] tmp;
         return 0;
     } else {
         //Error while reading message size
         clearReadBytesVariables();
         delete [] tmp;
-
+        //free(tmp);
         return -1;
     }
 }

@@ -108,14 +108,15 @@ long ClientSessionPipes::getClientLocalId(int socketNumber) {
 
 int ClientSessionPipes::writeBytes(int socketNumber) {
     pthread_mutex_lock(&clientSessionPipesMutex);
-    if(isWriteBytesBufferEmpty()) {
-        pthread_cond_wait(&writeBytesBufferNotEmpty,
-            &clientSessionPipesMutex);
-    }
+
 
     long localId = getClientLocalId(socketNumber);
     if(localId < 0) return -1;
+    if(isWriteBytesBufferEmpty()) {
 
+        pthread_mutex_unlock(&clientSessionPipesMutex);
+        return 0;
+    }
     vector<BytesMessage>::iterator it;
     int result;
 

@@ -22,6 +22,7 @@ void Network::waitForSignal(){
       break;
     }
     else{
+      //puts("SELECT");
       for(auto it=this->activeSockets.begin() ; it!=this->activeSockets.end() ; it++){
         int tmp = *it;
         if(FD_ISSET(tmp , &this->readfds)){
@@ -39,20 +40,28 @@ void Network::waitForSignal(){
           else{
             std::cout<<"READING FROM SOCKET "<<tmp<<std::endl;
             if(this->clients->readBytes(tmp) == -1){
+                std::cout<<"CLIENT "<<tmp<<" DISCONNECTED"<<std::endl;
                 closeSocket(tmp);
                 this->clients->deleteClientSession(tmp);
                 break;
             }
+            std::cout<<"END OF READING"<<tmp<<std::endl;
           }
         }
         if(FD_ISSET(tmp , &this->writefds)){
-          std::cout<<"WRITING TO SOCKET "<<tmp<<std::endl;
+          char* xd;
+          if(send(tmp , xd , 0 , MSG_DONTWAIT) == -1){
+            closeSocket(tmp);
+            this->clients->deleteClientSession(tmp);
+            break;
+          }
+          //std::cout<<"WRITING TO SOCKET "<<tmp<<std::endl;
           if(this->clients->writeBytes(tmp) == -1){
               closeSocket(tmp);
               this->clients->deleteClientSession(tmp);
               break;
           }
-          std::cout<<"WRITING IS ENDED"<<std::endl;
+          //std::cout<<"WRITING IS ENDED"<<std::endl;
         }
         if(FD_ISSET(tmp , &this->exceptionfds)){
           closeSocket(tmp);
@@ -159,7 +168,7 @@ bool Network::isServerWaiting(){
 
 bool Network::checkIfSocket(int socketNumber){
   for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
-    if(*it > socketNumber) return true;
+    if(*it == socketNumber) return true;
   }
   return false;
 }
