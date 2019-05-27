@@ -1,6 +1,6 @@
 #include "Network.h"
 
-Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):clients(clients) , working(true), ServerOperation(maxConnections,port,ip){
+Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
   this->tv.tv_sec = 1;
   this->tv.tv_usec = 0;
   FD_ZERO(&this->readfds);
@@ -10,11 +10,15 @@ Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<C
 }
 
 void Network::waitForSignal(){
-  puts("Server is waiting for signal from sockets");
+  perror("Server is waiting for signal from sockets");
+  pthread_mutex_lock(&this->mutex);
+  this->working=true;
+  pthread_mutex_unlock(&this->mutex);
   while(this->working){
     pthread_mutex_lock(&this->mutex);
+    puts("MUT");
     prepareLists();
-    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, &this->tv) < 1){
+    if(select(this->fdmax+1, &this->readfds, &this->writefds, &this->exceptionfds, 0) < 1){
       break;
     }
     else{
@@ -24,6 +28,7 @@ void Network::waitForSignal(){
           if(tmp == ServerOperation::getSocketNumber()){
             int newfd = ServerOperation::acceptConnection();
             if(newfd > 0){
+              puts("NEW CLIENT CONNECTED");
               addSocket(newfd);
               this->clients->createClientSession(newfd);
               break;
@@ -59,18 +64,17 @@ void Network::waitForSignal(){
 }
 
 void Network::prepareLists(){
-  /*
   this->readfds=this->master;
   this->writefds=this->master;
-  this->exceptionfds=this->master;*/
-  FD_ZERO(&this->readfds);
+  this->exceptionfds = this->master;
+  /*FD_ZERO(&this->readfds);
   FD_ZERO(&this->writefds);
   FD_ZERO(&this->exceptionfds);
   for(auto it = this->activeSockets.begin() ; it != this->activeSockets.end() ; it++){
     FD_SET(*it , &this->readfds);
     FD_SET(*it , &this->writefds);
     FD_SET(*it , &this->exceptionfds);
-  }
+  }*/
 }
 
 void Network::addSocket(int socketNumber){
@@ -133,8 +137,8 @@ void Network::updateFdmax(){
 int Network::startServer(){
   int fdnew=ServerOperation::createServerSocket();
   if(fdnew == -1) return -1;
-  addSocket(fdnew);
   if(ServerOperation::bindServerSocket() == -1) return -1;
+  addSocket(fdnew);
   return 0;
 }
 
@@ -145,7 +149,9 @@ void Network::stopWaiting(){
 }
 
 bool Network::isServerWaiting(){
+  puts("X");
   pthread_mutex_lock(&this->mutex);
+  puts("D");
   bool temp = this->working;
   pthread_mutex_unlock(&this->mutex);
   return temp;
