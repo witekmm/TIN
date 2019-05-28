@@ -5,29 +5,33 @@ package Message;
 message ClientMessage {
 
   enum  messageTypes{
-    AUTHORIZATION = 0;
-    GROUP = 1;
-    REPLY = 2;
+    NOMESSAGETYPE = 0;
+    AUTHORIZATION = 1;
+    GROUP = 2;
+    REPLY = 3;
   }
 
   enum groupActionTypes{
-    MESSAGE = 0;
-    CREATE = 1;
-    DELETE = 2;
-    REQUEST = 3;
-    ACCEPT = 4;
-    DECLINE = 5;
-    LEAVE = 6;
+    NOGROUPTYPE = 0;
+    MESSAGE = 1;
+    CREATE = 2;
+    DELETE = 3;
+    REQUEST = 4;
+    ACCEPT = 5;
+    DECLINE = 6;
+    LEAVE = 7;
   }
 
   enum authorizationTypes{
-    LOG_IN = 0;
-    REGISTER = 1;
+    NOAUTHORIZATIONTYPE = 0;
+    LOG_IN = 1;
+    REGISTER = 2;
   }
 
   enum replyStatus{
-    POSITIVE = 0;
-    NEGATIVE = 1;
+    NOSTATUS = 0;
+    POSITIVE = 1;
+    NEGATIVE = 2;
   }
 
   messageTypes messageType = 1;

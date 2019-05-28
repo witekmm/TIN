@@ -77,7 +77,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_Message_2eproto[] =
-  "\n\rMessage.proto\022\007Message\"\206\005\n\rClientMessa"
+  "\n\rMessage.proto\022\007Message\"\321\005\n\rClientMessa"
   "ge\0228\n\013messageType\030\001 \001(\0162#.Message.Client"
   "Message.messageTypes\022@\n\017groupActionType\030"
   "\002 \001(\0162\'.Message.ClientMessage.groupActio"
@@ -87,19 +87,20 @@ const char descriptor_table_protodef_Message_2eproto[] =
   "me\030\006 \001(\t\022\020\n\010userName\030\007 \001(\t\022\026\n\016messageCon"
   "tent\030\010 \001(\t\0221\n\005reply\030\t \001(\0162\".Message.Clie"
   "ntMessage.replyStatus\022\024\n\014replyContent\030\n "
-  "\001(\t\022\016\n\006groups\030\013 \003(\t\"7\n\014messageTypes\022\021\n\rA"
-  "UTHORIZATION\020\000\022\t\n\005GROUP\020\001\022\t\n\005REPLY\020\002\"h\n\020"
-  "groupActionTypes\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020"
-  "\001\022\n\n\006DELETE\020\002\022\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013"
-  "\n\007DECLINE\020\005\022\t\n\005LEAVE\020\006\".\n\022authorizationT"
-  "ypes\022\n\n\006LOG_IN\020\000\022\014\n\010REGISTER\020\001\")\n\013replyS"
-  "tatus\022\014\n\010POSITIVE\020\000\022\014\n\010NEGATIVE\020\001b\006proto"
-  "3"
+  "\001(\t\022\016\n\006groups\030\013 \003(\t\"J\n\014messageTypes\022\021\n\rN"
+  "OMESSAGETYPE\020\000\022\021\n\rAUTHORIZATION\020\001\022\t\n\005GRO"
+  "UP\020\002\022\t\n\005REPLY\020\003\"y\n\020groupActionTypes\022\017\n\013N"
+  "OGROUPTYPE\020\000\022\013\n\007MESSAGE\020\001\022\n\n\006CREATE\020\002\022\n\n"
+  "\006DELETE\020\003\022\013\n\007REQUEST\020\004\022\n\n\006ACCEPT\020\005\022\013\n\007DE"
+  "CLINE\020\006\022\t\n\005LEAVE\020\007\"G\n\022authorizationTypes"
+  "\022\027\n\023NOAUTHORIZATIONTYPE\020\000\022\n\n\006LOG_IN\020\001\022\014\n"
+  "\010REGISTER\020\002\"7\n\013replyStatus\022\014\n\010NOSTATUS\020\000"
+  "\022\014\n\010POSITIVE\020\001\022\014\n\010NEGATIVE\020\002b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_Message_2eproto = {
   false, InitDefaults_Message_2eproto, 
   descriptor_table_protodef_Message_2eproto,
-  "Message.proto", &assign_descriptors_table_Message_2eproto, 681,
+  "Message.proto", &assign_descriptors_table_Message_2eproto, 756,
 };
 
 void AddDescriptors_Message_2eproto() {
@@ -121,6 +122,7 @@ bool ClientMessage_messageTypes_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -128,6 +130,7 @@ bool ClientMessage_messageTypes_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const ClientMessage_messageTypes ClientMessage::NOMESSAGETYPE;
 const ClientMessage_messageTypes ClientMessage::AUTHORIZATION;
 const ClientMessage_messageTypes ClientMessage::GROUP;
 const ClientMessage_messageTypes ClientMessage::REPLY;
@@ -148,6 +151,7 @@ bool ClientMessage_groupActionTypes_IsValid(int value) {
     case 4:
     case 5:
     case 6:
+    case 7:
       return true;
     default:
       return false;
@@ -155,6 +159,7 @@ bool ClientMessage_groupActionTypes_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const ClientMessage_groupActionTypes ClientMessage::NOGROUPTYPE;
 const ClientMessage_groupActionTypes ClientMessage::MESSAGE;
 const ClientMessage_groupActionTypes ClientMessage::CREATE;
 const ClientMessage_groupActionTypes ClientMessage::DELETE;
@@ -174,6 +179,7 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -181,6 +187,7 @@ bool ClientMessage_authorizationTypes_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const ClientMessage_authorizationTypes ClientMessage::NOAUTHORIZATIONTYPE;
 const ClientMessage_authorizationTypes ClientMessage::LOG_IN;
 const ClientMessage_authorizationTypes ClientMessage::REGISTER;
 const ClientMessage_authorizationTypes ClientMessage::authorizationTypes_MIN;
@@ -195,6 +202,7 @@ bool ClientMessage_replyStatus_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
+    case 2:
       return true;
     default:
       return false;
@@ -202,6 +210,7 @@ bool ClientMessage_replyStatus_IsValid(int value) {
 }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const ClientMessage_replyStatus ClientMessage::NOSTATUS;
 const ClientMessage_replyStatus ClientMessage::POSITIVE;
 const ClientMessage_replyStatus ClientMessage::NEGATIVE;
 const ClientMessage_replyStatus ClientMessage::replyStatus_MIN;

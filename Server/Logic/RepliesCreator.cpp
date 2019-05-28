@@ -8,7 +8,7 @@ void Reply::incorrectMessage(int clientId, std::string error){
   message.set_reply(Message::ClientMessage::NEGATIVE);
   message.set_replycontent(error);
   //wyslij
-  puts("INCORRECT MESSAGE");
+  std::cout<<error<<std::endl;
   this->clients->readMessage(clientId,message);
 }
 

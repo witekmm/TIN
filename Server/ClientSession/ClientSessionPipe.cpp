@@ -10,8 +10,9 @@ using namespace std;
 
 ClientSessionPipe::ClientSessionPipe(int socket) {
     socketNumber = socket;
-    numberOfBytesToRead = MESSAGE_SIZE_BYTES_NUMBER;
-    bytesMessageSizeRead = false;
+    //numberOfBytesToRead = MESSAGE_SIZE_BYTES_NUMBER;
+    //bytesMessageSizeRead = false;
+    clearReadBytesVariables();
 }
 
 void ClientSessionPipe::clearReadBytesVariables() {
@@ -53,8 +54,8 @@ int ClientSessionPipe::readBytesSize() {
         //Message size fully read
         bytesMessageSizeRead = true;
       //  numberOfBytesToRead = atoi(tmp);
-        numberOfBytesToRead = (int)*tmp;
-        cout<<"Size is gonna be "<<numberOfBytesToRead<<" bytes"<<endl;
+        this->numberOfBytesToRead = (int)*tmp;
+        cout<<"Payload is gonna be "<<this->numberOfBytesToRead<<" bytes"<<endl;
         delete [] tmp;
         //free(tmp);
         return 0;
@@ -86,20 +87,22 @@ int ClientSessionPipe::readBytesSize() {
 int ClientSessionPipe::readBytesMessage() {
     char *tmp = new char[numberOfBytesToRead];
 
-    int bytesReceived = recv(this->socketNumber, &tmp,
+    int bytesReceived = recv(this->socketNumber, tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
 
-
+    cout<<"Received - "<<bytesReceived<<endl;
     if(bytesReceived >= 0) {
         numberOfBytesToRead -= bytesReceived;
 
-        string tmpString(tmp, bytesReceived);
+        //string tmpString(tmp, bytesReceived);
+        string tmpString(tmp);
         readBytesBuffer += tmpString;
 
         if(numberOfBytesToRead == 0) {
             //Message fully read, parse it and add to message buffer
             Message::ClientMessage message;
             message.ParseFromString(readBytesBuffer);
+            cout<<message.messagetype()<<message.authorizationtype()<<message.login()<<message.password();
 
             addWriteMessage(message);
 
@@ -125,7 +128,7 @@ int ClientSessionPipe::readBytes() {
     if(!bytesMessageSizeRead) {
         result = readBytesSize();
     } else {
-        int result = readBytesSize();
+        result = readBytesMessage();
     }
 
     return result;

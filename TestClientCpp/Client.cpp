@@ -52,32 +52,37 @@ void sendBuffer(int socket){
   string password = "gmd";
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::AUTHORIZATION);
-  message.set_authorizationtype(Message::ClientMessage::REGISTER);
+  message.set_authorizationtype(Message::ClientMessage::LOG_IN);
   message.set_login(login);
   message.set_password(password);
   string msg;
   message.SerializeToString(&msg);
-  puts("2");
-  bytesToSent = msg.length()+5;
-  puts("3");
+  Message::ClientMessage xd;
+  int payloadsize;
+  //xd.ParseFromString(msg);
+  //cout<<xd.messagetype()<<xd.authorizationtype()<<xd.login()<<xd.password();
+  payloadsize = msg.length();
+  bytesToSent = payloadsize+4;
   char* buffer = new char[4];
-  puts("4");
-  memcpy(buffer , &bytesToSent , 4);
+  memcpy(buffer , &payloadsize , 4);
   //JEST ZAJEBISCIE
   //cout<<(int *)*buffer<<endl;
-  puts("4.5");
   //char buffer2[msg.length()+1];
   char *buffer2 = new char[msg.length()];
   //buffer2 = msg.c_str();
   strcpy(buffer2 , msg.c_str());
+  //string lel(buffer2);
+  //xd.ParseFromString(lel);
+  //cout<<xd.messagetype()<<xd.authorizationtype()<<xd.login()<<xd.password();
+
   //cout<<buffer2<<endl;
   //buffer2 = msg.c_str();
-  puts("5");
-  char *bufferFull = new char[msg.length() + 5];
+  char *bufferFull = new char[msg.length() + 4];
   strcpy(bufferFull , buffer);
-  strcat(bufferFull , buffer2);
+  strcpy(bufferFull+4 , buffer2);
   int bytessentalready=0;
   cout<<"TO SEND:"<<bytesToSent<<endl;
+  cout<<"PAYLOAD SIZE:"<<payloadsize<<endl;
   puts("sending");
   while(bytesToSent!=0){
     int bytesSent = write(socket , bufferFull , bytesToSent);

@@ -42,23 +42,15 @@ void Network::waitForSignal(){
             if(this->clients->readBytes(tmp) == -1){
                 std::cout<<"CLIENT "<<tmp<<" DISCONNECTED"<<std::endl;
                 closeSocket(tmp);
-                this->clients->deleteClientSession(tmp);
                 break;
             }
             std::cout<<"END OF READING"<<tmp<<std::endl;
           }
         }
         if(FD_ISSET(tmp , &this->writefds)){
-          char* xd;
-          if(send(tmp , xd , 0 , MSG_DONTWAIT) == -1){
-            closeSocket(tmp);
-            this->clients->deleteClientSession(tmp);
-            break;
-          }
           //std::cout<<"WRITING TO SOCKET "<<tmp<<std::endl;
           if(this->clients->writeBytes(tmp) == -1){
               closeSocket(tmp);
-              this->clients->deleteClientSession(tmp);
               break;
           }
           //std::cout<<"WRITING IS ENDED"<<std::endl;

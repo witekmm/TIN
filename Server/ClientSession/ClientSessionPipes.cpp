@@ -81,7 +81,7 @@ int ClientSessionPipes::readBytes(int socketNumber) {
             break;
         }
     }
-
+    cout<<"RESULT - "<<result<<endl;
     if(result == 1) {
         //Message is successfully read
         ++writeMessagesCounter;
