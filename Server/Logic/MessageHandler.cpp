@@ -40,18 +40,8 @@ void MessageHandler::LogicThreadLoop(){
   }
 }
 
-void MessageHandler::DataBaseMessageCheckLoop(){
-  while(this->working){
-    std::vector<Client> users = this->clients->getLoggedClients();
-    for(auto it = users.begin() ; it != users.end() ; it++){
-      //Client temp = *it;
-      DataBaseConnector::getAllUsersMessagesAndSend( it->getLogin() , it->getLocalId() );
-    }
-  }
-}
-
 int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId, std::string clientlogin,bool islogged){
-  if(!message.messagetype()){
+  if(message.messagetype() < 1 || message.messagetype() > 3){
     return 1;
   }
   if(message.messagetype() == Message::ClientMessage::GROUP){
@@ -71,7 +61,7 @@ int MessageHandler::HandleMessage(Message::ClientMessage message, int clientId, 
 
 
 int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int clientId){
-  if(!message.authorizationtype()){
+  if(message.authorizationtype() < 1 || message.authorizationtype() > 2){
     return 2;
   }
   if(message.login().empty() || message.password().empty()){
@@ -88,7 +78,7 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
 
 
 int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string login, int clientId){
-  if(!message.groupactiontype()){
+  if(message.groupactiontype() < 1 || message.groupactiontype() > 7){
     return 2;
   }
   if(message.groupactiontype() == Message::ClientMessage::MESSAGE){

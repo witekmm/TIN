@@ -52,7 +52,7 @@ int ServerOperation::listenServerSocket(){
   }
   else{
     this->isSocketListening=true;
-    puts("Socket is passive.\n");
+    puts("Socket is passive.");
     return 0;
   }
 }
@@ -65,7 +65,8 @@ int ServerOperation::acceptConnection(){
   //Brak połączenia
   if(newfd == -1) return -1;
   //Połączono
-  else return newfd;
+  printf("New connection on socket %d\n", newfd);
+  return newfd;
 }
 
 int ServerOperation::getSocketNumber(){

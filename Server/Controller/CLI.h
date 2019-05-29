@@ -5,7 +5,7 @@
 
 #include "../Network/Network.h"
 #include "../Logic/MessageHandler.h"
-#include <thread>
+#include <pthread.h>
 #include <string>
 #include <iostream>
 #include <limits>
@@ -23,9 +23,8 @@ public:
   bool handleCommand(std::vector<std::string> splitedCommand);
   bool commandExist(std::string command);
 
-  void selectThreadWrapper();
-  void dataBaseThreadWrapper();
-  void logicThreadWrapper();
+  static void * selectThreadWrapper(void * Object);
+  static void * logicThreadWrapper(void * Object);
 };
 
 #endif

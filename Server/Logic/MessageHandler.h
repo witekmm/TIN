@@ -19,7 +19,6 @@ public:
   //will be there
   //check message type
   void LogicThreadLoop();
-  void DataBaseMessageCheckLoop();
 
   int HandleMessage(Message::ClientMessage message, int clientId, std::string clientlogin,bool islogged);
   //check action type

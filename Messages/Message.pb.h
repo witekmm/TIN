@@ -62,14 +62,15 @@ template<> ::Message::ClientMessage* Arena::CreateMaybeMessage<::Message::Client
 namespace Message {
 
 enum ClientMessage_messageTypes {
-  ClientMessage_messageTypes_AUTHORIZATION = 0,
-  ClientMessage_messageTypes_GROUP = 1,
-  ClientMessage_messageTypes_REPLY = 2,
+  ClientMessage_messageTypes_NOMESSAGETYPE = 0,
+  ClientMessage_messageTypes_AUTHORIZATION = 1,
+  ClientMessage_messageTypes_GROUP = 2,
+  ClientMessage_messageTypes_REPLY = 3,
   ClientMessage_messageTypes_ClientMessage_messageTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   ClientMessage_messageTypes_ClientMessage_messageTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_messageTypes_IsValid(int value);
-const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MIN = ClientMessage_messageTypes_AUTHORIZATION;
+const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MIN = ClientMessage_messageTypes_NOMESSAGETYPE;
 const ClientMessage_messageTypes ClientMessage_messageTypes_messageTypes_MAX = ClientMessage_messageTypes_REPLY;
 const int ClientMessage_messageTypes_messageTypes_ARRAYSIZE = ClientMessage_messageTypes_messageTypes_MAX + 1;
 
@@ -84,18 +85,19 @@ inline bool ClientMessage_messageTypes_Parse(
     ClientMessage_messageTypes_descriptor(), name, value);
 }
 enum ClientMessage_groupActionTypes {
-  ClientMessage_groupActionTypes_MESSAGE = 0,
-  ClientMessage_groupActionTypes_CREATE = 1,
-  ClientMessage_groupActionTypes_DELETE = 2,
-  ClientMessage_groupActionTypes_REQUEST = 3,
-  ClientMessage_groupActionTypes_ACCEPT = 4,
-  ClientMessage_groupActionTypes_DECLINE = 5,
-  ClientMessage_groupActionTypes_LEAVE = 6,
+  ClientMessage_groupActionTypes_NOGROUPTYPE = 0,
+  ClientMessage_groupActionTypes_MESSAGE = 1,
+  ClientMessage_groupActionTypes_CREATE = 2,
+  ClientMessage_groupActionTypes_DELETE = 3,
+  ClientMessage_groupActionTypes_REQUEST = 4,
+  ClientMessage_groupActionTypes_ACCEPT = 5,
+  ClientMessage_groupActionTypes_DECLINE = 6,
+  ClientMessage_groupActionTypes_LEAVE = 7,
   ClientMessage_groupActionTypes_ClientMessage_groupActionTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   ClientMessage_groupActionTypes_ClientMessage_groupActionTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_groupActionTypes_IsValid(int value);
-const ClientMessage_groupActionTypes ClientMessage_groupActionTypes_groupActionTypes_MIN = ClientMessage_groupActionTypes_MESSAGE;
+const ClientMessage_groupActionTypes ClientMessage_groupActionTypes_groupActionTypes_MIN = ClientMessage_groupActionTypes_NOGROUPTYPE;
 const ClientMessage_groupActionTypes ClientMessage_groupActionTypes_groupActionTypes_MAX = ClientMessage_groupActionTypes_LEAVE;
 const int ClientMessage_groupActionTypes_groupActionTypes_ARRAYSIZE = ClientMessage_groupActionTypes_groupActionTypes_MAX + 1;
 
@@ -110,13 +112,14 @@ inline bool ClientMessage_groupActionTypes_Parse(
     ClientMessage_groupActionTypes_descriptor(), name, value);
 }
 enum ClientMessage_authorizationTypes {
-  ClientMessage_authorizationTypes_LOG_IN = 0,
-  ClientMessage_authorizationTypes_REGISTER = 1,
+  ClientMessage_authorizationTypes_NOAUTHORIZATIONTYPE = 0,
+  ClientMessage_authorizationTypes_LOG_IN = 1,
+  ClientMessage_authorizationTypes_REGISTER = 2,
   ClientMessage_authorizationTypes_ClientMessage_authorizationTypes_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   ClientMessage_authorizationTypes_ClientMessage_authorizationTypes_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_authorizationTypes_IsValid(int value);
-const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_LOG_IN;
+const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MIN = ClientMessage_authorizationTypes_NOAUTHORIZATIONTYPE;
 const ClientMessage_authorizationTypes ClientMessage_authorizationTypes_authorizationTypes_MAX = ClientMessage_authorizationTypes_REGISTER;
 const int ClientMessage_authorizationTypes_authorizationTypes_ARRAYSIZE = ClientMessage_authorizationTypes_authorizationTypes_MAX + 1;
 
@@ -131,13 +134,14 @@ inline bool ClientMessage_authorizationTypes_Parse(
     ClientMessage_authorizationTypes_descriptor(), name, value);
 }
 enum ClientMessage_replyStatus {
-  ClientMessage_replyStatus_POSITIVE = 0,
-  ClientMessage_replyStatus_NEGATIVE = 1,
+  ClientMessage_replyStatus_NOSTATUS = 0,
+  ClientMessage_replyStatus_POSITIVE = 1,
+  ClientMessage_replyStatus_NEGATIVE = 2,
   ClientMessage_replyStatus_ClientMessage_replyStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
   ClientMessage_replyStatus_ClientMessage_replyStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
 };
 bool ClientMessage_replyStatus_IsValid(int value);
-const ClientMessage_replyStatus ClientMessage_replyStatus_replyStatus_MIN = ClientMessage_replyStatus_POSITIVE;
+const ClientMessage_replyStatus ClientMessage_replyStatus_replyStatus_MIN = ClientMessage_replyStatus_NOSTATUS;
 const ClientMessage_replyStatus ClientMessage_replyStatus_replyStatus_MAX = ClientMessage_replyStatus_NEGATIVE;
 const int ClientMessage_replyStatus_replyStatus_ARRAYSIZE = ClientMessage_replyStatus_replyStatus_MAX + 1;
 
@@ -247,6 +251,8 @@ class ClientMessage :
   // nested types ----------------------------------------------------
 
   typedef ClientMessage_messageTypes messageTypes;
+  static const messageTypes NOMESSAGETYPE =
+    ClientMessage_messageTypes_NOMESSAGETYPE;
   static const messageTypes AUTHORIZATION =
     ClientMessage_messageTypes_AUTHORIZATION;
   static const messageTypes GROUP =
@@ -275,6 +281,8 @@ class ClientMessage :
   }
 
   typedef ClientMessage_groupActionTypes groupActionTypes;
+  static const groupActionTypes NOGROUPTYPE =
+    ClientMessage_groupActionTypes_NOGROUPTYPE;
   static const groupActionTypes MESSAGE =
     ClientMessage_groupActionTypes_MESSAGE;
   static const groupActionTypes CREATE =
@@ -311,6 +319,8 @@ class ClientMessage :
   }
 
   typedef ClientMessage_authorizationTypes authorizationTypes;
+  static const authorizationTypes NOAUTHORIZATIONTYPE =
+    ClientMessage_authorizationTypes_NOAUTHORIZATIONTYPE;
   static const authorizationTypes LOG_IN =
     ClientMessage_authorizationTypes_LOG_IN;
   static const authorizationTypes REGISTER =
@@ -337,6 +347,8 @@ class ClientMessage :
   }
 
   typedef ClientMessage_replyStatus replyStatus;
+  static const replyStatus NOSTATUS =
+    ClientMessage_replyStatus_NOSTATUS;
   static const replyStatus POSITIVE =
     ClientMessage_replyStatus_POSITIVE;
   static const replyStatus NEGATIVE =

@@ -24,7 +24,7 @@ namespace Message {
     static MessageReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg1NZXNzYWdlLnByb3RvEgdNZXNzYWdlIpgFCg1DbGllbnRNZXNzYWdlEjgK",
+            "Cg1NZXNzYWdlLnByb3RvEgdNZXNzYWdlItEFCg1DbGllbnRNZXNzYWdlEjgK",
             "C21lc3NhZ2VUeXBlGAEgASgOMiMuTWVzc2FnZS5DbGllbnRNZXNzYWdlLm1l",
             "c3NhZ2VUeXBlcxJACg9ncm91cEFjdGlvblR5cGUYAiABKA4yJy5NZXNzYWdl",
             "LkNsaWVudE1lc3NhZ2UuZ3JvdXBBY3Rpb25UeXBlcxJEChFhdXRob3JpemF0",
@@ -33,13 +33,14 @@ namespace Message {
             "EQoJZ3JvdXBOYW1lGAYgASgJEhAKCHVzZXJOYW1lGAcgASgJEhYKDm1lc3Nh",
             "Z2VDb250ZW50GAggASgJEjEKBXJlcGx5GAkgASgOMiIuTWVzc2FnZS5DbGll",
             "bnRNZXNzYWdlLnJlcGx5U3RhdHVzEhQKDHJlcGx5Q29udGVudBgKIAEoCRIO",
-            "CgZncm91cHMYCyADKAkiLAoMbWVzc2FnZVR5cGVzEhEKDUFVVEhPUklaQVRJ",
-            "T04QABIJCgVHUk9VUBABImgKEGdyb3VwQWN0aW9uVHlwZXMSCwoHTUVTU0FH",
-            "RRAAEgoKBkNSRUFURRABEgoKBkRFTEVURRACEgsKB1JFUVVFU1QQAxIKCgZB",
-            "Q0NFUFQQBBILCgdERUNMSU5FEAUSCQoFTEVBVkUQBiJLChJhdXRob3JpemF0",
-            "aW9uVHlwZXMSCgoGTE9HX0lOEAASEgoOUkVHSVNURVJfTE9HSU4QARIVChFS",
-            "RUdJU1RFUl9QQVNTV09SRBACIikKC3JlcGx5U3RhdHVzEgwKCFBPU0lUSVZF",
-            "EAASDAoITkVHQVRJVkUQAWIGcHJvdG8z"));
+            "CgZncm91cHMYCyADKAkiSgoMbWVzc2FnZVR5cGVzEhEKDU5PTUVTU0FHRVRZ",
+            "UEUQABIRCg1BVVRIT1JJWkFUSU9OEAESCQoFR1JPVVAQAhIJCgVSRVBMWRAD",
+            "InkKEGdyb3VwQWN0aW9uVHlwZXMSDwoLTk9HUk9VUFRZUEUQABILCgdNRVNT",
+            "QUdFEAESCgoGQ1JFQVRFEAISCgoGREVMRVRFEAMSCwoHUkVRVUVTVBAEEgoK",
+            "BkFDQ0VQVBAFEgsKB0RFQ0xJTkUQBhIJCgVMRUFWRRAHIkcKEmF1dGhvcml6",
+            "YXRpb25UeXBlcxIXChNOT0FVVEhPUklaQVRJT05UWVBFEAASCgoGTE9HX0lO",
+            "EAESDAoIUkVHSVNURVIQAiI3CgtyZXBseVN0YXR1cxIMCghOT1NUQVRVUxAA",
+            "EgwKCFBPU0lUSVZFEAESDAoITkVHQVRJVkUQAmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -454,29 +455,33 @@ namespace Message {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
       public enum messageTypes {
-        [pbr::OriginalName("AUTHORIZATION")] Authorization = 0,
-        [pbr::OriginalName("GROUP")] Group = 1,
+        [pbr::OriginalName("NOMESSAGETYPE")] Nomessagetype = 0,
+        [pbr::OriginalName("AUTHORIZATION")] Authorization = 1,
+        [pbr::OriginalName("GROUP")] Group = 2,
+        [pbr::OriginalName("REPLY")] Reply = 3,
       }
 
       public enum groupActionTypes {
-        [pbr::OriginalName("MESSAGE")] Message = 0,
-        [pbr::OriginalName("CREATE")] Create = 1,
-        [pbr::OriginalName("DELETE")] Delete = 2,
-        [pbr::OriginalName("REQUEST")] Request = 3,
-        [pbr::OriginalName("ACCEPT")] Accept = 4,
-        [pbr::OriginalName("DECLINE")] Decline = 5,
-        [pbr::OriginalName("LEAVE")] Leave = 6,
+        [pbr::OriginalName("NOGROUPTYPE")] Nogrouptype = 0,
+        [pbr::OriginalName("MESSAGE")] Message = 1,
+        [pbr::OriginalName("CREATE")] Create = 2,
+        [pbr::OriginalName("DELETE")] Delete = 3,
+        [pbr::OriginalName("REQUEST")] Request = 4,
+        [pbr::OriginalName("ACCEPT")] Accept = 5,
+        [pbr::OriginalName("DECLINE")] Decline = 6,
+        [pbr::OriginalName("LEAVE")] Leave = 7,
       }
 
       public enum authorizationTypes {
-        [pbr::OriginalName("LOG_IN")] LogIn = 0,
-        [pbr::OriginalName("REGISTER_LOGIN")] RegisterLogin = 1,
-        [pbr::OriginalName("REGISTER_PASSWORD")] RegisterPassword = 2,
+        [pbr::OriginalName("NOAUTHORIZATIONTYPE")] Noauthorizationtype = 0,
+        [pbr::OriginalName("LOG_IN")] LogIn = 1,
+        [pbr::OriginalName("REGISTER")] Register = 2,
       }
 
       public enum replyStatus {
-        [pbr::OriginalName("POSITIVE")] Positive = 0,
-        [pbr::OriginalName("NEGATIVE")] Negative = 1,
+        [pbr::OriginalName("NOSTATUS")] Nostatus = 0,
+        [pbr::OriginalName("POSITIVE")] Positive = 1,
+        [pbr::OriginalName("NEGATIVE")] Negative = 2,
       }
 
     }

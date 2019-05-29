@@ -5,16 +5,15 @@ CommandLineInterface::CommandLineInterface(int maxConnections, int port, std::st
 {}
 
 void CommandLineInterface::getCommand(){
-  std::thread logicThread (&CommandLineInterface::logicThreadWrapper , this);
-  logicThread.detach();
 
-//  std::thread dataBaseThread (&CommandLineInterface::dataBaseThreadWrapper , this);
-//  dataBaseThread.detach();
+  pthread_t logicthread;
+  pthread_create(&logicthread, NULL, &CommandLineInterface::logicThreadWrapper, this);
 
   while(this->working){
     std::cin.clear();
     //clear buffer
     std::string command;
+    puts("COMMAND: ");
     std::getline(std::cin , command);
     //get command
     std::istringstream split(command);
@@ -32,6 +31,7 @@ void CommandLineInterface::getCommand(){
     }
   }
 }
+
 bool CommandLineInterface::checkCommandsPropriety(std::vector<std::string> splitedCommand){
   for(auto it = splitedCommand.begin() ; it!=splitedCommand.end() ; it++){
     if(it == splitedCommand.begin() && *it=="closebylogin") return true;
@@ -103,13 +103,15 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
         return true;
       }
       //czy moze juz server nasluchuje
-      if(!Network::isServerWaiting()){
+
+      if(Network::isServerWaiting()){
         puts("Socket already waiting!");
         return true;
       }
       //no to tworzymy watek
-      std::thread selectThread (&CommandLineInterface::selectThreadWrapper , this);
-      selectThread.detach();
+      puts("Server is waiting on socket!");
+      pthread_t selectThread;
+      pthread_create(&selectThread, NULL, &CommandLineInterface::selectThreadWrapper, this);
       return true;
     }
     else{
@@ -195,7 +197,7 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
   else if(splitedCommand[0] == "close"){
     if(splitedCommand.size() == 1) return false;
     //sprawdzamy czy to wgl liczba
-    for(auto it = splitedCommand[2].begin() ; it!=splitedCommand[2].end() ; it++){
+    for(auto it = splitedCommand[1].begin() ; it!=splitedCommand[1].end() ; it++){
       if(!std::isdigit(*it)) return false;
     }
     int number = std::stoi(splitedCommand[1]);
@@ -266,6 +268,7 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
     }
     else return false;
   }
+  else return false;
 }
 
 bool CommandLineInterface::commandExist(std::string command){
@@ -322,13 +325,10 @@ bool CommandLineInterface::commandExist(std::string command){
   }
 }
 
-void CommandLineInterface::selectThreadWrapper(){
-  Network::waitForSignal();
+void * CommandLineInterface::selectThreadWrapper(void * Object){
+  ((CommandLineInterface *)Object)->Network::waitForSignal();
 }
 
-void CommandLineInterface::dataBaseThreadWrapper(){
-  MessageHandler::LogicThreadLoop();
-}
-void CommandLineInterface::logicThreadWrapper(){
-  MessageHandler::DataBaseMessageCheckLoop();
+void * CommandLineInterface::logicThreadWrapper(void * Object){
+  ((CommandLineInterface *)Object)->MessageHandler::LogicThreadLoop();
 }
