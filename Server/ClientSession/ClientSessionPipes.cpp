@@ -61,11 +61,11 @@ void ClientSessionPipes::readMessage(long localId, Message::ClientMessage messag
     message.SerializeToString(&bytes);
 
     writeBytesBuffer.push_back(BytesMessage(localId, bytes));
-
+/*
     if(writeBytesBuffer.size() == 1) {
         pthread_cond_signal(&writeBytesBufferNotEmpty);
     }
-
+*/
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
@@ -119,6 +119,7 @@ int ClientSessionPipes::writeBytes(int socketNumber) {
         pthread_mutex_unlock(&clientSessionPipesMutex);
         return 0;
     }
+    puts("BUFFER NOT EMPTY");
     vector<BytesMessage>::iterator it;
     int result;
 

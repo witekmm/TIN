@@ -55,9 +55,10 @@ int BytesMessage::sendSize(int socketNumber) {
         //Buffer size fully send
         sizeSent = true;
         numberOfBytesToSend = getBufferSize();
+        puts("Size sent");
 
         delete [] tmp;
-        return 1;
+        return 0;
     } else {
         delete [] tmp;
         return 0;
@@ -78,7 +79,7 @@ int BytesMessage::sendBuffer(int socketNumber) {
     numberOfBytesToSend -= bytesSent;
 
     if(numberOfBytesToSend == 0) {
-        //Buffer fully send
+        //Buffer fully sent
         puts("MESSAGE SENT");
         return 1;
     } else {
@@ -92,7 +93,7 @@ int BytesMessage::sendBuffer(int socketNumber) {
 
 int BytesMessage::writeBytes(int socketNumber) {
     int result;
-
+    puts("SENDING");
     if(!sizeSent) {
         result = sendSize(socketNumber);
     } else {
