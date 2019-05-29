@@ -39,7 +39,7 @@ int BytesMessage::sendSize(int socketNumber) {
 
         strncpy(tmp, tmp + sentSizeBytesNumber, numberOfBytesToSend);
     }
-    
+
     int bytesSent = send(socketNumber, tmp,
         numberOfBytesToSend, MSG_DONTWAIT);
 
@@ -79,6 +79,7 @@ int BytesMessage::sendBuffer(int socketNumber) {
 
     if(numberOfBytesToSend == 0) {
         //Buffer fully send
+        puts("MESSAGE SENT");
         return 1;
     } else {
         //Buffer partially send

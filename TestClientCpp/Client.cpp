@@ -43,7 +43,32 @@ int commandLine(){
 }
 
 void recvBuffer(int socket){
-
+  int payloadsize;
+  char size[4];
+  int odebrane = read(socket, size , 4);
+  cout<<"ODEBRANO :"<<odebrane<<endl;
+  memcpy(&payloadsize , size , 4);
+  cout<<"WIELKOSC TO : "<<payloadsize<<endl;
+  char * buffer = new char[payloadsize];
+  string fullBuffer;
+  while(payloadsize != 0 ){
+    int received = read(socket, buffer , payloadsize);
+    cout<<received<<endl;
+    string temp(buffer);
+    fullBuffer+=temp;
+    payloadsize-=received;
+  }
+  Message::ClientMessage message;
+  message.ParseFromString(fullBuffer);
+  if(message.messagetype() != Message::ClientMessage::REPLY){
+    cout<<"COS NIE TRYBI"<<endl;
+  }
+  if(message.reply() == Message::ClientMessage::POSITIVE){
+    cout<<"gutgut"<<endl;
+  }
+  else{
+    cout<<"gohagohagoha 3zl"<<endl;
+  }
 }
 
 void sendBuffer(int socket){
@@ -57,26 +82,13 @@ void sendBuffer(int socket){
   message.set_password(password);
   string msg;
   message.SerializeToString(&msg);
-  Message::ClientMessage xd;
   int payloadsize;
-  //xd.ParseFromString(msg);
-  //cout<<xd.messagetype()<<xd.authorizationtype()<<xd.login()<<xd.password();
   payloadsize = msg.length();
   bytesToSent = payloadsize+4;
   char* buffer = new char[4];
   memcpy(buffer , &payloadsize , 4);
-  //JEST ZAJEBISCIE
-  //cout<<(int *)*buffer<<endl;
-  //char buffer2[msg.length()+1];
   char *buffer2 = new char[msg.length()];
-  //buffer2 = msg.c_str();
   strcpy(buffer2 , msg.c_str());
-  //string lel(buffer2);
-  //xd.ParseFromString(lel);
-  //cout<<xd.messagetype()<<xd.authorizationtype()<<xd.login()<<xd.password();
-
-  //cout<<buffer2<<endl;
-  //buffer2 = msg.c_str();
   char *bufferFull = new char[msg.length() + 4];
   strcpy(bufferFull , buffer);
   strcpy(bufferFull+4 , buffer2);
@@ -143,7 +155,7 @@ int main()
 
         if(g_flag == 3){
             sendBuffer(clientSocket);
-            //recvBuffer(clientSocket);
+            recvBuffer(clientSocket);
             g_flag = 1;
         }
     }
