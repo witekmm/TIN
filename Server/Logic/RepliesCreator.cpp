@@ -71,3 +71,11 @@ int Reply::findClientID(std::string login){
   }
   return -1;
 }
+
+bool Reply::checkIfClientAlreadyLoggedIn(std::string login){
+  std::vector<Client> loggedClients = this->clients->getLoggedClients();
+  for(auto it = loggedClients.begin() ; it!= loggedClients.end() ; it++){
+    if(it->getLogin() == login) return true;
+  }
+  return false;
+}

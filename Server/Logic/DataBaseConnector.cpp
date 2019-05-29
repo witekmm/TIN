@@ -155,6 +155,10 @@ int DataBaseConnector::logInUser(std::string login, std::string password, int cl
   if(password!=temp){
     return -2;
   }
+  if(Reply::checkIfClientAlreadyLoggedIn(login)){
+    Reply::incorrectMessage(clientId , "User already logged");
+    return 0;
+  }
   //zaloguj
   Reply::logInChoosenUser(clientId, login);
   //wyslij odpowiedz i dolacz wszystkie grupy

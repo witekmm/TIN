@@ -22,6 +22,7 @@ public:
 
   std::vector<Client> getLoggedClients();
   int findClientID(std::string login);
+  bool checkIfClientAlreadyLoggedIn(std::string login);
   //uywane przez DataBaseConnector
   //void userNotInGroup(std::string groupName, std::string login);
   //void groupNameExist(std::string groupName, std::string login);
