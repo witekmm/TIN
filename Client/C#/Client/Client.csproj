@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="login.proto" />
     <Compile Include="Client.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,7 +70,6 @@
     </Compile>
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionManager.cs" />
-    <Compile Include="Login.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,7 +98,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="Message.proto" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
