@@ -42,22 +42,22 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
   else if(command == "start"){
     return startHandling(splitedCommand);
   }
-  else if(splitedCommand[0] == "stop"){
+  else if(command == "stop"){
     return stopHandling(splitedCommand);
   }
-  else if(splitedCommand[0] == "set"){
+  else if(command == "set"){
     return setHandling(splitedCommand);
   }
-  else if(splitedCommand[0] == "close"){
+  else if(command == "close"){
     return closeHandling(splitedCommand);
   }
-  else if(splitedCommand[0] == "closebylogin"){
+  else if(command == "closebylogin"){
     return closeByLoginHandling(splitedCommand);
   }
-  else if(splitedCommand[0] == "add"){
+  else if(command == "add"){
     return addHandling(splitedCommand);
   }
-  else if(splitedCommand[0] == "delete"){
+  else if(command == "delete"){
     return deleteHandling(splitedCommand);
   }
   else return false;
