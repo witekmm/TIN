@@ -10,6 +10,10 @@ namespace Client
         private const int MAX_ATTEMPTS = 5;
         private readonly Socket socket;
         private readonly IPEndPoint endPoint;
+        public Socket Socket
+        {
+            get { return socket; }
+        }
 
         public Connection(IPAddress _IP, int _port)
         {
