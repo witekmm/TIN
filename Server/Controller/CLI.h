@@ -18,10 +18,40 @@ class CommandLineInterface: public Network, public MessageHandler{
   bool working;
 public:
   CommandLineInterface(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients);
-  void getCommand();
-  bool checkCommandsPropriety(std::vector<std::string> splitedCommand);
+  void startCommandLine();
+
   bool handleCommand(std::vector<std::string> splitedCommand);
-  bool commandExist(std::string command);
+
+  bool checkIfStringIsNumber(std::string toCheck);
+
+    void helpHandling();
+
+    bool startHandling(std::vector<std::string> splitedCommand);
+      void fullStartHandling();
+      void startServerHandling();
+      void startListeningHandling();
+      void startWaitingHandling();
+
+    bool stopHandling(std::vector<std::string> splitedCommand);
+      void fullStopHandling();
+      void stopWaitingHandling();
+
+    bool setHandling(std::vector<std::string> splitedCommand);
+      void setPortHandling(int port);
+      void setMaxConnectionsHandling(int connections);
+
+    bool addHandling(std::vector<std::string> splitedCommand);
+      void addUserHandling(std::string login, std::string password);
+      void addGroupHandling(std::string groupName, std::string adminLogin);
+
+    bool deleteHandling(std::vector<std::string> splitedCommand);
+      void deleteUserHandling(std::string login);
+      void deleteGroupHandling(std::string groupName);
+
+    bool closeHandling(std::vector<std::string> splitedCommand);
+
+    bool closeByLoginHandling(std::vector<std::string> splitedCommand);
+
 
   static void * selectThreadWrapper(void * Object);
   static void * logicThreadWrapper(void * Object);

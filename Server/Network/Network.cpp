@@ -1,4 +1,6 @@
 #include "Network.h"
+#include <errno.h>
+#include <iostream>
 
 Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):
 clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
@@ -49,11 +51,11 @@ void Network::waitForSignal(){
           }
         }
         if(FD_ISSET(tmp , &this->writefds)){
-          //std::cout<<"WRITING TO SOCKET "<<tmp<<std::endl;
           if(this->clients->writeBytes(tmp) == -1){
               closeSocket(tmp);
               break;
           }
+
           //std::cout<<"WRITING IS ENDED"<<std::endl;
         }
         if(FD_ISSET(tmp , &this->exceptionfds)){

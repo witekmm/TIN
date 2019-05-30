@@ -4,7 +4,7 @@ CommandLineInterface::CommandLineInterface(int maxConnections, int port, std::st
  Network(maxConnections,port,ip,clients), MessageHandler(clients) , working(true)
 {}
 
-void CommandLineInterface::getCommand(){
+void CommandLineInterface::startCommandLine(){
 
   pthread_t logicthread;
   pthread_create(&logicthread, NULL, &CommandLineInterface::logicThreadWrapper, this);
@@ -23,306 +23,298 @@ void CommandLineInterface::getCommand(){
       splitedCommand.push_back(each);
     }
     //split command into words
-    if(checkCommandsPropriety(splitedCommand)){
-      if(!handleCommand(splitedCommand)) puts("Incorrect command!");
-    }
-    else{
-      puts("Incorrect command!");
-    }
+    if(!handleCommand(splitedCommand)) puts("Incorrect command!");
   }
-}
-
-bool CommandLineInterface::checkCommandsPropriety(std::vector<std::string> splitedCommand){
-  for(auto it = splitedCommand.begin() ; it!=splitedCommand.end() ; it++){
-    if(it == splitedCommand.begin() && *it=="closebylogin") return true;
-    if(it == splitedCommand.begin() && (*it=="add" || *it=="delete")) return true;
-    if(!commandExist(*it)) return false;
-  }
-  return true;
 }
 
 bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand){
+  //sprawdzam czy komenda nie jest pusta
   if(!splitedCommand.size()) return false;
-  if(splitedCommand[0] == "help" || splitedCommand[0] == "-help"){
-    puts("start server - obvious");
-    puts("start listening - set server to passive mode");
-    puts("start waiting  - start waiting on select");
-    puts("stop server - obvious");
-    puts("stop waiting - stop waiting on select");
-    puts("set port NUMBER_OF_PORT - obvious");
-    puts("set connections NUMBER_OF_CONNECTIONS - set max number of connections");
-    puts("close NUMBER_OF_SOCKET - obvious");
-    puts("add user user_name user_password");
-    puts("add group group_name admin_name");
-    puts("delete user user_name");
-    puts("delete group group_name");
-    puts("closebylogin CLIENT_LOGIN - obvious");
+  //usuwam z vectora pierwszy element bo og odczytalem i zapisalem do tymczasowej zmiennej
+  auto it = splitedCommand.begin();
+  std::string command = *it;
+  splitedCommand.erase(it);
+  //obsluga
+  if(command == "help" || command == "-help"){
+    helpHandling();
     return true;
   }
-  //TU SIE ZACZYNA START
-  else if(splitedCommand[0] == "start"){
-    //tylko start
-    if(splitedCommand.size() == 1) return false;
-    //tworzymy socket i bindujemy do ip
-    else if(splitedCommand[1] == "server"){
-      //moze juz stworzony
-      if(Network::ServerOperation::getIsSocketNumberSet()) {
-        puts("Server already started!");
-        return true;
-      }
-      //czy sie udalo stworzyc
-      if(Network::startServer() == -1){
-        puts("Cannot start server!");
-      }
-      return true;
-    }
-    //socket w tryb pasywny
-    else if(splitedCommand[1] == "listening"){
-      //czy stworzono socket
-      if(!Network::ServerOperation::getIsSocketNumberSet()) {
-        puts("Server not started!");
-        return true;
-      }
-      //Czy juz jest pasywny
-      if(Network::ServerOperation::getIsSocketListening()){
-        puts("Socket already passive!");
-        return true;
-      }
-      //czy udalo sie
-      if(Network::ServerOperation::listenServerSocket() == -1){
-        puts("Cannot set passive mode!");
-      }
-      return true;
-    }
-    //zaczynamy nasluchiwac
-    else if(splitedCommand[1] == "waiting"){
-      //czy stworzono socket
-      //Czy jest pasywny
-      if(!Network::ServerOperation::getIsSocketListening()){
-        puts("Socket not passive!");
-        return true;
-      }
-      //czy moze juz server nasluchuje
-
-      if(Network::isServerWaiting()){
-        puts("Socket already waiting!");
-        return true;
-      }
-      //no to tworzymy watek
-      puts("Server is waiting on socket!");
-      pthread_t selectThread;
-      pthread_create(&selectThread, NULL, &CommandLineInterface::selectThreadWrapper, this);
-      return true;
-    }
-    else{
-      return false;
-    }
+  else if(command == "start"){
+    return startHandling(splitedCommand);
   }
-  //TU SIE ZACZYNA STOP
   else if(splitedCommand[0] == "stop"){
-    //czy jest cos po stop
-    if(splitedCommand.size() == 1) return false;
-    //czy stopujemy server
-    else if(splitedCommand[1] == "server"){
-      //czy stworzono socket
-      if(!Network::ServerOperation::getIsSocketNumberSet()) {
-        puts("Server not started!");
-        return true;
-      }
-      //jak stworzono to go zamykamy i wszystkich klientow
-      Network::closeServer();
-      return true;
-    }
-    else if(splitedCommand[1] == "waiting"){
-      //czy server nasluchuje
-      if(!Network::isServerWaiting()){
-        puts("Server not started!");
-      }
-      //jesli tak to wstrzymujemy nasluchiwanie ale klientow zatrzymujemy
-      Network::stopWaiting();
-      return true;
-    }
-    else{
-      return false;
-    }
+    return stopHandling(splitedCommand);
   }
-  //TU ZACZYNA SIE SET
   else if(splitedCommand[0] == "set"){
-    //czy jest cos po set
-    if(splitedCommand.size() < 3) return false;
-    //ustawiamy port
-    else if(splitedCommand[1] == "port"){
-      if(Network::ServerOperation::getIsSocketNumberSet()) {
-        puts("Cannot set port while server working!");
-        return true;
-      }
-      //sprawdzamy czy to wgl liczba
-      for(auto it = splitedCommand[2].begin() ; it!=splitedCommand[2].end() ; it++){
-        if(!std::isdigit(*it)) return false;
-      }
-      //sprawdzamy jaka to liczba
-      int number = std::stoi(splitedCommand[2]);
-      if(number > 65535 || number < 49152 ){
-        puts("Incorrect port number!");
-        return true;
-      }
-      std::cout<<"New port number is:"<<number<<std::endl;
-      Network::ServerOperation::setPort(number);
-      return true;
-    }
-    else if(splitedCommand[1] == "connections"){
-      if(Network::ServerOperation::getIsSocketNumberSet()) {
-        puts("Cannot set maxconnections while server working!");
-        return true;
-      }
-      //sprawdzamy czy to wgl liczba
-      for(auto it = splitedCommand[2].begin() ; it!=splitedCommand[2].end() ; it++){
-        if(!std::isdigit(*it)) return false;
-      }
-      //sprawdzamy jaka to liczba
-      int number = std::stoi(splitedCommand[2]);
-      if(number < 0  || number > 1000 ){
-        puts("Incorrect connections number");
-        return true;
-      }
-      std::cout<<"New connections number is:"<<number<<std::endl;
-      Network::ServerOperation::setConnections(number);
-      return true;
-    }
-    else{
-      return false;
-    }
-
+    return setHandling(splitedCommand);
   }
   else if(splitedCommand[0] == "close"){
-    if(splitedCommand.size() == 1) return false;
-    //sprawdzamy czy to wgl liczba
-    for(auto it = splitedCommand[1].begin() ; it!=splitedCommand[1].end() ; it++){
-      if(!std::isdigit(*it)) return false;
-    }
-    int number = std::stoi(splitedCommand[1]);
-    int result = Network::closeSocketWithBlocking(number);
-    //zamykanie serwera
-    if(result == 1){
-      puts("Cannot close server socket");
-      return true;
-    }
-    //zamykanie nieistniejacego socketa
-    else if(result == 2){
-      puts("Socket doesnt exist");
-      return true;
-    }
-    else{
-      puts("Socket closed");
-      return true;
-    }
+    return closeHandling(splitedCommand);
   }
   else if(splitedCommand[0] == "closebylogin"){
-    return false;
+    return closeByLoginHandling(splitedCommand);
   }
   else if(splitedCommand[0] == "add"){
-    if(splitedCommand.size() != 4) return false;
-    if(splitedCommand[1] == "user"){
-      std::hash<std::string> hasher;
-      std::string password = std::to_string(hasher(splitedCommand[3]));
-      int result = MessageHandler::DataBaseConnector::rootAddUser(splitedCommand[2], password);
-      if(result == -1){
-        puts("Login already in use!");
-        return true;
-      }
-      puts("User created");
-      return true;
-    }
-    else if(splitedCommand[1] == "group"){
-      int result = MessageHandler::DataBaseConnector::rootAddGroup(splitedCommand[2], splitedCommand[3]);
-      if(result == -1){
-        puts("User passed as admin doesn't exist!");
-        return true;
-      }
-      else if(result == -2){
-        puts("Group already exist!");
-        return true;
-      }
-      puts("Group created");
-      return true;
-    }
-    else return false;
+    return addHandling(splitedCommand);
   }
   else if(splitedCommand[0] == "delete"){
-    if(splitedCommand.size() != 3) return false;
-    if(splitedCommand[1] == "user"){
-      if(MessageHandler::DataBaseConnector::rootDeleteUser(splitedCommand[2]) == -1){
-        puts("User doesn't exist!");
-        return true;
-      }
-      puts("User deleted!");
-      return true;
-    }
-    else if(splitedCommand[1] == "group"){
-      if(MessageHandler::DataBaseConnector::rootDeleteGroup(splitedCommand[2]) == -1){
-        puts("Group doesn't exist!");
-        return true;
-      }
-      puts("Group deleted!");
-      return true;
-    }
-    else return false;
+    return deleteHandling(splitedCommand);
   }
   else return false;
 }
 
-bool CommandLineInterface::commandExist(std::string command){
-  if(command == "start"){
+void CommandLineInterface::helpHandling(){
+  puts("start server - obvious");
+  puts("start listening - set server to passive mode");
+  puts("start waiting  - start waiting on select");
+  puts("stop server - obvious");
+  puts("stop waiting - stop waiting on select");
+  puts("set port NUMBER_OF_PORT - obvious");
+  puts("set connections NUMBER_OF_CONNECTIONS - set max number of connections");
+  puts("close NUMBER_OF_SOCKET - obvious");
+  puts("add user user_name user_password");
+  puts("add group group_name admin_name");
+  puts("delete user user_name");
+  puts("delete group group_name");
+  puts("closebylogin CLIENT_LOGIN - obvious");
+}
+
+bool CommandLineInterface::startHandling(std::vector<std::string> splitedCommand){
+  if(!splitedCommand.size()){
+    fullStartHandling();
     return true;
   }
-  else if(command == "server"){
+  else if(splitedCommand[0] == "server"){
+    startServerHandling();
     return true;
   }
-  else if(command == "help"){
+  else if(splitedCommand[0] == "listening"){
+    startListeningHandling();
     return true;
   }
-  else if(command == "-help"){
+  else if(splitedCommand[0] == "waiting"){
+    startWaitingHandling();
     return true;
   }
-  else if(command == "listening"){
+  else return false;
+}
+
+bool CommandLineInterface::stopHandling(std::vector<std::string> splitedCommand){
+  if(!splitedCommand.size()){
+    fullStopHandling();
     return true;
   }
-  else if(command == "waiting"){
+  else if(splitedCommand[0] == "waiting"){
+    stopWaitingHandling();
     return true;
   }
-  else if(command == "set"){
+  else return false;
+}
+
+bool CommandLineInterface::setHandling(std::vector<std::string> splitedCommand){
+  if(splitedCommand.size()<2) return false;
+  if( !checkIfStringIsNumber(splitedCommand[1]) ) return false;
+  if(splitedCommand[0] == "port"){
+    setPortHandling( std::stoi(splitedCommand[1]) );
     return true;
   }
-  else if(command == "port"){
+  else if(splitedCommand[0] == "connections"){
+    setMaxConnectionsHandling(std::stoi(splitedCommand[1]));
     return true;
   }
-  else if(command == "stop"){
+  else return false;
+}
+
+bool CommandLineInterface::closeHandling(std::vector<std::string> splitedCommand){
+  if(!splitedCommand.size()) return false;
+  if( !checkIfStringIsNumber(splitedCommand[0]) ) return false;
+  int result = Network::closeSocketWithBlocking(std::stoi(splitedCommand[0]));
+  if(result == 1){
+    puts("Cannot close server socket");
     return true;
   }
-  else if(command == "close"){
-    return true;
-  }
-  else if(command == "connections"){
-    return true;
-  }
-  else if(command == "add"){
-    return true;
-  }
-  else if(command == "delete"){
-    return true;
-  }
-  else if(command == "user"){
-    return true;
-  }
-  else if(command == "group"){
+  else if(result == 2){
+    puts("Socket doesnt exist");
     return true;
   }
   else{
-    for(auto it = command.begin() ; it!=command.end() ; it++){
-      if(!std::isdigit(*it)) return false;
-    }
+    puts("Socket closed");
     return true;
   }
+}
+
+bool CommandLineInterface::addHandling(std::vector<std::string> splitedCommand){
+  if(splitedCommand.size() < 3) return false;
+  if(splitedCommand[0] == "user"){
+    addUserHandling(splitedCommand[1] , splitedCommand[2]);
+    return true;
+  }
+  else if(splitedCommand[0] == "group"){
+    addGroupHandling(splitedCommand[1] , splitedCommand[2]);
+    return true;
+  }
+  else return false;
+}
+
+bool CommandLineInterface::deleteHandling(std::vector<std::string> splitedCommand){
+  if(splitedCommand.size() < 2) return false;
+  if(splitedCommand[0] == "user"){
+    deleteUserHandling(splitedCommand[1]);
+    return true;
+  }
+  else if(splitedCommand[0] == "group"){
+    deleteGroupHandling(splitedCommand[1]);
+    return true;
+  }
+  else return false;
+}
+
+bool CommandLineInterface::closeByLoginHandling(std::vector<std::string> splitedCommand){
+  return true;
+}
+
+void CommandLineInterface::fullStartHandling(){
+  startServerHandling();
+  startListeningHandling();
+  startWaitingHandling();
+}
+
+void CommandLineInterface::startServerHandling(){
+  if(Network::ServerOperation::getIsSocketNumberSet()) {
+    puts("Server already started!");
+    return;
+  }
+  //czy sie udalo stworzyc
+  if(Network::startServer() == -1){
+    puts("Cannot start server!");
+    return;
+  }
+}
+
+void CommandLineInterface::startListeningHandling(){
+  if(!Network::ServerOperation::getIsSocketNumberSet()) {
+    puts("Server not started!");
+    return;
+  }
+  //Czy juz jest pasywny
+  if(Network::ServerOperation::getIsSocketListening()){
+    puts("Socket already passive!");
+    return;
+  }
+  //czy udalo sie
+  if(Network::ServerOperation::listenServerSocket() == -1){
+    puts("Cannot set passive mode!");
+  }
+}
+
+void CommandLineInterface::startWaitingHandling(){
+  if(!Network::ServerOperation::getIsSocketListening()){
+    puts("Socket not passive!");
+    return;
+  }
+  //czy moze juz server nasluchuje
+  if(Network::isServerWaiting()){
+    puts("Socket already waiting!");
+    return;
+  }
+  //no to tworzymy watek
+  puts("Server is waiting on socket!");
+  pthread_t selectThread;
+  pthread_create(&selectThread, NULL, &CommandLineInterface::selectThreadWrapper, this);
+}
+
+void CommandLineInterface::fullStopHandling(){
+  //czy stworzono socket
+  if(!Network::ServerOperation::getIsSocketNumberSet()) {
+    puts("Server not started!");
+    return;
+  }
+  //jak stworzono to go zamykamy i wszystkich klientow
+  Network::closeServer();
+}
+
+void CommandLineInterface::stopWaitingHandling(){
+  //czy server nasluchuje
+  if(!Network::isServerWaiting()){
+    puts("Server not started!");
+    return;
+  }
+  //jesli tak to wstrzymujemy nasluchiwanie ale klientow zatrzymujemy
+  Network::stopWaiting();
+}
+
+void CommandLineInterface::setPortHandling(int port){
+  if(Network::ServerOperation::getIsSocketNumberSet()) {
+    puts("Cannot set port while server working!");
+    return;
+  }
+  //sprawdzamy jaka to liczba
+  if(port > 65535 || port < 49152 ){
+    puts("Incorrect port number!");
+    return;
+  }
+  std::cout<<"New port number is:"<<port<<std::endl;
+  Network::ServerOperation::setPort(port);
+}
+
+void CommandLineInterface::setMaxConnectionsHandling(int connections){
+  if(Network::ServerOperation::getIsSocketNumberSet()) {
+    puts("Cannot set maxconnections while server working!");
+    return;
+  }
+  //sprawdzamy jaka to liczba
+  if(connections < 0  || connections > 1023 ){
+    puts("Incorrect connections number");
+    return;
+  }
+  std::cout<<"New connections number is:"<<connections<<std::endl;
+  Network::ServerOperation::setConnections(connections);
+}
+
+void CommandLineInterface::addUserHandling(std::string login, std::string password){
+  std::hash<std::string> hasher;
+  std::string hashedPassword = std::to_string( hasher(password) );
+  if(MessageHandler::DataBaseConnector::rootAddUser(login , hashedPassword) == -1){
+    puts("Login already in use!");
+    return;
+  }
+  puts("User created");
+}
+
+void CommandLineInterface::addGroupHandling(std::string groupName, std::string adminLogin){
+  int result = MessageHandler::DataBaseConnector::rootAddGroup(groupName, adminLogin);
+  if(result == -1){
+    puts("User passed as admin doesn't exist!");
+    return;
+  }
+  else if(result == -2){
+    puts("Group already exist!");
+    return;
+  }
+  puts("Group created");
+}
+
+void CommandLineInterface::deleteUserHandling(std::string login){
+  if(MessageHandler::DataBaseConnector::rootDeleteUser(login) == -1){
+    puts("User doesn't exist!");
+    return;
+  }
+  puts("User deleted!");
+}
+
+void CommandLineInterface::deleteGroupHandling(std::string groupName){
+  if(MessageHandler::DataBaseConnector::rootDeleteGroup(groupName) == -1){
+    puts("Group doesn't exist!");
+    return;
+  }
+  puts("Group deleted!");
+}
+
+bool checkIfStringIsNumber(std::string toCheck){
+  for(auto it = toCheck.begin() ; it != toCheck.end() ; it++){
+    if(!std::isdigit(*it)) return false;
+  }
+  return true;
 }
 
 void * CommandLineInterface::selectThreadWrapper(void * Object){
