@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <vector>
+#include <errno.h>
 
 #include "../Network/NetLibs.h"
 #include "../../Messages/Message.pb.h"
@@ -49,6 +50,9 @@ int ClientSessionPipe::readBytesSize() {
     //char *tmp = (char *)malloc(numberOfBytesToRead);
     int bytesReceived = recv(this->socketNumber, tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
+    if(errno != 0){
+      return -1;
+    }
     cout<<"Received: "<<bytesReceived<<" bytes."<<endl;
     if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size fully read

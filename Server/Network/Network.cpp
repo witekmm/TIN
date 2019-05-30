@@ -9,6 +9,7 @@ clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
   FD_ZERO(&this->exceptionfds);
   FD_ZERO(&this->master);
   pthread_mutex_init(&this->mutex, NULL);
+  sigfillset(&this->_set);
 }
 
 void Network::waitForSignal(){
