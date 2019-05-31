@@ -103,6 +103,7 @@ int Network::closeSocketWithBlocking(int socketNumber){
   pthread_mutex_trylock(&this->mutex);
   int result = closeSocket(socketNumber);
   pthread_mutex_unlock(&this->mutex);
+  if(!result) this->clients->deleteClientSession(socketNumber);
   return result;
 }
 
