@@ -12,11 +12,13 @@
 using namespace std;
 
 ClientSessionPipes::ClientSessionPipes(){
-  pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
-  pthread_cond_init(&this->writeMessagesBufferNotEmpty, NULL);
-  pthread_cond_init(&this->writeBytesBufferNotEmpty, NULL);
+    clientSessionPipesMutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
 
-  writeMessagesCounter = 0;
+    writeMessagesBufferNotEmpty = PTHREAD_COND_INITIALIZER;
+    pthread_cond_init(&this->writeMessagesBufferNotEmpty, NULL);
+
+    writeMessagesCounter = 0;
 }
 
 bool ClientSessionPipes::isWriteMessagesBufferEmpty() {
@@ -64,11 +66,7 @@ void ClientSessionPipes::readMessage(long localId, Message::ClientMessage messag
     message.SerializeToString(&bytes);
 
     writeBytesBuffer.push_back(BytesMessage(localId, bytes));
-/*
-    if(writeBytesBuffer.size() == 1) {
-        pthread_cond_signal(&writeBytesBufferNotEmpty);
-    }
-*/
+
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
