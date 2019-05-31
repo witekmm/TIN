@@ -51,14 +51,14 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
   else if(command == "close"){
     return closeHandling(splitedCommand);
   }
-  else if(command == "closebylogin"){
-    return closeByLoginHandling(splitedCommand);
-  }
   else if(command == "add"){
     return addHandling(splitedCommand);
   }
   else if(command == "delete"){
     return deleteHandling(splitedCommand);
+  }
+  else if(command == "exit"){
+    return exitHandling();
   }
   else return false;
 }
@@ -168,10 +168,6 @@ bool CommandLineInterface::deleteHandling(std::vector<std::string> splitedComman
     return true;
   }
   else return false;
-}
-
-bool CommandLineInterface::closeByLoginHandling(std::vector<std::string> splitedCommand){
-  return true;
 }
 
 void CommandLineInterface::fullStartHandling(){
@@ -309,6 +305,14 @@ void CommandLineInterface::deleteGroupHandling(std::string groupName){
     return;
   }
   puts("Group deleted!");
+}
+
+bool CommandLineInterface::exitHandling(){
+  fullStopHandling();
+  MessageHandler::stopLoop();
+  this->working=false;
+  puts("BYEBYE :)");
+  return true;
 }
 
 bool CommandLineInterface::checkIfStringIsNumber(std::string toCheck){

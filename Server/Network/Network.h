@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <memory>
-#include <signal.h>
 
 #include "ServerOperations.h"
 #include "NetLibs.h"

@@ -1,6 +1,8 @@
 #ifndef CLIENT_SESSION_PIPES_H
 #define CLIENT_SESSION_PIPES_H
 
+#define WRITE_MESSAGE_COND_WAIT_SEC 6
+
 #include <pthread.h>
 #include <vector>
 #include <string>

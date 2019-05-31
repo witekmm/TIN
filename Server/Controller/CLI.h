@@ -50,7 +50,7 @@ public:
 
     bool closeHandling(std::vector<std::string> splitedCommand);
 
-    bool closeByLoginHandling(std::vector<std::string> splitedCommand);
+    bool exitHandling();
 
 
   static void * selectThreadWrapper(void * Object);

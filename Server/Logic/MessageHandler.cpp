@@ -131,3 +131,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string 
     return 0;
   }
 }
+
+void MessageHandler::stopLoop(){
+  this->working=false;
+}
