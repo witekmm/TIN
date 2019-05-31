@@ -40,6 +40,7 @@ bool ClientSessionPipes::isWriteBytesBufferEmpty() {
 
 pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     pthread_mutex_lock(&clientSessionPipesMutex);
+
     if(isWriteMessagesBufferEmpty()) {
         pthread_cond_wait(&writeMessagesBufferNotEmpty,
             &clientSessionPipesMutex);
