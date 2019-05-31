@@ -113,7 +113,8 @@ bool CommandLineInterface::stopHandling(std::vector<std::string> splitedCommand)
 
 bool CommandLineInterface::setHandling(std::vector<std::string> splitedCommand){
   if(splitedCommand.size()<2) return false;
-  if( !checkIfStringIsNumber(splitedCommand[1]) ) return false;
+  auto it = splitedCommand.begin(); it++;
+  if( !checkIfStringIsNumber(*it)) return false;
   if(splitedCommand[0] == "port"){
     setPortHandling( std::stoi(splitedCommand[1]) );
     return true;
@@ -310,7 +311,7 @@ void CommandLineInterface::deleteGroupHandling(std::string groupName){
   puts("Group deleted!");
 }
 
-bool checkIfStringIsNumber(std::string toCheck){
+bool CommandLineInterface::checkIfStringIsNumber(std::string toCheck){
   for(auto it = toCheck.begin() ; it != toCheck.end() ; it++){
     if(!std::isdigit(*it)) return false;
   }

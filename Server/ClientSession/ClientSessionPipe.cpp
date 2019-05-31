@@ -11,8 +11,8 @@ using namespace std;
 
 ClientSessionPipe::ClientSessionPipe(int socket) {
     socketNumber = socket;
-    //numberOfBytesToRead = MESSAGE_SIZE_BYTES_NUMBER;
-    //bytesMessageSizeRead = false;
+    numberOfBytesToRead = MESSAGE_SIZE_BYTES_NUMBER;
+    bytesMessageSizeRead = false;
     clearReadBytesVariables();
 }
 
