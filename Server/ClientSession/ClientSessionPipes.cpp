@@ -15,6 +15,8 @@ ClientSessionPipes::ClientSessionPipes(){
   pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
   pthread_cond_init(&this->writeMessagesBufferNotEmpty, NULL);
   pthread_cond_init(&this->writeBytesBufferNotEmpty, NULL);
+
+  writeMessagesCounter = 0;
 }
 
 bool ClientSessionPipes::isWriteMessagesBufferEmpty() {
@@ -40,6 +42,7 @@ bool ClientSessionPipes::isWriteBytesBufferEmpty() {
 
 pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     pthread_mutex_lock(&clientSessionPipesMutex);
+
     if(isWriteMessagesBufferEmpty()) {
         pthread_cond_wait(&writeMessagesBufferNotEmpty,
             &clientSessionPipesMutex);
