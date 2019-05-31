@@ -25,6 +25,8 @@ void CommandLineInterface::startCommandLine(){
     //split command into words
     if(!handleCommand(splitedCommand)) puts("Incorrect command!");
   }
+
+  pthread_cancel(logicthread);
 }
 
 bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand){
@@ -64,10 +66,11 @@ bool CommandLineInterface::handleCommand(std::vector<std::string> splitedCommand
 }
 
 void CommandLineInterface::helpHandling(){
-  puts("start server - obvious");
+  puts("start - starts everything");
+  puts("start server - creates socket and bind ip and port");
   puts("start listening - set server to passive mode");
   puts("start waiting  - start waiting on select");
-  puts("stop server - obvious");
+  puts("stop - obvious");
   puts("stop waiting - stop waiting on select");
   puts("set port NUMBER_OF_PORT - obvious");
   puts("set connections NUMBER_OF_CONNECTIONS - set max number of connections");
