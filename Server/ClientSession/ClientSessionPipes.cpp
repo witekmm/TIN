@@ -12,9 +12,13 @@
 using namespace std;
 
 ClientSessionPipes::ClientSessionPipes(){
-  pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
-  pthread_cond_init(&this->writeMessagesBufferNotEmpty, NULL);
-  pthread_cond_init(&this->writeBytesBufferNotEmpty, NULL);
+    clientSessionPipesMutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_init(&this->clientSessionPipesMutex, NULL);
+
+    writeMessagesBufferNotEmpty = PTHREAD_COND_INITIALIZER;
+    pthread_cond_init(&this->writeMessagesBufferNotEmpty, NULL);
+
+    writeMessagesCounter = 0;
 }
 
 bool ClientSessionPipes::isWriteMessagesBufferEmpty() {
@@ -40,6 +44,7 @@ bool ClientSessionPipes::isWriteBytesBufferEmpty() {
 
 pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     pthread_mutex_lock(&clientSessionPipesMutex);
+
     if(isWriteMessagesBufferEmpty()) {
         pthread_cond_wait(&writeMessagesBufferNotEmpty,
             &clientSessionPipesMutex);
@@ -61,11 +66,7 @@ void ClientSessionPipes::readMessage(long localId, Message::ClientMessage messag
     message.SerializeToString(&bytes);
 
     writeBytesBuffer.push_back(BytesMessage(localId, bytes));
-/*
-    if(writeBytesBuffer.size() == 1) {
-        pthread_cond_signal(&writeBytesBufferNotEmpty);
-    }
-*/
+
     pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
@@ -81,7 +82,7 @@ int ClientSessionPipes::readBytes(int socketNumber) {
             break;
         }
     }
-    cout<<"RESULT - "<<result<<endl;
+    
     if(result == 1) {
         //Message is successfully read
         ++writeMessagesCounter;
@@ -119,7 +120,7 @@ int ClientSessionPipes::writeBytes(int socketNumber) {
         pthread_mutex_unlock(&clientSessionPipesMutex);
         return 0;
     }
-    puts("BUFFER NOT EMPTY");
+    
     vector<BytesMessage>::iterator it;
     int result;
 
@@ -173,7 +174,6 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
 }
 
 void ClientSessionPipes::deleteClientSession(int socketNumber) {
-    pthread_mutex_lock(&clientSessionPipesMutex);
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
@@ -182,10 +182,9 @@ void ClientSessionPipes::deleteClientSession(int socketNumber) {
             deleteWriteBuffers(socketNumber);
 
             clientSessionPipes.erase(it);
+            break;
         }
     }
-
-    pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
 vector<Client> ClientSessionPipes::getLoggedClients() {

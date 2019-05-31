@@ -24,7 +24,6 @@ class ClientSessionPipes {
     bool isWriteMessagesBufferEmpty();
 
     vector<BytesMessage> writeBytesBuffer;
-    pthread_cond_t writeBytesBufferNotEmpty;
     bool isWriteBytesBufferEmpty();
 
     pair<Client, Message::ClientMessage> getWriteMessageBufferMessage();

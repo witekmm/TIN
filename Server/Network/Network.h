@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <signal.h>
 
 #include "ServerOperations.h"
 #include "NetLibs.h"
@@ -13,6 +14,7 @@ class Network: public ServerOperation{
   pthread_mutex_t mutex;
   bool working;
   struct timeval tv;
+  sigset_t _set;
   //Descriptors list:
   //master - original list
   //readfds - waiting for read action

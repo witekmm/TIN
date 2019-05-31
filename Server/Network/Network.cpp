@@ -1,4 +1,6 @@
 #include "Network.h"
+#include <errno.h>
+#include <iostream>
 
 Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):
 clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
@@ -9,6 +11,7 @@ clients(clients) , working(false), ServerOperation(maxConnections,port,ip){
   FD_ZERO(&this->exceptionfds);
   FD_ZERO(&this->master);
   pthread_mutex_init(&this->mutex, NULL);
+  sigfillset(&this->_set);
 }
 
 void Network::waitForSignal(){
@@ -48,11 +51,11 @@ void Network::waitForSignal(){
           }
         }
         if(FD_ISSET(tmp , &this->writefds)){
-          //std::cout<<"WRITING TO SOCKET "<<tmp<<std::endl;
           if(this->clients->writeBytes(tmp) == -1){
               closeSocket(tmp);
               break;
           }
+
           //std::cout<<"WRITING IS ENDED"<<std::endl;
         }
         if(FD_ISSET(tmp , &this->exceptionfds)){
@@ -100,6 +103,7 @@ int Network::closeSocketWithBlocking(int socketNumber){
   pthread_mutex_trylock(&this->mutex);
   int result = closeSocket(socketNumber);
   pthread_mutex_unlock(&this->mutex);
+  if(!result) this->clients->deleteClientSession(socketNumber);
   return result;
 }
 
