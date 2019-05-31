@@ -402,15 +402,15 @@ namespace Client {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            messageType_ = (global::Client.ClientMessage.Types.messageTypes) input.ReadEnum();
+            MessageType = (global::Client.ClientMessage.Types.messageTypes) input.ReadEnum();
             break;
           }
           case 16: {
-            groupActionType_ = (global::Client.ClientMessage.Types.groupActionTypes) input.ReadEnum();
+            GroupActionType = (global::Client.ClientMessage.Types.groupActionTypes) input.ReadEnum();
             break;
           }
           case 24: {
-            authorizationType_ = (global::Client.ClientMessage.Types.authorizationTypes) input.ReadEnum();
+            AuthorizationType = (global::Client.ClientMessage.Types.authorizationTypes) input.ReadEnum();
             break;
           }
           case 34: {
@@ -434,7 +434,7 @@ namespace Client {
             break;
           }
           case 72: {
-            reply_ = (global::Client.ClientMessage.Types.replyStatus) input.ReadEnum();
+            Reply = (global::Client.ClientMessage.Types.replyStatus) input.ReadEnum();
             break;
           }
           case 82: {

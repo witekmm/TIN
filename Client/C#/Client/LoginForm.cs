@@ -59,6 +59,7 @@ namespace Client
             {
                 logged = true;
                 this.Hide();
+                client.ConnectionManager.ReceiveThread.Start();
                 client.Show();
             }
             else
@@ -67,7 +68,7 @@ namespace Client
                 {
                     this.Close();
                 }
-                    MessageBox.Show("Wrong input", "Bad ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Wrong data", "User not found ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 loginAttempts++;
                 return;
             }
