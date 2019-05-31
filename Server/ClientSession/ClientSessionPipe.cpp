@@ -45,7 +45,7 @@ void ClientSessionPipe::addWriteMessage(Message::ClientMessage message) {
 }
 
 bool  ClientSessionPipe::isRecvSuccessfull(int bytesReceived) {
-    return bytesReceived != -1 && errno == 0;
+    return bytesReceived > 0 && errno == 0;
 }
 
 int ClientSessionPipe::convertRecvBytesToSize(const char* recvBytes) {
@@ -73,7 +73,7 @@ int ClientSessionPipe::readBytesSize() {
 
         delete [] tmp;
         return 0;
-    } else if(bytesReceived >= 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
+    } else if(bytesReceived > 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size partially read
         numberOfBytesToRead -= bytesReceived;
 

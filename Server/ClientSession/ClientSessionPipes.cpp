@@ -174,7 +174,6 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
 }
 
 void ClientSessionPipes::deleteClientSession(int socketNumber) {
-    pthread_mutex_lock(&clientSessionPipesMutex);
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
@@ -183,10 +182,9 @@ void ClientSessionPipes::deleteClientSession(int socketNumber) {
             deleteWriteBuffers(socketNumber);
 
             clientSessionPipes.erase(it);
+            break;
         }
     }
-
-    pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
 vector<Client> ClientSessionPipes::getLoggedClients() {
