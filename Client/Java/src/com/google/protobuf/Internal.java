@@ -237,7 +237,7 @@ public final class Internal {
   /**
    * Helper method for implementing {@link Message#hashCode()} for enums.
    *
-   * <p>This is needed because {@link Enum#hashCode()} is final, but we need to use the
+   * <p>This is needed because {@link java.lang.Enum#hashCode()} is final, but we need to use the
    * field number as the hash code to ensure compatibility between statically and dynamically
    * generated enum objects.
    */
@@ -470,19 +470,19 @@ public final class Internal {
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<java.util.Map.Entry<K, V>> entrySet() {
       return new SetAdapter(realMap.entrySet());
     }
 
-    private class SetAdapter extends AbstractSet<Entry<K, V>> {
-      private final Set<Entry<K, RealValue>> realSet;
+    private class SetAdapter extends AbstractSet<Map.Entry<K, V>> {
+      private final Set<Map.Entry<K, RealValue>> realSet;
 
-      public SetAdapter(Set<Entry<K, RealValue>> realSet) {
+      public SetAdapter(Set<Map.Entry<K, RealValue>> realSet) {
         this.realSet = realSet;
       }
 
       @Override
-      public Iterator<Entry<K, V>> iterator() {
+      public Iterator<java.util.Map.Entry<K, V>> iterator() {
         return new IteratorAdapter(realSet.iterator());
       }
 
@@ -492,10 +492,10 @@ public final class Internal {
       }
     }
 
-    private class IteratorAdapter implements Iterator<Entry<K, V>> {
-      private final Iterator<Entry<K, RealValue>> realIterator;
+    private class IteratorAdapter implements Iterator<Map.Entry<K, V>> {
+      private final Iterator<Map.Entry<K, RealValue>> realIterator;
 
-      public IteratorAdapter(Iterator<Entry<K, RealValue>> realIterator) {
+      public IteratorAdapter(Iterator<Map.Entry<K, RealValue>> realIterator) {
         this.realIterator = realIterator;
       }
 
@@ -505,7 +505,7 @@ public final class Internal {
       }
 
       @Override
-      public Entry<K, V> next() {
+      public java.util.Map.Entry<K, V> next() {
         return new EntryAdapter(realIterator.next());
       }
 
@@ -515,10 +515,10 @@ public final class Internal {
       }
     }
 
-    private class EntryAdapter implements Entry<K, V> {
-      private final Entry<K, RealValue> realEntry;
+    private class EntryAdapter implements Map.Entry<K, V> {
+      private final Map.Entry<K, RealValue> realEntry;
 
-      public EntryAdapter(Entry<K, RealValue> realEntry) {
+      public EntryAdapter(Map.Entry<K, RealValue> realEntry) {
         this.realEntry = realEntry;
       }
 
@@ -550,7 +550,7 @@ public final class Internal {
           return false;
         }
         @SuppressWarnings("unchecked")
-        Entry<?, ?> other = (Entry<?, ?>) o;
+        Map.Entry<?, ?> other = (Map.Entry<?, ?>) o;
         return getKey().equals(other.getKey()) && getValue().equals(getValue());
       }
 
@@ -585,7 +585,7 @@ public final class Internal {
   }
 
   /**
-   * A {@link List} implementation that avoids boxing the elements into Integers if
+   * A {@link java.util.List} implementation that avoids boxing the elements into Integers if
    * possible. Does not support null elements.
    */
   public static interface IntList extends ProtobufList<Integer> {
@@ -605,7 +605,7 @@ public final class Internal {
   }
 
   /**
-   * A {@link List} implementation that avoids boxing the elements into Booleans if
+   * A {@link java.util.List} implementation that avoids boxing the elements into Booleans if
    * possible. Does not support null elements.
    */
   public static interface BooleanList extends ProtobufList<Boolean> {
@@ -625,7 +625,7 @@ public final class Internal {
   }
 
   /**
-   * A {@link List} implementation that avoids boxing the elements into Longs if possible.
+   * A {@link java.util.List} implementation that avoids boxing the elements into Longs if possible.
    * Does not support null elements.
    */
   public static interface LongList extends ProtobufList<Long> {
@@ -645,7 +645,7 @@ public final class Internal {
   }
 
   /**
-   * A {@link List} implementation that avoids boxing the elements into Doubles if
+   * A {@link java.util.List} implementation that avoids boxing the elements into Doubles if
    * possible. Does not support null elements.
    */
   public static interface DoubleList extends ProtobufList<Double> {
@@ -665,7 +665,7 @@ public final class Internal {
   }
 
   /**
-   * A {@link List} implementation that avoids boxing the elements into Floats if
+   * A {@link java.util.List} implementation that avoids boxing the elements into Floats if
    * possible. Does not support null elements.
    */
   public static interface FloatList extends ProtobufList<Float> {

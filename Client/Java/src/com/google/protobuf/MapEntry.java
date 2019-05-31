@@ -219,7 +219,7 @@ public final class MapEntry<K, V> extends AbstractMessage {
     Object result = field.getNumber() == 1 ? getKey() : getValue();
     // Convert enums to EnumValueDescriptor.
     if (field.getType() == FieldDescriptor.Type.ENUM) {
-      result = field.getEnumType().findValueByNumberCreatingIfUnknown((Integer) result);
+      result = field.getEnumType().findValueByNumberCreatingIfUnknown((java.lang.Integer) result);
     }
     return result;
   }

@@ -358,7 +358,7 @@ public class MapField<K, V> implements MutabilityOracle {
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<java.util.Map.Entry<K, V>> entrySet() {
       return new MutatabilityAwareSet<Entry<K, V>>(mutabilityOracle, delegate.entrySet());
     }
 

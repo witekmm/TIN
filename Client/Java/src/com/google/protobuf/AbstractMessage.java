@@ -197,8 +197,8 @@ public abstract class AbstractMessage
     Iterator iterator = list.iterator();
     Message entry = (Message) iterator.next();
     Descriptors.Descriptor descriptor = entry.getDescriptorForType();
-    FieldDescriptor key = descriptor.findFieldByName("key");
-    FieldDescriptor value = descriptor.findFieldByName("value");
+    Descriptors.FieldDescriptor key = descriptor.findFieldByName("key");
+    Descriptors.FieldDescriptor value = descriptor.findFieldByName("value");
     Object fieldValue = entry.getField(value);
     if (fieldValue instanceof EnumValueDescriptor) {
       fieldValue = ((EnumValueDescriptor) fieldValue).getNumber();

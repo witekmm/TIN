@@ -60,12 +60,12 @@ class MessageReflection {
         }
       }
     }
-    for (final Map.Entry<FieldDescriptor, Object> entry : fields.entrySet()) {
-      final FieldDescriptor field = entry.getKey();
+    for (final Map.Entry<Descriptors.FieldDescriptor, Object> entry : fields.entrySet()) {
+      final Descriptors.FieldDescriptor field = entry.getKey();
       final Object value = entry.getValue();
       if (isMessageSet
           && field.isExtension()
-          && field.getType() == FieldDescriptor.Type.MESSAGE
+          && field.getType() == Descriptors.FieldDescriptor.Type.MESSAGE
           && !field.isRepeated()) {
         output.writeMessageSetExtension(field.getNumber(), (Message) value);
       } else {
@@ -86,12 +86,12 @@ class MessageReflection {
     final boolean isMessageSet =
         message.getDescriptorForType().getOptions().getMessageSetWireFormat();
 
-    for (final Map.Entry<FieldDescriptor, Object> entry : fields.entrySet()) {
-      final FieldDescriptor field = entry.getKey();
+    for (final Map.Entry<Descriptors.FieldDescriptor, Object> entry : fields.entrySet()) {
+      final Descriptors.FieldDescriptor field = entry.getKey();
       final Object value = entry.getValue();
       if (isMessageSet
           && field.isExtension()
-          && field.getType() == FieldDescriptor.Type.MESSAGE
+          && field.getType() == Descriptors.FieldDescriptor.Type.MESSAGE
           && !field.isRepeated()) {
         size +=
             CodedOutputStream.computeMessageSetExtensionSize(field.getNumber(), (Message) value);
@@ -123,7 +123,7 @@ class MessageReflection {
   @SuppressWarnings("unchecked")
   static boolean isInitialized(MessageOrBuilder message) {
     // Check that all required fields are present.
-    for (final FieldDescriptor field : message.getDescriptorForType().getFields()) {
+    for (final Descriptors.FieldDescriptor field : message.getDescriptorForType().getFields()) {
       if (field.isRequired()) {
         if (!message.hasField(field)) {
           return false;
@@ -132,10 +132,10 @@ class MessageReflection {
     }
 
     // Check that embedded messages are initialized.
-    for (final Map.Entry<FieldDescriptor, Object> entry :
+    for (final Map.Entry<Descriptors.FieldDescriptor, Object> entry :
         message.getAllFields().entrySet()) {
-      final FieldDescriptor field = entry.getKey();
-      if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
+      final Descriptors.FieldDescriptor field = entry.getKey();
+      if (field.getJavaType() == Descriptors.FieldDescriptor.JavaType.MESSAGE) {
         if (field.isRepeated()) {
           for (final Message element : (List<Message>) entry.getValue()) {
             if (!element.isInitialized()) {
@@ -154,7 +154,7 @@ class MessageReflection {
   }
 
   private static String subMessagePrefix(
-      final String prefix, final FieldDescriptor field, final int index) {
+      final String prefix, final Descriptors.FieldDescriptor field, final int index) {
     final StringBuilder result = new StringBuilder(prefix);
     if (field.isExtension()) {
       result.append('(').append(field.getFullName()).append(')');
@@ -170,18 +170,18 @@ class MessageReflection {
 
   private static void findMissingFields(
       final MessageOrBuilder message, final String prefix, final List<String> results) {
-    for (final FieldDescriptor field : message.getDescriptorForType().getFields()) {
+    for (final Descriptors.FieldDescriptor field : message.getDescriptorForType().getFields()) {
       if (field.isRequired() && !message.hasField(field)) {
         results.add(prefix + field.getName());
       }
     }
 
-    for (final Map.Entry<FieldDescriptor, Object> entry :
+    for (final Map.Entry<Descriptors.FieldDescriptor, Object> entry :
         message.getAllFields().entrySet()) {
-      final FieldDescriptor field = entry.getKey();
+      final Descriptors.FieldDescriptor field = entry.getKey();
       final Object value = entry.getValue();
 
-      if (field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
+      if (field.getJavaType() == Descriptors.FieldDescriptor.JavaType.MESSAGE) {
         if (field.isRepeated()) {
           int i = 0;
           for (final Object element : (List) value) {
@@ -220,10 +220,10 @@ class MessageReflection {
     public ContainerType getContainerType();
 
     public ExtensionRegistry.ExtensionInfo findExtensionByName(
-            ExtensionRegistry registry, String name);
+        ExtensionRegistry registry, String name);
 
     public ExtensionRegistry.ExtensionInfo findExtensionByNumber(
-            ExtensionRegistry registry, Descriptors.Descriptor containingType, int fieldNumber);
+        ExtensionRegistry registry, Descriptors.Descriptor containingType, int fieldNumber);
 
     /**
      * Obtains the value of the given field, or the default value if it is not set. For primitive
@@ -231,7 +231,7 @@ class MessageReflection {
      * the value is returned. For embedded message fields, the sub-message is returned. For repeated
      * fields, a java.util.List is returned.
      */
-    public Object getField(FieldDescriptor field);
+    public Object getField(Descriptors.FieldDescriptor field);
 
     /**
      * Returns true if the given field is set. This is exactly equivalent to calling the generated
@@ -240,29 +240,29 @@ class MessageReflection {
      * @throws IllegalArgumentException The field is a repeated field, or {@code
      *     field.getContainingType() != getDescriptorForType()}.
      */
-    boolean hasField(FieldDescriptor field);
+    boolean hasField(Descriptors.FieldDescriptor field);
 
     /**
      * Sets a field to the given value. The value must be of the correct type for this field, i.e.
-     * the same type that {@link Message#getField(FieldDescriptor)} would return.
+     * the same type that {@link Message#getField(Descriptors.FieldDescriptor)} would return.
      */
-    MergeTarget setField(FieldDescriptor field, Object value);
+    MergeTarget setField(Descriptors.FieldDescriptor field, Object value);
 
     /**
      * Clears the field. This is exactly equivalent to calling the generated "clear" accessor method
      * corresponding to the field.
      */
-    MergeTarget clearField(FieldDescriptor field);
+    MergeTarget clearField(Descriptors.FieldDescriptor field);
 
     /**
      * Sets an element of a repeated field to the given value. The value must be of the correct type
      * for this field, i.e. the same type that {@link
-     * Message#getRepeatedField(FieldDescriptor, int)} would return.
+     * Message#getRepeatedField(Descriptors.FieldDescriptor, int)} would return.
      *
      * @throws IllegalArgumentException The field is not a repeated field, or {@code
      *     field.getContainingType() != getDescriptorForType()}.
      */
-    MergeTarget setRepeatedField(FieldDescriptor field, int index, Object value);
+    MergeTarget setRepeatedField(Descriptors.FieldDescriptor field, int index, Object value);
 
     /**
      * Like {@code setRepeatedField}, but appends the value as a new element.
@@ -270,7 +270,7 @@ class MessageReflection {
      * @throws IllegalArgumentException The field is not a repeated field, or {@code
      *     field.getContainingType() != getDescriptorForType()}.
      */
-    MergeTarget addRepeatedField(FieldDescriptor field, Object value);
+    MergeTarget addRepeatedField(Descriptors.FieldDescriptor field, Object value);
 
     /**
      * Returns true if the given oneof is set.
@@ -287,17 +287,17 @@ class MessageReflection {
     MergeTarget clearOneof(Descriptors.OneofDescriptor oneof);
 
     /** Obtains the FieldDescriptor if the given oneof is set. Returns null if no field is set. */
-    FieldDescriptor getOneofFieldDescriptor(Descriptors.OneofDescriptor oneof);
+    Descriptors.FieldDescriptor getOneofFieldDescriptor(Descriptors.OneofDescriptor oneof);
 
     /**
      * Parse the input stream into a sub field group defined based on either FieldDescriptor or the
      * default instance.
      */
     Object parseGroup(
-            CodedInputStream input,
-            ExtensionRegistryLite registry,
-            FieldDescriptor descriptor,
-            Message defaultInstance)
+        CodedInputStream input,
+        ExtensionRegistryLite registry,
+        Descriptors.FieldDescriptor descriptor,
+        Message defaultInstance)
         throws IOException;
 
     /**
@@ -305,10 +305,10 @@ class MessageReflection {
      * the default instance.
      */
     Object parseMessage(
-            CodedInputStream input,
-            ExtensionRegistryLite registry,
-            FieldDescriptor descriptor,
-            Message defaultInstance)
+        CodedInputStream input,
+        ExtensionRegistryLite registry,
+        Descriptors.FieldDescriptor descriptor,
+        Message defaultInstance)
         throws IOException;
 
     /**
@@ -317,14 +317,14 @@ class MessageReflection {
      * beginning of the input ByteString.
      */
     Object parseMessageFromBytes(
-            ByteString bytes,
-            ExtensionRegistryLite registry,
-            FieldDescriptor descriptor,
-            Message defaultInstance)
+        ByteString bytes,
+        ExtensionRegistryLite registry,
+        Descriptors.FieldDescriptor descriptor,
+        Message defaultInstance)
         throws IOException;
 
     /** Returns the UTF8 validation level for the field. */
-    WireFormat.Utf8Validation getUtf8Validation(FieldDescriptor descriptor);
+    WireFormat.Utf8Validation getUtf8Validation(Descriptors.FieldDescriptor descriptor);
 
     /**
      * Returns a new merge target for a sub-field. When defaultInstance is provided, it indicates
@@ -332,7 +332,7 @@ class MessageReflection {
      * from the defaultInstance prototype directly.
      */
     MergeTarget newMergeTargetForField(
-            FieldDescriptor descriptor, Message defaultInstance);
+        Descriptors.FieldDescriptor descriptor, Message defaultInstance);
 
     /**
      * Returns an empty merge target for a sub-field. When defaultInstance is provided, it indicates
@@ -340,7 +340,7 @@ class MessageReflection {
      * from the defaultInstance prototype directly.
      */
     MergeTarget newEmptyTargetForField(
-            FieldDescriptor descriptor, Message defaultInstance);
+        Descriptors.FieldDescriptor descriptor, Message defaultInstance);
 
     /** Finishes the merge and returns the underlying object. */
     Object finish();
@@ -360,36 +360,36 @@ class MessageReflection {
     }
 
     @Override
-    public Object getField(FieldDescriptor field) {
+    public Object getField(Descriptors.FieldDescriptor field) {
       return builder.getField(field);
     }
 
     @Override
-    public boolean hasField(FieldDescriptor field) {
+    public boolean hasField(Descriptors.FieldDescriptor field) {
       return builder.hasField(field);
     }
 
     @Override
-    public MergeTarget setField(FieldDescriptor field, Object value) {
+    public MergeTarget setField(Descriptors.FieldDescriptor field, Object value) {
       builder.setField(field, value);
       return this;
     }
 
     @Override
-    public MergeTarget clearField(FieldDescriptor field) {
+    public MergeTarget clearField(Descriptors.FieldDescriptor field) {
       builder.clearField(field);
       return this;
     }
 
     @Override
     public MergeTarget setRepeatedField(
-        FieldDescriptor field, int index, Object value) {
+        Descriptors.FieldDescriptor field, int index, Object value) {
       builder.setRepeatedField(field, index, value);
       return this;
     }
 
     @Override
-    public MergeTarget addRepeatedField(FieldDescriptor field, Object value) {
+    public MergeTarget addRepeatedField(Descriptors.FieldDescriptor field, Object value) {
       builder.addRepeatedField(field, value);
       return this;
     }
@@ -406,7 +406,7 @@ class MessageReflection {
     }
 
     @Override
-    public FieldDescriptor getOneofFieldDescriptor(Descriptors.OneofDescriptor oneof) {
+    public Descriptors.FieldDescriptor getOneofFieldDescriptor(Descriptors.OneofDescriptor oneof) {
       return builder.getOneofFieldDescriptor(oneof);
     }
 
@@ -431,7 +431,7 @@ class MessageReflection {
     public Object parseGroup(
         CodedInputStream input,
         ExtensionRegistryLite extensionRegistry,
-        FieldDescriptor field,
+        Descriptors.FieldDescriptor field,
         Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder;
@@ -455,7 +455,7 @@ class MessageReflection {
     public Object parseMessage(
         CodedInputStream input,
         ExtensionRegistryLite extensionRegistry,
-        FieldDescriptor field,
+        Descriptors.FieldDescriptor field,
         Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder;
@@ -479,7 +479,7 @@ class MessageReflection {
     public Object parseMessageFromBytes(
         ByteString bytes,
         ExtensionRegistryLite extensionRegistry,
-        FieldDescriptor field,
+        Descriptors.FieldDescriptor field,
         Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder;
@@ -501,7 +501,7 @@ class MessageReflection {
 
     @Override
     public MergeTarget newMergeTargetForField(
-        FieldDescriptor field, Message defaultInstance) {
+        Descriptors.FieldDescriptor field, Message defaultInstance) {
       Message.Builder subBuilder;
       if (defaultInstance != null) {
         subBuilder = defaultInstance.newBuilderForType();
@@ -519,7 +519,7 @@ class MessageReflection {
 
     @Override
     public MergeTarget newEmptyTargetForField(
-        FieldDescriptor field, Message defaultInstance) {
+        Descriptors.FieldDescriptor field, Message defaultInstance) {
       Message.Builder subBuilder;
       if (defaultInstance != null) {
         subBuilder = defaultInstance.newBuilderForType();
@@ -530,7 +530,7 @@ class MessageReflection {
     }
 
     @Override
-    public WireFormat.Utf8Validation getUtf8Validation(FieldDescriptor descriptor) {
+    public WireFormat.Utf8Validation getUtf8Validation(Descriptors.FieldDescriptor descriptor) {
       if (descriptor.needsUtf8Check()) {
         return WireFormat.Utf8Validation.STRICT;
       }
@@ -550,9 +550,9 @@ class MessageReflection {
 
   static class ExtensionAdapter implements MergeTarget {
 
-    private final FieldSet<FieldDescriptor> extensions;
+    private final FieldSet<Descriptors.FieldDescriptor> extensions;
 
-    ExtensionAdapter(FieldSet<FieldDescriptor> extensions) {
+    ExtensionAdapter(FieldSet<Descriptors.FieldDescriptor> extensions) {
       this.extensions = extensions;
     }
 
@@ -562,36 +562,36 @@ class MessageReflection {
     }
 
     @Override
-    public Object getField(FieldDescriptor field) {
+    public Object getField(Descriptors.FieldDescriptor field) {
       return extensions.getField(field);
     }
 
     @Override
-    public boolean hasField(FieldDescriptor field) {
+    public boolean hasField(Descriptors.FieldDescriptor field) {
       return extensions.hasField(field);
     }
 
     @Override
-    public MergeTarget setField(FieldDescriptor field, Object value) {
+    public MergeTarget setField(Descriptors.FieldDescriptor field, Object value) {
       extensions.setField(field, value);
       return this;
     }
 
     @Override
-    public MergeTarget clearField(FieldDescriptor field) {
+    public MergeTarget clearField(Descriptors.FieldDescriptor field) {
       extensions.clearField(field);
       return this;
     }
 
     @Override
     public MergeTarget setRepeatedField(
-        FieldDescriptor field, int index, Object value) {
+        Descriptors.FieldDescriptor field, int index, Object value) {
       extensions.setRepeatedField(field, index, value);
       return this;
     }
 
     @Override
-    public MergeTarget addRepeatedField(FieldDescriptor field, Object value) {
+    public MergeTarget addRepeatedField(Descriptors.FieldDescriptor field, Object value) {
       extensions.addRepeatedField(field, value);
       return this;
     }
@@ -608,7 +608,7 @@ class MessageReflection {
     }
 
     @Override
-    public FieldDescriptor getOneofFieldDescriptor(Descriptors.OneofDescriptor oneof) {
+    public Descriptors.FieldDescriptor getOneofFieldDescriptor(Descriptors.OneofDescriptor oneof) {
       return null;
     }
 
@@ -633,7 +633,7 @@ class MessageReflection {
     public Object parseGroup(
         CodedInputStream input,
         ExtensionRegistryLite registry,
-        FieldDescriptor field,
+        Descriptors.FieldDescriptor field,
         Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder = defaultInstance.newBuilderForType();
@@ -651,7 +651,7 @@ class MessageReflection {
     public Object parseMessage(
         CodedInputStream input,
         ExtensionRegistryLite registry,
-        FieldDescriptor field,
+        Descriptors.FieldDescriptor field,
         Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder = defaultInstance.newBuilderForType();
@@ -669,7 +669,7 @@ class MessageReflection {
     public Object parseMessageFromBytes(
         ByteString bytes,
         ExtensionRegistryLite registry,
-        FieldDescriptor field,
+        Descriptors.FieldDescriptor field,
         Message defaultInstance)
         throws IOException {
       Message.Builder subBuilder = defaultInstance.newBuilderForType();
@@ -685,18 +685,18 @@ class MessageReflection {
 
     @Override
     public MergeTarget newMergeTargetForField(
-        FieldDescriptor descriptor, Message defaultInstance) {
+        Descriptors.FieldDescriptor descriptor, Message defaultInstance) {
       throw new UnsupportedOperationException("newMergeTargetForField() called on FieldSet object");
     }
 
     @Override
     public MergeTarget newEmptyTargetForField(
-        FieldDescriptor descriptor, Message defaultInstance) {
+        Descriptors.FieldDescriptor descriptor, Message defaultInstance) {
       throw new UnsupportedOperationException("newEmptyTargetForField() called on FieldSet object");
     }
 
     @Override
-    public WireFormat.Utf8Validation getUtf8Validation(FieldDescriptor descriptor) {
+    public WireFormat.Utf8Validation getUtf8Validation(Descriptors.FieldDescriptor descriptor) {
       if (descriptor.needsUtf8Check()) {
         return WireFormat.Utf8Validation.STRICT;
       }
@@ -738,7 +738,7 @@ class MessageReflection {
     final int wireType = WireFormat.getTagWireType(tag);
     final int fieldNumber = WireFormat.getTagFieldNumber(tag);
 
-    final FieldDescriptor field;
+    final Descriptors.FieldDescriptor field;
     Message defaultInstance = null;
 
     if (type.isExtensionNumber(fieldNumber)) {
@@ -756,7 +756,7 @@ class MessageReflection {
           field = extension.descriptor;
           defaultInstance = extension.defaultInstance;
           if (defaultInstance == null
-              && field.getJavaType() == FieldDescriptor.JavaType.MESSAGE) {
+              && field.getJavaType() == Descriptors.FieldDescriptor.JavaType.MESSAGE) {
             throw new IllegalStateException(
                 "Message-typed extension lacked default instance: " + field.getFullName());
           }
@@ -962,7 +962,7 @@ class MessageReflection {
       MergeTarget target)
       throws IOException {
 
-    FieldDescriptor field = extension.descriptor;
+    Descriptors.FieldDescriptor field = extension.descriptor;
     boolean hasOriginalValue = target.hasField(field);
 
     if (hasOriginalValue || ExtensionRegistryLite.isEagerlyParseMessageSets()) {
@@ -984,7 +984,7 @@ class MessageReflection {
       ExtensionRegistryLite extensionRegistry,
       MergeTarget target)
       throws IOException {
-    FieldDescriptor field = extension.descriptor;
+    Descriptors.FieldDescriptor field = extension.descriptor;
     Object value = target.parseMessage(input, extensionRegistry, field, extension.defaultInstance);
     target.setField(field, value);
   }

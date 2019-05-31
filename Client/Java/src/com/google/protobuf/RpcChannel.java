@@ -60,9 +60,9 @@ public interface RpcChannel {
    * method.getOutputType()}).
    */
   void callMethod(
-          Descriptors.MethodDescriptor method,
-          RpcController controller,
-          Message request,
-          Message responsePrototype,
-          RpcCallback<Message> done);
+      Descriptors.MethodDescriptor method,
+      RpcController controller,
+      Message request,
+      Message responsePrototype,
+      RpcCallback<Message> done);
 }

@@ -44,7 +44,7 @@ import java.util.Map;
 
 /**
  * An implementation of {@link Message} that can represent arbitrary types, given a {@link
- * Descriptor}.
+ * Descriptors.Descriptor}.
  *
  * @author kenton@google.com Kenton Varda
  */
@@ -663,14 +663,14 @@ public final class DynamicMessage extends AbstractMessage {
     }
 
     @Override
-    public Message.Builder getFieldBuilder(FieldDescriptor field) {
+    public com.google.protobuf.Message.Builder getFieldBuilder(FieldDescriptor field) {
       // TODO(xiangl): need implementation for dynamic message
       throw new UnsupportedOperationException(
           "getFieldBuilder() called on a dynamic message type.");
     }
 
     @Override
-    public Message.Builder getRepeatedFieldBuilder(
+    public com.google.protobuf.Message.Builder getRepeatedFieldBuilder(
         FieldDescriptor field, int index) {
       throw new UnsupportedOperationException(
           "getRepeatedFieldBuilder() called on a dynamic message type.");

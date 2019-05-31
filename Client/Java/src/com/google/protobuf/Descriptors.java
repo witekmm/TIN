@@ -951,7 +951,7 @@ public final class Descriptors {
     /**
      * Get the index of this descriptor within its parent.
      *
-     * @see Descriptor#getIndex()
+     * @see Descriptors.Descriptor#getIndex()
      */
     public int getIndex() {
       return index;
@@ -978,7 +978,7 @@ public final class Descriptors {
     /**
      * Get the field's fully-qualified name.
      *
-     * @see Descriptor#getFullName()
+     * @see Descriptors.Descriptor#getFullName()
      */
     @Override
     public String getFullName() {
@@ -1072,7 +1072,7 @@ public final class Descriptors {
       if (!isPackable()) {
         return false;
       }
-      if (getFile().getSyntax() == Syntax.PROTO2) {
+      if (getFile().getSyntax() == FileDescriptor.Syntax.PROTO2) {
         return getOptions().getPacked();
       } else {
         return !getOptions().hasPacked() || getOptions().getPacked();
@@ -1585,7 +1585,7 @@ public final class Descriptors {
     /**
      * Get the index of this descriptor within its parent.
      *
-     * @see Descriptor#getIndex()
+     * @see Descriptors.Descriptor#getIndex()
      */
     public int getIndex() {
       return index;
@@ -1606,7 +1606,7 @@ public final class Descriptors {
     /**
      * Get the type's fully-qualified name.
      *
-     * @see Descriptor#getFullName()
+     * @see Descriptors.Descriptor#getFullName()
      */
     @Override
     public String getFullName() {
@@ -1776,7 +1776,7 @@ public final class Descriptors {
     /**
      * Get the index of this descriptor within its parent.
      *
-     * @see Descriptor#getIndex()
+     * @see Descriptors.Descriptor#getIndex()
      */
     public int getIndex() {
       return index;
@@ -1808,7 +1808,7 @@ public final class Descriptors {
     /**
      * Get the value's fully-qualified name.
      *
-     * @see Descriptor#getFullName()
+     * @see Descriptors.Descriptor#getFullName()
      */
     @Override
     public String getFullName() {
@@ -1901,7 +1901,7 @@ public final class Descriptors {
     /**
      * Get the type's fully-qualified name.
      *
-     * @see Descriptor#getFullName()
+     * @see Descriptors.Descriptor#getFullName()
      */
     @Override
     public String getFullName() {
@@ -2003,7 +2003,7 @@ public final class Descriptors {
     /**
      * Get the method's fully-qualified name.
      *
-     * @see Descriptor#getFullName()
+     * @see Descriptors.Descriptor#getFullName()
      */
     @Override
     public String getFullName() {
@@ -2288,7 +2288,7 @@ public final class Descriptors {
     GenericDescriptor lookupSymbol(
         final String name,
         final GenericDescriptor relativeTo,
-        final SearchFilter filter)
+        final DescriptorPool.SearchFilter filter)
         throws DescriptorValidationException {
       // TODO(kenton):  This could be optimized in a number of ways.
 
@@ -2336,7 +2336,7 @@ public final class Descriptors {
 
             // Append firstPart and try to find
             scopeToTry.append(firstPart);
-            result = findSymbol(scopeToTry.toString(), SearchFilter.AGGREGATES_ONLY);
+            result = findSymbol(scopeToTry.toString(), DescriptorPool.SearchFilter.AGGREGATES_ONLY);
 
             if (result != null) {
               if (firstPartLength != -1) {

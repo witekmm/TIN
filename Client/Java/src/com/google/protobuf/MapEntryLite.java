@@ -128,7 +128,7 @@ public class MapEntryLite<K, V> {
         input.readMessage(subBuilder, extensionRegistry);
         return (T) subBuilder.buildPartial();
       case ENUM:
-        return (T) (Integer) input.readEnum();
+        return (T) (java.lang.Integer) input.readEnum();
       case GROUP:
         throw new RuntimeException("Groups are not allowed in maps.");
       default:

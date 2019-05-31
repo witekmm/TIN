@@ -522,7 +522,7 @@ class SmallSortedMap<K extends Comparable<K>, V> extends AbstractMap<K, V> {
 
   private class DescendingEntrySet extends EntrySet {
     @Override
-    public Iterator<Map.Entry<K, V>> iterator() {
+    public Iterator<java.util.Map.Entry<K, V>> iterator() {
       return new DescendingEntryIterator();
     }
   }

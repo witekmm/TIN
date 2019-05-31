@@ -201,8 +201,8 @@ final class MessageLiteToString {
     if (o instanceof MessageLite) { // Can happen in oneofs.
       return o == ((MessageLite) o).getDefaultInstanceForType();
     }
-    if (o instanceof Enum<?>) { // Catches oneof enums.
-      return ((Enum<?>) o).ordinal() == 0;
+    if (o instanceof java.lang.Enum<?>) { // Catches oneof enums.
+      return ((java.lang.Enum<?>) o).ordinal() == 0;
     }
 
     return false;

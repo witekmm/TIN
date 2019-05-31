@@ -65,7 +65,7 @@ public class TextFormatParseInfoTree {
    */
   private TextFormatParseInfoTree(
       Map<FieldDescriptor, List<TextFormatParseLocation>> locationsFromField,
-      Map<FieldDescriptor, List<Builder>> subtreeBuildersFromField) {
+      Map<FieldDescriptor, List<TextFormatParseInfoTree.Builder>> subtreeBuildersFromField) {
 
     // The maps are unmodifiable.  The values in the maps are unmodifiable.
     Map<FieldDescriptor, List<TextFormatParseLocation>> locs =

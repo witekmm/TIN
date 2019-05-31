@@ -46,7 +46,7 @@ public interface BlockingService {
    * passing the information to a callback.
    */
   Message callBlockingMethod(
-          Descriptors.MethodDescriptor method, RpcController controller, Message request)
+      Descriptors.MethodDescriptor method, RpcController controller, Message request)
       throws ServiceException;
 
   /** Equivalent to {@link Service#getRequestPrototype}. */

@@ -43,9 +43,9 @@ public interface BlockingRpcChannel {
    * callBlockingMethod()} is the blocking equivalent to {@link RpcChannel#callMethod}.
    */
   Message callBlockingMethod(
-          Descriptors.MethodDescriptor method,
-          RpcController controller,
-          Message request,
-          Message responsePrototype)
+      Descriptors.MethodDescriptor method,
+      RpcController controller,
+      Message request,
+      Message responsePrototype)
       throws ServiceException;
 }

@@ -278,7 +278,7 @@ final class DescriptorMessageInfoFactory implements MessageInfoFactory {
       final FieldDescriptor fd = fieldDescriptors.get(i);
       boolean enforceUtf8 = fd.getFile().getOptions().getJavaStringCheckUtf8();
       Internal.EnumVerifier enumVerifier = null;
-      if (fd.getJavaType() == FieldDescriptor.JavaType.ENUM) {
+      if (fd.getJavaType() == Descriptors.FieldDescriptor.JavaType.ENUM) {
         enumVerifier =
             new Internal.EnumVerifier() {
               @Override
@@ -302,7 +302,7 @@ final class DescriptorMessageInfoFactory implements MessageInfoFactory {
           //     V value = 2;
           //   }
           final FieldDescriptor valueField = fd.getMessageType().findFieldByNumber(2);
-          if (valueField.getJavaType() == FieldDescriptor.JavaType.ENUM) {
+          if (valueField.getJavaType() == Descriptors.FieldDescriptor.JavaType.ENUM) {
             enumVerifier =
                 new Internal.EnumVerifier() {
                   @Override
@@ -590,7 +590,7 @@ final class DescriptorMessageInfoFactory implements MessageInfoFactory {
   }
 
   static String getFieldName(FieldDescriptor fd) {
-    String name = (fd.getType() == Type.GROUP)
+    String name = (fd.getType() == FieldDescriptor.Type.GROUP)
                   ? fd.getMessageType().getName()
                   : fd.getName();
     String suffix = specialFieldNames.contains(name) ? "__" : "_";
