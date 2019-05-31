@@ -1,5 +1,4 @@
 #include "Network.h"
-#include <errno.h>
 #include <iostream>
 
 Network::Network(int maxConnections, int port, std::string ip, std::shared_ptr<ClientSessionPipes> clients):

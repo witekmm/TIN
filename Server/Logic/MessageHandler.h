@@ -26,6 +26,7 @@ public:
   int HandleGroupType(Message::ClientMessage message, std::string login, int clientId);
   //CLICommandHandler
   //will be there
+  void stopLoop();
 };
 
 #endif
