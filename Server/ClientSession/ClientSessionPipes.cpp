@@ -82,7 +82,7 @@ int ClientSessionPipes::readBytes(int socketNumber) {
             break;
         }
     }
-    cout<<"RESULT - "<<result<<endl;
+    
     if(result == 1) {
         //Message is successfully read
         ++writeMessagesCounter;
@@ -120,7 +120,7 @@ int ClientSessionPipes::writeBytes(int socketNumber) {
         pthread_mutex_unlock(&clientSessionPipesMutex);
         return 0;
     }
-    puts("BUFFER NOT EMPTY");
+    
     vector<BytesMessage>::iterator it;
     int result;
 
