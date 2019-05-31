@@ -66,14 +66,10 @@ int ClientSessionPipe::readBytesSize() {
         return -1;
     }
 
-    cout << "Received:\t" << bytesReceived <<" bytes." << endl;
-
     if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size fully read at once
         bytesMessageSizeRead = true;
         numberOfBytesToRead = convertRecvBytesToSize(tmp);
-
-        cout<<"Payload is gonna be "<<this->numberOfBytesToRead<<" bytes"<<endl;
 
         delete [] tmp;
         return 0;
@@ -87,8 +83,6 @@ int ClientSessionPipe::readBytesSize() {
         if(numberOfBytesToRead == 0) {
             numberOfBytesToRead = convertRecvBytesToSize(
                 readBytesBuffer.c_str());
-
-            cout<<"Payload is gonna be "<<this->numberOfBytesToRead<<" bytes"<<endl;
 
             bytesMessageSizeRead = true;
             readBytesBuffer.clear();
@@ -105,36 +99,33 @@ int ClientSessionPipe::readBytesMessage() {
     int bytesReceived = recv(this->socketNumber, tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
 
-    cout<<"Received - "<<bytesReceived<<endl;
-    if(bytesReceived >= 0) {
-        numberOfBytesToRead -= bytesReceived;
-
-        //string tmpString(tmp, bytesReceived);
-        string tmpString(tmp);
-        readBytesBuffer += tmpString;
-
-        if(numberOfBytesToRead == 0) {
-            //Message fully read, parse it and add to message buffer
-            Message::ClientMessage message;
-            message.ParseFromString(readBytesBuffer);
-            cout<<message.messagetype()<<message.authorizationtype()<<message.login()<<message.password();
-
-            addWriteMessage(message);
-
-            clearReadBytesVariables();
-            delete [] tmp;
-            return 1;
-        }
-
-        delete [] tmp;
-        return 0;
-
-    } else {
-        //Error while reading message
+    if(!isRecvSuccessfull(bytesReceived)) {
+        //Error while receiving message
         clearReadBytesVariables();
         delete [] tmp;
+
         return -1;
     }
+
+    numberOfBytesToRead -= bytesReceived;
+
+    string tmpString(tmp, bytesReceived);
+    readBytesBuffer += tmpString;
+
+    if(numberOfBytesToRead == 0) {
+        //Message fully read, parse it and add to message buffer
+        Message::ClientMessage message;
+        message.ParseFromString(readBytesBuffer);
+
+        addWriteMessage(message);
+
+        clearReadBytesVariables();
+        delete [] tmp;
+        return 1;
+    }
+
+    delete [] tmp;
+    return 0;
 }
 
 int ClientSessionPipe::readBytes() {
