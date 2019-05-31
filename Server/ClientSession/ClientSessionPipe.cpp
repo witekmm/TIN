@@ -44,23 +44,38 @@ void ClientSessionPipe::addWriteMessage(Message::ClientMessage message) {
     writeMessagesBuffer.push_back(message);
 }
 
+bool  ClientSessionPipe::isRecvSuccessfull(int bytesReceived) {
+    return bytesReceived != -1 && errno == 0;
+}
+
+int ClientSessionPipe::convertRecvBytesToSize(const char* recvBytes) {
+    int size = (int)*recvBytes;
+    return size;
+}
+
 int ClientSessionPipe::readBytesSize() {
     char *tmp = new char[numberOfBytesToRead];
-    //char *tmp = (char *)malloc(numberOfBytesToRead);
     int bytesReceived = recv(this->socketNumber, tmp,
         numberOfBytesToRead, MSG_DONTWAIT);
-    if(errno != 0){
-      return -1;
-    }
-    cout<<"Received: "<<bytesReceived<<" bytes."<<endl;
-    if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
-        //Message size fully read
-        bytesMessageSizeRead = true;
-      //  numberOfBytesToRead = atoi(tmp);
-        this->numberOfBytesToRead = (int)*tmp;
-        cout<<"Payload is gonna be "<<this->numberOfBytesToRead<<" bytes"<<endl;
+
+    if(!isRecvSuccessfull(bytesReceived)) {
+        //Error while receiving message size
+        clearReadBytesVariables();
         delete [] tmp;
-        //free(tmp);
+
+        return -1;
+    }
+
+    cout << "Received:\t" << bytesReceived <<" bytes." << endl;
+
+    if(bytesReceived == MESSAGE_SIZE_BYTES_NUMBER) {
+        //Message size fully read at once
+        bytesMessageSizeRead = true;
+        numberOfBytesToRead = convertRecvBytesToSize(tmp);
+
+        cout<<"Payload is gonna be "<<this->numberOfBytesToRead<<" bytes"<<endl;
+
+        delete [] tmp;
         return 0;
     } else if(bytesReceived >= 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
         //Message size partially read
@@ -70,20 +85,17 @@ int ClientSessionPipe::readBytesSize() {
         readBytesBuffer += tmpString;
 
         if(numberOfBytesToRead == 0) {
-            numberOfBytesToRead = atoi(readBytesBuffer.c_str());
-            bytesMessageSizeRead = true;
+            numberOfBytesToRead = convertRecvBytesToSize(
+                readBytesBuffer.c_str());
 
+            cout<<"Payload is gonna be "<<this->numberOfBytesToRead<<" bytes"<<endl;
+
+            bytesMessageSizeRead = true;
             readBytesBuffer.clear();
         }
-        //free(tmp);
+        
         delete [] tmp;
         return 0;
-    } else {
-        //Error while reading message size
-        clearReadBytesVariables();
-        delete [] tmp;
-        //free(tmp);
-        return -1;
     }
 }
 

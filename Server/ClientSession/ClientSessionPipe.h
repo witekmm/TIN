@@ -27,6 +27,9 @@ class ClientSessionPipe {
     int readBytesSize();
     int readBytesMessage();
 
+    bool  isRecvSuccessfull(int bytesReceived);
+    int convertRecvBytesToSize(const char* recvBytes);
+
 public:
     ClientSessionPipe(int socketNumber);
 
