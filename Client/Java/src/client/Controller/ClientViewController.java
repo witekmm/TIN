@@ -43,15 +43,15 @@ public class ClientViewController {
 
     public void pressButtonDisconnect(ActionEvent e){
         Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "You were disconnected").showAndWait();
+        connectionManager.disconnect();
         openConnectForm();
     }
 
     public void pressButtonSend(ActionEvent e){
 
-        String message = sendText.getText();
-        buffer = message.getBytes();
-
-        connectionManager.send(buffer);
+        String message = sendText.getText(),
+                groupName = "tulipany";
+        connectionManager.send(message, groupName);
         sendText.clear();
     }
 
@@ -70,6 +70,10 @@ public class ClientViewController {
         }catch (IOException io){
             io.printStackTrace();
         }
+    }
+
+    public Scene getClientScene(){
+        return ipValue.getScene();
     }
 
     public ConnectionManager getConnectionManager() {

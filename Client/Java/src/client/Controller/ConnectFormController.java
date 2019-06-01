@@ -3,6 +3,7 @@ package client.Controller;
 import client.Utils.IPValidator;
 import client.Main;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -86,6 +88,10 @@ public class ConnectFormController {
             controllerClient.ClientWindowInit(ip, port);
             stage.setMinWidth(sceneClient.getWidth());
             stage.setMinHeight(sceneClient.getHeight());
+            stage.setOnCloseRequest(we -> {
+                if(controllerClient.getConnectionManager().isConnected() )
+                    controllerClient.getConnectionManager().disconnect();
+            });
 
             loader = new FXMLLoader(getClass().getResource("/client/View/LoginView.fxml"));
             Scene sceneLogin = new Scene(loader.load());

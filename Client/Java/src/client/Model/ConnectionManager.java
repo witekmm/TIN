@@ -3,12 +3,15 @@ package client.Model;
 import client.Controller.ClientViewController;
 import client.Main;
 import client.Message;
+import com.google.protobuf.InvalidProtocolBufferException;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.nio.ByteOrder;
 
 public class ConnectionManager {
 
@@ -17,6 +20,8 @@ public class ConnectionManager {
     private Integer port;
     private Boolean connected;
     private ClientViewController client;
+    private String login;
+    private String password;
 
     private Thread receiveThread;
 
@@ -30,7 +35,14 @@ public class ConnectionManager {
     }
 
     public void connect() throws Exception {
-        receiveThread = new Thread();
+        Task work = new Task<Void>(){
+            @Override
+            protected Void call() throws Exception {
+                ReceiveThreadMethod();
+                return null;
+            }
+        };
+        receiveThread = new Thread(work);
         int connResult = connection.connect();
         if (connResult != 0) {
 
@@ -52,8 +64,28 @@ public class ConnectionManager {
         connected = false;
     }
 
-    public void send(byte[] buffer){
-        connection.send(buffer);
+    public void send(String buffer, String groupName){
+
+        Message.ClientMessage msg = Message.ClientMessage.newBuilder()
+                .setGroupActionType(Message.ClientMessage.groupActionTypes.MESSAGE)
+                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                .setMessageContent(buffer)
+                .setGroupName(groupName)
+                .build();
+
+        byte[] serialized = msg.toByteArray();
+        int msgSize = serialized.length;
+        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+        byte[] send = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, send, 0, result.length);
+        System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+        try {
+            connection.getOut().write(send);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public byte[] receive(){
@@ -62,24 +94,76 @@ public class ConnectionManager {
         return buffer;
     }
 
-    private void ReceiveThreadMethod() throws InterruptedException {
+    private void ReceiveThreadMethod() {
 
-        byte[] buffer = new byte[1024];
         while(connected){
 
-            int received = connection.receive(buffer);
-            String message = Arrays.toString(buffer);
-            if(received > 0){
-                client.getTextArea().appendText(message + '\n');
+            int received = 0;
+
+            char[] answer = new char[4];
+            try {
+                if((received = connection.getIn().read(answer, 0, 4)) == -1){
+                    System.out.println("sieknol sie1");
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            // check if connected - if not close client
-            // receiveThread.join();
+            byte[] receivedBytes = new String(answer).getBytes();
+            ByteBuffer wrapped = ByteBuffer.wrap(receivedBytes);
+            wrapped.order(ByteOrder.LITTLE_ENDIAN);
+            int answerSize = wrapped.getInt();
+
+            char[] answerMsg = new char[answerSize];
+            try {
+                if((received = connection.getIn().read(answerMsg, 0, answerSize))==-1){
+                    System.out.println("sieknol sie1");
+                    break;
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Message.ClientMessage response = null;
+            try {
+                response = Message.ClientMessage.parseFrom(new String(answerMsg).getBytes());
+            } catch (InvalidProtocolBufferException e) {
+                e.printStackTrace();
+            }
+
+            if(received > 0){
+                if(response!= null && !response.getMessageContent().isEmpty())
+                    client.getTextArea().appendText(response.getMessageContent() + '\n');
+
+                Message.ClientMessage msg = Message.ClientMessage.newBuilder()
+                        .setMessageType(Message.ClientMessage.messageTypes.REPLY)
+                        .build();
+
+                byte[] serialized = msg.toByteArray();
+                int msgSize = serialized.length;
+                byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+                byte[] send = new byte[result.length + msgSize];
+                System.arraycopy(result, 0, send, 0, result.length);
+                System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+                try {
+                    connection.getOut().write(send);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+//            if(received == -1){
+//                    disconnect();
+//                    System.out.println("sieknol sie");
+//            }
         }
     }
 
     public boolean checkUser(String login, String password) throws IOException {
 
+        this.login = login; this.password = password;
         Message.ClientMessage user = Message.ClientMessage.newBuilder()
                 .setLogin(login).setPassword(password)
                 .setAuthorizationType(Message.ClientMessage.authorizationTypes.LOG_IN)
@@ -87,36 +171,37 @@ public class ConnectionManager {
                 .build();
 
         byte[] msg = user.toByteArray();
-        int bytesToSend = msg.length;
+        int msgSize = msg.length;
+        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
 
-        connection.getOut().write(4);
-//        while(bytesToSend != 0){
-            connection.getOut().write(Arrays.toString(msg), 0, bytesToSend);
-//        }
+        byte[] send = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, send, 0, result.length);
+        System.arraycopy(msg, 0, send, result.length, msgSize);
+
+        connection.getOut().write(send);
 
         char[] answer = new char[4];
-        int received = 0;
-        // wrap
-        received = connection.getIn().read(answer, 0, 4);
+        connection.getIn().read(answer, 0, 4);
 
         byte[] receivedBytes = new String(answer).getBytes();
-        int answerSize = ByteBuffer.wrap(receivedBytes).getInt();
+        ByteBuffer wrapped = ByteBuffer.wrap(receivedBytes);
+        wrapped.order(ByteOrder.LITTLE_ENDIAN);
+        int answerSize = wrapped.getInt();
 
         char[] answerMsg = new char[answerSize];
-        int rec = 0;
-        while(answerSize != 0){
-            received = connection.getIn().read(answerMsg, rec, answerSize);
-            rec += received;
-            answerSize -= received;
-        }
+        connection.getIn().read(answerMsg, 0, answerSize);
 
         Message.ClientMessage response = Message.ClientMessage.parseFrom(new String(answerMsg).getBytes());
-        if (response.getMessageType() != Message.ClientMessage.messageTypes.REPLY)
-            System.out.println("Cos nie halo");
         return response.getReply() == Message.ClientMessage.replyStatus.POSITIVE;
     }
 
     public Thread getReceiveThread() {
         return receiveThread;
     }
+
+    public Boolean isConnected(){
+        return connected;
+    }
+
+
 }

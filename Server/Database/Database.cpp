@@ -484,6 +484,7 @@ int Database::createMsg(std::string groupName, std::string sender, int type, std
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return -1;
 }
 
 void Database::addMsgToGroup(std::string groupName, std::string sender, int type, std::string text)
@@ -566,7 +567,7 @@ int Database::getOldestMsgForUser(int userId)
 		sql::SQLString query = "SELECT m.id FROM `Message` AS m ";
 										query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
 										query+= "JOIN `User` AS u ON u.id = um.user_id ";
-										query+= "WHERE u.id = ? ASC LIMIT 1";
+										query+= "WHERE u.id = ? ORDER BY m.id ASC LIMIT 1";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, userId);
@@ -636,8 +637,8 @@ int Database::isMsgOfTypeForGroup(std::string groupName, std::string login, int 
 		sql::SQLString query = "SELECT id from `Message` AS m ";
 					   query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
 					   query+= "JOIN `User` AS u ON u.id = um.user_id ";
-						 query+= "JOIN `User_Group` AS ug on u.id = ug.user_id";
-						 query+= "JOIN `Group` AS g on g.id = ug.group_id";
+						 query+= "JOIN `User_Group` AS ug on u.id = ug.user_id ";
+						 query+= "JOIN `Group` AS g on g.id = ug.group_id ";
 					   query+= "WHERE g.name = ? AND g.type = ? AND u.login = ?";
 
 		pstmt = con->prepareStatement(query);
@@ -780,8 +781,8 @@ std::string Database::getMsgGroupName(int msgId)
 		sql::SQLString query = "SELECT name from `Group` AS g ";
 					   query+= "JOIN `User_Group` AS ug ON g.id = ug.group_id ";
 					   query+= "JOIN `User` AS u ON u.id = ug.user_id ";
-						 query+= "JOIN `User_Message` AS um on u.id = um.user_id";
-						 query+= "JOIN `Message` AS m on m.id = um.message_id";
+						 query+= "JOIN `User_Message` AS um on u.id = um.user_id ";
+						 query+= "JOIN `Message` AS m on m.id = um.message_id ";
 					   query+= "WHERE m.id = ?";
 
 		pstmt = con->prepareStatement(query);
