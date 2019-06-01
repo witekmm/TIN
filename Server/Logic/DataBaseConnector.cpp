@@ -26,26 +26,26 @@ void DataBaseConnector::sendGroupMessage(std::string content, std::string groupN
 void DataBaseConnector::createGroup(std::string groupName, std::string login, int clientId)
 {
   if(this->database.isGroup(groupName)){
-    Reply::incorrectMessage(clientId, "Group name already in use");
+    Reply::incorrectMessage(clientId, "Group name already in use", groupName, Message::ClientMessage::CREATE);
     return;
   }
   this->database.createGroup(groupName, login);
-  Reply::correctMessage(clientId);
+  Reply::correctMessage(clientId, groupName, Message::ClientMessage::CREATE);
 }
 
 void DataBaseConnector::deleteGroup(std::string groupName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist", groupName, Message::ClientMessage::DELETE);
     return;
   }
   int id = this->database.getUserId(login);
   if(!this->database.isAdministrator(groupName, id)){
-    Reply::incorrectMessage(clientId, "You can't delete group you are not a administrator");
+    Reply::incorrectMessage(clientId, "You can't delete group you are not a administrator", groupName, Message::ClientMessage::DELETE);
     return;
   }
   this->database.deleteGroup(groupName);
-  Reply::correctMessage(clientId);
+  Reply::correctMessage(clientId, groupName, Message::ClientMessage::DELETE);
 }
 
 void DataBaseConnector::requestToGroup(std::string groupName, std::string login, int clientId)
@@ -126,22 +126,23 @@ void DataBaseConnector::leaveGroup(std::string groupName, std::string login, int
 {
   //czy grupa istnieje
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist", groupName, Message::ClientMessage::LEAVE);
     return;
   }
   //czy nalezy do grupy
   if(!this->database.belongsToGroup(groupName , login)){
-    Reply::incorrectMessage(clientId, "You can't leave group you don't belong");
+    Reply::incorrectMessage(clientId, "You can't leave group you don't belong", groupName, Message::ClientMessage::LEAVE);
     return;
   }
   int id = this->database.getUserId(login);
   if(this->database.isAdministrator(groupName, id)){
     this->database.removeAllUsersFromGroup(groupName);
     this->database.deleteGroup(groupName);
+    Reply::correctMessage(clientId, groupName, Message::ClientMessage::LEAVE);
     return;
   }
   this->database.removeUserFromGroup(groupName, login);
-  Reply::correctMessage(clientId);
+  Reply::correctMessage(clientId, groupName, Message::ClientMessage::LEAVE);
 }
 
 int DataBaseConnector::logInUser(std::string login, std::string password, int clientId)
