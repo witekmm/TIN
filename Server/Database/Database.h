@@ -89,6 +89,7 @@ class Database {
     int getMsgType(int msgId);
     std::string getMsgSender(int msgId);
     std::string getMsgGroupName(int msgId);
+    void removeMsgIfForNoUser(int msgId);
 
   private:
 

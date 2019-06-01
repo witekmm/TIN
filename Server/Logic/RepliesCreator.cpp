@@ -54,6 +54,7 @@ void Reply::correctLoginMessage(int clientId, std::vector<std::string> groups){
 }
 
 void Reply::logInChoosenUser(int clientId, std::string login){
+  std::cout<<login<<" is now logged in!"<<std::endl;
   this->clients->setClientLogin(clientId, login);
 }
 
@@ -65,10 +66,13 @@ void Reply::createAndSetMessage(std::string sender, std::string content, std::st
       message.set_groupactiontype(Message::ClientMessage::MESSAGE);
       message.set_messagecontent(content);
       message.set_username(sender);
+      message.set_groupname(groupName);
       break;
     case 2:
       message.set_groupactiontype(Message::ClientMessage::REQUEST);
       message.set_username(sender);
+      message.set_groupname(groupName);
+      std::cout<<"WYSLANO REQ"<<std::endl;
       break;
     case 3:
       message.set_groupactiontype(Message::ClientMessage::ACCEPT);

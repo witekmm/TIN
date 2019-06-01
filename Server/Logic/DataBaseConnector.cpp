@@ -59,7 +59,7 @@ void DataBaseConnector::requestToGroup(std::string groupName, std::string login,
     return;
   }
   if((this->database.isMsgOfTypeForGroup(groupName , login , 2)) != -1){
-    Reply::incorrectMessage(clientId, "No request from this user");
+    Reply::incorrectMessage(clientId, "Request from this user already exist");
     return;
   }
   Reply::correctMessage(clientId);
@@ -79,21 +79,21 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
   if(!this->database.isAdministrator(groupName, id)){
     Reply::incorrectMessage(clientId, "You have no right to reply for request");
     return;
-  }
+  }/*
   int msgid = this->database.isMsgOfTypeForGroup(groupName , userName, 2);
   if(msgid == -1){
     Reply::incorrectMessage(clientId, "No request from this user");
     return;
-  }
+  }*/
   //usun go
   Reply::correctMessage(clientId);
-  this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
-  msgid = this->database.createMsg(groupName , login , 3 , "");
+  //this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
+  int msgid = this->database.createMsg(groupName , login , 3 , "");
   std::string user = this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   this->database.addUserToGroup(groupName , userName);
   int userId = Reply::findClientID(user);
   if(userId == -1) return;
-  else Reply::createAndSetMessage(login , "" ,groupName, 2 , userId);
+  else Reply::createAndSetMessage(login , "" ,groupName, 3 , userId);
 }
 
 void DataBaseConnector::declineRequest(std::string groupName, std::string userName, std::string login, int clientId)
@@ -106,20 +106,20 @@ void DataBaseConnector::declineRequest(std::string groupName, std::string userNa
   if(!this->database.isAdministrator(groupName, id)){
     Reply::incorrectMessage(clientId, "You have no right to reply for request");
     return;
-  }
+  }/*
   int msgid = this->database.isMsgOfTypeForGroup(groupName , userName, 2);
   if(msgid == -1){
     Reply::incorrectMessage(clientId, "No request from this user");
     return;
-  }
+  }*/
   //usun go
   Reply::correctMessage(clientId);
-  this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
-  msgid = this->database.createMsg(groupName , login , 4 , "");
+  //this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
+  int msgid = this->database.createMsg(groupName , login , 4 , "");
   std::string user = this->database.addMsgToUser(msgid , this->database.getUserId(userName));
   int userId = Reply::findClientID(user);
   if(userId == -1) return;
-  else Reply::createAndSetMessage(login , "" ,groupName, 2 , userId);
+  else Reply::createAndSetMessage(login , "" ,groupName, 4 , userId);
 }
 
 void DataBaseConnector::leaveGroup(std::string groupName, std::string login, int clientId)
@@ -236,5 +236,7 @@ void DataBaseConnector::getAllUsersMessagesAndSend(std::string login, int id){
 }
 
 void DataBaseConnector::deleteLastUserMessage(std::string login){
+  int temp = this->database.getOldestMsgForUser(login);
   this->database.deleteOldestMsgForUser(login);
+  this->database.removeMsgIfForNoUser(temp);
 }
