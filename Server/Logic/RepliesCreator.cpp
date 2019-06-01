@@ -12,10 +12,32 @@ void Reply::incorrectMessage(int clientId, std::string error){
   this->clients->readMessage(clientId,message);
 }
 
+void Reply::incorrectMessage(int clientId, std::string error, std::string groupName,Message::ClientMessage_groupActionTypes type){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::REPLY);
+  message.set_reply(Message::ClientMessage::NEGATIVE);
+  message.set_groupactiontype(type);
+  message.set_groupname(groupName);
+  message.set_replycontent(error);
+  //wyslij
+  std::cout<<error<<std::endl;
+  this->clients->readMessage(clientId,message);
+}
+
 void Reply::correctMessage(int clientId){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::POSITIVE);
+  puts("CORRECT MESSAGE");
+  this->clients->readMessage(clientId,message);
+}
+
+void Reply::correctMessage(int clientId, std::string groupName,Message::ClientMessage_groupActionTypes type){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::REPLY);
+  message.set_reply(Message::ClientMessage::POSITIVE);
+  message.set_groupactiontype(type);
+  message.set_groupname(groupName);
   puts("CORRECT MESSAGE");
   this->clients->readMessage(clientId,message);
 }

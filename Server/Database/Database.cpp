@@ -32,6 +32,7 @@ void Database::manageException(sql::SQLException &e)
 	std::cout << "# ERR: " << e.what();
 	std::cout << " (MySQL error code: " << e.getErrorCode();
 	std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	
 }
 
 bool Database::userInGroup(std::string groupName, std::string login)
