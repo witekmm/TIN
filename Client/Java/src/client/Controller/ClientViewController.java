@@ -2,14 +2,13 @@ package client.Controller;
 
 import client.Main;
 import client.Model.ConnectionManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +17,8 @@ public class ClientViewController {
 
     public Button sendButton;
     public Button disconnectButton;
+    public Button createGroupButton;
+    public ChoiceBox groupChoice;
     @FXML
     private TextArea messageArea;
     @FXML
@@ -26,6 +27,8 @@ public class ClientViewController {
     private Label ipValue;
     @FXML
     private Label portValue;
+    @FXML
+    private TextField groupNameRequest;
 
     private byte[] buffer;
 
@@ -50,9 +53,31 @@ public class ClientViewController {
     public void pressButtonSend(ActionEvent e){
 
         String message = sendText.getText(),
-                groupName = "tulipany";
+                groupName = groupChoice.getValue().toString();
         connectionManager.send(message, groupName);
         sendText.clear();
+    }
+
+    public void pressButtonCreateGroup(ActionEvent e){
+        String groupName = groupNameRequest.getText();
+        groupNameRequest.setText("");
+        connectionManager.createGroup(groupName);
+    }
+
+    public void pressJoinGroupButton(){
+        String groupName = groupNameRequest.getText();
+        groupNameRequest.setText("");
+        connectionManager.joinGroup(groupName);
+    }
+
+    public void pressLeaveGroupButton(){
+        String groupName = groupChoice.getValue().toString();
+        connectionManager.leaveGroup(groupName);
+    }
+
+    public void pressDeleteGroupButton(){
+        String groupName = groupChoice.getValue().toString();
+        connectionManager.deleteGroup(groupName);
     }
 
     public TextArea getTextArea(){
@@ -76,8 +101,17 @@ public class ClientViewController {
         return ipValue.getScene();
     }
 
+
+
     public ConnectionManager getConnectionManager() {
         return connectionManager;
+    }
+
+    public ChoiceBox getGroupChoice() {
+        return groupChoice;
+    }
+    public void setGroupChoice(ChoiceBox groupChoice) {
+        this.groupChoice = groupChoice;
     }
 }
 

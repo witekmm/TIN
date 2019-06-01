@@ -4,24 +4,35 @@ import client.Controller.ClientViewController;
 import client.Main;
 import client.Message;
 import com.google.protobuf.InvalidProtocolBufferException;
+import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ConnectionManager {
-
     private Connection connection;
+
     private String IP;
     private Integer port;
     private Boolean connected;
     private ClientViewController client;
     private String login;
     private String password;
+
+    private ObservableList<String> groups;
 
     private Thread receiveThread;
 
@@ -56,12 +67,103 @@ public class ConnectionManager {
 
     public void disconnect(){
         try {
+//            if(receiveThread.isAlive())
+//                receiveThread.st
             connection.end();
         } catch (IOException e) {
             Main.newAlert(Alert.AlertType.ERROR, "Disconnection error!", e.getMessage())
                     .showAndWait();
         }
         connected = false;
+    }
+
+    public void createGroup(String groupName){
+        Message.ClientMessage group = Message.ClientMessage.newBuilder()
+                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                .setGroupActionType(Message.ClientMessage.groupActionTypes.CREATE)
+                .setGroupName(groupName)
+                .build();
+
+        byte[] serialized = group.toByteArray();
+        int msgSize = serialized.length;
+        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+        byte[] send = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, send, 0, result.length);
+        System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+        try {
+            connection.getOut().write(send);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void joinGroup(String groupName) {
+        Message.ClientMessage group = Message.ClientMessage.newBuilder()
+                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                .setGroupActionType(Message.ClientMessage.groupActionTypes.REQUEST)
+                .setGroupName(groupName)
+                .build();
+
+        byte[] serialized = group.toByteArray();
+        int msgSize = serialized.length;
+        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+        byte[] send = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, send, 0, result.length);
+        System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+        try {
+            connection.getOut().write(send);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void leaveGroup(String groupName) {
+        Message.ClientMessage group = Message.ClientMessage.newBuilder()
+                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                .setGroupActionType(Message.ClientMessage.groupActionTypes.LEAVE)
+                .setGroupName(groupName)
+                .build();
+
+        byte[] serialized = group.toByteArray();
+        int msgSize = serialized.length;
+        System.out.println("leave " + msgSize);
+        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+        byte[] send = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, send, 0, result.length);
+        System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+        try {
+            connection.getOut().write(send);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteGroup(String groupName) {
+        Message.ClientMessage group = Message.ClientMessage.newBuilder()
+                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                .setGroupActionType(Message.ClientMessage.groupActionTypes.DELETE)
+                .setGroupName(groupName)
+                .build();
+
+        byte[] serialized = group.toByteArray();
+        int msgSize = serialized.length;
+        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+        byte[] send = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, send, 0, result.length);
+        System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+        try {
+            connection.getOut().write(send);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void send(String buffer, String groupName){
@@ -133,31 +235,114 @@ public class ConnectionManager {
             }
 
             if(received > 0){
-                if(response!= null && !response.getMessageContent().isEmpty())
-                    client.getTextArea().appendText(response.getMessageContent() + '\n');
 
-                Message.ClientMessage msg = Message.ClientMessage.newBuilder()
-                        .setMessageType(Message.ClientMessage.messageTypes.REPLY)
-                        .build();
+                System.out.println("dostal " + response.getGroupActionType().toString() + " username: " + response.getUserName());
+                assert response != null;
+                if(!response.getMessageContent().isEmpty())
+                    client.getTextArea().appendText(response.getUserName() +  ": " + response.getMessageContent() + '\n');
+                if(!response.getReplyContent().isEmpty())
+                    client.getTextArea().appendText("Error: " + response.getReplyContent() + '\n');
 
-                byte[] serialized = msg.toByteArray();
-                int msgSize = serialized.length;
-                byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+                if(response.getReply() == Message.ClientMessage.replyStatus.POSITIVE) {
+                    System.out.print("wszedl");
+                    if (response.getGroupActionType() == Message.ClientMessage.groupActionTypes.CREATE){
+                        client.getTextArea().appendText("Group: '" + response.getGroupName() + "' created!" + '\n');
+                        ObservableList newList = client.getGroupChoice().getItems();
+                        newList.add(response.getGroupName());
+                        client.getGroupChoice().setItems(newList);
+                    }
+                    else if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.DELETE){
+                        client.getTextArea().appendText("Group: '" + response.getGroupName() + "' deleted!");
+                        ObservableList newList = client.getGroupChoice().getItems();
+                        newList.remove(response.getGroupName());
+                        client.getGroupChoice().setItems(newList);
+                        client.getGroupChoice().setValue("");
+                    }
+                    else if (response.getGroupActionType() == Message.ClientMessage.groupActionTypes.LEAVE){
+                        client.getTextArea().appendText("Group: '" + response.getGroupName() + "' left!");
+                        ObservableList newList = client.getGroupChoice().getItems();
+                        newList.remove(response.getGroupName());
+                        client.getGroupChoice().setItems(newList);
+                        client.getGroupChoice().setValue("");
+                    }
+                }
 
-                byte[] send = new byte[result.length + msgSize];
-                System.arraycopy(result, 0, send, 0, result.length);
-                System.arraycopy(serialized, 0, send, result.length, msgSize);
+                if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST) {
 
-                try {
-                    connection.getOut().write(send);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Wszedl do wyslania");
+                    String userName = response.getUserName();
+                    String groupName = response.getGroupName();
+
+                    Thread t = new Thread(() -> Platform.runLater(() -> {
+
+                        Alert alert = Main.newAlert(Alert.AlertType.CONFIRMATION, "Request", "User: " + userName + " wants to joing group: " + groupName);
+                        ButtonType buttonAccept = new ButtonType("Accept");
+                        ButtonType buttonDecline = new ButtonType("Decline");
+                        alert.getButtonTypes().setAll(buttonAccept, buttonDecline);
+                        Optional<ButtonType> option = alert.showAndWait();
+
+                        Message.ClientMessage msg;
+                        if (option.isPresent() && option.get() == buttonAccept) {
+                            msg = Message.ClientMessage.newBuilder()
+                                    .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                                    .setGroupActionType(Message.ClientMessage.groupActionTypes.ACCEPT)
+                                    .setUserName(userName)
+                                    .setGroupName(groupName)
+                                    .build();
+                        } else {
+                            msg = Message.ClientMessage.newBuilder()
+                                    .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                                    .setGroupActionType(Message.ClientMessage.groupActionTypes.DECLINE)
+                                    .setUserName(userName)
+                                    .setGroupName(groupName)
+                                    .build();
+                        }
+
+                        byte[] serialized = msg.toByteArray();
+                        int msgSize = serialized.length;
+                        byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+                        byte[] send = new byte[result.length + msgSize];
+                        System.arraycopy(result, 0, send, 0, result.length);
+                        System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+                        try {
+                            connection.getOut().write(send);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }));
+                    t.start();
+                }
+
+                if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT){
+                    client.getTextArea().appendText("Request accepted. Joined group: " + response.getGroupName() + '\n');
+                    ObservableList newList = client.getGroupChoice().getItems();
+                    newList.add(response.getGroupName());
+                    client.getGroupChoice().setItems(newList);
+                    client.getGroupChoice().setValue("");
+                }
+
+                if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY) {
+                    Message.ClientMessage msg = Message.ClientMessage.newBuilder()
+                            .setMessageType(Message.ClientMessage.messageTypes.REPLY)
+                            .build();
+
+                    byte[] serialized = msg.toByteArray();
+                    int msgSize = serialized.length;
+                    byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
+
+                    byte[] send = new byte[result.length + msgSize];
+                    System.arraycopy(result, 0, send, 0, result.length);
+                    System.arraycopy(serialized, 0, send, result.length, msgSize);
+
+                    try {
+                        connection.getOut().write(send);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-//            if(received == -1){
-//                    disconnect();
-//                    System.out.println("sieknol sie");
-//            }
         }
     }
 
@@ -192,6 +377,10 @@ public class ConnectionManager {
         connection.getIn().read(answerMsg, 0, answerSize);
 
         Message.ClientMessage response = Message.ClientMessage.parseFrom(new String(answerMsg).getBytes());
+
+        ObservableList<String> groups = FXCollections.observableArrayList(response.getGroupsList());
+
+        client.getGroupChoice().setItems(groups);
         return response.getReply() == Message.ClientMessage.replyStatus.POSITIVE;
     }
 
@@ -203,5 +392,7 @@ public class ConnectionManager {
         return connected;
     }
 
-
+    public ObservableList<String> getGroups() {
+        return groups;
+    }
 }

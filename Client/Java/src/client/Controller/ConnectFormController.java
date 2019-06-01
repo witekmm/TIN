@@ -88,6 +88,7 @@ public class ConnectFormController {
             controllerClient.ClientWindowInit(ip, port);
             stage.setMinWidth(sceneClient.getWidth());
             stage.setMinHeight(sceneClient.getHeight());
+            // when stage is closed
             stage.setOnCloseRequest(we -> {
                 if(controllerClient.getConnectionManager().isConnected() )
                     controllerClient.getConnectionManager().disconnect();
