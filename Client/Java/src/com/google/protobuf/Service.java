@@ -75,10 +75,10 @@ public interface Service {
    * </ul>
    */
   void callMethod(
-          Descriptors.MethodDescriptor method,
-          RpcController controller,
-          Message request,
-          RpcCallback<Message> done);
+      Descriptors.MethodDescriptor method,
+      RpcController controller,
+      Message request,
+      RpcCallback<Message> done);
 
   /**
    * {@code callMethod()} requires that the request passed in is of a particular subclass of {@code

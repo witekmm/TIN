@@ -156,7 +156,7 @@ public abstract class ByteString implements Iterable<Byte>, Serializable {
   abstract byte internalByteAt(int index);
 
   /**
-   * Return a {@link ByteIterator} over the bytes in the ByteString. To avoid
+   * Return a {@link ByteString.ByteIterator} over the bytes in the ByteString. To avoid
    * auto-boxing, you may get the iterator manually and call {@link ByteIterator#nextByte()}.
    *
    * @return the iterator
@@ -943,7 +943,7 @@ public abstract class ByteString implements Iterable<Byte>, Serializable {
    * Creates a new {@link Output} with the given initial capacity. Call {@link
    * Output#toByteString()} to create the {@code ByteString} instance.
    *
-   * <p>A {@link Output} offers the same functionality as a {@link
+   * <p>A {@link ByteString.Output} offers the same functionality as a {@link
    * ByteArrayOutputStream}, except that it returns a {@link ByteString} rather than a {@code byte}
    * array.
    *
@@ -958,7 +958,7 @@ public abstract class ByteString implements Iterable<Byte>, Serializable {
    * Creates a new {@link Output}. Call {@link Output#toByteString()} to create the {@code
    * ByteString} instance.
    *
-   * <p>A {@link Output} offers the same functionality as a {@link
+   * <p>A {@link ByteString.Output} offers the same functionality as a {@link
    * ByteArrayOutputStream}, except that it returns a {@link ByteString} rather than a {@code byte
    * array}.
    *
@@ -1272,7 +1272,7 @@ public abstract class ByteString implements Iterable<Byte>, Serializable {
   }
 
   /**
-   * This class implements a {@link ByteString} backed by a single array of
+   * This class implements a {@link com.google.protobuf.ByteString} backed by a single array of
    * bytes, contiguous in memory. It supports substring by pointing to only a sub-range of the
    * underlying byte array, meaning that a substring will reference the full byte-array of the
    * string it's made from, exactly as with {@link String}.
@@ -1281,7 +1281,7 @@ public abstract class ByteString implements Iterable<Byte>, Serializable {
    */
   // Keep this class private to avoid deadlocks in classloading across threads as ByteString's
   // static initializer loads LiteralByteString and another thread loads LiteralByteString.
-  private static class LiteralByteString extends LeafByteString {
+  private static class LiteralByteString extends ByteString.LeafByteString {
     private static final long serialVersionUID = 1L;
 
     protected final byte[] bytes;

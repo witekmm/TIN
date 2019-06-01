@@ -48,7 +48,7 @@ import java.util.NoSuchElementException;
 /**
  * Class to represent {@code ByteStrings} formed by concatenation of other ByteStrings, without
  * copying the data in the pieces. The concatenation is represented as a tree whose leaf nodes are
- * each a {@link LeafByteString}.
+ * each a {@link com.google.protobuf.ByteString.LeafByteString}.
  *
  * <p>Most of the operation here is inspired by the now-famous paper <a
  * href="https://web.archive.org/web/20060202015456/http://www.cs.ubc.ca/local/reading/proceedings/spe91-95/spe/vol25/issue12/spe986.pdf">
@@ -154,7 +154,7 @@ final class RopeByteString extends ByteString {
   /**
    * Concatenate the given strings while performing various optimizations to slow the growth rate of
    * tree depth and tree node count. The result is either a {@link
-   * LeafByteString} or a {@link RopeByteString} depending on which
+   * com.google.protobuf.ByteString.LeafByteString} or a {@link RopeByteString} depending on which
    * optimizations, if any, were applied.
    *
    * <p>Small pieces of length less than {@link ByteString#CONCATENATE_BY_COPY_SIZE} may be copied
@@ -338,7 +338,7 @@ final class RopeByteString extends ByteString {
    *
    * <p>Substrings of {@code length < 2} should result in at most a single recursive call chain,
    * terminating at a leaf node. Thus the result will be a {@link
-   * LeafByteString}.
+   * com.google.protobuf.ByteString.LeafByteString}.
    *
    * @param beginIndex start at this index
    * @param endIndex the last character is the one before this index
@@ -759,7 +759,7 @@ final class RopeByteString extends ByteString {
     }
 
     /**
-     * Returns the next item and advances one {@link LeafByteString}.
+     * Returns the next item and advances one {@link com.google.protobuf.ByteString.LeafByteString}.
      *
      * @return next non-empty LeafByteString or {@code null}
      */

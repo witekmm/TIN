@@ -45,9 +45,13 @@ bool ClientSessionPipes::isWriteBytesBufferEmpty() {
 pair<Client, Message::ClientMessage> ClientSessionPipes::writeMessage() {
     pthread_mutex_lock(&clientSessionPipesMutex);
 
-    if(isWriteMessagesBufferEmpty()) {
-        pthread_cond_wait(&writeMessagesBufferNotEmpty,
-            &clientSessionPipesMutex);
+    while(isWriteMessagesBufferEmpty()) {
+        struct timespec waitTime;
+        clock_gettime(CLOCK_REALTIME, &waitTime);
+        waitTime.tv_sec += WRITE_MESSAGE_COND_WAIT_SEC;
+
+        pthread_cond_timedwait(&writeMessagesBufferNotEmpty,
+            &clientSessionPipesMutex, &waitTime);
     }
 
     pair<Client, Message::ClientMessage> message =

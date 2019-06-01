@@ -204,7 +204,7 @@ public abstract class GeneratedMessage extends AbstractMessage
    * field is set iff hasField() returns true for that field.  A "repeated"
    * field is set iff getRepeatedFieldCount() is greater than zero.  The
    * values are exactly what would be returned by calling
-   * {@link #getFieldRaw(FieldDescriptor)} for each field.  The map
+   * {@link #getFieldRaw(Descriptors.FieldDescriptor)} for each field.  The map
    * is guaranteed to be a sorted map, so iterating over it will return fields
    * in order by field number.
    */
@@ -742,47 +742,47 @@ public abstract class GeneratedMessage extends AbstractMessage
 
     /** Check if a singular extension is present. */
     <Type> boolean hasExtension(
-            ExtensionLite<MessageType, Type> extension);
+        ExtensionLite<MessageType, Type> extension);
 
     /** Get the number of elements in a repeated extension. */
     <Type> int getExtensionCount(
-            ExtensionLite<MessageType, List<Type>> extension);
+        ExtensionLite<MessageType, List<Type>> extension);
 
     /** Get the value of an extension. */
     <Type> Type getExtension(
-            ExtensionLite<MessageType, Type> extension);
+        ExtensionLite<MessageType, Type> extension);
 
     /** Get one element of a repeated extension. */
     <Type> Type getExtension(
-            ExtensionLite<MessageType, List<Type>> extension,
-            int index);
+        ExtensionLite<MessageType, List<Type>> extension,
+        int index);
 
     /** Check if a singular extension is present. */
     <Type> boolean hasExtension(
-            Extension<MessageType, Type> extension);
+        Extension<MessageType, Type> extension);
     /** Check if a singular extension is present. */
     <Type> boolean hasExtension(
-            GeneratedExtension<MessageType, Type> extension);
+        GeneratedExtension<MessageType, Type> extension);
     /** Get the number of elements in a repeated extension. */
     <Type> int getExtensionCount(
-            Extension<MessageType, List<Type>> extension);
+        Extension<MessageType, List<Type>> extension);
     /** Get the number of elements in a repeated extension. */
     <Type> int getExtensionCount(
-            GeneratedExtension<MessageType, List<Type>> extension);
+        GeneratedExtension<MessageType, List<Type>> extension);
     /** Get the value of an extension. */
     <Type> Type getExtension(
-            Extension<MessageType, Type> extension);
+        Extension<MessageType, Type> extension);
     /** Get the value of an extension. */
     <Type> Type getExtension(
-            GeneratedExtension<MessageType, Type> extension);
+        GeneratedExtension<MessageType, Type> extension);
     /** Get one element of a repeated extension. */
     <Type> Type getExtension(
-            Extension<MessageType, List<Type>> extension,
-            int index);
+        Extension<MessageType, List<Type>> extension,
+        int index);
     /** Get one element of a repeated extension. */
     <Type> Type getExtension(
-            GeneratedExtension<MessageType, List<Type>> extension,
-            int index);
+        GeneratedExtension<MessageType, List<Type>> extension,
+        int index);
   }
 
   /**
@@ -2165,25 +2165,25 @@ public abstract class GeneratedMessage extends AbstractMessage
      */
     private interface FieldAccessor {
       Object get(GeneratedMessage message);
-      Object get(Builder builder);
+      Object get(GeneratedMessage.Builder builder);
       Object getRaw(GeneratedMessage message);
-      Object getRaw(Builder builder);
+      Object getRaw(GeneratedMessage.Builder builder);
       void set(Builder builder, Object value);
       Object getRepeated(GeneratedMessage message, int index);
-      Object getRepeated(Builder builder, int index);
+      Object getRepeated(GeneratedMessage.Builder builder, int index);
       Object getRepeatedRaw(GeneratedMessage message, int index);
-      Object getRepeatedRaw(Builder builder, int index);
+      Object getRepeatedRaw(GeneratedMessage.Builder builder, int index);
       void setRepeated(Builder builder,
                        int index, Object value);
       void addRepeated(Builder builder, Object value);
       boolean has(GeneratedMessage message);
-      boolean has(Builder builder);
+      boolean has(GeneratedMessage.Builder builder);
       int getRepeatedCount(GeneratedMessage message);
-      int getRepeatedCount(Builder builder);
+      int getRepeatedCount(GeneratedMessage.Builder builder);
       void clear(Builder builder);
       Message.Builder newBuilder();
-      Message.Builder getBuilder(Builder builder);
-      Message.Builder getRepeatedBuilder(Builder builder,
+      Message.Builder getBuilder(GeneratedMessage.Builder builder);
+      Message.Builder getRepeatedBuilder(GeneratedMessage.Builder builder,
                                          int index);
     }
 
@@ -2213,7 +2213,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return true;
       }
 
-      public boolean has(Builder builder) {
+      public boolean has(GeneratedMessage.Builder builder) {
         if (((Internal.EnumLite) invokeOrDie(caseMethodBuilder, builder)).getNumber() == 0) {
           return false;
         }
@@ -2228,7 +2228,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return null;
       }
 
-      public FieldDescriptor get(Builder builder) {
+      public FieldDescriptor get(GeneratedMessage.Builder builder) {
         int fieldNumber = ((Internal.EnumLite) invokeOrDie(caseMethodBuilder, builder)).getNumber();
         if (fieldNumber > 0) {
           return descriptor.findFieldByNumber(fieldNumber);
@@ -2292,7 +2292,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return ((Internal.EnumLite) invokeOrDie(caseMethod, message)).getNumber();
       }
 
-      private int getOneofFieldNumber(final Builder builder) {
+      private int getOneofFieldNumber(final GeneratedMessage.Builder builder) {
         return ((Internal.EnumLite) invokeOrDie(caseMethodBuilder, builder)).getNumber();
       }
 
@@ -2301,7 +2301,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return invokeOrDie(getMethod, message);
       }
       @Override
-      public Object get(Builder builder) {
+      public Object get(GeneratedMessage.Builder builder) {
         return invokeOrDie(getMethodBuilder, builder);
       }
       @Override
@@ -2309,7 +2309,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return get(message);
       }
       @Override
-      public Object getRaw(Builder builder) {
+      public Object getRaw(GeneratedMessage.Builder builder) {
         return get(builder);
       }
       @Override
@@ -2327,12 +2327,12 @@ public abstract class GeneratedMessage extends AbstractMessage
           "getRepeatedFieldRaw() called on a singular field.");
       }
       @Override
-      public Object getRepeated(Builder builder, int index) {
+      public Object getRepeated(GeneratedMessage.Builder builder, int index) {
         throw new UnsupportedOperationException(
           "getRepeatedField() called on a singular field.");
       }
       @Override
-      public Object getRepeatedRaw(Builder builder, int index) {
+      public Object getRepeatedRaw(GeneratedMessage.Builder builder, int index) {
         throw new UnsupportedOperationException(
           "getRepeatedFieldRaw() called on a singular field.");
       }
@@ -2357,7 +2357,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return (Boolean) invokeOrDie(hasMethod, message);
       }
       @Override
-      public boolean has(Builder builder) {
+      public boolean has(GeneratedMessage.Builder builder) {
         if (!hasHasMethod) {
           if (isOneofField) {
             return getOneofFieldNumber(builder) == field.getNumber();
@@ -2372,7 +2372,7 @@ public abstract class GeneratedMessage extends AbstractMessage
           "getRepeatedFieldSize() called on a singular field.");
       }
       @Override
-      public int getRepeatedCount(Builder builder) {
+      public int getRepeatedCount(GeneratedMessage.Builder builder) {
         throw new UnsupportedOperationException(
           "getRepeatedFieldSize() called on a singular field.");
       }
@@ -2386,12 +2386,12 @@ public abstract class GeneratedMessage extends AbstractMessage
           "newBuilderForField() called on a non-Message type.");
       }
       @Override
-      public Message.Builder getBuilder(Builder builder) {
+      public Message.Builder getBuilder(GeneratedMessage.Builder builder) {
         throw new UnsupportedOperationException(
           "getFieldBuilder() called on a non-Message type.");
       }
       @Override
-      public Message.Builder getRepeatedBuilder(Builder builder, int index) {
+      public Message.Builder getRepeatedBuilder(GeneratedMessage.Builder builder, int index) {
         throw new UnsupportedOperationException(
           "getRepeatedFieldBuilder() called on a non-Message type.");
       }
@@ -2440,7 +2440,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return invokeOrDie(getMethod, message);
       }
       @Override
-      public Object get(Builder builder) {
+      public Object get(GeneratedMessage.Builder builder) {
         return invokeOrDie(getMethodBuilder, builder);
       }
       @Override
@@ -2448,7 +2448,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return get(message);
       }
       @Override
-      public Object getRaw(Builder builder) {
+      public Object getRaw(GeneratedMessage.Builder builder) {
         return get(builder);
       }
       @Override
@@ -2467,7 +2467,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return invokeOrDie(getRepeatedMethod, message, index);
       }
       @Override
-      public Object getRepeated(Builder builder, int index) {
+      public Object getRepeated(GeneratedMessage.Builder builder, int index) {
         return invokeOrDie(getRepeatedMethodBuilder, builder, index);
       }
       @Override
@@ -2475,7 +2475,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return getRepeated(message, index);
       }
       @Override
-      public Object getRepeatedRaw(Builder builder, int index) {
+      public Object getRepeatedRaw(GeneratedMessage.Builder builder, int index) {
         return getRepeated(builder, index);
       }
       @Override
@@ -2492,7 +2492,7 @@ public abstract class GeneratedMessage extends AbstractMessage
           "hasField() called on a repeated field.");
       }
       @Override
-      public boolean has(Builder builder) {
+      public boolean has(GeneratedMessage.Builder builder) {
         throw new UnsupportedOperationException(
           "hasField() called on a repeated field.");
       }
@@ -2501,7 +2501,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return (Integer) invokeOrDie(getCountMethod, message);
       }
       @Override
-      public int getRepeatedCount(Builder builder) {
+      public int getRepeatedCount(GeneratedMessage.Builder builder) {
         return (Integer) invokeOrDie(getCountMethodBuilder, builder);
       }
       @Override
@@ -2514,12 +2514,12 @@ public abstract class GeneratedMessage extends AbstractMessage
           "newBuilderForField() called on a non-Message type.");
       }
       @Override
-      public Message.Builder getBuilder(Builder builder) {
+      public Message.Builder getBuilder(GeneratedMessage.Builder builder) {
         throw new UnsupportedOperationException(
           "getFieldBuilder() called on a non-Message type.");
       }
       @Override
-      public Message.Builder getRepeatedBuilder(Builder builder, int index) {
+      public Message.Builder getRepeatedBuilder(GeneratedMessage.Builder builder, int index) {
         throw new UnsupportedOperationException(
           "getRepeatedFieldBuilder() called on a non-Message type.");
       }
@@ -2546,12 +2546,12 @@ public abstract class GeneratedMessage extends AbstractMessage
         return (MapField<?, ?>) message.internalGetMapField(field.getNumber());
       }
 
-      private MapField<?, ?> getMapField(Builder builder) {
+      private MapField<?, ?> getMapField(GeneratedMessage.Builder builder) {
         return (MapField<?, ?>) builder.internalGetMapField(field.getNumber());
       }
 
       private MapField<?, ?> getMutableMapField(
-          Builder builder) {
+          GeneratedMessage.Builder builder) {
         return (MapField<?, ?>) builder.internalGetMutableMapField(
             field.getNumber());
       }
@@ -2582,7 +2582,7 @@ public abstract class GeneratedMessage extends AbstractMessage
       }
 
       @Override
-      public Object getRaw(Builder builder) {
+      public Object getRaw(GeneratedMessage.Builder builder) {
         return get(builder);
       }
 
@@ -2652,18 +2652,18 @@ public abstract class GeneratedMessage extends AbstractMessage
       }
 
       @Override
-      public Message.Builder newBuilder() {
+      public com.google.protobuf.Message.Builder newBuilder() {
         return mapEntryMessageDefaultInstance.newBuilderForType();
       }
 
       @Override
-      public Message.Builder getBuilder(Builder builder) {
+      public com.google.protobuf.Message.Builder getBuilder(Builder builder) {
         throw new UnsupportedOperationException(
             "Nested builder not supported for map fields.");
       }
 
       @Override
-      public Message.Builder getRepeatedBuilder(Builder builder, int index) {
+      public com.google.protobuf.Message.Builder getRepeatedBuilder(Builder builder, int index) {
         throw new UnsupportedOperationException(
             "Nested builder not supported for map fields.");
       }
@@ -2718,7 +2718,7 @@ public abstract class GeneratedMessage extends AbstractMessage
       }
 
       @Override
-      public Object get(final Builder builder) {
+      public Object get(final GeneratedMessage.Builder builder) {
         if (supportUnknownEnumValue) {
           int value = (Integer) invokeOrDie(getValueMethodBuilder, builder);
           return enumDescriptor.findValueByNumberCreatingIfUnknown(value);
@@ -2788,7 +2788,7 @@ public abstract class GeneratedMessage extends AbstractMessage
 
       @Override
       @SuppressWarnings("unchecked")
-      public Object get(final Builder builder) {
+      public Object get(final GeneratedMessage.Builder builder) {
         final List newList = new ArrayList();
         final int size = getRepeatedCount(builder);
         for (int i = 0; i < size; i++) {
@@ -2808,7 +2808,7 @@ public abstract class GeneratedMessage extends AbstractMessage
           super.getRepeated(message, index));
       }
       @Override
-      public Object getRepeated(final Builder builder,
+      public Object getRepeated(final GeneratedMessage.Builder builder,
                                 final int index) {
         if (supportUnknownEnumValue) {
           int value = (Integer) invokeOrDie(getRepeatedValueMethodBuilder, builder, index);
@@ -2879,12 +2879,12 @@ public abstract class GeneratedMessage extends AbstractMessage
       }
 
       @Override
-      public Object getRaw(Builder builder) {
+      public Object getRaw(GeneratedMessage.Builder builder) {
         return invokeOrDie(getBytesMethodBuilder, builder);
       }
 
       @Override
-      public void set(Builder builder, Object value) {
+      public void set(GeneratedMessage.Builder builder, Object value) {
         if (value instanceof ByteString) {
           invokeOrDie(setBytesMethodBuilder, builder, value);
         } else {
@@ -2935,7 +2935,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         return (Message.Builder) invokeOrDie(newBuilderMethod, null);
       }
       @Override
-      public Message.Builder getBuilder(Builder builder) {
+      public Message.Builder getBuilder(GeneratedMessage.Builder builder) {
         return (Message.Builder) invokeOrDie(getBuilderMethodBuilder, builder);
       }
     }
@@ -2984,7 +2984,7 @@ public abstract class GeneratedMessage extends AbstractMessage
       }
       @Override
       public Message.Builder getRepeatedBuilder(
-          final Builder builder, final int index) {
+          final GeneratedMessage.Builder builder, final int index) {
         return (Message.Builder) invokeOrDie(
             getBuilderMethodBuilder, builder, index);
       }

@@ -286,10 +286,10 @@ interface Reader {
    * @param targetType the type of the elements stored in the {@code target} list.
    */
   <T> void readMessageList(
-          List<T> target, Schema<T> schema, ExtensionRegistryLite extensionRegistry) throws IOException;
+      List<T> target, Schema<T> schema, ExtensionRegistryLite extensionRegistry) throws IOException;
 
   <T> void readMessageList(
-          List<T> target, Class<T> targetType, ExtensionRegistryLite extensionRegistry)
+      List<T> target, Class<T> targetType, ExtensionRegistryLite extensionRegistry)
       throws IOException;
 
   /**
@@ -301,12 +301,12 @@ interface Reader {
    */
   @Deprecated
   <T> void readGroupList(
-          List<T> target, Class<T> targetType, ExtensionRegistryLite extensionRegistry)
+      List<T> target, Class<T> targetType, ExtensionRegistryLite extensionRegistry)
       throws IOException;
 
   @Deprecated
   <T> void readGroupList(
-          List<T> target, Schema<T> targetType, ExtensionRegistryLite extensionRegistry)
+      List<T> target, Schema<T> targetType, ExtensionRegistryLite extensionRegistry)
       throws IOException;
 
   /**
@@ -372,8 +372,8 @@ interface Reader {
    * @param extensionRegistry the extension registry for parsing message value fields.
    */
   <K, V> void readMap(
-          Map<K, V> target,
-          MapEntryLite.Metadata<K, V> mapDefaultEntry,
-          ExtensionRegistryLite extensionRegistry)
+      Map<K, V> target,
+      MapEntryLite.Metadata<K, V> mapDefaultEntry,
+      ExtensionRegistryLite extensionRegistry)
       throws IOException;
 }

@@ -88,13 +88,13 @@ final class FieldSet<
   }
 
   /** Construct a new FieldSet. */
-  public static <T extends FieldDescriptorLite<T>> FieldSet<T> newFieldSet() {
+  public static <T extends FieldSet.FieldDescriptorLite<T>> FieldSet<T> newFieldSet() {
     return new FieldSet<T>();
   }
 
   /** Get an immutable empty FieldSet. */
   @SuppressWarnings("unchecked")
-  public static <T extends FieldDescriptorLite<T>> FieldSet<T> emptySet() {
+  public static <T extends FieldSet.FieldDescriptorLite<T>> FieldSet<T> emptySet() {
     return DEFAULT_INSTANCE;
   }
 

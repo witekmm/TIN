@@ -172,14 +172,14 @@ public abstract class GeneratedMessageLite<
 
   protected final <
           MessageType extends GeneratedMessageLite<MessageType, BuilderType>,
-          BuilderType extends Builder<MessageType, BuilderType>>
+          BuilderType extends GeneratedMessageLite.Builder<MessageType, BuilderType>>
       BuilderType createBuilder() {
     return (BuilderType) dynamicMethod(MethodToInvoke.NEW_BUILDER);
   }
 
   protected final <
           MessageType extends GeneratedMessageLite<MessageType, BuilderType>,
-          BuilderType extends Builder<MessageType, BuilderType>>
+          BuilderType extends GeneratedMessageLite.Builder<MessageType, BuilderType>>
       BuilderType createBuilder(MessageType prototype) {
     return ((BuilderType) createBuilder()).mergeFrom(prototype);
   }
@@ -445,7 +445,7 @@ public abstract class GeneratedMessageLite<
 
     @Override
     public BuilderType mergeFrom(
-        CodedInputStream input,
+        com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws IOException {
       copyOnWrite();
@@ -468,7 +468,7 @@ public abstract class GeneratedMessageLite<
   // =================================================================
   // Extensions-related stuff
 
-  /** Lite equivalent of {@link GeneratedMessage.ExtendableMessageOrBuilder}. */
+  /** Lite equivalent of {@link com.google.protobuf.GeneratedMessage.ExtendableMessageOrBuilder}. */
   public interface ExtendableMessageOrBuilder<
           MessageType extends ExtendableMessage<MessageType, BuilderType>,
           BuilderType extends ExtendableBuilder<MessageType, BuilderType>>
@@ -563,7 +563,7 @@ public abstract class GeneratedMessageLite<
       if (packed) {
         int length = input.readRawVarint32();
         int limit = input.pushLimit(length);
-        if (extension.descriptor.getLiteType() == FieldType.ENUM) {
+        if (extension.descriptor.getLiteType() == WireFormat.FieldType.ENUM) {
           while (input.getBytesUntilLimit() > 0) {
             int rawValue = input.readEnum();
             Object value = extension.descriptor.getEnumType().findValueByNumber(rawValue);
@@ -599,7 +599,7 @@ public abstract class GeneratedMessageLite<
               if (subBuilder == null) {
                 subBuilder = extension.getMessageDefaultInstance().newBuilderForType();
               }
-              if (extension.descriptor.getLiteType() == FieldType.GROUP) {
+              if (extension.descriptor.getLiteType() == WireFormat.FieldType.GROUP) {
                 input.readGroup(extension.getNumber(), subBuilder, extensionRegistry);
               } else {
                 input.readMessage(subBuilder, extensionRegistry);
@@ -1040,7 +1040,7 @@ public abstract class GeneratedMessageLite<
           final MessageLite messageDefaultInstance,
           final Internal.EnumLiteMap<?> enumTypeMap,
           final int number,
-          final FieldType type,
+          final WireFormat.FieldType type,
           final Class singularType) {
     return new GeneratedExtension<ContainingType, Type>(
         containingTypeDefaultInstance,
@@ -1058,7 +1058,7 @@ public abstract class GeneratedMessageLite<
           final MessageLite messageDefaultInstance,
           final Internal.EnumLiteMap<?> enumTypeMap,
           final int number,
-          final FieldType type,
+          final WireFormat.FieldType type,
           final boolean isPacked,
           final Class singularType) {
     @SuppressWarnings("unchecked") // Subclasses ensure Type is a List
@@ -1076,7 +1076,7 @@ public abstract class GeneratedMessageLite<
     ExtensionDescriptor(
         final Internal.EnumLiteMap<?> enumTypeMap,
         final int number,
-        final FieldType type,
+        final WireFormat.FieldType type,
         final boolean isRepeated,
         final boolean isPacked) {
       this.enumTypeMap = enumTypeMap;
@@ -1088,7 +1088,7 @@ public abstract class GeneratedMessageLite<
 
     final Internal.EnumLiteMap<?> enumTypeMap;
     final int number;
-    final FieldType type;
+    final WireFormat.FieldType type;
     final boolean isRepeated;
     final boolean isPacked;
 
@@ -1098,7 +1098,7 @@ public abstract class GeneratedMessageLite<
     }
 
     @Override
-    public FieldType getLiteType() {
+    public WireFormat.FieldType getLiteType() {
       return type;
     }
 
@@ -1197,7 +1197,7 @@ public abstract class GeneratedMessageLite<
       if (containingTypeDefaultInstance == null) {
         throw new IllegalArgumentException("Null containingTypeDefaultInstance");
       }
-      if (descriptor.getLiteType() == FieldType.MESSAGE
+      if (descriptor.getLiteType() == WireFormat.FieldType.MESSAGE
           && messageDefaultInstance == null) {
         throw new IllegalArgumentException("Null messageDefaultInstance");
       }
@@ -1317,7 +1317,7 @@ public abstract class GeneratedMessageLite<
     private final byte[] asBytes;
 
     /**
-     * Creates the serialized form by calling {@link MessageLite#toByteArray}.
+     * Creates the serialized form by calling {@link com.google.protobuf.MessageLite#toByteArray}.
      *
      * @param regularForm the message to serialize
      */

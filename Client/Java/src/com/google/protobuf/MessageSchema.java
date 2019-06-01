@@ -470,11 +470,11 @@ final class MessageSchema<T> implements Schema<T> {
           }
         }
 
-        final Field oneofField;
+        final java.lang.reflect.Field oneofField;
         int index = oneofIndex * 2;
         Object o = messageInfoObjects[index];
-        if (o instanceof Field) {
-          oneofField = (Field) o;
+        if (o instanceof java.lang.reflect.Field) {
+          oneofField = (java.lang.reflect.Field) o;
         } else {
           oneofField = reflectField(messageClass, (String) o);
           // Memoize java.lang.reflect.Field instances for oneof/hasbits fields, since they're
@@ -486,11 +486,11 @@ final class MessageSchema<T> implements Schema<T> {
 
         fieldOffset = (int) unsafe.objectFieldOffset(oneofField);
 
-        final Field oneofCaseField;
+        final java.lang.reflect.Field oneofCaseField;
         index++;
         o = messageInfoObjects[index];
-        if (o instanceof Field) {
-          oneofCaseField = (Field) o;
+        if (o instanceof java.lang.reflect.Field) {
+          oneofCaseField = (java.lang.reflect.Field) o;
         } else {
           oneofCaseField = reflectField(messageClass, (String) o);
           messageInfoObjects[index] = oneofCaseField;
@@ -533,11 +533,11 @@ final class MessageSchema<T> implements Schema<T> {
           }
           int hasBitsIndex = next;
 
-          final Field hasBitsField;
+          final java.lang.reflect.Field hasBitsField;
           int index = oneofCount * 2 + hasBitsIndex / 32;
           Object o = messageInfoObjects[index];
-          if (o instanceof Field) {
-            hasBitsField = (Field) o;
+          if (o instanceof java.lang.reflect.Field) {
+            hasBitsField = (java.lang.reflect.Field) o;
           } else {
             hasBitsField = reflectField(messageClass, (String) o);
             messageInfoObjects[index] = hasBitsField;
@@ -584,14 +584,14 @@ final class MessageSchema<T> implements Schema<T> {
         mapFieldSchema);
   }
 
-  private static Field reflectField(Class<?> messageClass, String fieldName) {
+  private static java.lang.reflect.Field reflectField(Class<?> messageClass, String fieldName) {
     try {
       return messageClass.getDeclaredField(fieldName);
     } catch (NoSuchFieldException e) {
       // Some Samsung devices lie about what fields are present via the getDeclaredField API so
       // we do the for loop properly that they seem to have messed up...
-      Field[] fields = messageClass.getDeclaredFields();
-      for (Field field : fields) {
+      java.lang.reflect.Field[] fields = messageClass.getDeclaredFields();
+      for (java.lang.reflect.Field field : fields) {
         if (fieldName.equals(field.getName())) {
           return field;
         }
@@ -3827,7 +3827,7 @@ final class MessageSchema<T> implements Schema<T> {
     if (mapField != null) {
       writer.writeMap(
           number,
-          (Metadata<K, V>) mapFieldSchema.forMapMetadata(getMapFieldDefaultEntry(pos)),
+          (MapEntryLite.Metadata<K, V>) mapFieldSchema.forMapMetadata(getMapFieldDefaultEntry(pos)),
           (Map<K, V>) mapFieldSchema.forMapData(mapField));
     }
   }
@@ -4414,7 +4414,7 @@ final class MessageSchema<T> implements Schema<T> {
       byte[] data,
       int position,
       int limit,
-      Metadata<K, V> metadata,
+      MapEntryLite.Metadata<K, V> metadata,
       Map<K, V> target,
       Registers registers)
       throws IOException {
@@ -5601,7 +5601,7 @@ final class MessageSchema<T> implements Schema<T> {
       return true;
     }
     Object mapDefaultEntry = getMapFieldDefaultEntry(pos);
-    Metadata<?, ?> metadata = mapFieldSchema.forMapMetadata(mapDefaultEntry);
+    MapEntryLite.Metadata<?, ?> metadata = mapFieldSchema.forMapMetadata(mapDefaultEntry);
     if (metadata.valueType.getJavaType() != WireFormat.JavaType.MESSAGE) {
       return true;
     }
