@@ -8,7 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class LoginViewController {
@@ -36,6 +35,7 @@ public class LoginViewController {
 
         if(validateUser(login, password)){
             logged = true;
+            client.getUserName().setText(login);
             Scene clientScene = client.getClientScene();
             Stage stage = (Stage) loginInput.getScene().getWindow();
             client.getConnectionManager().getReceiveThread().start();
@@ -44,7 +44,6 @@ public class LoginViewController {
         else{
             if(loginAttempts == MAX_LOGIN_ATTEMPTS){
                 Main.newAlert(Alert.AlertType.WARNING, "Disconnected", "Too many attempts failed! Disconnecting!").showAndWait();
-
             }
             Main.newAlert(Alert.AlertType.WARNING, "Wrong data", "No such user!").showAndWait();
             loginAttempts++;

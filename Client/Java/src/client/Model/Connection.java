@@ -52,18 +52,20 @@ public class Connection {
     }
 
     public void send(byte[] msg){
-//        out.write(Arrays.toString(msg));
-    }
-
-    public int receive(byte[] answerBuffer){
-        String answer = null;
         try {
-            answer = in.readLine();
+            out.write(msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        answerBuffer = answer != null ? answer.getBytes() : new byte[0];
-        return answerBuffer.length;
+    }
+
+    public int receive(char[] answerBuffer, int offset, int length){
+        try {
+            return in.read(answerBuffer, offset, length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public Socket getSocket() {

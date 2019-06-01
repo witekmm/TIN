@@ -2,8 +2,6 @@ package client.Controller;
 
 import client.Main;
 import client.Model.ConnectionManager;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,16 +25,15 @@ public class ClientViewController {
     private Label ipValue;
     @FXML
     private Label portValue;
+
+    @FXML
+    private Label userName;
+
     @FXML
     private TextField groupNameRequest;
-
-    private byte[] buffer;
-
     private ConnectionManager connectionManager;
-
     public void ClientWindowInit(String IP, Integer port) throws Exception {
 
-        buffer = new byte[1024];
         ipValue.setText(IP);
         portValue.setText(port.toString());
 
@@ -54,7 +51,7 @@ public class ClientViewController {
 
         String message = sendText.getText(),
                 groupName = groupChoice.getValue().toString();
-        connectionManager.send(message, groupName);
+        connectionManager.sendMessage(message, groupName);
         sendText.clear();
     }
 
@@ -101,8 +98,6 @@ public class ClientViewController {
         return ipValue.getScene();
     }
 
-
-
     public ConnectionManager getConnectionManager() {
         return connectionManager;
     }
@@ -110,8 +105,10 @@ public class ClientViewController {
     public ChoiceBox getGroupChoice() {
         return groupChoice;
     }
-    public void setGroupChoice(ChoiceBox groupChoice) {
-        this.groupChoice = groupChoice;
+
+    public Label getUserName() {
+        return userName;
     }
+
 }
 
