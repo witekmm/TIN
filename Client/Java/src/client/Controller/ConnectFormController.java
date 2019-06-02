@@ -10,8 +10,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.net.SocketException;
 
 public class ConnectFormController {
@@ -86,6 +84,11 @@ public class ConnectFormController {
             controllerClient.ClientWindowInit(ip, port);
             stage.setMinWidth(sceneClient.getWidth());
             stage.setMinHeight(sceneClient.getHeight());
+            // when stage is closed
+            stage.setOnCloseRequest(we -> {
+                if(controllerClient.getConnectionManager().isConnected() )
+                    controllerClient.getConnectionManager().disconnect();
+            });
 
             loader = new FXMLLoader(getClass().getResource("/client/View/LoginView.fxml"));
             Scene sceneLogin = new Scene(loader.load());

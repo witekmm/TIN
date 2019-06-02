@@ -64,7 +64,7 @@ public class RepeatedFieldBuilder<
         IType extends MessageOrBuilder>
     implements GeneratedMessage.BuilderParent {
 
-  // Parent to send changes to.
+  // Parent to sendMessage changes to.
   private GeneratedMessage.BuilderParent parent;
 
   // List of messages. Never null. It may be immutable, in which case
@@ -200,7 +200,7 @@ public class RepeatedFieldBuilder<
    *
    * @param index the index of the message to get
    * @param forBuild this is being called for build so we want to make sure we
-   *     SingleFieldBuilder.build to send dirty invalidations
+   *     SingleFieldBuilder.build to sendMessage dirty invalidations
    * @return the message for the specified index
    */
   private MType getMessage(int index, boolean forBuild) {

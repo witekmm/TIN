@@ -24,7 +24,7 @@ namespace Client {
     static MessageReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg1NZXNzYWdlLnByb3RvEgZDbGllbnQiggUKDUNsaWVudE1lc3NhZ2USNwoL",
+            "Cg1NZXNzYWdlLnByb3RvEgZDbGllbnQizQUKDUNsaWVudE1lc3NhZ2USNwoL",
             "bWVzc2FnZVR5cGUYASABKA4yIi5DbGllbnQuQ2xpZW50TWVzc2FnZS5tZXNz",
             "YWdlVHlwZXMSPwoPZ3JvdXBBY3Rpb25UeXBlGAIgASgOMiYuQ2xpZW50LkNs",
             "aWVudE1lc3NhZ2UuZ3JvdXBBY3Rpb25UeXBlcxJDChFhdXRob3JpemF0aW9u",
@@ -33,13 +33,14 @@ namespace Client {
             "cm91cE5hbWUYBiABKAkSEAoIdXNlck5hbWUYByABKAkSFgoObWVzc2FnZUNv",
             "bnRlbnQYCCABKAkSMAoFcmVwbHkYCSABKA4yIS5DbGllbnQuQ2xpZW50TWVz",
             "c2FnZS5yZXBseVN0YXR1cxIUCgxyZXBseUNvbnRlbnQYCiABKAkSDgoGZ3Jv",
-            "dXBzGAsgAygJIjcKDG1lc3NhZ2VUeXBlcxIRCg1BVVRIT1JJWkFUSU9OEAAS",
-            "CQoFR1JPVVAQARIJCgVSRVBMWRACImgKEGdyb3VwQWN0aW9uVHlwZXMSCwoH",
-            "TUVTU0FHRRAAEgoKBkNSRUFURRABEgoKBkRFTEVURRACEgsKB1JFUVVFU1QQ",
-            "AxIKCgZBQ0NFUFQQBBILCgdERUNMSU5FEAUSCQoFTEVBVkUQBiIuChJhdXRo",
-            "b3JpemF0aW9uVHlwZXMSCgoGTE9HX0lOEAASDAoIUkVHSVNURVIQASIpCgty",
-            "ZXBseVN0YXR1cxIMCghQT1NJVElWRRAAEgwKCE5FR0FUSVZFEAFiBnByb3Rv",
-            "Mw=="));
+            "dXBzGAsgAygJIkoKDG1lc3NhZ2VUeXBlcxIRCg1OT01FU1NBR0VUWVBFEAAS",
+            "EQoNQVVUSE9SSVpBVElPThABEgkKBUdST1VQEAISCQoFUkVQTFkQAyJ5ChBn",
+            "cm91cEFjdGlvblR5cGVzEg8KC05PR1JPVVBUWVBFEAASCwoHTUVTU0FHRRAB",
+            "EgoKBkNSRUFURRACEgoKBkRFTEVURRADEgsKB1JFUVVFU1QQBBIKCgZBQ0NF",
+            "UFQQBRILCgdERUNMSU5FEAYSCQoFTEVBVkUQByJHChJhdXRob3JpemF0aW9u",
+            "VHlwZXMSFwoTTk9BVVRIT1JJWkFUSU9OVFlQRRAAEgoKBkxPR19JThABEgwK",
+            "CFJFR0lTVEVSEAIiNwoLcmVwbHlTdGF0dXMSDAoITk9TVEFUVVMQABIMCghQ",
+            "T1NJVElWRRABEgwKCE5FR0FUSVZFEAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -402,15 +403,15 @@ namespace Client {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            MessageType = (global::Client.ClientMessage.Types.messageTypes) input.ReadEnum();
+            messageType_ = (global::Client.ClientMessage.Types.messageTypes) input.ReadEnum();
             break;
           }
           case 16: {
-            GroupActionType = (global::Client.ClientMessage.Types.groupActionTypes) input.ReadEnum();
+            groupActionType_ = (global::Client.ClientMessage.Types.groupActionTypes) input.ReadEnum();
             break;
           }
           case 24: {
-            AuthorizationType = (global::Client.ClientMessage.Types.authorizationTypes) input.ReadEnum();
+            authorizationType_ = (global::Client.ClientMessage.Types.authorizationTypes) input.ReadEnum();
             break;
           }
           case 34: {
@@ -434,7 +435,7 @@ namespace Client {
             break;
           }
           case 72: {
-            Reply = (global::Client.ClientMessage.Types.replyStatus) input.ReadEnum();
+            reply_ = (global::Client.ClientMessage.Types.replyStatus) input.ReadEnum();
             break;
           }
           case 82: {
@@ -454,29 +455,33 @@ namespace Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
       public enum messageTypes {
-        [pbr::OriginalName("AUTHORIZATION")] Authorization = 0,
-        [pbr::OriginalName("GROUP")] Group = 1,
-        [pbr::OriginalName("REPLY")] Reply = 2,
+        [pbr::OriginalName("NOMESSAGETYPE")] Nomessagetype = 0,
+        [pbr::OriginalName("AUTHORIZATION")] Authorization = 1,
+        [pbr::OriginalName("GROUP")] Group = 2,
+        [pbr::OriginalName("REPLY")] Reply = 3,
       }
 
       public enum groupActionTypes {
-        [pbr::OriginalName("MESSAGE")] Message = 0,
-        [pbr::OriginalName("CREATE")] Create = 1,
-        [pbr::OriginalName("DELETE")] Delete = 2,
-        [pbr::OriginalName("REQUEST")] Request = 3,
-        [pbr::OriginalName("ACCEPT")] Accept = 4,
-        [pbr::OriginalName("DECLINE")] Decline = 5,
-        [pbr::OriginalName("LEAVE")] Leave = 6,
+        [pbr::OriginalName("NOGROUPTYPE")] Nogrouptype = 0,
+        [pbr::OriginalName("MESSAGE")] Message = 1,
+        [pbr::OriginalName("CREATE")] Create = 2,
+        [pbr::OriginalName("DELETE")] Delete = 3,
+        [pbr::OriginalName("REQUEST")] Request = 4,
+        [pbr::OriginalName("ACCEPT")] Accept = 5,
+        [pbr::OriginalName("DECLINE")] Decline = 6,
+        [pbr::OriginalName("LEAVE")] Leave = 7,
       }
 
       public enum authorizationTypes {
-        [pbr::OriginalName("LOG_IN")] LogIn = 0,
-        [pbr::OriginalName("REGISTER")] Register = 1,
+        [pbr::OriginalName("NOAUTHORIZATIONTYPE")] Noauthorizationtype = 0,
+        [pbr::OriginalName("LOG_IN")] LogIn = 1,
+        [pbr::OriginalName("REGISTER")] Register = 2,
       }
 
       public enum replyStatus {
-        [pbr::OriginalName("POSITIVE")] Positive = 0,
-        [pbr::OriginalName("NEGATIVE")] Negative = 1,
+        [pbr::OriginalName("NOSTATUS")] Nostatus = 0,
+        [pbr::OriginalName("POSITIVE")] Positive = 1,
+        [pbr::OriginalName("NEGATIVE")] Negative = 2,
       }
 
     }

@@ -12,10 +12,32 @@ void Reply::incorrectMessage(int clientId, std::string error){
   this->clients->readMessage(clientId,message);
 }
 
+void Reply::incorrectMessage(int clientId, std::string error, std::string groupName,Message::ClientMessage_groupActionTypes type){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::REPLY);
+  message.set_reply(Message::ClientMessage::NEGATIVE);
+  message.set_groupactiontype(type);
+  message.set_groupname(groupName);
+  message.set_replycontent(error);
+  //wyslij
+  std::cout<<error<<std::endl;
+  this->clients->readMessage(clientId,message);
+}
+
 void Reply::correctMessage(int clientId){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::POSITIVE);
+  puts("CORRECT MESSAGE");
+  this->clients->readMessage(clientId,message);
+}
+
+void Reply::correctMessage(int clientId, std::string groupName,Message::ClientMessage_groupActionTypes type){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::REPLY);
+  message.set_reply(Message::ClientMessage::POSITIVE);
+  message.set_groupactiontype(type);
+  message.set_groupname(groupName);
   puts("CORRECT MESSAGE");
   this->clients->readMessage(clientId,message);
 }
@@ -32,6 +54,7 @@ void Reply::correctLoginMessage(int clientId, std::vector<std::string> groups){
 }
 
 void Reply::logInChoosenUser(int clientId, std::string login){
+  std::cout<<login<<" is now logged in!"<<std::endl;
   this->clients->setClientLogin(clientId, login);
 }
 
@@ -43,10 +66,13 @@ void Reply::createAndSetMessage(std::string sender, std::string content, std::st
       message.set_groupactiontype(Message::ClientMessage::MESSAGE);
       message.set_messagecontent(content);
       message.set_username(sender);
+      message.set_groupname(groupName);
       break;
     case 2:
       message.set_groupactiontype(Message::ClientMessage::REQUEST);
       message.set_username(sender);
+      message.set_groupname(groupName);
+      std::cout<<"WYSLANO REQ"<<std::endl;
       break;
     case 3:
       message.set_groupactiontype(Message::ClientMessage::ACCEPT);

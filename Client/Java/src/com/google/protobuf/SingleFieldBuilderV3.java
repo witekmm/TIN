@@ -58,7 +58,7 @@ public class SingleFieldBuilderV3<
         IType extends MessageOrBuilder>
     implements AbstractMessage.BuilderParent {
 
-  // Parent to send changes to.
+  // Parent to sendMessage changes to.
   private AbstractMessage.BuilderParent parent;
 
   // Invariant: one of builder or message fields must be non-null.

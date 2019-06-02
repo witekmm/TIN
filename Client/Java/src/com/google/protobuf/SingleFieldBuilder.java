@@ -58,7 +58,7 @@ public class SingleFieldBuilder<
         IType extends MessageOrBuilder>
     implements GeneratedMessage.BuilderParent {
 
-  // Parent to send changes to.
+  // Parent to sendMessage changes to.
   private GeneratedMessage.BuilderParent parent;
 
   // Invariant: one of builder or message fields must be non-null.

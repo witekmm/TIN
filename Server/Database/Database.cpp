@@ -32,6 +32,7 @@ void Database::manageException(sql::SQLException &e)
 	std::cout << "# ERR: " << e.what();
 	std::cout << " (MySQL error code: " << e.getErrorCode();
 	std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	
 }
 
 bool Database::userInGroup(std::string groupName, std::string login)
@@ -484,6 +485,7 @@ int Database::createMsg(std::string groupName, std::string sender, int type, std
 	catch(sql::SQLException &e) {
 		manageException(e);
 	}
+	return -1;
 }
 
 void Database::addMsgToGroup(std::string groupName, std::string sender, int type, std::string text)
@@ -496,7 +498,7 @@ void Database::addMsgToGroup(std::string groupName, std::string sender, int type
 		int senderId = getUserId(sender);
 		for(int i : users)
 		{
-			if(i != senderId)
+			//if(i != senderId)
 				addMsgToUser(msgId, i);
 		}
 	}
@@ -566,7 +568,7 @@ int Database::getOldestMsgForUser(int userId)
 		sql::SQLString query = "SELECT m.id FROM `Message` AS m ";
 										query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
 										query+= "JOIN `User` AS u ON u.id = um.user_id ";
-										query+= "WHERE u.id = ? ASC LIMIT 1";
+										query+= "WHERE u.id = ? ORDER BY m.id ASC LIMIT 1";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, userId);
@@ -633,12 +635,12 @@ int Database::isMsgOfTypeForGroup(std::string groupName, std::string login, int 
 {
 	try
 	{
-		sql::SQLString query = "SELECT id from `Message` AS m ";
+		sql::SQLString query = "SELECT m.id from `Message` AS m ";
 					   query+= "JOIN `User_Message` AS um ON m.id = um.message_id ";
 					   query+= "JOIN `User` AS u ON u.id = um.user_id ";
-						 query+= "JOIN `User_Group` AS ug on u.id = ug.user_id";
-						 query+= "JOIN `Group` AS g on g.id = ug.group_id";
-					   query+= "WHERE g.name = ? AND g.type = ? AND u.login = ?";
+						 query+= "JOIN `User_Group` AS ug on u.id = ug.user_id ";
+						 query+= "JOIN `Group` AS g on g.id = ug.group_id ";
+					   query+= "WHERE g.name = ? AND m.type = ? AND u.login = ?";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setString(1, groupName);
@@ -650,7 +652,13 @@ int Database::isMsgOfTypeForGroup(std::string groupName, std::string login, int 
 			return res->getInt("id");
 	}
   catch (sql::SQLException &e) {
-		manageException(e);
+		
+	std::cout << "# ERR: SQLException in " << __FILE__;
+	std::cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << std::endl;
+	std::cout << "# ERR: " << e.what();
+	std::cout << " (MySQL error code: " << e.getErrorCode();
+	std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	
 	}
 	return -1;
 }
@@ -780,8 +788,8 @@ std::string Database::getMsgGroupName(int msgId)
 		sql::SQLString query = "SELECT name from `Group` AS g ";
 					   query+= "JOIN `User_Group` AS ug ON g.id = ug.group_id ";
 					   query+= "JOIN `User` AS u ON u.id = ug.user_id ";
-						 query+= "JOIN `User_Message` AS um on u.id = um.user_id";
-						 query+= "JOIN `Message` AS m on m.id = um.message_id";
+						 query+= "JOIN `User_Message` AS um on u.id = um.user_id ";
+						 query+= "JOIN `Message` AS m on m.id = um.message_id ";
 					   query+= "WHERE m.id = ?";
 
 		pstmt = con->prepareStatement(query);
@@ -795,4 +803,24 @@ std::string Database::getMsgGroupName(int msgId)
 		manageException(e);
 	}
 	return "";
+}
+
+void Database::removeMsgIfForNoUser(int msgId)
+{
+	try
+	{
+		sql::SQLString query = "SELECT u.id from `User_Message` AS um ";
+					   				query+= "JOIN `User` u on u.id = um.user_id ";
+										 query+= "WHERE um.message_id = ?";
+
+		pstmt = con->prepareStatement(query);
+		pstmt->setInt(1, msgId);
+		res = pstmt->executeQuery();
+
+		if(!res->next())
+			deleteMsg(msgId);
+	}
+	catch(sql::SQLException &e) {
+		manageException(e);
+	}
 }

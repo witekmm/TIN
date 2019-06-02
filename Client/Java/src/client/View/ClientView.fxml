@@ -1,49 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="419.0" prefWidth="718.0" style="-fx-background-color: lightGreen; -fx-min-height: 420; -fx-border-width: 780;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Controller.ClientViewController">
+<AnchorPane prefHeight="420.0" prefWidth="759.0" style="-fx-background-color: lightGreen; -fx-min-height: 420; -fx-border-width: 780;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Controller.ClientViewController">
    <children>
-      <Label id="connectLabel" layoutX="42.0" layoutY="40.0" prefHeight="47.0" prefWidth="165.0" style="-fx-font-weight: bold;" text="Connected to:">
+      <Label id="connectLabel" layoutX="34.0" layoutY="86.0" prefHeight="47.0" prefWidth="165.0" style="-fx-font-weight: bold;" text="Connected to:">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="42.0" layoutY="87.0" prefHeight="62.0" prefWidth="42.0" style="-fx-font-weight: bold;" text="IP:">
+      <Label layoutX="55.0" layoutY="122.0" prefHeight="62.0" prefWidth="42.0" style="-fx-font-weight: bold;" text="IP:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="ipValue" fx:id="ipValue" layoutX="104.0" layoutY="100.0" prefHeight="36.0" prefWidth="97.0" text="ipValue">
+      <Label id="ipValue" fx:id="ipValue" layoutX="92.0" layoutY="135.0" prefHeight="36.0" prefWidth="150.0" text="ipValue">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label id="portValue" fx:id="portValue" layoutX="104.0" layoutY="147.0" prefHeight="36.0" prefWidth="97.0" text="portValue">
+      <Label id="portValue" fx:id="portValue" layoutX="92.0" layoutY="165.0" prefHeight="36.0" prefWidth="120.0" text="portValue">
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Button id="disconnectButton" fx:id="disconnectButton" layoutX="55.0" layoutY="203.0" mnemonicParsing="false" onAction="#pressButtonDisconnect" prefHeight="47.0" prefWidth="111.0" style="-fx-font-weight: bold;" text="Disconnect" textFill="#d70000">
+      <Button id="disconnectButton" fx:id="disconnectButton" layoutX="73.0" layoutY="210.0" mnemonicParsing="false" onAction="#pressButtonDisconnect" prefHeight="47.0" prefWidth="111.0" style="-fx-font-weight: bold;" text="Disconnect" textFill="#d70000">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <TextArea id="messageArea" fx:id="messageArea" editable="false" layoutX="275.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="257.0" prefWidth="416.0">
+      <TextArea id="messageArea" fx:id="messageArea" editable="false" layoutX="275.0" layoutY="75.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="257.0" prefWidth="467.0">
          <font>
             <Font size="14.0" />
          </font>
       </TextArea>
-      <Button fx:id="sendButton" layoutX="606.0" layoutY="320.0" mnemonicParsing="false" onAction="#pressButtonSend" prefHeight="36.0" prefWidth="85.0" style="-fx-font-weight: bold;" text="Send" textFill="#068619">
+      <Button fx:id="sendButton" layoutX="641.0" layoutY="349.0" mnemonicParsing="false" onAction="#pressButtonSend" prefHeight="36.0" prefWidth="100.0" style="-fx-font-weight: bold; -fx-font-size: 15;" text="Send" textFill="#068619">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <TextArea fx:id="sendText" layoutX="275.0" layoutY="319.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefRowCount="1" prefWidth="305.0" />
-      <Label layoutX="35.0" layoutY="151.0" style="-fx-font-weight: bold;" text="Port:">
+      <TextArea fx:id="sendText" layoutX="275.0" layoutY="349.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefRowCount="1" prefWidth="347.0" promptText="Type message" />
+      <Label layoutX="34.0" layoutY="170.0" style="-fx-font-weight: bold;" text="Port:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="groupChoice" layoutX="353.0" layoutY="28.0" prefHeight="25.0" prefWidth="177.0" />
+      <Label layoutX="275.0" layoutY="19.0" prefHeight="43.0" prefWidth="82.0" style="-fx-font-weight: bold;" text="Group:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="leaveGroupButton" layoutX="543.0" layoutY="19.0" mnemonicParsing="false" onAction="#pressLeaveGroupButton" prefHeight="43.0" prefWidth="73.0" style="-fx-font-weight: bold; -fx-font-size: 15;" text="Leave" />
+      <Button fx:id="deleteGroupButton" layoutX="631.0" layoutY="19.0" mnemonicParsing="false" onAction="#pressDeleteGroupButton" prefHeight="43.0" prefWidth="82.0" style="-fx-font-weight: bold; -fx-font-size: 15;" text="Delete" textFill="#bf0808" />
+      <Button fx:id="createGroupButton" layoutX="17.0" layoutY="332.0" mnemonicParsing="false" onAction="#pressButtonCreateGroup" prefHeight="43.0" prefWidth="111.0" style="-fx-font-weight: bold;" text="Create Group" textFill="#008183">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <TextField fx:id="groupNameRequest" layoutX="30.0" layoutY="291.0" prefHeight="25.0" prefWidth="208.0" promptText="Group name request" />
+      <Button fx:id="joinGroupButton" layoutX="134.0" layoutY="332.0" mnemonicParsing="false" onAction="#pressJoinGroupButton" prefHeight="43.0" prefWidth="111.0" style="-fx-font-weight: bold;" text="Join request" textFill="#056fbf">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="34.0" layoutY="-3.0" prefHeight="62.0" prefWidth="120.0" style="-fx-font-weight: bold; -fx-font-size: 12;" text="Your username: :">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label id="ipValue" fx:id="userName" alignment="CENTER" contentDisplay="CENTER" layoutX="28.0" layoutY="44.0" prefHeight="36.0" prefWidth="201.0" style="-fx-font-weight: bold;" text="user name" textFill="#330075">
          <font>
             <Font size="18.0" />
          </font>

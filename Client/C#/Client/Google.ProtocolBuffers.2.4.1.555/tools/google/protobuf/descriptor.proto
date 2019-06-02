@@ -221,7 +221,7 @@ message MethodDescriptorProto {
 //   same number for multiple options.
 // * For options which will be published and used publicly by multiple
 //   independent entities, e-mail kenton@google.com to reserve extension
-//   numbers.  Simply tell me how many you need and I'll send you back a
+//   numbers.  Simply tell me how many you need and I'll sendMessage you back a
 //   set of numbers to use -- there's no need to explain how you intend to
 //   use them.  If this turns out to be popular, a web service will be set up
 //   to automatically assign option numbers.

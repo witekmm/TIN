@@ -9,7 +9,6 @@ namespace Client
     {
         private readonly ConnectionManager connectionManager;
         private readonly ConnectForm connectForm;
-        private byte[] buffer;
 
         public Client(ConnectForm _connectForm, IPAddress _IP, int _port)
         {
@@ -22,7 +21,6 @@ namespace Client
             connectForm = _connectForm;
             IPValue.Text = _IP.ToString();
             PortValue.Text = _port.ToString();
-            buffer = new byte[1024];
         }
 
         private void Client_FormClosing(object sender, FormClosingEventArgs e)
@@ -34,10 +32,10 @@ namespace Client
 
         private void SendButton_Click(object sender, EventArgs e)
         {
-            string message = SendTextBox.Text;
-            buffer = Encoding.ASCII.GetBytes(message);
+            String message = SendTextBox.Text,
+                    groupName = GroupComboBox.SelectedItem.ToString();
 
-            connectionManager.Send(buffer);
+            connectionManager.SendMessage(message, groupName);
             SendTextBox.Clear();
         }
 
@@ -46,16 +44,48 @@ namespace Client
             Close();
         }
 
-      
+        private void CreateGroupButton_Click(object sender, EventArgs e)
+        {
+            String groupName = GroupTextBox.Text;
+            GroupTextBox.Clear();
+            connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Create, groupName);
+        }
 
+        private void JoinGroupButton_Click(object sender, EventArgs e)
+        {
+            String groupName = GroupTextBox.Text;
+            GroupTextBox.Clear();
+            connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Request, groupName);
+        }
+
+        private void LeaveGroupButton_Click(object sender, EventArgs e)
+        {
+            String groupName = GroupComboBox.SelectedItem.ToString();
+            GroupTextBox.Clear();
+            connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Leave, groupName);
+        }
+        private void DeleteGroupButton_Click(object sender, EventArgs e)
+        {
+            String groupName = GroupComboBox.SelectedItem.ToString();
+            GroupTextBox.Clear();
+            connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Delete, groupName);
+        }
         private void Client_Load(object sender, EventArgs e)
         {
 
         }
-
-        public TextBox ChatText
+        public Label Username
+        {
+            get { return UsernameLabel; }
+        }
+        public RichTextBox ChatText
         {
             get { return ChatTextBox; }
+        }
+
+        public ComboBox Groups
+        {
+            get { return GroupComboBox; }
         }
 
         public ConnectForm ConnectForm
