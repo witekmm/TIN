@@ -93,7 +93,7 @@ int ClientSessionPipes::readBytes(int socketNumber) {
         pthread_cond_signal(&writeMessagesBufferNotEmpty);
     } else if (result == -1) {
         //Error while reading message, client disconnected
-        deleteClientSession(socketNumber);
+        deleteClientSessionPipe(socketNumber);
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
@@ -140,7 +140,7 @@ int ClientSessionPipes::writeBytes(int socketNumber) {
         writeBytesBuffer.erase(it);
     } else if(result == -1) {
         //Error while sending message, client disconnected
-        deleteClientSession(socketNumber);
+        deleteClientSessionPipe(socketNumber);
     }
 
     pthread_mutex_unlock(&clientSessionPipesMutex);
@@ -177,7 +177,7 @@ void ClientSessionPipes::deleteWriteBuffers(int socketNumber) {
     }), writeBytesBuffer.end());
 }
 
-void ClientSessionPipes::deleteClientSession(int socketNumber) {
+void ClientSessionPipes::deleteClientSessionPipe(int socketNumber) {
     vector<pair<Client, ClientSessionPipe>>::iterator it;
 
     for(it = clientSessionPipes.begin(); it != clientSessionPipes.end(); ++it) {
@@ -189,6 +189,14 @@ void ClientSessionPipes::deleteClientSession(int socketNumber) {
             break;
         }
     }
+}
+
+void ClientSessionPipes::deleteClientSession(int socketNumber) {
+    pthread_mutex_lock(&clientSessionPipesMutex);
+
+    deleteClientSessionPipe(socketNumber);
+
+    pthread_mutex_unlock(&clientSessionPipesMutex);
 }
 
 vector<Client> ClientSessionPipes::getLoggedClients() {

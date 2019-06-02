@@ -34,6 +34,8 @@ class ClientSessionPipes {
 
     void deleteWriteBuffers(int socketNumber);
 
+    void deleteClientSessionPipe(int socketNumber);
+
 public:
     ClientSessionPipes();
 
