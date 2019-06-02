@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Shell;
 using Google.Protobuf;
 using System.Collections.Generic;
 using System.Drawing;
@@ -158,12 +158,12 @@ namespace Client
         }
         private void HandleResponse(ClientMessage response)
         {
-            if (!(response.MessageContent.Length == 0))
+            if (response.MessageContent.Length != 0)
             {
                 client.ChatText.SelectionColor = Color.Black;
                 client.ChatText.AppendText(response.UserName + ": " + response.MessageContent + Environment.NewLine);
             }
-            if (!(response.ReplyContent.Length == 0))
+            if (response.ReplyContent.Length != 0)
             {
                 client.ChatText.SelectionColor = Color.Red;
                 client.ChatText.AppendText("Error: " + response.ReplyContent + Environment.NewLine);
@@ -172,7 +172,11 @@ namespace Client
             {
                 GroupReply(response, response.GroupActionType);
             }
-
+            if (response.Reply == ClientMessage.Types.replyStatus.Negative)
+            {
+                if(response.GroupName.Length != 0)
+                    GroupReply(response, response.GroupActionType);
+            }
             if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Request)
             {
                 CreateJoinGroupAlert(response.UserName, response.GroupName);
@@ -190,34 +194,62 @@ namespace Client
         }
         private void GroupReply(ClientMessage response, ClientMessage.Types.groupActionTypes reply)
         {
-            if (reply == ClientMessage.Types.groupActionTypes.Create)
+            switch (reply)
             {
-                client.ChatText.SelectionColor = Color.Green;
-                client.ChatText.AppendText("Group: '" + response.GroupName + "' created!" + Environment.NewLine);
-                client.Groups.Items.Add(response.GroupName);
-            }
-            else if (reply == ClientMessage.Types.groupActionTypes.Delete)
-            {
-                client.ChatText.SelectionColor = Color.Green;
-                client.ChatText.AppendText("Group: '" + response.GroupName + "' deleted!" + Environment.NewLine);
-                client.Groups.Items.Remove(response.GroupName);
-            }
-            else if (reply == ClientMessage.Types.groupActionTypes.Leave)
-            {
-                client.ChatText.SelectionColor = Color.Blue;
-                client.ChatText.AppendText("Group: '" + response.GroupName + "' left!" + Environment.NewLine);
-                client.Groups.Items.Remove(response.GroupName);
-            }
-            else if (reply == ClientMessage.Types.groupActionTypes.Accept)
-            {
-                client.ChatText.SelectionColor = Color.Green;
-                client.ChatText.AppendText("Request accepted. Joined group: " + response.GroupName + Environment.NewLine);
-                client.Groups.Items.Add(response.GroupName);
+                case ClientMessage.Types.groupActionTypes.Create:
+                    {
+                        client.ChatText.SelectionColor = Color.Green;
+                        client.ChatText.AppendText("Group: '" + response.GroupName + "' created!" + Environment.NewLine);
+                        client.Groups.Items.Add(response.GroupName);
+                        break;
+                    }
+                case ClientMessage.Types.groupActionTypes.Delete:
+                    {
+                        client.ChatText.SelectionColor = Color.Green;
+                        client.ChatText.AppendText("Group: '" + response.GroupName + "' deleted!" + Environment.NewLine);
+                        client.Groups.Items.Remove(response.GroupName);
+                        break;
+                    }
+                case ClientMessage.Types.groupActionTypes.Leave:
+                    {
+                        client.ChatText.SelectionColor = Color.Blue;
+                        client.ChatText.AppendText("Group: '" + response.GroupName + "' left!" + Environment.NewLine);
+                        client.Groups.Items.Remove(response.GroupName);
+                        break;
+                    }
+                case ClientMessage.Types.groupActionTypes.Accept:
+                    {
+                        client.ChatText.SelectionColor = Color.Green;
+                        client.ChatText.AppendText("Request accepted. Joined group: " + response.GroupName + Environment.NewLine);
+                        client.Groups.Items.Add(response.GroupName);
+                        break;
+                    }   
+                case ClientMessage.Types.groupActionTypes.Message:
+                    {
+                        client.Groups.Items.Remove(response.GroupName);
+                        break;
+                    }
             }
         }
         private void CreateJoinGroupAlert(String username, String groupName)
         {
-
+            MethodInvoker methodInvokerDelegate = delegate ()
+            {
+                ClientMessage.Types.groupActionTypes type = ClientMessage.Types.groupActionTypes.Decline;
+                DialogResult dialog = MessageBox.Show("User: " + username + " wants to join group: " + groupName + "\nAccpet?", "Join request", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialog == DialogResult.Yes)
+                {
+                    type = ClientMessage.Types.groupActionTypes.Accept;
+                }
+                ClientMessage msg = new ClientMessage
+                {
+                    MessageType = ClientMessage.Types.messageTypes.Group,
+                    GroupActionType = type,
+                    UserName = username,
+                    GroupName = groupName
+                };
+                SerializeAndSend(msg);
+            };
         }
         public Boolean CheckUser(String _login, String _password)
         {

@@ -1,6 +1,7 @@
 package client.Model;
 
 import client.Controller.ClientViewController;
+import client.Controller.LoginViewController;
 import client.Main;
 import client.Message;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -25,6 +26,7 @@ public class ConnectionManager {
     private ClientViewController client;
     private ObservableList<String> groups;
     private Thread receiveThread;
+    private LoginViewController loginController;
 
     public ConnectionManager(String _ip, Integer _port, ClientViewController clientViewController) {
         IP = _ip;
@@ -37,7 +39,7 @@ public class ConnectionManager {
     public void connect() throws Exception {
         Task work = new Task<Void>(){
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 ReceiveThreadMethod();
                 return null;
             }
@@ -56,8 +58,6 @@ public class ConnectionManager {
 
     public void disconnect(){
         try {
-//            if(receiveThread.isAlive())
-//                receiveThread.st
             connection.end();
         } catch (IOException e) {
             Main.newAlert(Alert.AlertType.ERROR, "Disconnection error!", e.getMessage())
@@ -128,10 +128,9 @@ public class ConnectionManager {
     private void ReceiveThreadMethod() {
 
         while(connected){
-
             int received;
             char[] answer = new char[4];
-            if((received = connection.receive(answer, 0, 4)) == -1){
+            if((connection.receive(answer, 0, 4)) == -1){
                 break;
             }
 
@@ -153,58 +152,94 @@ public class ConnectionManager {
                 handleResponse(response);
             }
         }
+        sendNoConnection();
+    }
+
+    private void sendNoConnection(){
+        Thread t = new Thread(() -> Platform.runLater(() -> {
+            Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "Server connection lost! You were disconnected").showAndWait();
+            client.openConnectForm();
+        }));
+        t.start();
+    }
+
+    private void loginUser(Boolean correctData, Message.ClientMessage response){
+        Thread t = new Thread(() -> Platform.runLater(() -> {
+            if(correctData){
+                ObservableList<String> groups = FXCollections.observableArrayList(response.getGroupsList());
+                client.getGroupChoice().setItems(groups);
+                loginController.acceptLogin();
+            }
+            else{
+                loginController.rejectLogin();
+            }
+        }));
+        t.start();
     }
 
     private void handleResponse(Message.ClientMessage response){
-        if(!response.getMessageContent().isEmpty())
-            client.getTextArea().appendText(response.getUserName() +  ": " + response.getMessageContent() + '\n');
-
-        if(!response.getReplyContent().isEmpty())
-            client.getTextArea().appendText("Error: " + response.getReplyContent() + '\n');
-
         if(response.getReply() == Message.ClientMessage.replyStatus.POSITIVE) {
-            groupReply(response, response.getGroupActionType());
+            if(response.getAuthorizationType() == Message.ClientMessage.authorizationTypes.LOG_IN)
+                loginUser(true, response);
+            else if(response.getGroupActionType() != Message.ClientMessage.groupActionTypes.NOGROUPTYPE)
+                groupReply(response.getGroupName(), response.getGroupActionType());
         }
         else if(response.getReply() == Message.ClientMessage.replyStatus.NEGATIVE){
             if(!response.getGroupName().isEmpty()) {
-                groupReply(response, response.getGroupActionType());
+                groupReply(response.getGroupName(), response.getGroupActionType());
             }
+            else if(response.getAuthorizationType() == Message.ClientMessage.authorizationTypes.LOG_IN)
+                loginUser(false, response);
         }
         if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST) {
             createJoinGroupAlert(response.getUserName(), response.getGroupName());
         }
         if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT){
-            groupReply(response, response.getGroupActionType());
+            groupReply(response.getGroupName(), response.getGroupActionType());
         }
         if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY) {
             sendReply();
         }
+        if(!response.getMessageContent().isEmpty())
+            client.getTextArea().appendText(response.getUserName() +  ": " + response.getMessageContent() + '\n');
+
+        if(!response.getReplyContent().isEmpty())
+            client.getTextArea().appendText("Error: " + response.getReplyContent() + '\n');
     }
 
-    private void groupReply(Message.ClientMessage response, Message.ClientMessage.groupActionTypes reply){
+    private void groupReply(String groupName, Message.ClientMessage.groupActionTypes type){
+        Platform.runLater(()-> {
+            ObservableList newList = client.getGroupChoice().getItems();
+            switch(type) {
+                case CREATE: {
+                    client.getTextArea().appendText("Group: '" + groupName + "' created!" + '\n');
+                    newList.add(groupName);
+                    break;
+                }
+                case DELETE: {
+                    client.getTextArea().appendText("Group: '" + groupName + "' deleted!" + '\n');
+                    newList.remove(groupName);
+                    break;
+                }
+                case LEAVE: {
+                    client.getTextArea().appendText("Group: '" + groupName + "' left!" + '\n');
+                    newList.remove(groupName);
+                    break;
+                }
+                case ACCEPT: {
+                    client.getTextArea().appendText("Request accepted. Joined group: " + groupName + '\n');
+                    newList.add(groupName);
+                    break;
+                }
+                case MESSAGE: {
+                    newList.remove(groupName);
+                    break;
+                }
+            }
+            client.getGroupChoice().setItems(newList);
+            client.getGroupChoice().getSelectionModel().clearSelection();
+        });
 
-        ObservableList newList = client.getGroupChoice().getItems();
-        if(reply == Message.ClientMessage.groupActionTypes.CREATE){
-            client.getTextArea().appendText("Group: '" + response.getGroupName() + "' created!" + '\n');
-            newList.add(response.getGroupName());
-        }
-        else if(reply == Message.ClientMessage.groupActionTypes.DELETE){
-            client.getTextArea().appendText("Group: '" + response.getGroupName() + "' deleted!" + '\n');
-            newList.remove(response.getGroupName());
-        }
-        else if(reply == Message.ClientMessage.groupActionTypes.LEAVE){
-            client.getTextArea().appendText("Group: '" + response.getGroupName() + "' left!" + '\n');
-            newList.remove(response.getGroupName());
-        }
-        else if(reply == Message.ClientMessage.groupActionTypes.ACCEPT){
-            client.getTextArea().appendText("Request accepted. Joined group: " + response.getGroupName() + '\n');
-            newList.add(response.getGroupName());
-        }
-        else if(reply == Message.ClientMessage.groupActionTypes.MESSAGE){
-            newList.remove(response.getGroupName());
-        }
-        client.getGroupChoice().setItems(newList);
-        client.getGroupChoice().setValue("");
     }
 
     private void createJoinGroupAlert(String userName, String groupName){
@@ -217,40 +252,24 @@ public class ConnectionManager {
             alert.getButtonTypes().setAll(buttonAccept, buttonDecline);
             Optional<ButtonType> option = alert.showAndWait();
 
-            Message.ClientMessage msg;
+            Message.ClientMessage.groupActionTypes type = Message.ClientMessage.groupActionTypes.DECLINE;
             if (option.isPresent() && option.get() == buttonAccept) {
-                msg = Message.ClientMessage.newBuilder()
-                        .setMessageType(Message.ClientMessage.messageTypes.GROUP)
-                        .setGroupActionType(Message.ClientMessage.groupActionTypes.ACCEPT)
-                        .setUserName(userName)
-                        .setGroupName(groupName)
-                        .build();
-            } else {
-                msg = Message.ClientMessage.newBuilder()
-                        .setMessageType(Message.ClientMessage.messageTypes.GROUP)
-                        .setGroupActionType(Message.ClientMessage.groupActionTypes.DECLINE)
-                        .setUserName(userName)
-                        .setGroupName(groupName)
-                        .build();
+                type = Message.ClientMessage.groupActionTypes.ACCEPT;
             }
+            Message.ClientMessage msg = Message.ClientMessage.newBuilder()
+                    .setMessageType(Message.ClientMessage.messageTypes.GROUP)
+                    .setGroupActionType(type)
+                    .setUserName(userName)
+                    .setGroupName(groupName)
+                    .build();
+
             serializeAndSend(msg);
         }));
         t.start();
     }
-    public boolean checkUser(String login, String password) throws IOException {
+    public void checkUser(String login, String password, LoginViewController _loginController) throws IOException {
+        loginController = _loginController;
         sendLoginRequest(login, password);
-
-        char[] answer = new char[4];
-        connection.receive(answer, 0, 4);
-
-        int answerSize = getMsgLength(answer);
-        char[] answerMsg = new char[answerSize];
-        connection.receive(answerMsg, 0, answerSize);
-
-        Message.ClientMessage response = Message.ClientMessage.parseFrom(new String(answerMsg).getBytes());
-        ObservableList<String> groups = FXCollections.observableArrayList(response.getGroupsList());
-        client.getGroupChoice().setItems(groups);
-        return response.getReply() == Message.ClientMessage.replyStatus.POSITIVE;
     }
 
     public Thread getReceiveThread() { return receiveThread; }

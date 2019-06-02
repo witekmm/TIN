@@ -22,41 +22,46 @@ public class LoginViewController {
     private int loginAttempts;
     private String login, password;
     private ClientViewController client;
+    private Scene clientScene;
 
-    public void LoginInit(ClientViewController controllerClient) {
+    void LoginInit(ClientViewController controllerClient, Scene sceneClient) {
         loginAttempts = 0;
         logged = false;
         client = controllerClient;
+        clientScene = sceneClient;
+        client.getConnectionManager().getReceiveThread().start();
     }
 
     public void pressButton(ActionEvent e){
         login = loginInput.getText();
         password = passwordInput.getText();
 
-        if(validateUser(login, password)){
-            logged = true;
-            client.getUserName().setText(login);
-            Scene clientScene = client.getClientScene();
-            Stage stage = (Stage) loginInput.getScene().getWindow();
-            client.getConnectionManager().getReceiveThread().start();
-            stage.setScene(clientScene);
-        }
-        else{
-            if(loginAttempts == MAX_LOGIN_ATTEMPTS){
-                Main.newAlert(Alert.AlertType.WARNING, "Disconnected", "Too many attempts failed! Disconnecting!").showAndWait();
-            }
-            Main.newAlert(Alert.AlertType.WARNING, "Wrong data", "No such user!").showAndWait();
-            loginAttempts++;
-            return;
-        }
+        validateUser(login, password);
     }
 
-    private boolean validateUser(String login, String password) {
+    public void acceptLogin(){
+        System.out.println("Logged in");
+        logged = true;
+        client.getUserName().setText(login);
+//        Scene clientScene = client.getClientScene();
+//        Stage stage = (Stage) loginInput.getScene().getWindow();
+//            client.getConnectionManager().getReceiveThread().start();
+        client.getStage().setScene(clientScene);
+    }
+
+    public void rejectLogin(){
+        if(loginAttempts == MAX_LOGIN_ATTEMPTS){
+                Main.newAlert(Alert.AlertType.WARNING, "Disconnected", "Too many attempts failed! Disconnecting!").showAndWait();
+        }
+        Main.newAlert(Alert.AlertType.WARNING, "Wrong data", "Wrong input! Can't find user!").showAndWait();
+        loginAttempts++;
+    }
+
+    private void validateUser(String login, String password) {
         try {
-            return client.getConnectionManager().checkUser(login, password);
+            client.getConnectionManager().checkUser(login, password, this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
     }
 }

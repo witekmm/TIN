@@ -22,10 +22,16 @@ public class ConnectFormController {
     public void pressButton(ActionEvent e){
 
         String ip = ipText.getText();
-        if(!checkIP(ip)) return;
-        Integer port = checkPort(portText.getText());
-        if(port == null) return;
-
+        Integer port;
+        if(ip.equals("test")){
+            ip = "169.254.203.113";
+            port = 50011;
+        }
+        else {
+            if (!checkIP(ip)) return;
+            port = checkPort(portText.getText());
+            if (port == null) return;
+        }
         openClientWindow(ip, port);
     }
 
@@ -81,7 +87,7 @@ public class ConnectFormController {
             Stage stage = (Stage) connectButton.getScene().getWindow();
             Scene sceneClient = new Scene(loader.load());
             ClientViewController controllerClient = loader.getController();
-            controllerClient.ClientWindowInit(ip, port);
+            controllerClient.ClientWindowInit(ip, port, stage);
             stage.setMinWidth(sceneClient.getWidth());
             stage.setMinHeight(sceneClient.getHeight());
             // when stage is closed
@@ -94,14 +100,14 @@ public class ConnectFormController {
             Scene sceneLogin = new Scene(loader.load());
             LoginViewController controllerLogin = loader.getController();
             stage.setScene(sceneLogin);
-            controllerLogin.LoginInit(controllerClient);
+            controllerLogin.LoginInit(controllerClient, sceneClient);
         }
         catch(SocketException e) {
             Main.newAlert(Alert.AlertType.ERROR, "Socket error", "Connection error. Couldn't connect to socket!")
                 .showAndWait();
         }
         catch(Exception ex) {
-            Main.newAlert(Alert.AlertType.ERROR, "Error", "Connection error: " + ex.getMessage())
+            Main.newAlert(Alert.AlertType.CONFIRMATION, "Connection", "Connection to server: " + ex.getMessage())
                     .showAndWait();
         }
     }
