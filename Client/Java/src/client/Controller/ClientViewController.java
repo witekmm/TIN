@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class ClientViewController {
@@ -17,7 +16,7 @@ public class ClientViewController {
     public Button sendButton;
     public Button disconnectButton;
     public Button createGroupButton;
-    public ChoiceBox groupChoice;
+    public volatile ChoiceBox groupChoice;
     @FXML
     private TextArea messageArea;
     @FXML
@@ -31,11 +30,18 @@ public class ClientViewController {
     @FXML
     private TextField groupNameRequest;
     private ConnectionManager connectionManager;
-    public void ClientWindowInit(String IP, Integer port) throws Exception {
+
+    public Stage getStage() {
+        return mainStage;
+    }
+
+    private Stage mainStage;
+
+    public void ClientWindowInit(String IP, Integer port, Stage stage) throws Exception {
 
         ipValue.setText(IP);
         portValue.setText(port.toString());
-
+        mainStage = stage;
         connectionManager = new ConnectionManager(IP, port, this);
         connectionManager.connect();
     }
@@ -79,14 +85,11 @@ public class ClientViewController {
         return messageArea;
     }
 
-    private void openConnectForm(){
+    public void openConnectForm(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/View/Connectform.fxml"));
-            Stage stage = (Stage) disconnectButton.getScene().getWindow();
             Scene scene = new Scene(loader.load());
-            stage.setMinWidth(scene.getWidth());
-            stage.setMinHeight(scene.getHeight());
-            stage.setScene(scene);
+            mainStage.setScene(scene);
         }catch (IOException io){
             io.printStackTrace();
         }

@@ -3,18 +3,15 @@ package client.Model;
 import client.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
+import java.net.SocketException;
 import java.util.Optional;
 
 public class Connection {
 
     private final int MAX_ATTEMPTS = 5;
-
     private Socket socket;
-
     private String IP;
     private Integer port;
     private DataOutputStream out;
@@ -34,7 +31,7 @@ public class Connection {
                 out = new DataOutputStream(socket.getOutputStream());
             } catch (IOException e) {
 
-                Optional<ButtonType> result = Main.newAlert(Alert.AlertType.CONFIRMATION, "Connection error. Attaempt: " + attempts, e.getMessage())
+                Optional<ButtonType> result = Main.newAlert(Alert.AlertType.CONFIRMATION, "Connection error. Attempt: " + attempts, e.getMessage())
                         .showAndWait();
                 if(result.isPresent())
                     if(result.get() == ButtonType.CANCEL)
@@ -62,6 +59,8 @@ public class Connection {
     public int receive(char[] answerBuffer, int offset, int length){
         try {
             return in.read(answerBuffer, offset, length);
+        } catch (SocketException e){
+            return -1;
         } catch (IOException e) {
             e.printStackTrace();
         }
