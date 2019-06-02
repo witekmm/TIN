@@ -1,6 +1,5 @@
 package client.Controller;
 
-import client.Main;
 import client.Message;
 import client.Model.ConnectionManager;
 import javafx.event.ActionEvent;
