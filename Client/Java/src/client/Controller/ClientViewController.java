@@ -30,14 +30,9 @@ public class ClientViewController {
     @FXML
     private TextField groupNameRequest;
     private ConnectionManager connectionManager;
-
-    public Stage getStage() {
-        return mainStage;
-    }
-
     private Stage mainStage;
 
-    public void ClientWindowInit(String IP, Integer port, Stage stage) throws Exception {
+    void ClientWindowInit(String IP, Integer port, Stage stage) throws Exception {
 
         ipValue.setText(IP);
         portValue.setText(port.toString());
@@ -47,14 +42,18 @@ public class ClientViewController {
     }
 
     public void pressButtonDisconnect(ActionEvent e){
-        Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "You were disconnected").showAndWait();
         connectionManager.disconnect();
         openConnectForm();
     }
 
     public void pressButtonSend(ActionEvent e){
-        String message = sendText.getText(),
-                groupName = groupChoice.getValue().toString();
+        String message = sendText.getText(), groupName;
+        try{
+           groupName = groupChoice.getValue().toString();
+        }catch(NullPointerException ex){
+            messageArea.appendText("No group chosen!\n");
+            return;
+        }
         connectionManager.sendMessage(message, groupName);
         sendText.clear();
     }
@@ -95,11 +94,7 @@ public class ClientViewController {
         }
     }
 
-    public Scene getClientScene(){
-        return ipValue.getScene();
-    }
-
-    public ConnectionManager getConnectionManager() {
+    ConnectionManager getConnectionManager() {
         return connectionManager;
     }
 
@@ -111,5 +106,8 @@ public class ClientViewController {
         return userName;
     }
 
+    Stage getStage() {
+        return mainStage;
+    }
 }
 
