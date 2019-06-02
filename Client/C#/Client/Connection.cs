@@ -61,9 +61,9 @@ namespace Client
             int amount = socket.Send(buffer);
         }
 
-        public int Receive(byte[] buffer)
+        public int Receive(byte[] buffer, int offset, int length)
         {
-            return socket.Receive(buffer);
+            return socket.Receive(buffer, offset, length, SocketFlags.None);
         }
 
         public Boolean IsConnected()

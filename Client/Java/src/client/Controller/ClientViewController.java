@@ -1,6 +1,7 @@
 package client.Controller;
 
 import client.Main;
+import client.Message;
 import client.Model.ConnectionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,10 +26,8 @@ public class ClientViewController {
     private Label ipValue;
     @FXML
     private Label portValue;
-
     @FXML
     private Label userName;
-
     @FXML
     private TextField groupNameRequest;
     private ConnectionManager connectionManager;
@@ -48,7 +47,6 @@ public class ClientViewController {
     }
 
     public void pressButtonSend(ActionEvent e){
-
         String message = sendText.getText(),
                 groupName = groupChoice.getValue().toString();
         connectionManager.sendMessage(message, groupName);
@@ -58,23 +56,23 @@ public class ClientViewController {
     public void pressButtonCreateGroup(ActionEvent e){
         String groupName = groupNameRequest.getText();
         groupNameRequest.setText("");
-        connectionManager.createGroup(groupName);
+        connectionManager.groupAction(Message.ClientMessage.groupActionTypes.CREATE, groupName);
     }
 
     public void pressJoinGroupButton(){
         String groupName = groupNameRequest.getText();
         groupNameRequest.setText("");
-        connectionManager.joinGroup(groupName);
+        connectionManager.groupAction(Message.ClientMessage.groupActionTypes.REQUEST, groupName);
     }
 
     public void pressLeaveGroupButton(){
         String groupName = groupChoice.getValue().toString();
-        connectionManager.leaveGroup(groupName);
+        connectionManager.groupAction(Message.ClientMessage.groupActionTypes.LEAVE, groupName);
     }
 
     public void pressDeleteGroupButton(){
         String groupName = groupChoice.getValue().toString();
-        connectionManager.deleteGroup(groupName);
+        connectionManager.groupAction(Message.ClientMessage.groupActionTypes.DELETE, groupName);
     }
 
     public TextArea getTextArea(){

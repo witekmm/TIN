@@ -66,40 +66,10 @@ public class ConnectionManager {
         connected = false;
     }
 
-    public void createGroup(String groupName){
+    public void groupAction(Message.ClientMessage.groupActionTypes type, String groupName){
         Message.ClientMessage group = Message.ClientMessage.newBuilder()
                 .setMessageType(Message.ClientMessage.messageTypes.GROUP)
-                .setGroupActionType(Message.ClientMessage.groupActionTypes.CREATE)
-                .setGroupName(groupName)
-                .build();
-
-        serializeAndSend(group);
-    }
-
-    public void joinGroup(String groupName) {
-        Message.ClientMessage group = Message.ClientMessage.newBuilder()
-                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
-                .setGroupActionType(Message.ClientMessage.groupActionTypes.REQUEST)
-                .setGroupName(groupName)
-                .build();
-
-        serializeAndSend(group);
-    }
-
-    public void leaveGroup(String groupName) {
-        Message.ClientMessage group = Message.ClientMessage.newBuilder()
-                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
-                .setGroupActionType(Message.ClientMessage.groupActionTypes.LEAVE)
-                .setGroupName(groupName)
-                .build();
-
-        serializeAndSend(group);
-    }
-
-    public void deleteGroup(String groupName) {
-        Message.ClientMessage group = Message.ClientMessage.newBuilder()
-                .setMessageType(Message.ClientMessage.messageTypes.GROUP)
-                .setGroupActionType(Message.ClientMessage.groupActionTypes.DELETE)
+                .setGroupActionType(type)
                 .setGroupName(groupName)
                 .build();
 
@@ -161,7 +131,6 @@ public class ConnectionManager {
 
             int received;
             char[] answer = new char[4];
-
             if((received = connection.receive(answer, 0, 4)) == -1){
                 break;
             }
@@ -271,7 +240,7 @@ public class ConnectionManager {
 
         int answerSize = getMsgLength(answer);
         char[] answerMsg = new char[answerSize];
-        connection.getIn().read(answerMsg, 0, answerSize);
+        connection.receive(answerMsg, 0, answerSize);
 
         Message.ClientMessage response = Message.ClientMessage.parseFrom(new String(answerMsg).getBytes());
         ObservableList<String> groups = FXCollections.observableArrayList(response.getGroupsList());

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="281.0" prefWidth="531.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Controller.LoginViewController">
+   <children>
+      <TextField fx:id="loginInput" layoutX="245.0" layoutY="63.0" />
+      <Button fx:id="confirmButton" layoutX="202.0" layoutY="196.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="134.0" text="Confirm" onAction="#pressButton">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="156.0" layoutY="59.0" prefHeight="33.0" prefWidth="113.0" text="Login:">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="121.0" layoutY="124.0" prefHeight="33.0" prefWidth="113.0" text="Password:">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="passwordInput" layoutX="245.0" layoutY="128.0" />
+   </children>
+</AnchorPane>
