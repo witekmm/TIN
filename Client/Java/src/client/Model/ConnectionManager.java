@@ -49,9 +49,9 @@ public class ConnectionManager {
         int connResult = connection.connect();
         if (connResult != 0) {
 
-            if (connResult == -1)
+            if (connResult == -1) // max connections reached, couldn't connect
                 throw new SocketException();
-            if (connResult == -2)
+            if (connResult == -2) // connection canceled by user
                 throw new Exception("Canceled");
         }
         connected = serverConnection = true;
@@ -114,11 +114,11 @@ public class ConnectionManager {
         int msgSize = serialized.length;
         byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(msgSize).array();
 
-        byte[] send = new byte[result.length + msgSize];
-        System.arraycopy(result, 0, send, 0, result.length);
-        System.arraycopy(serialized, 0, send, result.length, msgSize);
+        byte[] message = new byte[result.length + msgSize];
+        System.arraycopy(result, 0, message, 0, result.length);
+        System.arraycopy(serialized, 0, message, result.length, msgSize);
 
-        connection.send(send);
+        connection.send(message);
     }
 
     private int getMsgLength(char[] answer){
@@ -199,12 +199,12 @@ public class ConnectionManager {
             client.getTextArea().appendText("Request to join group: '" + response.getGroupName() + "' send!");
             createJoinGroupAlert(response.getUserName(), response.getGroupName());
         }
-        if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT){
+        if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT)
             groupReply(response.getGroupName(), response.getGroupActionType());
-        }
-        if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY) {
+
+        if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY)
             sendReply();
-        }
+
         if(!response.getMessageContent().isEmpty())
             client.getTextArea().appendText(response.getUserName() +  ": " + response.getMessageContent() + '\n');
 

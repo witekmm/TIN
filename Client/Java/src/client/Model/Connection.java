@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class Connection {
 
-    private final int MAX_ATTEMPTS = 5;
+    private final int MAX_CONNECTION_ATTEMPTS = 5;
     private Socket socket;
     private String IP;
     private Integer port;
@@ -37,7 +37,7 @@ public class Connection {
                     if(result.get() == ButtonType.CANCEL)
                         return -2;
             }
-            if(attempts == MAX_ATTEMPTS)
+            if(attempts == MAX_CONNECTION_ATTEMPTS)
                 return -1;
             attempts++;
         }
@@ -65,17 +65,5 @@ public class Connection {
             e.printStackTrace();
         }
         return -1;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public DataOutputStream getOut() {
-        return out;
-    }
-
-    public BufferedReader getIn() {
-        return in;
     }
 }
