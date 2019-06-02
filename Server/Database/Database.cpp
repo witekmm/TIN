@@ -586,11 +586,13 @@ int Database::getOldestMsgForUser(int userId)
 void Database::deleteOldestMsgForUser(std::string login)
 {
 	int msgId = getOldestMsgForUser(login);
+	int userId = getUserId(login);
 	try
 	{
-		sql::SQLString query = "DELETE FROM `User_Message` WHERE message_id = ?";
+		sql::SQLString query = "DELETE FROM `User_Message` WHERE message_id = ? AND user_id=?";
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, msgId);
+		pstmt->setInt(2, userId);
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
@@ -809,7 +811,7 @@ void Database::removeMsgIfForNoUser(int msgId)
 {
 	try
 	{
-		sql::SQLString query = "SELECT u.id from `User_Message` AS um ";
+		sql::SQLString query = "SELECT um.user_id from `User_Message` AS um ";
 					   				query+= "JOIN `User` u on u.id = um.user_id ";
 										 query+= "WHERE um.message_id = ?";
 
