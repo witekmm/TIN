@@ -23,6 +23,7 @@ public class ConnectionManager {
     private String IP;
     private Integer port;
     private Boolean connected;
+    private volatile Boolean serverConnection;
     private ClientViewController client;
     private ObservableList<String> groups;
     private Thread receiveThread;
@@ -53,10 +54,12 @@ public class ConnectionManager {
             if (connResult == -2)
                 throw new Exception("Canceled");
         }
-        connected = true;
+        connected = serverConnection = true;
     }
 
     public void disconnect(){
+        Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "You were disconnected").showAndWait();
+        serverConnection = false;
         try {
             connection.end();
         } catch (IOException e) {
@@ -157,7 +160,8 @@ public class ConnectionManager {
 
     private void sendNoConnection(){
         Thread t = new Thread(() -> Platform.runLater(() -> {
-            Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "Server connection lost! You were disconnected").showAndWait();
+            if(serverConnection)
+                Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "Server connection lost! You were disconnected").showAndWait();
             client.openConnectForm();
         }));
         t.start();
@@ -185,13 +189,14 @@ public class ConnectionManager {
                 groupReply(response.getGroupName(), response.getGroupActionType());
         }
         else if(response.getReply() == Message.ClientMessage.replyStatus.NEGATIVE){
-            if(!response.getGroupName().isEmpty()) {
-                groupReply(response.getGroupName(), response.getGroupActionType());
+            if(!response.getGroupName().isEmpty() && !response.getReplyContent().isEmpty() && response.getMessageType() == Message.ClientMessage.messageTypes.REPLY) {
+                groupReply(response.getGroupName(), Message.ClientMessage.groupActionTypes.MESSAGE);
             }
-            else if(response.getAuthorizationType() == Message.ClientMessage.authorizationTypes.LOG_IN)
+            if(response.getAuthorizationType() == Message.ClientMessage.authorizationTypes.LOG_IN)
                 loginUser(false, response);
         }
         if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST) {
+            client.getTextArea().appendText("Request to join group: '" + response.getGroupName() + "' send!");
             createJoinGroupAlert(response.getUserName(), response.getGroupName());
         }
         if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT){
@@ -227,7 +232,7 @@ public class ConnectionManager {
                     break;
                 }
                 case ACCEPT: {
-                    client.getTextArea().appendText("Request accepted. Joined group: " + groupName + '\n');
+                    client.getTextArea().appendText("Request accepted. Joined group: '" + groupName + "'" + '\n');
                     newList.add(groupName);
                     break;
                 }
@@ -239,7 +244,6 @@ public class ConnectionManager {
             client.getGroupChoice().setItems(newList);
             client.getGroupChoice().getSelectionModel().clearSelection();
         });
-
     }
 
     private void createJoinGroupAlert(String userName, String groupName){

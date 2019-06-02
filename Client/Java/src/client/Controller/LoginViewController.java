@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginViewController {
@@ -43,9 +42,6 @@ public class LoginViewController {
         System.out.println("Logged in");
         logged = true;
         client.getUserName().setText(login);
-//        Scene clientScene = client.getClientScene();
-//        Stage stage = (Stage) loginInput.getScene().getWindow();
-//            client.getConnectionManager().getReceiveThread().start();
         client.getStage().setScene(clientScene);
     }
 
