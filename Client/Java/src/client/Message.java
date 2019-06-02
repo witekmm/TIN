@@ -245,7 +245,7 @@ public final class Message {
             }
             case 90: {
               java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+              if (!((mutable_bitField0_ & 0x00000400) != 0)) {
                 groups_ = new com.google.protobuf.LazyStringArrayList();
                 mutable_bitField0_ |= 0x00000400;
               }
@@ -253,7 +253,7 @@ public final class Message {
               break;
             }
             default: {
-              if (!parseUnknownFieldProto3(
+              if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
@@ -267,7 +267,7 @@ public final class Message {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+        if (((mutable_bitField0_ & 0x00000400) != 0)) {
           groups_ = groups_.getUnmodifiableView();
         }
         this.unknownFields = unknownFields.build();
@@ -293,32 +293,40 @@ public final class Message {
     public enum messageTypes
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>AUTHORIZATION = 0;</code>
+       * <code>NOMESSAGETYPE = 0;</code>
        */
-      AUTHORIZATION(0),
+      NOMESSAGETYPE(0),
       /**
-       * <code>GROUP = 1;</code>
+       * <code>AUTHORIZATION = 1;</code>
        */
-      GROUP(1),
+      AUTHORIZATION(1),
       /**
-       * <code>REPLY = 2;</code>
+       * <code>GROUP = 2;</code>
        */
-      REPLY(2),
+      GROUP(2),
+      /**
+       * <code>REPLY = 3;</code>
+       */
+      REPLY(3),
       UNRECOGNIZED(-1),
       ;
 
       /**
-       * <code>AUTHORIZATION = 0;</code>
+       * <code>NOMESSAGETYPE = 0;</code>
        */
-      public static final int AUTHORIZATION_VALUE = 0;
+      public static final int NOMESSAGETYPE_VALUE = 0;
       /**
-       * <code>GROUP = 1;</code>
+       * <code>AUTHORIZATION = 1;</code>
        */
-      public static final int GROUP_VALUE = 1;
+      public static final int AUTHORIZATION_VALUE = 1;
       /**
-       * <code>REPLY = 2;</code>
+       * <code>GROUP = 2;</code>
        */
-      public static final int REPLY_VALUE = 2;
+      public static final int GROUP_VALUE = 2;
+      /**
+       * <code>REPLY = 3;</code>
+       */
+      public static final int REPLY_VALUE = 3;
 
 
       public final int getNumber() {
@@ -339,9 +347,10 @@ public final class Message {
 
       public static messageTypes forNumber(int value) {
         switch (value) {
-          case 0: return AUTHORIZATION;
-          case 1: return GROUP;
-          case 2: return REPLY;
+          case 0: return NOMESSAGETYPE;
+          case 1: return AUTHORIZATION;
+          case 2: return GROUP;
+          case 3: return REPLY;
           default: return null;
         }
       }
@@ -400,64 +409,72 @@ public final class Message {
     public enum groupActionTypes
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>MESSAGE = 0;</code>
+       * <code>NOGROUPTYPE = 0;</code>
        */
-      MESSAGE(0),
+      NOGROUPTYPE(0),
       /**
-       * <code>CREATE = 1;</code>
+       * <code>MESSAGE = 1;</code>
        */
-      CREATE(1),
+      MESSAGE(1),
       /**
-       * <code>DELETE = 2;</code>
+       * <code>CREATE = 2;</code>
        */
-      DELETE(2),
+      CREATE(2),
       /**
-       * <code>REQUEST = 3;</code>
+       * <code>DELETE = 3;</code>
        */
-      REQUEST(3),
+      DELETE(3),
       /**
-       * <code>ACCEPT = 4;</code>
+       * <code>REQUEST = 4;</code>
        */
-      ACCEPT(4),
+      REQUEST(4),
       /**
-       * <code>DECLINE = 5;</code>
+       * <code>ACCEPT = 5;</code>
        */
-      DECLINE(5),
+      ACCEPT(5),
       /**
-       * <code>LEAVE = 6;</code>
+       * <code>DECLINE = 6;</code>
        */
-      LEAVE(6),
+      DECLINE(6),
+      /**
+       * <code>LEAVE = 7;</code>
+       */
+      LEAVE(7),
       UNRECOGNIZED(-1),
       ;
 
       /**
-       * <code>MESSAGE = 0;</code>
+       * <code>NOGROUPTYPE = 0;</code>
        */
-      public static final int MESSAGE_VALUE = 0;
+      public static final int NOGROUPTYPE_VALUE = 0;
       /**
-       * <code>CREATE = 1;</code>
+       * <code>MESSAGE = 1;</code>
        */
-      public static final int CREATE_VALUE = 1;
+      public static final int MESSAGE_VALUE = 1;
       /**
-       * <code>DELETE = 2;</code>
+       * <code>CREATE = 2;</code>
        */
-      public static final int DELETE_VALUE = 2;
+      public static final int CREATE_VALUE = 2;
       /**
-       * <code>REQUEST = 3;</code>
+       * <code>DELETE = 3;</code>
        */
-      public static final int REQUEST_VALUE = 3;
+      public static final int DELETE_VALUE = 3;
       /**
-       * <code>ACCEPT = 4;</code>
+       * <code>REQUEST = 4;</code>
        */
-      public static final int ACCEPT_VALUE = 4;
+      public static final int REQUEST_VALUE = 4;
       /**
-       * <code>DECLINE = 5;</code>
+       * <code>ACCEPT = 5;</code>
        */
-      public static final int DECLINE_VALUE = 5;
+      public static final int ACCEPT_VALUE = 5;
       /**
-       * <code>LEAVE = 6;</code>
+       * <code>DECLINE = 6;</code>
        */
-      public static final int LEAVE_VALUE = 6;
+      public static final int DECLINE_VALUE = 6;
+      /**
+       * <code>LEAVE = 7;</code>
+       */
+      public static final int LEAVE_VALUE = 7;
 
 
       public final int getNumber() {
@@ -478,13 +495,14 @@ public final class Message {
 
       public static groupActionTypes forNumber(int value) {
         switch (value) {
-          case 0: return MESSAGE;
-          case 1: return CREATE;
-          case 2: return DELETE;
-          case 3: return REQUEST;
-          case 4: return ACCEPT;
-          case 5: return DECLINE;
-          case 6: return LEAVE;
+          case 0: return NOGROUPTYPE;
+          case 1: return MESSAGE;
+          case 2: return CREATE;
+          case 3: return DELETE;
+          case 4: return REQUEST;
+          case 5: return ACCEPT;
+          case 6: return DECLINE;
+          case 7: return LEAVE;
           default: return null;
         }
       }
@@ -543,24 +561,32 @@ public final class Message {
     public enum authorizationTypes
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>LOG_IN = 0;</code>
+       * <code>NOAUTHORIZATIONTYPE = 0;</code>
        */
-      LOG_IN(0),
+      NOAUTHORIZATIONTYPE(0),
       /**
-       * <code>REGISTER = 1;</code>
+       * <code>LOG_IN = 1;</code>
        */
-      REGISTER(1),
+      LOG_IN(1),
+      /**
+       * <code>REGISTER = 2;</code>
+       */
+      REGISTER(2),
       UNRECOGNIZED(-1),
       ;
 
       /**
-       * <code>LOG_IN = 0;</code>
+       * <code>NOAUTHORIZATIONTYPE = 0;</code>
        */
-      public static final int LOG_IN_VALUE = 0;
+      public static final int NOAUTHORIZATIONTYPE_VALUE = 0;
       /**
-       * <code>REGISTER = 1;</code>
+       * <code>LOG_IN = 1;</code>
        */
-      public static final int REGISTER_VALUE = 1;
+      public static final int LOG_IN_VALUE = 1;
+      /**
+       * <code>REGISTER = 2;</code>
+       */
+      public static final int REGISTER_VALUE = 2;
 
 
       public final int getNumber() {
@@ -581,8 +607,9 @@ public final class Message {
 
       public static authorizationTypes forNumber(int value) {
         switch (value) {
-          case 0: return LOG_IN;
-          case 1: return REGISTER;
+          case 0: return NOAUTHORIZATIONTYPE;
+          case 1: return LOG_IN;
+          case 2: return REGISTER;
           default: return null;
         }
       }
@@ -641,24 +668,32 @@ public final class Message {
     public enum replyStatus
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>POSITIVE = 0;</code>
+       * <code>NOSTATUS = 0;</code>
        */
-      POSITIVE(0),
+      NOSTATUS(0),
       /**
-       * <code>NEGATIVE = 1;</code>
+       * <code>POSITIVE = 1;</code>
        */
-      NEGATIVE(1),
+      POSITIVE(1),
+      /**
+       * <code>NEGATIVE = 2;</code>
+       */
+      NEGATIVE(2),
       UNRECOGNIZED(-1),
       ;
 
       /**
-       * <code>POSITIVE = 0;</code>
+       * <code>NOSTATUS = 0;</code>
        */
-      public static final int POSITIVE_VALUE = 0;
+      public static final int NOSTATUS_VALUE = 0;
       /**
-       * <code>NEGATIVE = 1;</code>
+       * <code>POSITIVE = 1;</code>
        */
-      public static final int NEGATIVE_VALUE = 1;
+      public static final int POSITIVE_VALUE = 1;
+      /**
+       * <code>NEGATIVE = 2;</code>
+       */
+      public static final int NEGATIVE_VALUE = 2;
 
 
       public final int getNumber() {
@@ -679,8 +714,9 @@ public final class Message {
 
       public static replyStatus forNumber(int value) {
         switch (value) {
-          case 0: return POSITIVE;
-          case 1: return NEGATIVE;
+          case 0: return NOSTATUS;
+          case 1: return POSITIVE;
+          case 2: return NEGATIVE;
           default: return null;
         }
       }
@@ -1049,13 +1085,13 @@ public final class Message {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (messageType_ != Message.ClientMessage.messageTypes.AUTHORIZATION.getNumber()) {
+      if (messageType_ != Message.ClientMessage.messageTypes.NOMESSAGETYPE.getNumber()) {
         output.writeEnum(1, messageType_);
       }
-      if (groupActionType_ != Message.ClientMessage.groupActionTypes.MESSAGE.getNumber()) {
+      if (groupActionType_ != Message.ClientMessage.groupActionTypes.NOGROUPTYPE.getNumber()) {
         output.writeEnum(2, groupActionType_);
       }
-      if (authorizationType_ != Message.ClientMessage.authorizationTypes.LOG_IN.getNumber()) {
+      if (authorizationType_ != Message.ClientMessage.authorizationTypes.NOAUTHORIZATIONTYPE.getNumber()) {
         output.writeEnum(3, authorizationType_);
       }
       if (!getLoginBytes().isEmpty()) {
@@ -1073,7 +1109,7 @@ public final class Message {
       if (!getMessageContentBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 8, messageContent_);
       }
-      if (reply_ != Message.ClientMessage.replyStatus.POSITIVE.getNumber()) {
+      if (reply_ != Message.ClientMessage.replyStatus.NOSTATUS.getNumber()) {
         output.writeEnum(9, reply_);
       }
       if (!getReplyContentBytes().isEmpty()) {
@@ -1091,15 +1127,15 @@ public final class Message {
       if (size != -1) return size;
 
       size = 0;
-      if (messageType_ != Message.ClientMessage.messageTypes.AUTHORIZATION.getNumber()) {
+      if (messageType_ != Message.ClientMessage.messageTypes.NOMESSAGETYPE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, messageType_);
       }
-      if (groupActionType_ != Message.ClientMessage.groupActionTypes.MESSAGE.getNumber()) {
+      if (groupActionType_ != Message.ClientMessage.groupActionTypes.NOGROUPTYPE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(2, groupActionType_);
       }
-      if (authorizationType_ != Message.ClientMessage.authorizationTypes.LOG_IN.getNumber()) {
+      if (authorizationType_ != Message.ClientMessage.authorizationTypes.NOAUTHORIZATIONTYPE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, authorizationType_);
       }
@@ -1118,7 +1154,7 @@ public final class Message {
       if (!getMessageContentBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, messageContent_);
       }
-      if (reply_ != Message.ClientMessage.replyStatus.POSITIVE.getNumber()) {
+      if (reply_ != Message.ClientMessage.replyStatus.NOSTATUS.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(9, reply_);
       }
@@ -1148,27 +1184,26 @@ public final class Message {
       }
       Message.ClientMessage other = (Message.ClientMessage) obj;
 
-      boolean result = true;
-      result = result && messageType_ == other.messageType_;
-      result = result && groupActionType_ == other.groupActionType_;
-      result = result && authorizationType_ == other.authorizationType_;
-      result = result && getLogin()
-          .equals(other.getLogin());
-      result = result && getPassword()
-          .equals(other.getPassword());
-      result = result && getGroupName()
-          .equals(other.getGroupName());
-      result = result && getUserName()
-          .equals(other.getUserName());
-      result = result && getMessageContent()
-          .equals(other.getMessageContent());
-      result = result && reply_ == other.reply_;
-      result = result && getReplyContent()
-          .equals(other.getReplyContent());
-      result = result && getGroupsList()
-          .equals(other.getGroupsList());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (messageType_ != other.messageType_) return false;
+      if (groupActionType_ != other.groupActionType_) return false;
+      if (authorizationType_ != other.authorizationType_) return false;
+      if (!getLogin()
+          .equals(other.getLogin())) return false;
+      if (!getPassword()
+          .equals(other.getPassword())) return false;
+      if (!getGroupName()
+          .equals(other.getGroupName())) return false;
+      if (!getUserName()
+          .equals(other.getUserName())) return false;
+      if (!getMessageContent()
+          .equals(other.getMessageContent())) return false;
+      if (reply_ != other.reply_) return false;
+      if (!getReplyContent()
+          .equals(other.getReplyContent())) return false;
+      if (!getGroupsList()
+          .equals(other.getGroupsList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -1395,7 +1430,7 @@ public final class Message {
         result.messageContent_ = messageContent_;
         result.reply_ = reply_;
         result.replyContent_ = replyContent_;
-        if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        if (((bitField0_ & 0x00000400) != 0)) {
           groups_ = groups_.getUnmodifiableView();
           bitField0_ = (bitField0_ & ~0x00000400);
         }
@@ -1407,35 +1442,35 @@ public final class Message {
 
       @java.lang.Override
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2121,7 +2156,7 @@ public final class Message {
 
       private com.google.protobuf.LazyStringList groups_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureGroupsIsMutable() {
-        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+        if (!((bitField0_ & 0x00000400) != 0)) {
           groups_ = new com.google.protobuf.LazyStringArrayList(groups_);
           bitField0_ |= 0x00000400;
          }
@@ -2215,7 +2250,7 @@ public final class Message {
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
+        return super.setUnknownFields(unknownFields);
       }
 
       @java.lang.Override
@@ -2279,7 +2314,7 @@ public final class Message {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rmessage.proto\"\346\004\n\rClientMessage\0220\n\013mes" +
+      "\n\rmessage.proto\"\261\005\n\rClientMessage\0220\n\013mes" +
       "sageType\030\001 \001(\0162\033.ClientMessage.messageTy" +
       "pes\0228\n\017groupActionType\030\002 \001(\0162\037.ClientMes" +
       "sage.groupActionTypes\022<\n\021authorizationTy" +
@@ -2288,13 +2323,15 @@ public final class Message {
       "groupName\030\006 \001(\t\022\020\n\010userName\030\007 \001(\t\022\026\n\016mes" +
       "sageContent\030\010 \001(\t\022)\n\005reply\030\t \001(\0162\032.Clien" +
       "tMessage.replyStatus\022\024\n\014replyContent\030\n \001" +
-      "(\t\022\016\n\006groups\030\013 \003(\t\"7\n\014messageTypes\022\021\n\rAU" +
-      "THORIZATION\020\000\022\t\n\005GROUP\020\001\022\t\n\005REPLY\020\002\"h\n\020g" +
-      "roupActionTypes\022\013\n\007MESSAGE\020\000\022\n\n\006CREATE\020\001" +
-      "\022\n\n\006DELETE\020\002\022\013\n\007REQUEST\020\003\022\n\n\006ACCEPT\020\004\022\013\n" +
-      "\007DECLINE\020\005\022\t\n\005LEAVE\020\006\".\n\022authorizationTy" +
-      "pes\022\n\n\006LOG_IN\020\000\022\014\n\010REGISTER\020\001\")\n\013replySt" +
-      "atus\022\014\n\010POSITIVE\020\000\022\014\n\010NEGATIVE\020\001b\006proto3"
+      "(\t\022\016\n\006groups\030\013 \003(\t\"J\n\014messageTypes\022\021\n\rNO" +
+      "MESSAGETYPE\020\000\022\021\n\rAUTHORIZATION\020\001\022\t\n\005GROU" +
+      "P\020\002\022\t\n\005REPLY\020\003\"y\n\020groupActionTypes\022\017\n\013NO" +
+      "GROUPTYPE\020\000\022\013\n\007MESSAGE\020\001\022\n\n\006CREATE\020\002\022\n\n\006" +
+      "DELETE\020\003\022\013\n\007REQUEST\020\004\022\n\n\006ACCEPT\020\005\022\013\n\007DEC" +
+      "LINE\020\006\022\t\n\005LEAVE\020\007\"G\n\022authorizationTypes\022" +
+      "\027\n\023NOAUTHORIZATIONTYPE\020\000\022\n\n\006LOG_IN\020\001\022\014\n\010" +
+      "REGISTER\020\002\"7\n\013replyStatus\022\014\n\010NOSTATUS\020\000\022" +
+      "\014\n\010POSITIVE\020\001\022\014\n\010NEGATIVE\020\002b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

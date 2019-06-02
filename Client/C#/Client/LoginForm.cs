@@ -19,37 +19,22 @@ namespace Client
             this.Show();
             loginAttempts = 0;
             logged = false;
-            //tryLogin();
         }
 
         public Boolean LogedIn
         {
             get { return logged; }
         }
-
-        private void tryLogin()
-        {
-            while (!logged)
-            {
-                if(loginAttempts == 5)
-                {
-                    this.Close();
-                }
-            }
-        }
-
         private void Client_FormClosing(object sender, FormClosingEventArgs e)
         {
             client.ConnectionManager.Disconnect(true);
             MessageBox.Show("Disconnected", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
             client.ConnectForm.Enabled = true;
         }
-
         private void LoginForm_Load(object sender, EventArgs e)
         {
 
         }
-
         private void LoginButton_Click(object sender, EventArgs e)
         {
 
@@ -59,6 +44,7 @@ namespace Client
             {
                 logged = true;
                 this.Hide();
+                client.Username.Text = login;
                 client.ConnectionManager.ReceiveThread.Start();
                 client.Show();
             }

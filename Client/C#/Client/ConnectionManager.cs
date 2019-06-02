@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Google.Protobuf;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Client
 {
@@ -23,28 +24,9 @@ namespace Client
             IP = _IP;
             port = _port;
             client = _client;
+            connected = false;
             connection = new Connection(IP, port);
-            connected = false;
         }
-
-        public Thread ReceiveThread
-        {
-            get { return receiveThread; }
-        }
-
-        public void Disconnect(Boolean wasConnected)
-        {
-            try
-            {
-                connection.End(wasConnected);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Disconnect error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            connected = false;
-        }
-
         public void Connect()
         {
             receiveThread = new Thread(ReceiveThreadMethod);
@@ -60,64 +42,47 @@ namespace Client
                         throw new Exception("Canceled");
                 }
                 connected = true;
-                //receiveThread.Start();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
-
-        public void Send(byte[] buffer)
+        public void Disconnect(Boolean wasConnected)
         {
             try
             {
-                connection.Send(buffer);
+                connection.End(wasConnected);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Send error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Disconnect error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            connected = false;
         }
-
-        public byte[] Receive()
+        public void GroupAction(ClientMessage.Types.groupActionTypes type, String groupName)
         {
-            byte[] buffer = new byte[1024];
-            try
+            Console.Write("type: " + type);
+            ClientMessage msg = new ClientMessage
             {
-                connection.Receive(buffer);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Receive error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return buffer;
+                GroupActionType = type,
+                MessageType = ClientMessage.Types.messageTypes.Group,
+                GroupName = groupName
+            };
+            SerializeAndSend(msg);
         }
-
-        private void ReceiveThreadMethod()
+        public void SendMessage(String buffer, String groupName)
         {
-            byte[] buffer = new byte[1024];
-            while (connected)
+            ClientMessage msg = new ClientMessage
             {
-                int received = connection.Receive(buffer);
-                string message = Encoding.ASCII.GetString(buffer);
-                
-                if (received > 0)
-                {
-                    client.ChatText.AppendText(message);
-                    client.ChatText.AppendText(Environment.NewLine);
-                }
-
-                if (!connection.IsConnected())
-                {
-                    MessageBox.Show("Connection to server lost. Closing client now!", "Connection error", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    receiveThread.Join();
-                    client.Close();
-                }
-            }
+                GroupActionType = ClientMessage.Types.groupActionTypes.Message,
+                MessageType = ClientMessage.Types.messageTypes.Group,
+                MessageContent = buffer,
+                GroupName = groupName
+            };
+            SerializeAndSend(msg);
         }
-        public Boolean CheckUser(String _login, String _password)
+        public void SendLoginRequest(String _login, String _password)
         {
             ClientMessage user = new ClientMessage
             {
@@ -126,63 +91,165 @@ namespace Client
                 AuthorizationType = ClientMessage.Types.authorizationTypes.LogIn,
                 MessageType = ClientMessage.Types.messageTypes.Authorization
             };
+            SerializeAndSend(user);
+        }
+        private void SendReply()
+        {
+            ClientMessage msg = new ClientMessage
+            {
+                MessageType = ClientMessage.Types.messageTypes.Reply
+            };
+            SerializeAndSend(msg);
+        }
+        public void SerializeAndSend(ClientMessage msg)
+        {
+            byte[] serialized = msg.ToByteArray();
+            int msgSize = serialized.Length;
+            byte[] result = BitConverter.GetBytes(msgSize);
 
-            byte[] msg = user.ToByteArray();
-            int bytesToSend = msg.Length;
-
-            byte[] empty = new byte[4];
-            connection.Socket.Send(empty, 4, SocketFlags.None);
+            byte[] send = new byte[result.Length + msgSize];
+            System.Buffer.BlockCopy(result, 0, send, 0, result.Length);
+            System.Buffer.BlockCopy(serialized, 0, send, result.Length, msgSize);
+            Console.Write("send: " + send.Length);
+            int bytesToSend = send.Length;
             while (bytesToSend != 0)
             {
-                int sent = connection.Socket.Send(msg, bytesToSend, SocketFlags.None);
-                if (sent != 0)
-                    Console.WriteLine("Sent: " + sent);
-                if(sent == -1)
-                    Console.WriteLine("Cannot sent");
-
+                int sent = connection.Socket.Send(send, bytesToSend, SocketFlags.None);
                 bytesToSend -= sent;
-                Console.WriteLine("Tosend: " + bytesToSend + " Sent: " + sent);
             }
-            Console.WriteLine("Sent all");
+        }
+        private void ReceiveThreadMethod()
+        {
+            while (connected)
+            {
+                int received;
+                byte[] answer = new byte[4];
+                received = connection.Receive(answer, 0, 4);
 
-            //byte[] bytes = new byte[4];
-            //int size = connection.Socket.Send(bytes);
-            ////Send(bytes);
-            //Console.Write("size: " + size);
-            //bytes = user.ToByteArray();
-            //connection.Socket.Send(bytes);
-            ////Send(bytes);
-            //Console.Write("\nsize: " + size);
+                int answerSize = BitConverter.ToInt32(answer, 0);
+                byte[] answerMsg = new byte[answerSize];
+
+                List<byte> list = new List<byte>();
+                while (answerSize != 0)
+                {
+                    received = connection.Socket.Receive(answerMsg, answerSize, SocketFlags.None);
+                    foreach (byte i in answerMsg)
+                    {
+                        list.Add(i);
+                    }
+                    Array.Clear(answerMsg, 0, answerMsg.Length);
+                    answerSize -= received;
+                }
+                ClientMessage response = ClientMessage.Parser.ParseFrom(list.ToArray());
+
+                if (received > 0)
+                {
+                    HandleResponse(response);
+                }
+
+                if (!connection.IsConnected())
+                {
+                    MessageBox.Show("Connection to server lost. Closing client now!", "Connection error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //receiveThread.Join();
+                    client.Close();
+                }
+            }
+        }
+        private void HandleResponse(ClientMessage response)
+        {
+            if (!(response.MessageContent.Length == 0))
+            {
+                client.ChatText.SelectionColor = Color.Black;
+                client.ChatText.AppendText(response.UserName + ": " + response.MessageContent + Environment.NewLine);
+            }
+            if (!(response.ReplyContent.Length == 0))
+            {
+                client.ChatText.SelectionColor = Color.Red;
+                client.ChatText.AppendText("Error: " + response.ReplyContent + Environment.NewLine);
+            }
+            if (response.Reply == ClientMessage.Types.replyStatus.Positive)
+            {
+                GroupReply(response, response.GroupActionType);
+            }
+
+            if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Request)
+            {
+                CreateJoinGroupAlert(response.UserName, response.GroupName);
+            }
+
+            if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Accept)
+            {
+                GroupReply(response, response.GroupActionType);
+            }
+
+            if (response.MessageType != ClientMessage.Types.messageTypes.Reply)
+            {
+                SendReply();
+            }
+        }
+        private void GroupReply(ClientMessage response, ClientMessage.Types.groupActionTypes reply)
+        {
+            if (reply == ClientMessage.Types.groupActionTypes.Create)
+            {
+                client.ChatText.SelectionColor = Color.Green;
+                client.ChatText.AppendText("Group: '" + response.GroupName + "' created!" + Environment.NewLine);
+                client.Groups.Items.Add(response.GroupName);
+            }
+            else if (reply == ClientMessage.Types.groupActionTypes.Delete)
+            {
+                client.ChatText.SelectionColor = Color.Green;
+                client.ChatText.AppendText("Group: '" + response.GroupName + "' deleted!" + Environment.NewLine);
+                client.Groups.Items.Remove(response.GroupName);
+            }
+            else if (reply == ClientMessage.Types.groupActionTypes.Leave)
+            {
+                client.ChatText.SelectionColor = Color.Blue;
+                client.ChatText.AppendText("Group: '" + response.GroupName + "' left!" + Environment.NewLine);
+                client.Groups.Items.Remove(response.GroupName);
+            }
+            else if (reply == ClientMessage.Types.groupActionTypes.Accept)
+            {
+                client.ChatText.SelectionColor = Color.Green;
+                client.ChatText.AppendText("Request accepted. Joined group: " + response.GroupName + Environment.NewLine);
+                client.Groups.Items.Add(response.GroupName);
+            }
+        }
+        private void CreateJoinGroupAlert(String username, String groupName)
+        {
+
+        }
+        public Boolean CheckUser(String _login, String _password)
+        {
+            SendLoginRequest(_login, _password);
+
             byte[] answer = new byte[4];
-            int received = connection.Socket.Receive(answer);
+            int received = connection.Receive(answer, 0, 4);
+
             int answerSize = BitConverter.ToInt32(answer, 0);
-            Console.WriteLine("Size: " + answerSize);
             byte[] answerMsg = new byte[answerSize];
-            String buffer = "";
             List<byte> list = new List<byte>();
             while (answerSize != 0)
             {
                 received = connection.Socket.Receive(answerMsg, answerSize, SocketFlags.None);
-                //buffer += answerMsg.ToString();
                 foreach(byte i in answerMsg)
                 {
                     list.Add(i);
-
                 }
                 Array.Clear(answerMsg, 0, answerMsg.Length);
                 answerSize -= received;
-
             }
-            Console.WriteLine("answer: " + list);
-            //Console.WriteLine("boffer: " + buffer);
-
-            //ClientMessage response = ClientMessage.Parser.ParseFrom(Encoding.ASCII.GetBytes(buffer));
             ClientMessage response = ClientMessage.Parser.ParseFrom(list.ToArray());
-            if (response.MessageType != ClientMessage.Types.messageTypes.Reply)
-                Console.WriteLine("cos nie alo");
-            if (response.Reply == ClientMessage.Types.replyStatus.Positive) 
-                return true;
-            return false;
+            foreach(String g in response.Groups)
+            {
+                client.Groups.Items.Add(g);
+            }
+            return response.Reply == ClientMessage.Types.replyStatus.Positive;
+        }
+        public Thread ReceiveThread
+        {
+            get { return receiveThread; }
         }
     }
+    
 }

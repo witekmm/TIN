@@ -4,10 +4,7 @@ import client.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Optional;
@@ -20,7 +17,7 @@ public class Connection {
 
     private String IP;
     private Integer port;
-    private PrintWriter out;
+    private DataOutputStream out;
     private BufferedReader in;
     public Connection(String _ip, Integer _port) {
         IP = _ip;
@@ -34,7 +31,7 @@ public class Connection {
             try {
                 socket = new Socket(IP, port);
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new PrintWriter(socket.getOutputStream(), true);
+                out = new DataOutputStream(socket.getOutputStream());
             } catch (IOException e) {
 
                 Optional<ButtonType> result = Main.newAlert(Alert.AlertType.CONFIRMATION, "Connection error. Attaempt: " + attempts, e.getMessage())
@@ -55,25 +52,27 @@ public class Connection {
     }
 
     public void send(byte[] msg){
-        out.println(Arrays.toString(msg));
-    }
-
-    public int receive(byte[] answerBuffer){
-        String answer = null;
         try {
-            answer = in.readLine();
+            out.write(msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        answerBuffer = answer != null ? answer.getBytes() : new byte[0];
-        return answerBuffer.length;
+    }
+
+    public int receive(char[] answerBuffer, int offset, int length){
+        try {
+            return in.read(answerBuffer, offset, length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public Socket getSocket() {
         return socket;
     }
 
-    public PrintWriter getOut() {
+    public DataOutputStream getOut() {
         return out;
     }
 

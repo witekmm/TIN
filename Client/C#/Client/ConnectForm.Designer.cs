@@ -43,7 +43,7 @@
             this.ConnectButton.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ConnectButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.ConnectButton.ForeColor = System.Drawing.Color.SeaGreen;
-            this.ConnectButton.Location = new System.Drawing.Point(160, 212);
+            this.ConnectButton.Location = new System.Drawing.Point(146, 201);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(108, 49);
             this.ConnectButton.TabIndex = 0;
@@ -85,14 +85,14 @@
             // 
             this.textBoxIP.Location = new System.Drawing.Point(163, 100);
             this.textBoxIP.Name = "textBoxIP";
-            this.textBoxIP.Size = new System.Drawing.Size(105, 20);
+            this.textBoxIP.Size = new System.Drawing.Size(116, 20);
             this.textBoxIP.TabIndex = 4;
             // 
             // textBoxPort
             // 
             this.textBoxPort.Location = new System.Drawing.Point(163, 144);
             this.textBoxPort.Name = "textBoxPort";
-            this.textBoxPort.Size = new System.Drawing.Size(55, 20);
+            this.textBoxPort.Size = new System.Drawing.Size(82, 20);
             this.textBoxPort.TabIndex = 5;
             // 
             // label4
@@ -114,7 +114,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.BurlyWood;
-            this.ClientSize = new System.Drawing.Size(402, 293);
+            this.ClientSize = new System.Drawing.Size(413, 291);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxPort);

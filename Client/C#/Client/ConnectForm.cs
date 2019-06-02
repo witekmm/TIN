@@ -25,6 +25,10 @@ namespace Client
                 {
                     serverAddress = Connection.GetLocalIP();
                 }
+                if (serverAddress == "test")
+                {
+                    serverAddress = "169.254.203.113";
+                }
                 serverIP = IPAddress.Parse(serverAddress);
             }
             catch(FormatException)

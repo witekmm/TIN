@@ -49,7 +49,9 @@ bool  ClientSessionPipe::isRecvSuccessfull(int bytesReceived) {
 }
 
 int ClientSessionPipe::convertRecvBytesToSize(const char* recvBytes) {
-    int size = (int)*recvBytes;
+    // int size = (int)*recvBytes;
+    int size;
+    memcpy(&size , recvBytes , 4);
     return size;
 }
 
@@ -70,7 +72,7 @@ int ClientSessionPipe::readBytesSize() {
         //Message size fully read at once
         bytesMessageSizeRead = true;
         numberOfBytesToRead = convertRecvBytesToSize(tmp);
-
+        cout<<"patload: "<<numberOfBytesToRead<<endl;
         delete [] tmp;
         return 0;
     } else if(bytesReceived > 0 && bytesReceived < MESSAGE_SIZE_BYTES_NUMBER) {
@@ -84,6 +86,7 @@ int ClientSessionPipe::readBytesSize() {
             numberOfBytesToRead = convertRecvBytesToSize(
                 readBytesBuffer.c_str());
 
+cout<<"patload213142: "<<numberOfBytesToRead<<endl;
             bytesMessageSizeRead = true;
             readBytesBuffer.clear();
         }
