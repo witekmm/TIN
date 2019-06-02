@@ -165,15 +165,17 @@ public class ConnectionManager {
         if(response.getReply() == Message.ClientMessage.replyStatus.POSITIVE) {
             groupReply(response, response.getGroupActionType());
         }
-
+        else if(response.getReply() == Message.ClientMessage.replyStatus.NEGATIVE){
+            if(!response.getGroupName().isEmpty()) {
+                groupReply(response, response.getGroupActionType());
+            }
+        }
         if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST) {
             createJoinGroupAlert(response.getUserName(), response.getGroupName());
         }
-
         if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT){
             groupReply(response, response.getGroupActionType());
         }
-
         if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY) {
             sendReply();
         }
@@ -197,6 +199,9 @@ public class ConnectionManager {
         else if(reply == Message.ClientMessage.groupActionTypes.ACCEPT){
             client.getTextArea().appendText("Request accepted. Joined group: " + response.getGroupName() + '\n');
             newList.add(response.getGroupName());
+        }
+        else if(reply == Message.ClientMessage.groupActionTypes.MESSAGE){
+            newList.remove(response.getGroupName());
         }
         client.getGroupChoice().setItems(newList);
         client.getGroupChoice().setValue("");
