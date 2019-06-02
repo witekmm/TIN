@@ -586,11 +586,13 @@ int Database::getOldestMsgForUser(int userId)
 void Database::deleteOldestMsgForUser(std::string login)
 {
 	int msgId = getOldestMsgForUser(login);
+	int userId = getUserId(login);
 	try
 	{
-		sql::SQLString query = "DELETE FROM `User_Message` WHERE message_id = ?";
+		sql::SQLString query = "DELETE FROM `User_Message` WHERE message_id = ? AND user_id=?";
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, msgId);
+		pstmt->setInt(2, userId);
 		pstmt->execute();
 	}
 	catch(sql::SQLException &e) {
@@ -785,19 +787,14 @@ std::string Database::getMsgGroupName(int msgId)
 {
 	try
 	{
-		sql::SQLString query = "SELECT name from `Group` AS g ";
-					   query+= "JOIN `User_Group` AS ug ON g.id = ug.group_id ";
-					   query+= "JOIN `User` AS u ON u.id = ug.user_id ";
-						 query+= "JOIN `User_Message` AS um on u.id = um.user_id ";
-						 query+= "JOIN `Message` AS m on m.id = um.message_id ";
-					   query+= "WHERE m.id = ?";
+		sql::SQLString query = "SELECT group_name FROM `Message` WHERE id = ?";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, msgId);
 		res = pstmt->executeQuery();
 
 		if(res->next())
-			return res->getString("name");
+			return res->getString("group_name");
 	}
   catch (sql::SQLException &e) {
 		manageException(e);
@@ -809,7 +806,7 @@ void Database::removeMsgIfForNoUser(int msgId)
 {
 	try
 	{
-		sql::SQLString query = "SELECT u.id from `User_Message` AS um ";
+		sql::SQLString query = "SELECT um.user_id from `User_Message` AS um ";
 					   				query+= "JOIN `User` u on u.id = um.user_id ";
 										 query+= "WHERE um.message_id = ?";
 
