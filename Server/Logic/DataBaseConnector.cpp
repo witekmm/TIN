@@ -80,6 +80,10 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
     Reply::incorrectMessage(clientId, "You have no right to reply for request", groupName, Message::ClientMessage::ACCEPT);
     return;
   }
+  if(this->database.belongsToGroup(groupName, login)){
+    Reply::incorrectMessage(clientId, "User already in group", groupName, Message::ClientMessage::ACCEPT);
+    return;
+  }
   Reply::correctMessage(clientId, groupName, Message::ClientMessage::ACCEPT);
   //this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
   int msgid = this->database.createMsg(groupName , login , 3 , "");
