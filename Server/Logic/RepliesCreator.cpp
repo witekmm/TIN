@@ -12,7 +12,7 @@ void Reply::incorrectMessage(int clientId, std::string error){
   this->clients->readMessage(clientId,message);
 }
 
-void Reply::incorrectMessage(int clientId, std::string error, std::string groupName,Message::ClientMessage_groupActionTypes type){
+void Reply::incorrectMessage(int clientId, std::string error, std::string groupName, Message::ClientMessage_groupActionTypes type){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::NEGATIVE);
@@ -46,6 +46,7 @@ void Reply::correctLoginMessage(int clientId, std::vector<std::string> groups){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::POSITIVE);
+  message.set_authorizationtype(Message::ClientMessage::LOG_IN);
   puts("CORRECT LOGIN MESSAGE");
   for(auto it = groups.begin(); it != groups.end() ; it++){
     message.add_groups( *it );

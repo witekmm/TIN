@@ -79,12 +79,11 @@ void DataBaseConnector::acceptRequest(std::string groupName, std::string userNam
   if(!this->database.isAdministrator(groupName, id)){
     Reply::incorrectMessage(clientId, "You have no right to reply for request");
     return;
-  }/*
-  int msgid = this->database.isMsgOfTypeForGroup(groupName , userName, 2);
-  if(msgid == -1){
-    Reply::incorrectMessage(clientId, "No request from this user");
-    return;
-  }*/
+  }
+  // if(this->database.belongsToGroup(groupName, login)){
+  //   Reply::incorrectMessage(clientId, "User already in group", groupName, Message::ClientMessage::ACCEPT);
+  //   return;
+  // }
   //usun go
   Reply::correctMessage(clientId);
   //this->database.deleteMsgOfTypeForGroup(groupName , userName , 2);
