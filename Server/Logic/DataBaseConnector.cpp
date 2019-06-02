@@ -6,7 +6,7 @@ DataBaseConnector::DataBaseConnector(std::shared_ptr<ClientSessionPipes> clients
 void DataBaseConnector::sendGroupMessage(std::string content, std::string groupName, std::string login, int clientId)
 {
   if(!this->database.isGroup(groupName)){
-    Reply::incorrectMessage(clientId, "Group doesn't exist");
+    Reply::incorrectMessage(clientId, "Group doesn't exist", groupName, Message::ClientMessage::MESSAGE);
     return;
   }
   if(!this->database.belongsToGroup(groupName , login)){
