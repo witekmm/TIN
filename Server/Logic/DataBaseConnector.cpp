@@ -16,9 +16,9 @@ void DataBaseConnector::sendGroupMessage(std::string content, std::string groupN
   this->database.addMsgToGroup(groupName, login, 1, content);
   Reply::correctMessage(clientId);
   std::vector<Client> loggedclients = Reply::getLoggedClients();
-  for(auto it = loggedclients.begin() ; it != loggedclients.end() ; it++){
-    if(this->database.belongsToGroup(groupName , it->getLogin())){
-      Reply::createAndSetMessage(login , content ,groupName, 1 , it->getLocalId());
+  for(auto it = loggedclients.begin(); it != loggedclients.end(); it++){
+    if(this->database.belongsToGroup(groupName, it->getLogin())){
+      Reply::createAndSetMessage(login, content, groupName, 1, it->getLocalId());
     }
   }
 }
@@ -54,19 +54,19 @@ void DataBaseConnector::requestToGroup(std::string groupName, std::string login,
     Reply::incorrectMessage(clientId, "Group doesn't exist");
     return;
   }
-  if(this->database.belongsToGroup(groupName , login)){
+  if(this->database.belongsToGroup(groupName, login)){
     Reply::incorrectMessage(clientId, "You already belong to choosen group");
     return;
   }
-  if((this->database.isMsgOfTypeForGroup(groupName , login , 2)) != -1){
+  if((this->database.isMsgOfTypeForGroup(groupName, login, 2)) != -1){
     Reply::incorrectMessage(clientId, "Request from this user already exist");
     return;
   }
   Reply::correctMessage(clientId);
-  std::string adminName = this->database.addMsgToAdministrator(groupName, login , 2 , "");
+  std::string adminName = this->database.addMsgToAdministrator(groupName, login, 2, "");
   int adminId = Reply::findClientID(adminName);
   if(adminId == -1) return;
-  else Reply::createAndSetMessage(login , "" ,groupName, 2 , adminId);
+  else Reply::createAndSetMessage(login, "", groupName, 2, adminId);
 }
 
 void DataBaseConnector::acceptRequest(std::string groupName, std::string userName, std::string login, int clientId)
@@ -225,12 +225,12 @@ int DataBaseConnector::rootAddGroup(std::string groupName, std::string administr
 
 void DataBaseConnector::getAllUsersMessagesAndSend(std::string login, int id){
   std::vector<int> messages = this->database.getAllMsgsForUser(login);
-  for(auto it = messages.begin() ; it!= messages.end() ; it++){
+  for(auto it = messages.begin(); it!= messages.end(); it++){
     int type = this->database.getMsgType(*it);
     std::string content = this->database.getMsgText(*it);
     std::string sender = this->database.getMsgSender(*it);
     std::string groupName = this->database.getMsgGroupName(*it);
-    Reply::createAndSetMessage(sender , content ,groupName, type , id);
+    Reply::createAndSetMessage(sender, content, groupName, type, id);
   }
 }
 

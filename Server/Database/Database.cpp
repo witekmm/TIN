@@ -787,19 +787,14 @@ std::string Database::getMsgGroupName(int msgId)
 {
 	try
 	{
-		sql::SQLString query = "SELECT name from `Group` AS g ";
-					   query+= "JOIN `User_Group` AS ug ON g.id = ug.group_id ";
-					   query+= "JOIN `User` AS u ON u.id = ug.user_id ";
-						 query+= "JOIN `User_Message` AS um on u.id = um.user_id ";
-						 query+= "JOIN `Message` AS m on m.id = um.message_id ";
-					   query+= "WHERE m.id = ?";
+		sql::SQLString query = "SELECT group_name FROM `Message` WHERE id = ?";
 
 		pstmt = con->prepareStatement(query);
 		pstmt->setInt(1, msgId);
 		res = pstmt->executeQuery();
 
 		if(res->next())
-			return res->getString("name");
+			return res->getString("group_name");
 	}
   catch (sql::SQLException &e) {
 		manageException(e);
