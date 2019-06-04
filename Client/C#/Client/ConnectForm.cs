@@ -11,7 +11,6 @@ namespace Client
         {
             InitializeComponent();
         }
-
         private void Button_Click(object sender, EventArgs e)
         {
             String serverAddress;
@@ -57,7 +56,6 @@ namespace Client
             try
             {
                 Client client = new Client(this, serverIP, port);
-                //this.Enabled = false;
                 this.Hide();
                 LoginForm loginForm = new LoginForm(client);
             }

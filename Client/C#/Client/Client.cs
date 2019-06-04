@@ -37,7 +37,6 @@ namespace Client
         {
             ChatText.SelectionColor = Color.Red;
             ChatText.AppendText(msg + Environment.NewLine);
-            return;
         }
         private void SendButton_Click(object sender, EventArgs e)
         {
@@ -45,6 +44,7 @@ namespace Client
             if(message.Length == 0)
             {
                 emptyError("Message is empty!");
+                return;
             }
             try
             {
@@ -52,7 +52,8 @@ namespace Client
             }
             catch (Exception)
             {
-                emptyError("No grup chosen!");
+                emptyError("No group chosen!");
+                return;
             }
             connectionManager.SendMessage(message, groupName);
             SendTextBox.Clear();
@@ -79,7 +80,8 @@ namespace Client
             }
             catch (Exception)
             {
-                emptyError("No grup chosen!");
+                emptyError("No group chosen!");
+                return;
             }
             GroupTextBox.Clear();
             connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Leave, groupName);
@@ -93,7 +95,8 @@ namespace Client
             }
             catch (Exception)
             {
-                emptyError("No grup chosen!");
+                emptyError("No group chosen!");
+                return;
             }
             GroupTextBox.Clear();
             connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Delete, groupName);

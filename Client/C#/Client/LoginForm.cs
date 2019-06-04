@@ -17,6 +17,7 @@ namespace Client
             FormClosing += Login_FormClosing;
             loginAttempts = 0;
             logged = false;
+            client.ConnectionManager.LoginForm = this;
             this.client = client;
             this.Show();
             client.ConnectionManager.ReceiveThread.Start();
@@ -45,6 +46,7 @@ namespace Client
         }
         private void ValidateUser(string login, string password)
         {
+            this.login = login;
             client.ConnectionManager.CheckUser(login, password, this);
         }
         public void AcceptLogin()
@@ -61,7 +63,7 @@ namespace Client
                 MessageBox.Show("Disconnected", "Too many attempts failed! Disconnecting!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.Close();
             }
-            MessageBox.Show("Wrong data", errorMsg, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(errorMsg, "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Information);
             loginAttempts++;
             return;
         }

@@ -130,21 +130,22 @@ public class ConnectionManager {
 
     private void ReceiveThreadMethod() {
 
-        while(connected){
+        conn: while(connected){
             int received, toRead = 4, bytesRead = 0;
             char[] answer = new char[4];
             while(toRead != 0) {
-                if ((received = connection.receive(answer, 0, 4)) == -1) {
-                    break;
+                if ((received = connection.receive(answer, 4 - toRead, toRead)) == -1) {
+                    break conn;
                 }
                 toRead -= received;
             }
+
             int answerSize = getMsgLength(answer);
             char[] answerMsg = new char[answerSize];
             toRead = answerSize;
             while(toRead != 0) {
-                if((received = connection.receive(answerMsg, 0, answerSize)) == -1){
-                    break;
+                if((received = connection.receive(answerMsg, answerSize - toRead, toRead)) == -1){
+                    break conn;
                 }
                 toRead -= received;
                 bytesRead += received;
@@ -168,7 +169,7 @@ public class ConnectionManager {
     private void sendNoConnection(){
         Thread t = new Thread(() -> Platform.runLater(() -> {
             if(serverConnection) {
-                Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "Server connection lost! You were disconnected").showAndWait();
+                Main.newAlert(Alert.AlertType.ERROR, "Disconnection", "Server connection lost! You were disconnected").showAndWait();
                 try {
                     connection.end();
                 } catch (IOException e) {
@@ -202,7 +203,9 @@ public class ConnectionManager {
                 groupReply(response.getGroupName(), response.getGroupActionType());
         }
         else if(response.getReply() == Message.ClientMessage.replyStatus.NEGATIVE){
-            if(!response.getGroupName().isEmpty() && !response.getReplyContent().isEmpty() && response.getMessageType() == Message.ClientMessage.messageTypes.REPLY) {
+            if(!response.getGroupName().isEmpty() &&
+                    !response.getReplyContent().isEmpty() &&
+                        response.getMessageType() == Message.ClientMessage.messageTypes.REPLY) {
                 groupReply(response.getGroupName(), Message.ClientMessage.groupActionTypes.MESSAGE);
             }
             if(response.getAuthorizationType() == Message.ClientMessage.authorizationTypes.LOG_IN)
@@ -211,9 +214,8 @@ public class ConnectionManager {
         if(response.getMessageType() == Message.ClientMessage.messageTypes.GROUP){
             if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST)
                 createJoinGroupAlert(response.getUserName(), response.getGroupName());
-            else if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT)
-                groupReply(response.getGroupName(), response.getGroupActionType());
-            else if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.DECLINE)
+            else if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT ||
+                        response.getGroupActionType() == Message.ClientMessage.groupActionTypes.DECLINE)
                 groupReply(response.getGroupName(), response.getGroupActionType());
         }
         if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY)

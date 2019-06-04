@@ -47,18 +47,19 @@ public class ClientViewController {
 
     private void emptyError(String msg){
         messageArea.appendText(msg + "\n");
-        return;
     }
 
     public void pressButtonSend(ActionEvent e){
         String message = sendText.getText(), groupName = "";
         if(message.isBlank()){
             emptyError("Message is empty!");
+            return;
         }
         try{
            groupName = groupChoice.getValue().toString();
         }catch(NullPointerException ex){
             emptyError("No group chosen!");
+            return;
         }
         connectionManager.sendMessage(message, groupName);
         sendText.clear();
@@ -82,6 +83,7 @@ public class ClientViewController {
             groupName = groupChoice.getValue().toString();
         }catch(NullPointerException ex){
             emptyError("No group chosen!");
+            return;
         }
         connectionManager.groupAction(Message.ClientMessage.groupActionTypes.LEAVE, groupName);
     }
@@ -92,6 +94,7 @@ public class ClientViewController {
             groupName = groupChoice.getValue().toString();
         }catch(NullPointerException ex){
             emptyError("No group chosen!");
+            return;
         }
         connectionManager.groupAction(Message.ClientMessage.groupActionTypes.DELETE, groupName);
     }

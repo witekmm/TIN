@@ -41,6 +41,7 @@ public class LoginViewController {
     public void acceptLogin(){
         logged = true;
         client.getUserName().setText(login);
+        client.getStage().setTitle("Client Java");
         client.getStage().setScene(clientScene);
     }
 

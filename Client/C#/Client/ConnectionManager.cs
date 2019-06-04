@@ -123,10 +123,9 @@ namespace Client
             {
                 int received = 0, toRead = 4, bytesRead = 0;
                 byte[] answer = new byte[4];
-                List<byte> answerFull = new List<byte>();
                 while (toRead != 0)
                 {
-                    if ((received = connection.Receive(answer, 0, toRead)) == -1)
+                    if ((received = connection.Receive(answer, 4 - toRead, toRead)) == -1)
                         break;
                     toRead -= received;
                 }
@@ -160,11 +159,22 @@ namespace Client
         {
             if (serverConnection)
             {
-                client.Invoke((MethodInvoker)delegate
+                if (!loginForm.LogedIn)
                 {
-                    MessageBox.Show("Connection to server lost. Closing client now!", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    client.Close();
-                });
+                    loginForm.Invoke((MethodInvoker)delegate
+                    {
+                        MessageBox.Show("Connection to server lost. Closing loginForm now!", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        loginForm.Close();
+                    });
+                }
+                else
+                {
+                    client.Invoke((MethodInvoker)delegate
+                    {
+                        MessageBox.Show("Connection to server lost. Closing client now!", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        client.Close();
+                    });
+                }
             }
         }
         private void LoginUser(Boolean correctData, ClientMessage response)
@@ -211,9 +221,8 @@ namespace Client
             {
                 if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Request)
                     CreateJoinGroupAlert(response.UserName, response.GroupName);
-                else if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Accept)
-                    GroupReply(response.GroupName, response.GroupActionType);
-                else if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Decline)
+                else if (response.GroupActionType == ClientMessage.Types.groupActionTypes.Accept ||
+                            response.GroupActionType == ClientMessage.Types.groupActionTypes.Decline)
                     GroupReply(response.GroupName, response.GroupActionType);
             }
             if (response.MessageType != ClientMessage.Types.messageTypes.Reply)
@@ -309,11 +318,14 @@ namespace Client
         public void CheckUser(String _login, String _password, LoginForm loginForm)
         {
             SendLoginRequest(_login, _password);
-            this.loginForm = loginForm;       
         }
         public Thread ReceiveThread
         {
             get { return receiveThread; }
+        }
+        public LoginForm LoginForm
+        {
+            set { loginForm = value; }
         }
     }
     
