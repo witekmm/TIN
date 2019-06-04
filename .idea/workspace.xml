@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f454f1b4-1702-4321-8d63-dd6ba2153cd2" name="Default Changelist" comment="java client update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/C#/Client/Client.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/C#/Client/Client.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/C#/Client/Client.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Client/C#/Client/Client.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/C#/Client/ConnectForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/C#/Client/ConnectForm.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/C#/Client/ConnectionManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/C#/Client/ConnectionManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/C#/Client/LoginForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/C#/Client/LoginForm.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/Java/out/production/ClientJAVA/client/Controller/ClientViewController.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/Java/out/production/ClientJAVA/client/Controller/ConnectFormController$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/Java/out/production/ClientJAVA/client/Controller/ConnectFormController.class" beforeDir="false" />
@@ -1069,10 +1065,7 @@
       <change beforePath="$PROJECT_DIR$/Client/Java/out/production/TIN/com/google/protobuf/Writer$FieldOrder.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/Java/out/production/TIN/com/google/protobuf/Writer.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/Java/out/production/TIN/module-info.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/Java/src/client/Controller/ClientViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Java/src/client/Controller/ClientViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/Java/src/client/Controller/LoginViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Java/src/client/Controller/LoginViewController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/Java/src/client/Model/ConnectionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Java/src/client/Model/ConnectionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/Java/src/client/View/ClientView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Java/src/client/View/ClientView.fxml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -1094,13 +1087,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/Java/src/client/Model/ConnectionManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="324">
-              <caret line="147" column="25" selection-start-line="147" selection-start-column="25" selection-end-line="147" selection-end-column="25" />
+              <caret line="147" selection-start-line="147" selection-end-line="147" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#12264#12265#0" expanded="true" />
+                <element signature="e#12296#12297#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1152,25 +1147,6 @@
                 <element signature="e#1266#1267#0" expanded="true" />
                 <element signature="e#1315#1316#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Client/Java/src/client/View/ClientView.fxml">
-          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="31" column="127" selection-start-line="31" selection-start-column="127" selection-end-line="31" selection-end-column="127" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Server/Logic/DataBaseConnector.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="82" column="57" selection-start-line="82" selection-start-column="57" selection-end-line="82" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -1229,7 +1205,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-7" />
-    <option name="width" value="1365" />
+    <option name="width" value="874" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
@@ -1413,17 +1389,24 @@
       <option name="project" value="LOCAL" />
       <updated>1559501914036</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="java + c# finished">
+      <created>1559616649810</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1559616649810</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78245000" />
+    <option name="totallyTimeSpent" value="78827000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1365" height="1047" extended-state="0" />
+    <frame x="-7" y="0" width="874" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2704981" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.269863" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1439,7 +1422,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.19256018" />
+      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.19256018" />
       <window_info anchor="bottom" id="Tool Output" order="9" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Terminal" order="11" />
@@ -1465,7 +1448,8 @@
     <MESSAGE value="dodany negative" />
     <MESSAGE value="java client finished" />
     <MESSAGE value="java client update" />
-    <option name="LAST_COMMIT_MESSAGE" value="java client update" />
+    <MESSAGE value="java + c# finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="java + c# finished" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk-11.0.3/lib/src.zip!/java.base/javax/security/auth/callback/ConfirmationCallback.java" />
@@ -1543,26 +1527,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/Java/src/client/View/ClientView.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="127" selection-start-line="31" selection-start-column="127" selection-end-line="31" selection-end-column="127" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/Java/src/client/Controller/ClientViewController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="78" selection-start-line="78" selection-end-line="78" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1266#1267#0" expanded="true" />
-            <element signature="e#1315#1316#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Client/Java/src/client/Controller/LoginViewController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
@@ -1600,20 +1564,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/Java/src/client/Model/ConnectionManager.java">
+    <entry file="file://$PROJECT_DIR$/Server/Logic/DataBaseConnector.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="147" column="25" selection-start-line="147" selection-start-column="25" selection-end-line="147" selection-end-column="25" />
+        <state relative-caret-position="244">
+          <caret line="80" column="11" lean-forward="true" selection-start-line="80" selection-start-column="11" selection-end-line="80" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/Java/src/client/View/ClientView.fxml">
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="31" column="127" selection-start-line="31" selection-start-column="127" selection-end-line="31" selection-end-column="127" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/Java/src/client/Controller/ClientViewController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="78" selection-start-line="78" selection-end-line="78" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1266#1267#0" expanded="true" />
+            <element signature="e#1315#1316#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Server/Logic/DataBaseConnector.cpp">
+    <entry file="file://$PROJECT_DIR$/Client/Java/src/client/Model/ConnectionManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="82" column="57" selection-start-line="82" selection-start-column="57" selection-end-line="82" selection-end-column="57" />
+        <state relative-caret-position="324">
+          <caret line="147" selection-start-line="147" selection-end-line="147" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#12264#12265#0" expanded="true" />
+            <element signature="e#12296#12297#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
