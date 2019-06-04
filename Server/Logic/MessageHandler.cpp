@@ -34,7 +34,7 @@ void MessageHandler::LogicThreadLoop(){
         DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Not logged in!");
         break;
       case 5:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!", Message::ClientMessage::LOG_IN);
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!");
         break;
     }
   }
@@ -75,7 +75,6 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
     return DataBaseConnector::registerUser(message.login() , message.password() , clientId);
   }
 }
-
 
 int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string login, int clientId){
   if(message.groupactiontype() < 1 || message.groupactiontype() > 7){
@@ -130,6 +129,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string 
     DataBaseConnector::leaveGroup( message.groupname() , login , clientId);
     return 0;
   }
+  return -1;
 }
 
 void MessageHandler::stopLoop(){

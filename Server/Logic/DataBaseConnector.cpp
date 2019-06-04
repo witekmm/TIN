@@ -156,7 +156,7 @@ int DataBaseConnector::logInUser(std::string login, std::string password, int cl
     return -2;
   }
   if(Reply::checkIfClientAlreadyLoggedIn(login)){
-    Reply::incorrectMessage(clientId, "User already logged");
+    Reply::incorrectMessage(clientId, "User already logged", Message::ClientMessage::LOG_IN);
     return 0;
   }
   //zaloguj
