@@ -34,7 +34,7 @@ void MessageHandler::LogicThreadLoop(){
         DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Not logged in!");
         break;
       case 5:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!", Message::ClientMessage::LOG_IN);
         break;
     }
   }
