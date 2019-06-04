@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using Google.Protobuf;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Client
@@ -130,24 +129,19 @@ namespace Client
                     toRead -= received;
                 }
                 if (received == -1) break;
+
                 int answerSize = BitConverter.ToInt32(answer, 0);
                 byte[] answerMsg = new byte[answerSize];
-
-                List<byte> list = new List<byte>();
-                while (answerSize != 0)
+                toRead = answerSize;
+                while (toRead != 0)
                 {
-                    if((received = connection.Receive(answerMsg, 0, answerSize)) == -1)
+                    if((received = connection.Receive(answerMsg, answerSize - toRead, toRead)) == -1)
                         break;
-                    foreach (byte i in answerMsg)
-                    {
-                        list.Add(i);
-                    }
-                    Array.Clear(answerMsg, 0, answerMsg.Length);
-                    answerSize -= received;
+                    toRead -= received;
                     bytesRead += received;
                 }
                 if (received == -1) break;
-                ClientMessage response = ClientMessage.Parser.ParseFrom(list.ToArray());
+                ClientMessage response = ClientMessage.Parser.ParseFrom(answerMsg);
                 if (bytesRead > 0)
                 {
                     HandleResponse(response);

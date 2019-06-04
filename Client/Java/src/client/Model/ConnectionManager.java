@@ -134,9 +134,8 @@ public class ConnectionManager {
             int received, toRead = 4, bytesRead = 0;
             char[] answer = new char[4];
             while(toRead != 0) {
-                if ((received = connection.receive(answer, 4 - toRead, toRead)) == -1) {
+                if ((received = connection.receive(answer, 4 - toRead, toRead)) == -1)
                     break conn;
-                }
                 toRead -= received;
             }
 
@@ -144,9 +143,8 @@ public class ConnectionManager {
             char[] answerMsg = new char[answerSize];
             toRead = answerSize;
             while(toRead != 0) {
-                if((received = connection.receive(answerMsg, answerSize - toRead, toRead)) == -1){
+                if((received = connection.receive(answerMsg, answerSize - toRead, toRead)) == -1)
                     break conn;
-                }
                 toRead -= received;
                 bytesRead += received;
             }
