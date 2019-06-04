@@ -45,13 +45,20 @@ public class ClientViewController {
         openConnectForm();
     }
 
+    private void emptyError(String msg){
+        messageArea.appendText(msg + "\n");
+        return;
+    }
+
     public void pressButtonSend(ActionEvent e){
-        String message = sendText.getText(), groupName;
+        String message = sendText.getText(), groupName = "";
+        if(message.isBlank()){
+            emptyError("Message is empty!");
+        }
         try{
            groupName = groupChoice.getValue().toString();
         }catch(NullPointerException ex){
-            messageArea.appendText("No group chosen!\n");
-            return;
+            emptyError("No group chosen!");
         }
         connectionManager.sendMessage(message, groupName);
         sendText.clear();
@@ -70,12 +77,22 @@ public class ClientViewController {
     }
 
     public void pressLeaveGroupButton(){
-        String groupName = groupChoice.getValue().toString();
+        String groupName = "";
+        try{
+            groupName = groupChoice.getValue().toString();
+        }catch(NullPointerException ex){
+            emptyError("No group chosen!");
+        }
         connectionManager.groupAction(Message.ClientMessage.groupActionTypes.LEAVE, groupName);
     }
 
     public void pressDeleteGroupButton(){
-        String groupName = groupChoice.getValue().toString();
+        String groupName = "";
+        try{
+            groupName = groupChoice.getValue().toString();
+        }catch(NullPointerException ex){
+            emptyError("No group chosen!");
+        }
         connectionManager.groupAction(Message.ClientMessage.groupActionTypes.DELETE, groupName);
     }
 

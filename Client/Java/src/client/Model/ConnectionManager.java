@@ -131,16 +131,23 @@ public class ConnectionManager {
     private void ReceiveThreadMethod() {
 
         while(connected){
-            int received;
+            int received, toRead = 4, bytesRead = 0;
             char[] answer = new char[4];
-            if((connection.receive(answer, 0, 4)) == -1){
-                break;
+            while(toRead != 0) {
+                if ((received = connection.receive(answer, 0, 4)) == -1) {
+                    break;
+                }
+                toRead -= received;
             }
-
             int answerSize = getMsgLength(answer);
             char[] answerMsg = new char[answerSize];
-            if((received = connection.receive(answerMsg, 0, answerSize)) == -1){
-                break;
+            toRead = answerSize;
+            while(toRead != 0) {
+                if((received = connection.receive(answerMsg, 0, answerSize)) == -1){
+                    break;
+                }
+                toRead -= received;
+                bytesRead += received;
             }
 
             Message.ClientMessage response = null;
@@ -150,7 +157,7 @@ public class ConnectionManager {
                 e.printStackTrace();
             }
 
-            if(received > 0){
+            if(bytesRead > 0){
                 assert response != null;
                 handleResponse(response);
             }
@@ -160,8 +167,14 @@ public class ConnectionManager {
 
     private void sendNoConnection(){
         Thread t = new Thread(() -> Platform.runLater(() -> {
-            if(serverConnection)
+            if(serverConnection) {
                 Main.newAlert(Alert.AlertType.INFORMATION, "Disconnection", "Server connection lost! You were disconnected").showAndWait();
+                try {
+                    connection.end();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             client.openConnectForm();
         }));
         t.start();
@@ -175,7 +188,7 @@ public class ConnectionManager {
                 loginController.acceptLogin();
             }
             else{
-                loginController.rejectLogin();
+                loginController.rejectLogin(response.getReplyContent());
             }
         }));
         t.start();
@@ -195,20 +208,21 @@ public class ConnectionManager {
             if(response.getAuthorizationType() == Message.ClientMessage.authorizationTypes.LOG_IN)
                 loginUser(false, response);
         }
-        if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST) {
-            client.getTextArea().appendText("Request to join group: '" + response.getGroupName() + "' send!");
-            createJoinGroupAlert(response.getUserName(), response.getGroupName());
+        if(response.getMessageType() == Message.ClientMessage.messageTypes.GROUP){
+            if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.REQUEST)
+                createJoinGroupAlert(response.getUserName(), response.getGroupName());
+            else if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT)
+                groupReply(response.getGroupName(), response.getGroupActionType());
+            else if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.DECLINE)
+                groupReply(response.getGroupName(), response.getGroupActionType());
         }
-        if(response.getGroupActionType() == Message.ClientMessage.groupActionTypes.ACCEPT)
-            groupReply(response.getGroupName(), response.getGroupActionType());
-
         if(response.getMessageType()!= Message.ClientMessage.messageTypes.REPLY)
             sendReply();
 
         if(!response.getMessageContent().isEmpty())
             client.getTextArea().appendText(response.getUserName() +  ": " + response.getMessageContent() + '\n');
 
-        if(!response.getReplyContent().isEmpty())
+        if(!response.getReplyContent().isEmpty() && response.getAuthorizationType() != Message.ClientMessage.authorizationTypes.LOG_IN)
             client.getTextArea().appendText("Error: " + response.getReplyContent() + '\n');
     }
 
@@ -234,6 +248,14 @@ public class ConnectionManager {
                 case ACCEPT: {
                     client.getTextArea().appendText("Request accepted. Joined group: '" + groupName + "'" + '\n');
                     newList.add(groupName);
+                    break;
+                }
+                case DECLINE: {
+                    client.getTextArea().appendText("Request to join group: '" + groupName + "' rejected!\n");
+                    break;
+                }
+                case REQUEST: {
+                    client.getTextArea().appendText("Request to join group: '" + groupName + "' send!\n");
                     break;
                 }
                 case MESSAGE: {

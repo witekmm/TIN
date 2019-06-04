@@ -39,17 +39,16 @@ public class LoginViewController {
     }
 
     public void acceptLogin(){
-        System.out.println("Logged in");
         logged = true;
         client.getUserName().setText(login);
         client.getStage().setScene(clientScene);
     }
 
-    public void rejectLogin(){
+    public void rejectLogin(String errorMsg){
         if(loginAttempts == MAX_LOGIN_ATTEMPTS){
                 Main.newAlert(Alert.AlertType.WARNING, "Disconnected", "Too many attempts failed! Disconnecting!").showAndWait();
         }
-        Main.newAlert(Alert.AlertType.WARNING, "Wrong data", "Wrong input! Can't find user!").showAndWait();
+        Main.newAlert(Alert.AlertType.WARNING, "Wrong data", "Wrong input! " + errorMsg).showAndWait();
         loginAttempts++;
     }
 

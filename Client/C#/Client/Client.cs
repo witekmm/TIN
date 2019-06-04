@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Drawing;
 using System.Net;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Client
@@ -22,35 +22,47 @@ namespace Client
             IPValue.Text = _IP.ToString();
             PortValue.Text = _port.ToString();
         }
-
         private void Client_FormClosing(object sender, FormClosingEventArgs e)
         {
             connectionManager.Disconnect(true);
             MessageBox.Show("Disconnected", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            connectForm.Enabled = true;
+            connectForm.Show();
         }
-
-        private void SendButton_Click(object sender, EventArgs e)
-        {
-            String message = SendTextBox.Text,
-                    groupName = GroupComboBox.SelectedItem.ToString();
-
-            connectionManager.SendMessage(message, groupName);
-            SendTextBox.Clear();
-        }
-
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        private void emptyError(String msg)
+        {
+            ChatText.SelectionColor = Color.Red;
+            ChatText.AppendText(msg + Environment.NewLine);
+            return;
+        }
+        private void SendButton_Click(object sender, EventArgs e)
+        {
+            String message = SendTextBox.Text, groupName = "";
+            if(message.Length == 0)
+            {
+                emptyError("Message is empty!");
+            }
+            try
+            {
+                groupName = GroupComboBox.SelectedItem.ToString();
+            }
+            catch (Exception)
+            {
+                emptyError("No grup chosen!");
+            }
+            connectionManager.SendMessage(message, groupName);
+            SendTextBox.Clear();
+        }
         private void CreateGroupButton_Click(object sender, EventArgs e)
         {
             String groupName = GroupTextBox.Text;
             GroupTextBox.Clear();
             connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Create, groupName);
         }
-
         private void JoinGroupButton_Click(object sender, EventArgs e)
         {
             String groupName = GroupTextBox.Text;
@@ -60,13 +72,29 @@ namespace Client
 
         private void LeaveGroupButton_Click(object sender, EventArgs e)
         {
-            String groupName = GroupComboBox.SelectedItem.ToString();
+            String groupName = "";
+            try
+            {
+                groupName = GroupComboBox.SelectedItem.ToString();
+            }
+            catch (Exception)
+            {
+                emptyError("No grup chosen!");
+            }
             GroupTextBox.Clear();
             connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Leave, groupName);
         }
         private void DeleteGroupButton_Click(object sender, EventArgs e)
         {
-            String groupName = GroupComboBox.SelectedItem.ToString();
+            String groupName = "";
+            try
+            {
+                groupName = GroupComboBox.SelectedItem.ToString();
+            }
+            catch (Exception)
+            {
+                emptyError("No grup chosen!");
+            }
             GroupTextBox.Clear();
             connectionManager.GroupAction(ClientMessage.Types.groupActionTypes.Delete, groupName);
         }
