@@ -11,13 +11,13 @@ void MessageHandler::LogicThreadLoop(){
     switch (res)
     {
       case -3:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!", Message::ClientMessage::LOG_IN);
         break;
       case -2:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Wrong password!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Wrong password!", Message::ClientMessage::LOG_IN);
         break;
       case -1:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!", Message::ClientMessage::LOG_IN);
         break;
       case 0:
         break;
@@ -34,7 +34,7 @@ void MessageHandler::LogicThreadLoop(){
         DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Not logged in!");
         break;
       case 5:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Already logged in!", Message::ClientMessage::LOG_IN);
         break;
     }
   }

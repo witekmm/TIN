@@ -13,6 +13,7 @@ class Reply{
 public:
   Reply(std::shared_ptr<ClientSessionPipes> clients);
   void incorrectMessage(int clientId, std::string error);
+  void incorrectMessage(int clientId, std::string error, Message::ClientMessage_authorizationTypes type);
   void incorrectMessage(int clientId, std::string error, std::string groupName,Message::ClientMessage_groupActionTypes type);
   void correctMessage(int clientId);
   void correctMessage(int clientId, std::string groupName,Message::ClientMessage_groupActionTypes type);
