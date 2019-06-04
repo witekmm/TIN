@@ -58,12 +58,23 @@ namespace Client
 
         public void Send(byte[] buffer)
         {
-            int amount = socket.Send(buffer);
+            socket.Send(buffer);
         }
 
         public int Receive(byte[] buffer, int offset, int length)
         {
-            return socket.Receive(buffer, offset, length, SocketFlags.None);
+            if (!IsConnected())
+            {
+                return -1;
+            }
+            try
+            {
+                return socket.Receive(buffer, offset, length, SocketFlags.None);
+            }
+            catch (SocketException)
+            {
+                return -1;
+            }
         }
 
         public Boolean IsConnected()

@@ -7,29 +7,34 @@ namespace Client
     {
         private Client client;
         private String login;
-        private String password;
-        private Boolean logged;
+        private bool logged;
         private int loginAttempts;
+        private const int MAX_LOGIN_ATTEMPTS = 5; 
 
         public LoginForm(Client client)
         {
             InitializeComponent();
-            FormClosing += Client_FormClosing;
-            this.client = client;
-            this.Show();
+            FormClosing += Login_FormClosing;
             loginAttempts = 0;
             logged = false;
+            client.ConnectionManager.LoginForm = this;
+            this.client = client;
+            this.Show();
+            client.ConnectionManager.ReceiveThread.Start();
         }
 
         public Boolean LogedIn
         {
             get { return logged; }
         }
-        private void Client_FormClosing(object sender, FormClosingEventArgs e)
+        private void Login_FormClosing(object sender, FormClosingEventArgs e)
         {
-            client.ConnectionManager.Disconnect(true);
-            MessageBox.Show("Disconnected", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            client.ConnectForm.Enabled = true;
+            if(logged == false)
+            {
+                client.ConnectionManager.Disconnect(true);
+                MessageBox.Show("Disconnected", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                client.ConnectForm.Show();
+            }
         }
         private void LoginForm_Load(object sender, EventArgs e)
         {
@@ -37,31 +42,31 @@ namespace Client
         }
         private void LoginButton_Click(object sender, EventArgs e)
         {
-
-            login = LoginTextBox.Text;
-            password = PasswordTextBox.Text;
-            if (ValidateUser(login, password))
-            {
-                logged = true;
-                this.Hide();
-                client.Username.Text = login;
-                client.ConnectionManager.ReceiveThread.Start();
-                client.Show();
-            }
-            else
-            {
-                if (loginAttempts == 5)
-                {
-                    this.Close();
-                }
-                MessageBox.Show("Wrong data", "User not found ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                loginAttempts++;
-                return;
-            }
+            ValidateUser(LoginTextBox.Text, PasswordTextBox.Text);
         }
-        private Boolean ValidateUser(string login, string password)
+        private void ValidateUser(string login, string password)
         {
-            return client.ConnectionManager.CheckUser(login, password);
+            this.login = login;
+            client.ConnectionManager.CheckUser(login, password, this);
         }
+        public void AcceptLogin()
+        {
+            logged = true;
+            this.Close();
+            client.Username.Text = login;
+            client.Show();
+        }
+        public void RejectLogin(String errorMsg)
+        {
+            if (loginAttempts == MAX_LOGIN_ATTEMPTS)
+            {
+                MessageBox.Show("Disconnected", "Too many attempts failed! Disconnecting!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.Close();
+            }
+            MessageBox.Show(errorMsg, "Wrong input", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            loginAttempts++;
+            return;
+        }
+
     }
 }

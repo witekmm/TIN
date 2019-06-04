@@ -144,6 +144,7 @@
             // 
             // GroupComboBox
             // 
+            this.GroupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.GroupComboBox.FormattingEnabled = true;
             this.GroupComboBox.Location = new System.Drawing.Point(340, 33);
             this.GroupComboBox.Name = "GroupComboBox";

@@ -11,50 +11,52 @@ namespace Client
         {
             InitializeComponent();
         }
-
         private void Button_Click(object sender, EventArgs e)
         {
             String serverAddress;
             int port;
             IPAddress serverIP;
-
-            try
+            serverAddress = textBoxIP.Text;
+            if (serverAddress == "test")
             {
-                serverAddress = textBoxIP.Text;
-                if(serverAddress == "localhost")
-                {
-                    serverAddress = Connection.GetLocalIP();
-                }
-                if (serverAddress == "test")
-                {
-                    serverAddress = "169.254.203.113";
-                }
+                serverAddress = "169.254.203.113";
                 serverIP = IPAddress.Parse(serverAddress);
+                port = 50011;
             }
-            catch(FormatException)
+            else
             {
-                MessageBox.Show("Invalid IP", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            try
-            {
-                port = Int32.Parse(textBoxPort.Text);
-                if(port < 1024 || port > 65500)
+                try
                 {
-                    throw new Exception();
+                    if (serverAddress == "localhost")
+                    {
+                        serverAddress = Connection.GetLocalIP();
+                    }
+                    serverIP = IPAddress.Parse(serverAddress);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Invalid IP", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                try
+                {
+                    port = Int32.Parse(textBoxPort.Text);
+                    if (port < 1024 || port > 65500)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Invalid port", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
             }
-            catch(Exception)
-            {
-                MessageBox.Show("Invalid port", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
             try
             {
                 Client client = new Client(this, serverIP, port);
-                this.Enabled = false;
+                this.Hide();
                 LoginForm loginForm = new LoginForm(client);
             }
             catch(SocketException)

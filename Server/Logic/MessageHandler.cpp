@@ -11,13 +11,13 @@ void MessageHandler::LogicThreadLoop(){
     switch (res)
     {
       case -3:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!", Message::ClientMessage::LOG_IN);
         break;
       case -2:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Wrong password!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Wrong password!", Message::ClientMessage::LOG_IN);
         break;
       case -1:
-        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!");
+        DataBaseConnector::Reply::incorrectMessage(result.first.getLocalId() , "Login doesn't exist!", Message::ClientMessage::LOG_IN);
         break;
       case 0:
         break;
@@ -76,7 +76,6 @@ int MessageHandler::HandleAuthorizationType(Message::ClientMessage message, int 
   }
 }
 
-
 int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string login, int clientId){
   if(message.groupactiontype() < 1 || message.groupactiontype() > 7){
     return 2;
@@ -130,6 +129,7 @@ int MessageHandler::HandleGroupType(Message::ClientMessage message, std::string 
     DataBaseConnector::leaveGroup( message.groupname() , login , clientId);
     return 0;
   }
+  return -1;
 }
 
 void MessageHandler::stopLoop(){

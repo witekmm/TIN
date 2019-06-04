@@ -12,6 +12,17 @@ void Reply::incorrectMessage(int clientId, std::string error){
   this->clients->readMessage(clientId,message);
 }
 
+void Reply::incorrectMessage(int clientId, std::string error, Message::ClientMessage_authorizationTypes type){
+  Message::ClientMessage message;
+  message.set_messagetype(Message::ClientMessage::REPLY);
+  message.set_reply(Message::ClientMessage::NEGATIVE);
+  message.set_authorizationtype(type);
+  message.set_replycontent(error);
+  //wyslij
+  std::cout<<error<<std::endl;
+  this->clients->readMessage(clientId,message);
+}
+
 void Reply::incorrectMessage(int clientId, std::string error, std::string groupName, Message::ClientMessage_groupActionTypes type){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
@@ -32,7 +43,7 @@ void Reply::correctMessage(int clientId){
   this->clients->readMessage(clientId,message);
 }
 
-void Reply::correctMessage(int clientId, std::string groupName,Message::ClientMessage_groupActionTypes type){
+void Reply::correctMessage(int clientId, std::string groupName, Message::ClientMessage_groupActionTypes type){
   Message::ClientMessage message;
   message.set_messagetype(Message::ClientMessage::REPLY);
   message.set_reply(Message::ClientMessage::POSITIVE);
@@ -84,7 +95,7 @@ void Reply::createAndSetMessage(std::string sender, std::string content, std::st
       message.set_groupname(groupName);
       break;
   }
-  this->clients->readMessage(clientId,message);
+  this->clients->readMessage(clientId, message);
 }
 
 std::vector<Client> Reply::getLoggedClients(){
